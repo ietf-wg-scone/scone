@@ -56,24 +56,32 @@ informative:
 
 --- abstract
 
-On-path network elements can sometimes be configured to apply rate limits to
-flows that pass them.  This document describes a method for signaling to
-endpoints that rate limiting policies are in force and  what that rate limit is.
+This document describes a protocol where on-path network elements
+can give endpoints their perspective on what the maximum achievable
+throughput might be for QUIC flows.
 
 
 --- middle
 
 # Introduction
 
-Many access networks limit the maximum data rate that attached devices are able
-to attain.  This is often done without any indication to the applications
+Many access networks apply rate limits to constrain the data rate of attached
+devices. This is often done without any indication to the applications
 running on devices.  The result can be that application performance is degraded,
 as the manner in which rate limits are enforced can be incompatible with the
 rate estimation or congestion control algorithms used at endpoints.
 
 Having the network indicate what its rate limiting policy is, in a way that is
-accessible to endpoints, might allow applications to use this information when
+accessible to endpoints, allows applications to use this information when
 adapting their send rate.
+
+Network elements are not limited to communicating information
+about rate limiting policies.
+Network elements in access networks could provide information
+to endpoints that can help account for changes in network capacity
+that are not suited to congestion control feedback. This might include
+reduced capacity due to overuse, equipment faults, or other transient issues;
+conversely, networks might choose to signal increased availability of capacity.
 
 The Standard Communication with Network Elements (SCONE) protocol is
 negotiated by QUIC endpoints.  This protocol provides a means for network
@@ -122,16 +130,16 @@ This protocol only works for flows that use the SCONE packet ({{packet}}).
 
 The protocol requires that packets are modified as they transit a
 network element, which provides endpoints strong evidence that the network
-element has the power to drop packets; though see {{security}} for potential
-limitations on this.
+element has the power to apply rate limiting; though see {{security}} for
+potential limitations on this.
 
-The rate limit signal that this protocol carries is independent of congestion
+The throughput advice signal that this protocol carries is independent of congestion
 signals, limited to a single path and UDP packet flow, unidirectional, and
 strictly advisory.
 
 ## Independent of Congestion Signals
 
-Rate limit signals are not a substitute for congestion feedback.  Congestion
+Throughput advice signals are not a substitute for congestion feedback.  Congestion
 signals, such as acknowledgments, provide information on loss, delay, or ECN
 markings {{?ECN=RFC3168}} that indicate the real-time condition of a network
 path.  Congestion signals might indicate a throughput that is different from the
@@ -145,14 +153,14 @@ congestion controller.
 
 ## Unspecified Scope
 
-Modifying a packet does not prove that the rate limit that is indicated would be
+Modifying a packet does not prove that the throughput that is indicated would be
 achievable.  A signal that is sent for a specific flow is likely enforced at a
 different scope.  The extent of that scope is not carried in the signal.
 
 For instance, limits might apply at a network subscription level, such
 that multiple flows receive the same signal.
 
-Endpoints can therefore be more confident in the rate limit signal as an
+Endpoints can therefore be more confident in the throughput signal as an
 indication of the maximum achievable throughput than as any indication of
 expected throughput.  That throughput will only be achievable when there is no
 significant data flowing in the same scope.  In the presence of other flows,
@@ -172,9 +180,9 @@ involved.
 
 ## Undirectional Signal
 
-The endpoint that receives a rate limit signal is not the endpoint that might
+The endpoint that receives a throughput advice signal is not the endpoint that might
 adapt its sending behavior as a result of receiving the signal.  This ensures
-that the rate limit signal is attached to the flow that it is mostly likely to
+that the throughput advice signal is attached to the flow that it is mostly likely to
 apply to.
 
 An endpoint might need to communicate the value it receives to its peer in order
@@ -197,12 +205,14 @@ when a network element detects a flow using more bandwidth than advertised via
 SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.
 
-The time and scope over which a rate limit applies is not specified.  The
-effective rate limit might change without being signaled.  The signaled limit
-can be assumed to apply to the flow of packets on the same UDP address tuple for
-the duration of that flow.  Rate limiting policies often apply on the level of a
-device or subscription, but endpoints cannot assume that this is the case.  A
-separate signal can be sent for each flow.
+The time and scope over which throughput advice applies is not specified.
+Network conditions and rate-limit policies can change in ways that make
+previously signaled advice obsolete, and there are no guarantees that
+updated advice will be sent at such events. The signaled
+advice can be assumed to apply to the flow of packets on the same UDP address
+tuple for the duration of that flow.  For rate limiting networks, rate limiting
+policies often apply on the level of a device or subscription, but endpoints
+cannot assume that this is the case.  A separate signal can be sent for each flow.
 
 
 # Conventions and Definitions
@@ -331,7 +341,7 @@ QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 ({{apply}}) according to their policies.
 
 
-## Applying Rate Limit Signals {#apply}
+## Applying Throughput Advice Signals {#apply}
 
 A network element detects a SCONE packet by observing that a packet has a QUIC
 long header and one of the SCONE protocol versions (0xSCONE1 or 0xSCONE2).
@@ -369,9 +379,9 @@ different ranges of bitrates. This design allows for:
 *  Graceful handling of network elements that might only recognize one version.
 
 
-## Providing Opportunities to Apply Rate Limit Signals {#extra-packets}
+## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
 
-Endpoints that wish to offer network elements the option to add rate limit
+Endpoints that wish to offer network elements the option to add throughout advice
 signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams. It is recommended that endpoints promptly
 send an initial SCONE packet once the peer confirms its willingness to receive
@@ -380,7 +390,7 @@ them.
 Endpoints MUST send any SCONE packet they send as the first packet in a
 datagram, coalesced with additional packets. An endpoint that receives and
 discards a SCONE packet without also successfully processing another packet
-from the same datagram SHOULD ignore any rate limit signal. Such a datagram
+from the same datagram SHOULD ignore any throughput advice signal. Such a datagram
 might be entirely spoofed.
 
 A network element that wishes to signal an updated rate limit waits for the
@@ -388,14 +398,14 @@ next SCONE packet in the desired direction.
 
 ## Feedback To Sender About Signals {#feedback}
 
-Information about rate limits is intended for the sending application.  Any
+Information about throughout advice is intended for the sending application.  Any
 signal from network elements can be propagated to the receiving application
 using an implementation-defined mechanism.
 
 This document does not define a means for indicating what was received.
 That is, the expectation is that any signal is propagated to the application
 for handling, not handled automatically by the transport layer.
-How a receiving application communicates the rate limit signal to a
+How a receiving application communicates the throughput advice signal to a
 sending application will depend on the application in use.
 
 Different applications can choose different approaches. For example,
@@ -411,7 +421,7 @@ processed.
 
 SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
-network element applied a rate limit signal.
+network element applied a throughput advice signal.
 
 ## Interactions with congestion control
 
@@ -419,7 +429,8 @@ SCONE and congestion control both provide the application with estimates
 of a path capacity. They are complementary. Congestion control algorithms
 are typically designed to quickly detect and react to congestion, i.e., to
 the "minimum" capacity of a path. SCONE informs the endpoint
-of the maximum capacity of a path.
+of the maximum capacity of a path based on network rate limit policy,
+network conditions, or a combination of the two.
 
 Consider for example a path in which the bottleneck router implements Early
 Congestion Notification as specified in the L4S architecture {{?RFC9330}}.
@@ -435,10 +446,10 @@ channel.
 # Security Considerations {#security}
 
 The modification of packets provides endpoints proof that a network element is
-in a position to drop datagrams and thereby enforce the indicated rate limit.
+in a position to drop datagrams and could apply a rate limit policy.
 {{extra-packets}} states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
-spurious rate limit signals.
+spurious throughput advice signals.
 
 Some off-path attackers may be able to both
 observe traffic and inject packets. Attackers with such capabilities could
@@ -451,12 +462,12 @@ rate limiters. The attacker will thus get arbitrary SCONE packets accepted by
 the peer, with the result being that the endpoint receives a false
 or misleading rate limit.
 
-The recipient of a rate limit signal therefore cannot guarantee that
+The recipient of a throughput advice signal therefore cannot guarantee that
 the signal was generated by an on-path network element. However,
 the capabilities required of an off-path attacker are substantially
 similar to those of on path elements.
 
-The actual value of the rate limit signal is not authenticated.  Any signal
+The actual value of the throughput advice signal is not authenticated.  Any signal
 might be incorrectly set in order to encourage endpoints to behave in ways that
 are not in their interests.  Endpoints are free to ignore limits that they think
 are incorrect.  The congestion controller employed by a sender provides
@@ -561,7 +572,7 @@ in the packets behind VPN and proxy and also between the users and the VPN,
 but it does not know which VPN address corresponds to what user address.
 
 Suppose now that the attacker selects a flow on the link between the
-VPN/proxy and server. The attacker applies rate limit signals to SCONE packets
+VPN/proxy and server. The attacker applies throughput advice signals to SCONE packets
 in that flow. The attacker chooses a bandwidth that is
 lower than the "natural" bandwidth of the connection. A reduction
 in the rate of flows between client and VPN/proxy might allow
@@ -578,7 +589,7 @@ the attacker to link the altered flow to the client.
                   .---->|       |     ^      +--------+
 +--------+       /      +-------+     |
 | Client |======'                     |
-+--------+      ^           Apply rate limit signal
++--------+      ^           Apply throughput advice signal
                  \
                   \
                Observe change
@@ -590,7 +601,7 @@ That will also likely result in changes in the congestion response by
 the affected client.
 
 A VPN or proxy could defend against this style of attack by removing SCONE (and
-ECN) signals. There are few reasons to provide per-flow rate limit signals in
+ECN) signals. There are few reasons to provide per-flow throughput advice signals in
 that situation.  Endpoints might also either disable this feature or ignore any
 signals when they are aware of the use of a VPN or proxy.
 
