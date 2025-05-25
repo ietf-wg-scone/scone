@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-22T01:43:26.903368+00:00",
+  "timestamp": "2025-05-25T01:51:27.939949+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -162,7 +162,7 @@
       "labels": [],
       "body": "1. Section 2 of the draft shows \"QUIC Sender\", ie, the server initiates the TRONE signal toward the client. This implies that TRONE signal is going to be server initiated. This will result in having the \"network element\" listens to all IP flows in the downlink direction. This is CPU intensive\n2. The authors should consider a design that is independent of SNI-based flow detection\n3. The authors should reconsider this design and allow for CLIENT initiated TRONE signaling (uplink direction) with implicit support for  flow detection\n\nAs a point of reference, section 6 of draft mishra-scone-usercase-00, added following requirement:\nSCONE (aka TRONE) signal MUST be a client-application endpoint initiated to assist the network element (UPF/5G or PGW/4G) with the implicit flow detection\nplease see https://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.1.1",
       "createdAt": "2025-03-20T06:13:47Z",
-      "updatedAt": "2025-05-21T17:25:00Z",
+      "updatedAt": "2025-05-23T17:00:53Z",
       "closedAt": null,
       "comments": [
         {
@@ -339,6 +339,13 @@
           "body": "> If they could handle QUIC flows all with SCONE attached, there would be no need for Indications at all.\n\nThis depends. An indication can be interpreted as an endpoint opting in to the strictest possible ceiling. Flows that do not include the indication might still benefit form SCONE signals, even if the communicated ceiling is less strict.\n\n> Instead, we should focus on encouraging the development of network elements that can handle 100% SCONE flows.\n\nThese network elements can work with 100% SCONE flows. As an example, a 5G UPF can apply multiple sets of policies at different scopes:\n\n-  Flow- or application-based policies that apply to packets that match some packet filter (e.g., through the use of DPI).\n-  Session-based policies that govern the session Aggregate Maximum Bitrate (AMBR) for a subscriber session.\n\nOften, the flow/application-based policy is more strict than the session AMBR. A flow that opts in to the strictest ceiling using an indication will get the lowest of the two policies. Flows that do not explicitly opt-in to the strictest ceiling will get the AMBR value. \n\nIt would be great if a fully SCONE capable world changes policy enforcement such that there is no need for differentiation on application type or use of indications (and I do understand that the indication and its meaning as a policy toggle is not pretty). But I think there is a long way to get that world, and if we design a solution for an idealized world we run the risk of getting little to no deployment at all. \n\nTherefore, given the current reality, a _strictly optional_ indication with clear guidance text that endpoints SHOULD only send it for flows they control (e.g., don't use this if you're a browser) and that networks MUST NOT penalize its absence, seems to me as a pragmatic way to increase SCONE deployment incentives.\n\nAnd fwiw I'd be totally ok to define an optional MUFFIN packet as @ianswett suggests further up in the thread, but perhaps not copying the SNI, but simply being an indication of opt-in to the strictest ceiling regardless if it's enforced by SCONE or CC-based throttling.",
           "createdAt": "2025-05-21T17:24:59Z",
           "updatedAt": "2025-05-21T17:24:59Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "It is very hard to understand where we are at this issue? Do we have a decision here?\n\n@smishra1200, as a network operator do you plan to give the throughput advice to any QUIC connection that goes through you UPF/NE? Or this is really based on subscriber policy meaning different subscriber get different advice or does not get anything at all?\n",
+          "createdAt": "2025-05-23T17:00:52Z",
+          "updatedAt": "2025-05-23T17:00:52Z"
         }
       ]
     },
