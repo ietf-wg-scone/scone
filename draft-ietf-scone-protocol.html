@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta content="Common,Latin" name="scripts">
 <meta content="initial-scale=1.0" name="viewport">
-<title>Transparent Rate Optimization for Network Endpoints (TRONE) Protocol</title>
+<title>Standard Communication with Network Elements (SCONE) Protocol</title>
 <meta content="Martin Thomson" name="author">
 <meta content="Christian Huitema" name="author">
 <meta content="奥 一穂 (Kazuho Oku)" name="author">
@@ -18,23 +18,23 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="locomotive" name="keyword">
 <meta content="pastry" name="keyword">
-<meta content="draft-thoji-scone-trone-protocol-latest" name="ietf.draft">
+<meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.28.1
-    Python 3.12.9
+    Python 3.12.10
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.0
-    platformdirs 4.3.7
+    platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
     setuptools 70.3.0
     wcwidth 0.2.13
 -->
-<link href="draft-thoji-scone-trone-protocol.xml" rel="alternate" type="application/rfc+xml">
+<link href="draft-ietf-scone-protocol.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">@font-face {
   font-family: 'Lora';
@@ -1050,12 +1050,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="center">TRONE Protocol</td>
-<td class="right">April 2025</td>
+<td class="center">SCONE Protocol</td>
+<td class="right">May 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 18 October 2025</td>
+<td class="center">Expires 29 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,15 +1065,15 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">SCONE</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-thoji-scone-trone-protocol-latest</dd>
+<dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-04-16" class="published">16 April 2025</time>
+<time datetime="2025-05-28" class="published">28 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-10-18">18 October 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-29">29 November 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1100,7 +1100,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </dd>
 </dl>
 </div>
-<h1 id="title">Transparent Rate Optimization for Network Endpoints (TRONE) Protocol</h1>
+<h1 id="title">Standard Communication with Network Elements (SCONE) Protocol</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">On-path network elements can sometimes be configured to apply rate limits to
@@ -1113,15 +1113,15 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://ietf-wg-scone.github.io/trone/draft-thoji-scone-trone-protocol.html">https://ietf-wg-scone.github.io/trone/draft-thoji-scone-trone-protocol.html</a></span>.
-        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-thoji-scone-trone-protocol/">https://datatracker.ietf.org/doc/draft-thoji-scone-trone-protocol/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+        The latest revision of this draft can be found at <span><a href="https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html">https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-ietf-scone-protocol/">https://datatracker.ietf.org/doc/draft-ietf-scone-protocol/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">
         Discussion of this document takes place on the
         SCONE Working Group mailing list (<span><a href="mailto:scone@ietf.org">mailto:scone@ietf.org</a></span>),
         which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/scone/">https://mailarchive.ietf.org/arch/browse/scone/</a></span>.
         Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/scone/">https://www.ietf.org/mailman/listinfo/scone/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 <p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/ietf-wg-scone/trone">https://github.com/ietf-wg-scone/trone</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+        <span><a href="https://github.com/ietf-wg-scone/scone">https://github.com/ietf-wg-scone/scone</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1142,7 +1142,7 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 October 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1201,18 +1201,18 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
             <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-trone-packet" class="internal xref">TRONE Packet</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-scone-packet" class="internal xref">SCONE Packet</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-rate-signals" class="internal xref">Rate Signals</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-endpoint-processing-of-tron" class="internal xref">Endpoint Processing of TRONE Packets</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-endpoint-processing-of-scon" class="internal xref">Endpoint Processing of SCONE Packets</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-negotiating-trone" class="internal xref">Negotiating TRONE</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-negotiating-scone" class="internal xref">Negotiating SCONE</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-deployment" class="internal xref">Deployment</a></p>
@@ -1220,58 +1220,68 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-applying-rate-limit-signals" class="internal xref">Applying Rate Limit Signals</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-providing-opportunities-to-" class="internal xref">Providing Opportunities to Apply Rate Limit Signals</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-feedback-to-sender-about-si" class="internal xref">Feedback To Sender About Signals</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
-                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-interactions-with-congestio" class="internal xref">Interactions with congestion control</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-version-interaction" class="internal xref">Version Interaction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-providing-opportunities-to-" class="internal xref">Providing Opportunities to Apply Rate Limit Signals</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-feedback-to-sender-about-si" class="internal xref">Feedback To Sender About Signals</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-interactions-with-congestio" class="internal xref">Interactions with congestion control</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-passive-attacks" class="internal xref">Passive Attacks</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-active-attacks" class="internal xref">Active Attacks</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-flooding-intermediaries-wit" class="internal xref">Flooding intermediaries with fake packets</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-trone-version" class="internal xref">TRONE Version</a></p>
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-passive-attacks" class="internal xref">Passive Attacks</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-trone_supported-transport-p" class="internal xref">trone_supported Transport Parameter</a></p>
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-active-attacks" class="internal xref">Active Attacks</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
-                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-scone-versions" class="internal xref">SCONE Versions</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
-                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-scone_supported-transport-p" class="internal xref">scone_supported Transport Parameter</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1290,7 +1300,7 @@ rate estimation or congestion control algorithms used at endpoints.<a href="#sec
 <p id="section-1-2">Having the network indicate what its rate limiting policy is, in a way that is
 accessible to endpoints, might allow applications to use this information when
 adapting their send rate.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The Transparent Rate Optimization for Network Endpoints (TRONE) protocol is
+<p id="section-1-3">The Standard Communication with Network Elements (SCONE) protocol is
 negotiated by QUIC endpoints.  This protocol provides a means for network
 elements to signal the maximum available sustained throughput, or rate limits,
 for flows of UDP datagrams that transit that network element to a QUIC endpoint.<a href="#section-1-3" class="pilcrow">¶</a></p>
@@ -1301,12 +1311,12 @@ for flows of UDP datagrams that transit that network element to a QUIC endpoint.
       <h2 id="name-overview">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
       </h2>
-<p id="section-2-1">QUIC endpoints can negotiate the use of TRONE by including a transport parameter
-(<a href="#tp" class="auto internal xref">Section 6</a>) in the QUIC handshake.  Endpoints then occasionally coalesce a TRONE
+<p id="section-2-1">QUIC endpoints can negotiate the use of SCONE by including a transport parameter
+(<a href="#tp" class="auto internal xref">Section 6</a>) in the QUIC handshake.  Endpoints then occasionally coalesce a SCONE
 packet with ordinary QUIC packets that they send.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">Network elements that have rate limiting policies can detect flows that include
-TRONE packets.  The network element can indicate a maximum sustained throughput
-by modifying the TRONE packet as it transits the network element.<a href="#section-2-2" class="pilcrow">¶</a></p>
+SCONE packets.  The network element can indicate a maximum sustained throughput
+by modifying the SCONE packet as it transits the network element.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <div id="section-2-3">
         <div class="alignLeft art-svg artwork" id="section-2-3.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="192" width="472" viewBox="0 0 472 192" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
@@ -1338,8 +1348,8 @@ by modifying the TRONE packet as it transits the network element.<a href="#secti
               <text x="44" y="68">Sender</text>
               <text x="160" y="68">Element</text>
               <text x="292" y="68">Receiver</text>
-              <text x="96" y="116">TRONE</text>
-              <text x="228" y="116">TRONE+rate</text>
+              <text x="96" y="116">SCONE</text>
+              <text x="228" y="116">SCONE+rate</text>
               <text x="96" y="132">+QUIC</text>
               <text x="224" y="132">+QUIC</text>
               <text x="340" y="148">Validate</text>
@@ -1352,7 +1362,7 @@ by modifying the TRONE packet as it transits the network element.<a href="#secti
           </svg><a href="#section-2-3.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-2-4">QUIC endpoints that receive modified TRONE packets observe the indicated
+<p id="section-2-4">QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5">Indicated rate limits apply only in a single direction.  Separate indications
 can be sent for the client-to-server direction and server-to-client direction.
@@ -1367,10 +1377,10 @@ cannot assume that rate limit indications from one path apply to new paths.<a hr
       <h2 id="name-applicability">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-applicability" class="section-name selfRef">Applicability</a>
       </h2>
-<p id="section-3-1">This protocol only works for flows that use the TRONE packet (<a href="#packet" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">This protocol only works for flows that use the SCONE packet (<a href="#packet" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The protocol requires that packets are modified as they transit a
 network element, which provides endpoints strong evidence that the network
-element has the power to drop packets; though see <a href="#security" class="auto internal xref">Section 8</a> for potential
+element has the power to drop packets; though see <a href="#security" class="auto internal xref">Section 9</a> for potential
 limitations on this.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">The rate limit signal that this protocol carries is independent of congestion
 signals, limited to a single path and UDP packet flow, unidirectional, and
@@ -1445,9 +1455,16 @@ signaling occurs as this is specific to the application in use.<a href="#section
         </h3>
 <p id="section-3.5-1">A signal does not prove that a higher rate would not be successful.  Endpoints
 that receive this signal therefore need to treat the information as advisory.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
-<p id="section-3.5-2">As an advisory signal, network elements cannot assume that endpoints will
-respect the signal.  Though this might reduce the need for more active rate
-limiting, how rate limit enforcement is applied is a matter for network policy.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.5-2">The fact that an endpoint requests bitrate signals does not necessarily mean
+that it will adhere to them; in some cases, the endpoint cannot. For
+example, a flow may initially be used to serve video chunks, with the client
+selecting appropriate chunks based on bitrate signals, but later switch to a
+bulk download for which bitrate adaptation is not applicable. Composite flows
+from multiple applications, such as tunneled flows, might only have a subset of
+the involved applications that are capable of handling SCONE signals. Therefore,
+when a network element detects a flow using more bandwidth than advertised via
+SCONE, it might switch to applying its policies for non-SCONE flows, using
+congestion control signals.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
 <p id="section-3.5-3">The time and scope over which a rate limit applies is not specified.  The
 effective rate limit might change without being signaled.  The signaled limit
 can be assumed to apply to the flow of packets on the same UDP address tuple for
@@ -1471,73 +1488,183 @@ appear in all capitals, as shown here.<a href="#section-4-1" class="pilcrow">¶<
 </div>
 <div id="packet">
 <section id="section-5">
-      <h2 id="name-trone-packet">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-trone-packet" class="section-name selfRef">TRONE Packet</a>
+      <h2 id="name-scone-packet">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-scone-packet" class="section-name selfRef">SCONE Packet</a>
       </h2>
-<p id="section-5-1">A TRONE packet is a QUIC long header packet that follows the QUIC invariants;
+<p id="section-5-1">A SCONE packet is a QUIC long header packet that follows the QUIC invariants;
 see <span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.1" class="relref">Section 5.1</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2"><a href="#fig-trone-packet" class="auto internal xref">Figure 1</a> shows the format of the TRONE packet using the conventions
+<p id="section-5-2"><a href="#fig-scone-packet" class="auto internal xref">Figure 1</a> shows the format of the SCONE packet using the conventions
 from <span><a href="https://rfc-editor.org/rfc/rfc8999#section-4" class="relref">Section 4</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<span id="name-trone-packet-format"></span><div id="fig-trone-packet">
+<span id="name-scone-packet-format"></span><div id="fig-scone-packet">
 <figure id="figure-1">
         <div class="lang-artwork sourcecode" id="section-5-3.1">
 <pre>
-TRONE Packet {
+SCONE Packet {
   Header Form (1) = 1,
   Reserved (1),
-  Reserved (6),
-  Version (32) = 0xTBD,
+  Rate Signal (6),
+  Version (32) = 0xSCONE1 or 0xSCONE2,
   Destination Connection ID Length (8),
   Destination Connection ID (0..2040),
   Source Connection ID Length (8),
   Source Connection ID (0..2040),
-  Rate Signal (TBD)
 }
 </pre>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
-<a href="#name-trone-packet-format" class="selfRef">TRONE Packet Format</a>
+<a href="#name-scone-packet-format" class="selfRef">SCONE Packet Format</a>
         </figcaption></figure>
 </div>
 <p id="section-5-4">The most significant bit (0x80) of the packet indicates that this is a QUIC long
 header packet.  The next bit (0x40) is reserved and can be set according to
 <span>[<a href="#QUIC-BIT" class="cite xref">QUIC-BIT</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">The low 6 bits (0x3f) of the first byte are reserved.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-5">The low 6 bits (0x3f) of the first byte contain the Rate Signal field. Values
+for this field are described in <a href="#rate-signal" class="auto internal xref">Section 5.1</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-12.2" class="relref">Section 12.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <p id="section-5-7">The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
 (<span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.2" class="relref">Section 5.2</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>), the Source Connection ID field is empty.<a href="#section-5-7" class="pilcrow">¶</a></p>
-<p id="section-5-8">TRONE packets <span class="bcp14">SHOULD</span> be included as the first packet in a datagram.  This is
+<p id="section-5-8">SCONE packets <span class="bcp14">SHOULD</span> be included as the first packet in a datagram.  This is
 necessary in many cases for QUIC versions 1 and 2 because packets with a short
 header cannot precede any other packets.<a href="#section-5-8" class="pilcrow">¶</a></p>
-<p id="section-5-9">The payload of a TRONE packet consists of a single Rate Signal field, described
-in <a href="#rate-signal" class="auto internal xref">Section 5.1</a>.<a href="#section-5-9" class="pilcrow">¶</a></p>
 <div id="rate-signal">
 <section id="section-5.1">
         <h3 id="name-rate-signals">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-rate-signals" class="section-name selfRef">Rate Signals</a>
         </h3>
-<p id="section-5.1-1">Specification of the the size and format of the Rate Signal field is left for
-future revisions of this document.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">The Rate Signal field in SCONE uses the low 6 bits (0x3f) of the first byte.
+This field is encoded as a logarithmically spaced distribution over a range
+defined by the SCONE protocol version.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">When sent by a QUIC endpoint, the Version field of a SCONE packet is set to
+0xSCONE2 and the Rate Signal field is set to 0x3F (63), indicating no rate limit
+is in place or that the SCONE protocol is not supported by network elements on
+the path. All other values (0x00 through 0x3F for protocol version 0xSCONE1 and
+0x00 through 0x3E for protocol version 0xSCONE2) represent the ceiling of rates
+being advised by the network element(s) on the path.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">For SCONE protocol version 0xSCONE1, the rate limits use a logarithmic scale with:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1-4.1">
+            <p id="section-5.1-4.1.1">Base rate (b_min) = 100 Kbps<a href="#section-5.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.1-4.2">
+            <p id="section-5.1-4.2.1">Bitrate at value n = b_min * 10^(n/20)<a href="#section-5.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.1-5">For SCONE protocol version 0xSCONE2, the rate limits use a logarithmic scale with:<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.1-6.1">
+            <p id="section-5.1-6.1.1">Bitrate at value n = b_min * 10^((n + 64)/20)<a href="#section-5.1-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.1-7">With two versions combined, bitrates between 100 Kbps and 199.5 Gbps can be
+expressed.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
+<p id="section-5.1-8">Some notable values in these ranges include:<a href="#section-5.1-8" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Version</th>
+              <th class="text-left" rowspan="1" colspan="1">Rate Signal</th>
+              <th class="text-left" rowspan="1" colspan="1">Bitrate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">100 Kbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">10</td>
+              <td class="text-left" rowspan="1" colspan="1">316 Kbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">20</td>
+              <td class="text-left" rowspan="1" colspan="1">1 Mbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">30</td>
+              <td class="text-left" rowspan="1" colspan="1">3.16 Mbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">40</td>
+              <td class="text-left" rowspan="1" colspan="1">10 Mbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">50</td>
+              <td class="text-left" rowspan="1" colspan="1">31.6 Mbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
+              <td class="text-left" rowspan="1" colspan="1">60</td>
+              <td class="text-left" rowspan="1" colspan="1">100 Mbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">6</td>
+              <td class="text-left" rowspan="1" colspan="1">316 Mbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">16</td>
+              <td class="text-left" rowspan="1" colspan="1">1 Gbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">26</td>
+              <td class="text-left" rowspan="1" colspan="1">3.16 Gbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">36</td>
+              <td class="text-left" rowspan="1" colspan="1">10 Gbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">46</td>
+              <td class="text-left" rowspan="1" colspan="1">31.6 Gbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">56</td>
+              <td class="text-left" rowspan="1" colspan="1">100 Gbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">62</td>
+              <td class="text-left" rowspan="1" colspan="1">199.5 Gbps</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
+              <td class="text-left" rowspan="1" colspan="1">63</td>
+              <td class="text-left" rowspan="1" colspan="1">No limit</td>
+            </tr>
+          </tbody>
+        </table>
 </section>
 </div>
-<div id="endpoint-processing-of-trone-packets">
+<div id="endpoint-processing-of-scone-packets">
 <section id="section-5.2">
-        <h3 id="name-endpoint-processing-of-tron">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-endpoint-processing-of-tron" class="section-name selfRef">Endpoint Processing of TRONE Packets</a>
+        <h3 id="name-endpoint-processing-of-scon">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-endpoint-processing-of-scon" class="section-name selfRef">Endpoint Processing of SCONE Packets</a>
         </h3>
-<p id="section-5.2-1">Processing a TRONE packet involves reading the value from the Rate Signal field.
+<p id="section-5.2-1">Processing a SCONE packet involves reading the value from the Rate Signal field.
 However, this value <span class="bcp14">MUST NOT</span> be used unless another packet from the same
-datagram is successfully processed.  Therefore, a TRONE packet always needs to
+datagram is successfully processed.  Therefore, a SCONE packet always needs to
 be coalesced with other QUIC packets.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">A TRONE packet is defined by the use of the longer header bit (0x80 in the first
-byte) and the TRONE protocol version (0xTBD in the next four bytes).  A TRONE
+<p id="section-5.2-2">A SCONE packet is defined by the use of the longer header bit (0x80 in the first
+byte) and the SCONE protocol version (0xTBD in the next four bytes).  A SCONE
 packet <span class="bcp14">MAY</span> be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
 packets, as specified in <a href="#packet" class="auto internal xref">Section 5</a>.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">A TRONE packet <span class="bcp14">MUST</span> be discarded if the Destination Connection ID does not match
+<p id="section-5.2-3">A SCONE packet <span class="bcp14">MUST</span> be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1545,11 +1672,11 @@ one recognized by the receiving endpoint.<a href="#section-5.2-3" class="pilcrow
 </div>
 <div id="tp">
 <section id="section-6">
-      <h2 id="name-negotiating-trone">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-negotiating-trone" class="section-name selfRef">Negotiating TRONE</a>
+      <h2 id="name-negotiating-scone">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-negotiating-scone" class="section-name selfRef">Negotiating SCONE</a>
       </h2>
-<p id="section-6-1">A QUIC endpoint indicates that it is willing to receive TRONE packets by
-including the trone_supported transport parameter (0xTBD).<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">A QUIC endpoint indicates that it is willing to receive SCONE packets by
+including the scone_supported transport parameter (0xTBD).<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This transport parameter is valid for QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2
 <span>[<a href="#QUICv2" class="cite xref">QUICv2</a>]</span> and any other version that recognizes the versions,
 transport parameters, and frame types registries established in Sections <a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">22.2</a>, <a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">22.3</a>, and <a href="https://rfc-editor.org/rfc/rfc9000#section-22.4" class="relref">22.4</a> of <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
@@ -1560,7 +1687,7 @@ transport parameters, and frame types registries established in Sections <a href
       <h2 id="name-deployment">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-deployment" class="section-name selfRef">Deployment</a>
       </h2>
-<p id="section-7-1">QUIC endpoints can enable the use of the TRONE protocol by sending TRONE packets
+<p id="section-7-1">QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 <a href="#packet" class="auto internal xref">Section 5</a>.  Network elements then apply or replace the Rate Signal field
 (<a href="#apply" class="auto internal xref">Section 7.1</a>) according to their policies.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="apply">
@@ -1568,100 +1695,105 @@ transport parameters, and frame types registries established in Sections <a href
         <h3 id="name-applying-rate-limit-signals">
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-applying-rate-limit-signals" class="section-name selfRef">Applying Rate Limit Signals</a>
         </h3>
-<p id="section-7.1-1">A network element detects a TRONE packet by observing that a packet has a QUIC
-long header and the TRONE protocol version of 0xTBD.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">A network element then conditionally replaces the Rate Signal field with
-values of its choosing.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">A network element detects a SCONE packet by observing that a packet has a QUIC
+long header and one of the SCONE protocol versions (0xSCONE1 or 0xSCONE2).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">A network element then conditionally replaces the Version field and the Rate
+Signal field with values of its choosing.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">A network element might receive a packet that already includes a rate signal.
 The network element replaces the rate signal if it wishes to signal a lower
 rate limit; otherwise, the original values are retained, preserving the signal
 from the network element with the lower policy.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
-<p id="section-7.1-4">The following pseudocode indicates how a network element might detect a TRONE
+<p id="section-7.1-4">The following pseudocode indicates how a network element might detect a SCONE
 packet and replace an existing rate signal.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <div class="lang-pseudocode sourcecode" id="section-7.1-5">
 <pre>
 is_long = packet[0] &amp; 0x80 == 0x80
-is_trone = compare(packet[1..5], TRONE_VERSION)
-if is_long and is_trone:
-  dcid_len = packet[5]
-  offset = 6 + dcid_len
-  scid_len = packet[offset]
-  offset = offset + 1 + scid_len
-  packet_rate = read_rate_signal(packet[offset : offset + rate_signal_size])
-  if target_rate.is_lower_than(packet_rate):
-    write_rate_signal(packet[offset : offset + rate_signal_size], target_rate)
+packet_version = packet[1..5]
+if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VERSION):
+  packet_rate_value = packet[0] &amp; 0x3f
+  (target_rate_version, target_rate_value) = convert_rate_to_signal(target_rate)
+  if target_rate_version &lt; packet_version or target_rate_value &lt; packet_rate_value
+    packet[1..5] = target_rate_version
+    packet[0] = packet[0] &amp; 0xc0 | target_rate_value
 </pre><a href="#section-7.1-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
+</section>
+</div>
+<div id="version-interaction">
+<section id="section-8">
+      <h2 id="name-version-interaction">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-version-interaction" class="section-name selfRef">Version Interaction</a>
+      </h2>
+<p id="section-8-1">The SCONE protocol defines two versions (0xSCONE1 and 0xSCONE2) that cover
+different ranges of bitrates. This design allows for:<a href="#section-8-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.1">
+          <p id="section-8-2.1.1">Support for both very low bitrates (down to 100 Kbps) and very high bitrates
+(up to 199.5 Gbps)<a href="#section-8-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-8-2.2">
+          <p id="section-8-2.2.1">Graceful handling of network elements that might only recognize one version.<a href="#section-8-2.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
 <div id="extra-packets">
-<section id="section-7.2">
+<section id="section-8.1">
         <h3 id="name-providing-opportunities-to-">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-providing-opportunities-to-" class="section-name selfRef">Providing Opportunities to Apply Rate Limit Signals</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-providing-opportunities-to-" class="section-name selfRef">Providing Opportunities to Apply Rate Limit Signals</a>
         </h3>
-<p id="section-7.2-1">Endpoints that wish to offer network elements the option to add rate limit
-signals can send TRONE packets at any time.  This is a decision that a sender
+<p id="section-8.1-1">Endpoints that wish to offer network elements the option to add rate limit
+signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams. It is recommended that endpoints promptly
-send an initial TRONE packet once the peer confirms its willingness to receive
-them.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">An endpoint that has not recently sent a TRONE packet <span class="bcp14">MAY</span> treat receipt of one
-from its peer as a trigger to send a TRONE packet in the reverse direction. This
-way a peer that is receiving downlink data can influence the frequency of
-receiving rate signals.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2-3">Endpoints <span class="bcp14">MUST</span> send any TRONE packet they send as the first packet of a
-datagram, coalesced with additional packets.  An endpoint that receives and
-discards a TRONE packet without also successfully processing another packet
+send an initial SCONE packet once the peer confirms its willingness to receive
+them.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">Endpoints <span class="bcp14">MUST</span> send any SCONE packet they send as the first packet in a
+datagram, coalesced with additional packets. An endpoint that receives and
+discards a SCONE packet without also successfully processing another packet
 from the same datagram <span class="bcp14">SHOULD</span> ignore any rate limit signal. Such a datagram
-might be entirely spoofed.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.2-4">A network element that wishes to signal an updated rate limit waits for the
-next TRONE packet in the desired direction. However, if no TRONE packet
-arrives within a reasonable time, the network element <span class="bcp14">MAY</span> construct its own
-TRONE packet and prepend it to a QUIC packet before forwarding. This process
-requires expanding the UDP datagram containing the original QUIC packet, which
-might cause the datagram to exceed the path MTU. Therefore, a network element
-<span class="bcp14">SHOULD NOT</span> expand UDP datagrams if the combined payload of the TRONE packet and
-the subsequent packets exceeds 1200 bytes, the smallest maximum datagram size
-supported by QUIC versions 1 and 2 (see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-14" class="relref">Section 14</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>).<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+might be entirely spoofed.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">A network element that wishes to signal an updated rate limit waits for the
+next SCONE packet in the desired direction.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback">
-<section id="section-7.3">
+<section id="section-8.2">
         <h3 id="name-feedback-to-sender-about-si">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-feedback-to-sender-about-si" class="section-name selfRef">Feedback To Sender About Signals</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-feedback-to-sender-about-si" class="section-name selfRef">Feedback To Sender About Signals</a>
         </h3>
-<p id="section-7.3-1">Information about rate limits is intended for the sending application.  Any
+<p id="section-8.2-1">Information about rate limits is intended for the sending application.  Any
 signal from network elements can be propagated to the receiving application
-using an implementation-defined mechanism.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3-2">This document does not define a means for indicating what was received.
+using an implementation-defined mechanism.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">This document does not define a means for indicating what was received.
 That is, the expectation is that any signal is propagated to the application
 for handling, not handled automatically by the transport layer.
 How a receiving application communicates the rate limit signal to a
-sending application will depend on the application in use.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">Different applications can choose different approaches. For example,
+sending application will depend on the application in use.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-3">Different applications can choose different approaches. For example,
 in an application where a receiver drives rate adaptation, it might
-not be necessary to define additional signaling.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
-<p id="section-7.3-4">A sender can use any acknowledgment mechanism provided by the QUIC version in
-use to learn whether datagrams containing TRONE packets were likely received.
-This might help inform whether to send additional TRONE packets in the event
+not be necessary to define additional signaling.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">A sender can use any acknowledgment mechanism provided by the QUIC version in
+use to learn whether datagrams containing SCONE packets were likely received.
+This might help inform whether to send additional SCONE packets in the event
 that a datagram is lost. However, rather than relying on transport signals, an
 application might be better able to indicate what has been received and
-processed.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
-<p id="section-7.3-5">TRONE packets could be stripped from datagrams in the network, which cannot be
+processed.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
-network element applied a rate limit signal.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
+network element applied a rate limit signal.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="interactions-with-congestion-control">
-<section id="section-7.4">
+<section id="section-8.3">
         <h3 id="name-interactions-with-congestio">
-<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-interactions-with-congestio" class="section-name selfRef">Interactions with congestion control</a>
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-interactions-with-congestio" class="section-name selfRef">Interactions with congestion control</a>
         </h3>
-<p id="section-7.4-1">TRONE and congestion control both provide the application with estimates
+<p id="section-8.3-1">SCONE and congestion control both provide the application with estimates
 of a path capacity. They are complementary. Congestion control algorithms
 are typically designed to quickly detect and react to congestion, i.e., to
-the "minimum" capacity of a path. TRONE informs the endpoint
-of the maximum capacity of a path.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
-<p id="section-7.4-2">Consider for example a path in which the bottleneck router implements Early
+the "minimum" capacity of a path. SCONE informs the endpoint
+of the maximum capacity of a path.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">Consider for example a path in which the bottleneck router implements Early
 Congestion Notification as specified in the L4S architecture <span>[<a href="#RFC9330" class="cite xref">RFC9330</a>]</span>.
 If the path capacity diminishes, queues will build up and the router
 will immediately start increasing the rate at which packets are marked
@@ -1670,120 +1802,153 @@ and inform its peer. The incoming congestion will be detected within
 1 round trip time (RTT). This scenario will play out whatever the reason
 for the change in capacity, whether due to increased competition between
 multiple applications or, for example, to a change in capacity of a wireless
-channel.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+channel.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="security">
-<section id="section-8">
+<section id="section-9">
       <h2 id="name-security-considerations">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-8-1">The modification of packets provides endpoints proof that a network element is
+<p id="section-9-1">The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and thereby enforce the indicated rate limit.
-<a href="#extra-packets" class="auto internal xref">Section 7.2</a> states that endpoints only accept signals if the datagram
+<a href="#extra-packets" class="auto internal xref">Section 8.1</a> states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
-spurious rate limit signals.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">Some off-path attackers may be able to both
+spurious rate limit signals.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-2">Some off-path attackers may be able to both
 observe traffic and inject packets. Attackers with such capabilities could
 observe packets sent by an endpoint, create datagrams coalescing an
-arbitrary TRONE packet and the observed packet, and send these datagrams
+arbitrary SCONE packet and the observed packet, and send these datagrams
 such that they arrive at the peer endpoint before the original
 packet. Spoofed packets that seek to advertise a higher limit
 than might otherwise be permitted also need to bypass any
-rate limiters. The attacker will thus get arbitrary TRONE packets accepted by
+rate limiters. The attacker will thus get arbitrary SCONE packets accepted by
 the peer, with the result being that the endpoint receives a false
-or misleading rate limit.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">The recipient of a rate limit signal therefore cannot guarantee that
+or misleading rate limit.<a href="#section-9-2" class="pilcrow">¶</a></p>
+<p id="section-9-3">The recipient of a rate limit signal therefore cannot guarantee that
 the signal was generated by an on-path network element. However,
 the capabilities required of an off-path attacker are substantially
-similar to those of on path elements.<a href="#section-8-3" class="pilcrow">¶</a></p>
-<p id="section-8-4">The actual value of the rate limit signal is not authenticated.  Any signal
+similar to those of on path elements.<a href="#section-9-3" class="pilcrow">¶</a></p>
+<p id="section-9-4">The actual value of the rate limit signal is not authenticated.  Any signal
 might be incorrectly set in order to encourage endpoints to behave in ways that
 are not in their interests.  Endpoints are free to ignore limits that they think
 are incorrect.  The congestion controller employed by a sender provides
 real-time information about the rate at which the network path is delivering
-data.<a href="#section-8-4" class="pilcrow">¶</a></p>
-<p id="section-8-5">Similarly, if there is a strong need to ensure that a rate limit is respected,
+data.<a href="#section-9-4" class="pilcrow">¶</a></p>
+<p id="section-9-5">Similarly, if there is a strong need to ensure that a rate limit is respected,
 network elements cannot assume that the signaled limit will be respected by
-endpoints.<a href="#section-8-5" class="pilcrow">¶</a></p>
+endpoints.<a href="#section-9-5" class="pilcrow">¶</a></p>
+<div id="flooding-intermediaries-with-fake-packets">
+<section id="section-9.1">
+        <h3 id="name-flooding-intermediaries-wit">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-flooding-intermediaries-wit" class="section-name selfRef">Flooding intermediaries with fake packets</a>
+        </h3>
+<p id="section-9.1-1">Attackers that can inject packets may compose arbitrary "SCONE-like" packets
+by selecting a pair of IP addresses and ports, an arbitrary rate signal, a
+valid SCONE version number, an arbitrary "destination
+connection ID", and an arbitrary "source connection ID". The SCONE packet
+will carry these information. A coalesced "1RTT" packet will start with
+a plausible first octet, and continue with the selected destination connection
+ID followed by a sufficiently long series of random bytes, mimicking the
+content of an encrypted packets.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">The injected packets will travel towards the destination.
+The final destination will reject such packets because the destination ID
+is invalid or because decryption fail, but network elements cannot do these checks,
+and will have to process the packets. All the network elements between the injection
+point and the destination will have to process these packets.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.1-3">Attackers could send a high volume of these "fake" SCONE packets in
+a denial of service (DOS) attempt against network elements. The attack will
+force the intermediaries to process the fake packets. If network elements
+are keeping state for ongoing SCONE flows, the attack can cause the
+excessive allocation of memory resource. The mitigation there
+will be the same as mitigation of other distributed DOS attacks: limit
+the rate of SCONE packets that a network element is willing to process;
+possibly, implement logic to distinguish valid SCONE packets from
+fake packets; or, use generic protection against Distributed DOS attacks.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+<p id="section-9.1-4">Attackers could also try to craft the fake SCONE packets in ways that trigger
+a processing error at network elements. For example, they might pick connection
+identifiers of arbitrary length. Network elements can mitigate these attacks
+with implementations that fully conform to the specification of <a href="#packet" class="auto internal xref">Section 5</a>.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="privacy">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-privacy-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
       </h2>
-<p id="section-9-1">The focus of this analysis is the extent to which observing TRONE
+<p id="section-10-1">The focus of this analysis is the extent to which observing SCONE
 packets could be used to gain information about endpoints.
 This might be leaking details of how applications using QUIC
 operate or leaks of endpoint identity when using additional
-privacy protection, such as a VPN.<a href="#section-9-1" class="pilcrow">¶</a></p>
-<p id="section-9-2">Any network element that can observe the content of that packet can read the
+privacy protection, such as a VPN.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-2">Any network element that can observe the content of that packet can read the
 rate limit that was applied.  Any signal is visible on the path, from the point
 at which it is applied to the point at which it is consumed at an endpoint.
-On path elements can also alter the TRONE signal to try trigger specific
-reactions and gain further knowledge.<a href="#section-9-2" class="pilcrow">¶</a></p>
-<p id="section-9-3">In the general case of a client connected to a server through the
-Internet, we believe that TRONE does not provide much advantage to attackers.
+On path elements can also alter the SCONE signal to try trigger specific
+reactions and gain further knowledge.<a href="#section-10-2" class="pilcrow">¶</a></p>
+<p id="section-10-3">In the general case of a client connected to a server through the
+Internet, we believe that SCONE does not provide much advantage to attackers.
 The identities of the clients and servers are already visible through their
 IP addresses. Traffic analysis tools already provide more information than
-the data rate limits set by TRONE.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">There are two avenues of attack that require more analysis:<a href="#section-9-4" class="pilcrow">¶</a></p>
+the data rate limits set by SCONE.<a href="#section-10-3" class="pilcrow">¶</a></p>
+<p id="section-10-4">There are two avenues of attack that require more analysis:<a href="#section-10-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9-5.1">
-          <p id="section-9-5.1.1">that the passive observation of TRONE packets might help identify or
-distinguish endpoints; and<a href="#section-9-5.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-10-5.1">
+          <p id="section-10-5.1.1">that the passive observation of SCONE packets might help identify or
+distinguish endpoints; and<a href="#section-10-5.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-9-5.2">
-          <p id="section-9-5.2.1">that active manipulation of TRONE signals might help reveal the
-identity of endpoints that are otherwise hidden behind VPNs or proxies.<a href="#section-9-5.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-10-5.2">
+          <p id="section-10-5.2.1">that active manipulation of SCONE signals might help reveal the
+identity of endpoints that are otherwise hidden behind VPNs or proxies.<a href="#section-10-5.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <div id="passive-attacks">
-<section id="section-9.1">
+<section id="section-10.1">
         <h3 id="name-passive-attacks">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-passive-attacks" class="section-name selfRef">Passive Attacks</a>
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-passive-attacks" class="section-name selfRef">Passive Attacks</a>
         </h3>
-<p id="section-9.1-1">If only few clients and server pairs negotiate the usage of TRONE, the
-occasional observation of TRONE packets will "stick out". That observation,
+<p id="section-10.1-1">If only few clients and server pairs negotiate the usage of SCONE, the
+occasional observation of SCONE packets will "stick out". That observation,
 could be combined with observation of timing and volume of traffic to
 help identify the endpoint or categorize the application that they
-are using.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1-2">A variation of this issue occurs if TRONE is widely implemented, but
+are using.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+<p id="section-10.1-2">A variation of this issue occurs if SCONE is widely implemented, but
 only used in some specific circumstances. In that case, observation of
-TRONE packets reveals information about the state of the endpoint.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
-<p id="section-9.1-3">If multiple servers are accessed through the same front facing server,
+SCONE packets reveals information about the state of the endpoint.<a href="#section-10.1-2" class="pilcrow">¶</a></p>
+<p id="section-10.1-3">If multiple servers are accessed through the same front facing server,
 Encrypted Client Hello (ECH) may be used to prevent outside parties to
 identify which specific server a client is using. However, if only
-a few of these servers use TRONE, any TRONE packets
-will help identify which specific server a client is using.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
-<p id="section-9.1-4">This issue will be mitigated if TRONE becomes widely implemented, and
-if the usage of TRONE is not limited to the type of applications
-that make active use of the signal.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
-<p id="section-9.1-5">QUIC implementations are therefore encouraged to make the feature available
-unconditionally.  Endpoints might send TRONE packets whenever a peer can accept
-them.<a href="#section-9.1-5" class="pilcrow">¶</a></p>
+a few of these servers use SCONE, any SCONE packets
+will help identify which specific server a client is using.<a href="#section-10.1-3" class="pilcrow">¶</a></p>
+<p id="section-10.1-4">This issue will be mitigated if SCONE becomes widely implemented, and
+if the usage of SCONE is not limited to the type of applications
+that make active use of the signal.<a href="#section-10.1-4" class="pilcrow">¶</a></p>
+<p id="section-10.1-5">QUIC implementations are therefore encouraged to make the feature available
+unconditionally.  Endpoints might send SCONE packets whenever a peer can accept
+them.<a href="#section-10.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="active-attacks">
-<section id="section-9.2">
+<section id="section-10.2">
         <h3 id="name-active-attacks">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-active-attacks" class="section-name selfRef">Active Attacks</a>
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-active-attacks" class="section-name selfRef">Active Attacks</a>
         </h3>
-<p id="section-9.2-1">Suppose a configuration in which multiple clients use a VPN or proxy
+<p id="section-10.2-1">Suppose a configuration in which multiple clients use a VPN or proxy
 service to access the same server. The attacker sees the IP addresses
 in the packets behind VPN and proxy and also between the users and the VPN,
-but it does not know which VPN address corresponds to what user address.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
-<p id="section-9.2-2">Suppose now that the attacker selects a flow on the link between the
-VPN/proxy and server. The attacker applies rate limit signals to TRONE packets
+but it does not know which VPN address corresponds to what user address.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+<p id="section-10.2-2">Suppose now that the attacker selects a flow on the link between the
+VPN/proxy and server. The attacker applies rate limit signals to SCONE packets
 in that flow. The attacker chooses a bandwidth that is
 lower than the "natural" bandwidth of the connection. A reduction
 in the rate of flows between client and VPN/proxy might allow
-the attacker to link the altered flow to the client.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
-<div id="section-9.2-3">
-          <div class="alignLeft art-svg artwork" id="section-9.2-3.1">
+the attacker to link the altered flow to the client.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
+<div id="section-10.2-3">
+          <div class="alignLeft art-svg artwork" id="section-10.2-3.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="448" viewBox="0 0 448 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
               <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
               <path d="M 8,96 L 8,128" fill="none" stroke="black"></path>
@@ -1847,117 +2012,149 @@ the attacker to link the altered flow to the client.<a href="#section-9.2-2" cla
                 <text x="152" y="244">Observe</text>
                 <text x="212" y="244">change</text>
               </g>
-            </svg><a href="#section-9.2-3.1" class="pilcrow">¶</a>
+            </svg><a href="#section-10.2-3.1" class="pilcrow">¶</a>
 </div>
 </div>
-<p id="section-9.2-4">An attacker that can manipulate TRONE headers can also simulate
+<p id="section-10.2-4">An attacker that can manipulate SCONE headers can also simulate
 congestion signals by dropping packets or by setting the ECN CE bit.
 That will also likely result in changes in the congestion response by
-the affected client.<a href="#section-9.2-4" class="pilcrow">¶</a></p>
-<p id="section-9.2-5">A VPN or proxy could defend against this style of attack by removing TRONE (and
+the affected client.<a href="#section-10.2-4" class="pilcrow">¶</a></p>
+<p id="section-10.2-5">A VPN or proxy could defend against this style of attack by removing SCONE (and
 ECN) signals. There are few reasons to provide per-flow rate limit signals in
 that situation.  Endpoints might also either disable this feature or ignore any
-signals when they are aware of the use of a VPN or proxy.<a href="#section-9.2-5" class="pilcrow">¶</a></p>
+signals when they are aware of the use of a VPN or proxy.<a href="#section-10.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="iana">
-<section id="section-10">
+<section id="section-11">
       <h2 id="name-iana-considerations">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-10-1">This document registers a new QUIC version (<a href="#iana-version" class="auto internal xref">Section 10.1</a>) and a QUIC
-transport parameter (<a href="#iana-tp" class="auto internal xref">Section 10.2</a>).<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-11-1">This document registers a new QUIC version (<a href="#iana-version" class="auto internal xref">Section 11.1</a>) and a QUIC
+transport parameter (<a href="#iana-tp" class="auto internal xref">Section 11.2</a>).<a href="#section-11-1" class="pilcrow">¶</a></p>
 <div id="iana-version">
-<section id="section-10.1">
-        <h3 id="name-trone-version">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-trone-version" class="section-name selfRef">TRONE Version</a>
+<section id="section-11.1">
+        <h3 id="name-scone-versions">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-scone-versions" class="section-name selfRef">SCONE Versions</a>
         </h3>
-<p id="section-10.1-1">This document registers the following entry to the "QUIC Versions" registry
+<p id="section-11.1-1">This document registers the following entries to the "QUIC Versions" registry
 maintained at <a href="https://www.iana.org/assignments/quic">https://www.iana.org/assignments/quic</a>, following the guidance
-from <span><a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">Section 22.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlCompact dlParallel" id="section-10.1-2">
-          <dt id="section-10.1-2.1">Value:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.1-2.2">
-            <p id="section-10.1-2.2.1">0xTBD<a href="#section-10.1-2.2.1" class="pilcrow">¶</a></p>
+from <span><a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">Section 22.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-11.1-2">
+          <dt id="section-11.1-2.1">Value:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-2.2">
+            <p id="section-11.1-2.2.1">0xSCONE1<a href="#section-11.1-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.1-2.3">Status:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.1-2.4">
-            <p id="section-10.1-2.4.1">permanent<a href="#section-10.1-2.4.1" class="pilcrow">¶</a></p>
+<dt id="section-11.1-2.3">Status:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-2.4">
+            <p id="section-11.1-2.4.1">permanent<a href="#section-11.1-2.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.1-2.5">Specification:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.1-2.6">
-            <p id="section-10.1-2.6.1">This document<a href="#section-10.1-2.6.1" class="pilcrow">¶</a></p>
+<dt id="section-11.1-2.5">Specification:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-2.6">
+            <p id="section-11.1-2.6.1">This document<a href="#section-11.1-2.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.1-2.7">Change Controller:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.1-2.8">
-            <p id="section-10.1-2.8.1">IETF (iesg@ietf.org)<a href="#section-10.1-2.8.1" class="pilcrow">¶</a></p>
+<dt id="section-11.1-2.7">Change Controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-2.8">
+            <p id="section-11.1-2.8.1">IETF (iesg@ietf.org)<a href="#section-11.1-2.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.1-2.9">Contact:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.1-2.10">
-            <p id="section-10.1-2.10.1">QUIC Working Group (quic@ietf.org)<a href="#section-10.1-2.10.1" class="pilcrow">¶</a></p>
+<dt id="section-11.1-2.9">Contact:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-2.10">
+            <p id="section-11.1-2.10.1">QUIC Working Group (quic@ietf.org)<a href="#section-11.1-2.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.1-2.11">Notes:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.1-2.12">
-            <p id="section-10.1-2.12.1">TRONE Protocol<a href="#section-10.1-2.12.1" class="pilcrow">¶</a></p>
+<dt id="section-11.1-2.11">Notes:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-2.12">
+            <p id="section-11.1-2.12.1">SCONE Protocol - Low Range<a href="#section-11.1-2.12.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-11.1-3">
+          <dt id="section-11.1-3.1">Value:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-3.2">
+            <p id="section-11.1-3.2.1">0xSCONE2<a href="#section-11.1-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-11.1-3.3">Status:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-3.4">
+            <p id="section-11.1-3.4.1">permanent<a href="#section-11.1-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-11.1-3.5">Specification:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-3.6">
+            <p id="section-11.1-3.6.1">This document<a href="#section-11.1-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-11.1-3.7">Change Controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-3.8">
+            <p id="section-11.1-3.8.1">IETF (iesg@ietf.org)<a href="#section-11.1-3.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-11.1-3.9">Contact:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-3.10">
+            <p id="section-11.1-3.10.1">QUIC Working Group (quic@ietf.org)<a href="#section-11.1-3.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-11.1-3.11">Notes:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.1-3.12">
+            <p id="section-11.1-3.12.1">SCONE Protocol - High Range<a href="#section-11.1-3.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
 </section>
 </div>
 <div id="iana-tp">
-<section id="section-10.2">
-        <h3 id="name-trone_supported-transport-p">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-trone_supported-transport-p" class="section-name selfRef">trone_supported Transport Parameter</a>
+<section id="section-11.2">
+        <h3 id="name-scone_supported-transport-p">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-scone_supported-transport-p" class="section-name selfRef">scone_supported Transport Parameter</a>
         </h3>
-<p id="section-10.2-1">This document registers the trone_supported transport parameter in the "QUIC
+<p id="section-11.2-1">This document registers the scone_supported transport parameter in the "QUIC
 Transport Parameters" registry maintained at
-<a href="https://www.iana.org/assignments/quic">https://www.iana.org/assignments/quic</a>, following the guidance from <span><a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">Section 22.3</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlCompact dlParallel" id="section-10.2-2">
-          <dt id="section-10.2-2.1">Value:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.2">
-            <p id="section-10.2-2.2.1">0xTBD<a href="#section-10.2-2.2.1" class="pilcrow">¶</a></p>
+<a href="https://www.iana.org/assignments/quic">https://www.iana.org/assignments/quic</a>, following the guidance from <span><a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">Section 22.3</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-11.2-2">
+          <dt id="section-11.2-2.1">Value:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.2">
+            <p id="section-11.2-2.2.1">0xTBD<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.3">Parameter Name:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.4">
-            <p id="section-10.2-2.4.1">trone_supported<a href="#section-10.2-2.4.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.3">Parameter Name:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.4">
+            <p id="section-11.2-2.4.1">scone_supported<a href="#section-11.2-2.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.5">Status:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.6">
-            <p id="section-10.2-2.6.1">Permanent<a href="#section-10.2-2.6.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.5">Status:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.6">
+            <p id="section-11.2-2.6.1">Permanent<a href="#section-11.2-2.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.7">Specification:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.8">
-            <p id="section-10.2-2.8.1">This document<a href="#section-10.2-2.8.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.7">Specification:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.8">
+            <p id="section-11.2-2.8.1">This document<a href="#section-11.2-2.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.9">Date:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.10">
-            <p id="section-10.2-2.10.1">This date<a href="#section-10.2-2.10.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.9">Date:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.10">
+            <p id="section-11.2-2.10.1">This date<a href="#section-11.2-2.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.11">Change Controller:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.12">
-            <p id="section-10.2-2.12.1">IETF (iesg@ietf.org)<a href="#section-10.2-2.12.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.11">Change Controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.12">
+            <p id="section-11.2-2.12.1">IETF (iesg@ietf.org)<a href="#section-11.2-2.12.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.13">Contact:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.14">
-            <p id="section-10.2-2.14.1">QUIC Working Group (quic@ietf.org)<a href="#section-10.2-2.14.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.13">Contact:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.14">
+            <p id="section-11.2-2.14.1">QUIC Working Group (quic@ietf.org)<a href="#section-11.2-2.14.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-10.2-2.15">Notes:</dt>
-          <dd style="margin-left: 1.5em" id="section-10.2-2.16">
-            <p id="section-10.2-2.16.1">(none)<a href="#section-10.2-2.16.1" class="pilcrow">¶</a></p>
+<dt id="section-11.2-2.15">Notes:</dt>
+          <dd style="margin-left: 1.5em" id="section-11.2-2.16">
+            <p id="section-11.2-2.16.1">(none)<a href="#section-11.2-2.16.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1966,14 +2163,14 @@ Transport Parameters" registry maintained at
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-11">
+<section id="section-12">
       <h2 id="name-references">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-11.1">
+<section id="section-12.1">
         <h3 id="name-normative-references">
-<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="BCP14">[BCP14]</dt>
@@ -2006,9 +2203,9 @@ Transport Parameters" registry maintained at
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-11.2">
+<section id="section-12.2">
         <h3 id="name-informative-references">
-<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="ECN">[ECN]</dt>
@@ -2017,7 +2214,7 @@ Transport Parameters" registry maintained at
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
-<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-13</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-13">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-13</a>&gt;</span>. </dd>
+<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-14</span>, <time datetime="2025-04-23" class="refDate">23 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9330">[RFC9330]</dt>
       <dd>
