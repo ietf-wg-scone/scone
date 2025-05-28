@@ -2,10 +2,10 @@
 
 This is the working area for the IETF SCONE Internet-Draft, "Standard Communication with Network Elements (SCONE) Protocol".
 
-* [Editor's Copy](https://ietf-wg-scone.github.io/scone/#go.draft-thoji-scone-protocol.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-thoji-scone-protocol)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-thoji-scone-protocol)
-* [Compare Editor's Copy to Individual Draft](https://ietf-wg-scone.github.io/scone/#go.draft-thoji-scone-protocol.diff)
+* [Editor's Copy](https://ietf-wg-scone.github.io/scone/#go.draft-ietf-scone-protocol.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-scone-protocol)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-ietf-scone-protocol)
+* [Compare Editor's Copy to Individual Draft](https://ietf-wg-scone.github.io/scone/#go.draft-ietf-scone-protocol.diff)
 
 
 ## Contributing
