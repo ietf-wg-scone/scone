@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-05-27T01:42:48.670612+00:00",
+  "timestamp": "2025-05-29T01:44:22.679575+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -162,7 +162,7 @@
       "labels": [],
       "body": "1. Section 2 of the draft shows \"QUIC Sender\", ie, the server initiates the TRONE signal toward the client. This implies that TRONE signal is going to be server initiated. This will result in having the \"network element\" listens to all IP flows in the downlink direction. This is CPU intensive\n2. The authors should consider a design that is independent of SNI-based flow detection\n3. The authors should reconsider this design and allow for CLIENT initiated TRONE signaling (uplink direction) with implicit support for  flow detection\n\nAs a point of reference, section 6 of draft mishra-scone-usercase-00, added following requirement:\nSCONE (aka TRONE) signal MUST be a client-application endpoint initiated to assist the network element (UPF/5G or PGW/4G) with the implicit flow detection\nplease see https://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.1.1",
       "createdAt": "2025-03-20T06:13:47Z",
-      "updatedAt": "2025-05-26T01:30:31Z",
+      "updatedAt": "2025-05-28T22:29:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -367,6 +367,13 @@
           "body": "\n> Assume that we have defined a \"scone capable\" indication and that all connections are using it, whether or not they are sending videos. The connections will then send SCONE packets at interval. Do I understand correctly that:\n> \n> * if your network has recognized the application as \"doing video\", the SCONE packet will be updated to indicate the target throughput, which will depend on the user's subscription.\n> * otherwise, the SCONE packet will not be modified, and the throughput parameter will be left to a default value?\n\nUse of  SNI in combination with subscriber policy and RAT type guides the ABR video optimization. If the \"scone capable\" indication is applied only to ABR-video QUIC connections, the SCONE protocol would not only eliminate the need for SNI in flow detection but also provide a stronger rationale for its deployment.\n\nHowever, applying the \"scone capable\" indication to all QUIC connections would mean our network would need to inspect every QUIC connection, regardless of whether it's a video flow. We would still need to rely on SNI to determine if a specific QUIC connection is a video flow to decide whether to populate the throughput parameter in the SCONE packet.\n\nIf my understanding is correct, it seems that implementing SCONE in this way would add to CPU processing, and the benefit compared to our current process is unclear to me. Additionally, SCONE's applicability is limited to QUIC, and TCP connections will still exist.\n\nCould you please clarify if my understanding is correct?",
           "createdAt": "2025-05-26T00:14:33Z",
           "updatedAt": "2025-05-26T01:30:30Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Trying to summarize the issue, based on the discussion here and in the recent interim meeting.\nThere is broad agreement that giving networks an incentive to deploy SCONE is valuable. Early indications have been proposed as one such incentive, because they could reduce DPI load while SCONE adoption ramps up.\n\nThe main disagreement is what an indication should imply.\n* Some want a flag that means \"this flow is ABR video,\" so they can skip DPI and save CPU.\n* Others worry that a dedicated \"video flag\" becomes a new fingerprint and might be used as a trigger for immediate short-term policing instead of the intended long-term throughput monitoring.\n\nA suggested compromise is to allow indications but encourage all flows, video and non-video, to set them. That reduces the fingerprinting concern and makes the bit less attractive as a throttle toggle. It does, however, leave operators with a choice:\n* Replace video-specific policies with generic \u201cSCONE policies\u201d where throughput advice is communicated, and long-term throughput is measured and potentially enforced on all SCONE flows.\nIndications are helpful during the transition when legacy and SCONE rules coexist.\n* Keep DPI to detect video and apply differentiated policies, possibly using SCONE to signal these policies.\nIn this model, indications provide no additional value.\n\n",
+          "createdAt": "2025-05-28T22:29:36Z",
+          "updatedAt": "2025-05-28T22:29:36Z"
         }
       ]
     },
