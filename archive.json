@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-01T02:01:24.193769+00:00",
+  "timestamp": "2025-06-05T01:45:08.443645+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -162,7 +162,7 @@
       "labels": [],
       "body": "1. Section 2 of the draft shows \"QUIC Sender\", ie, the server initiates the TRONE signal toward the client. This implies that TRONE signal is going to be server initiated. This will result in having the \"network element\" listens to all IP flows in the downlink direction. This is CPU intensive\n2. The authors should consider a design that is independent of SNI-based flow detection\n3. The authors should reconsider this design and allow for CLIENT initiated TRONE signaling (uplink direction) with implicit support for  flow detection\n\nAs a point of reference, section 6 of draft mishra-scone-usercase-00, added following requirement:\nSCONE (aka TRONE) signal MUST be a client-application endpoint initiated to assist the network element (UPF/5G or PGW/4G) with the implicit flow detection\nplease see https://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.1.1",
       "createdAt": "2025-03-20T06:13:47Z",
-      "updatedAt": "2025-05-29T01:45:10Z",
+      "updatedAt": "2025-06-04T18:59:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -381,6 +381,34 @@
           "body": "We may also mention that \"Keep DPI to detect video and apply differentiated policies\" fails in presence of ECH or migration.",
           "createdAt": "2025-05-29T01:45:10Z",
           "updatedAt": "2025-05-29T01:45:10Z"
+        },
+        {
+          "author": "smishra1200",
+          "authorAssociation": "NONE",
+          "body": "@ihlar, I understand you are only summarizing the conversation and greatly appreciate you doing this. I'd appreciate a bit more clarity on a few points in the summary:\n\n> Replace video-specific policies with generic \u201cSCONE policies\u201d where throughput advice is communicated, and long-term throughput is measured and potentially enforced on all SCONE flows.\n\nCould you please clarify what constitutes a \"SCONE\" flow? Is it defined as \"applications capable of adjusting their bit-rate based on network conditions,\" or is the definition different?\n\n> Indications are helpful during the transition when legacy and SCONE rules coexist.\n\n It would be helpful if these indications were limited to \"SCONE\" flows. For example, a large file download that cannot adjust its bit-rate might not benefit from an indication, and the resulting throughput advice may not be useful since the download might not be subject to rate limits. (or any none ABR content)\n\n> Keep DPI to detect video and apply differentiated policies, possibly using SCONE to signal these policies.\n\nI'm wondering about the value of SCONE over existing methods if it still relies on DPI. If SCONE's functionality is contingent on DPI, similar to the current approach, what would be the future role of SCONE, especially with the emergence of ECH?\n\n",
+          "createdAt": "2025-06-03T21:32:48Z",
+          "updatedAt": "2025-06-03T21:32:48Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "SCONE is very much not dependent on DPI.  The question at hand is whether networks would change how they condition their actions on DPI.  That is, if they currently rely on DPI for policing/shaping, would SCONE change that?\n\nWe have some answers to that question and the answers are (unsurprisingly) not consistent.",
+          "createdAt": "2025-06-04T00:35:58Z",
+          "updatedAt": "2025-06-04T00:35:58Z"
+        },
+        {
+          "author": "smishra1200",
+          "authorAssociation": "NONE",
+          "body": "A mechanism that replaces SNI when used for video flow optimization is a change in the right direction. SCONE can give an alternative to networks over current methods in so far as identifying video flows.  \n",
+          "createdAt": "2025-06-04T18:28:26Z",
+          "updatedAt": "2025-06-04T18:28:26Z"
+        },
+        {
+          "author": "afrind",
+          "authorAssociation": "NONE",
+          "body": "Policies that shape or police an _entire connection_ based on the presence of ABR video flows on that connection are counterproductive to QoE.  We've found that coalescing video traffic with photos and dynamic requests generally gives us better control of response prioritization and corresponding QoE wins overall, except in networks that throttle, where non-video traffic experiences collateral damage.\n\nWe'd prefer that networks offer SCONE throughput advice (and remove shaping) regardless of the SNI, \"video/non-video\" or any other properties of the traffic.  Tell us what bitrate is sustainable and we will deliver the best possible QoE within that limit.",
+          "createdAt": "2025-06-04T18:59:20Z",
+          "updatedAt": "2025-06-04T18:59:20Z"
         }
       ]
     },
