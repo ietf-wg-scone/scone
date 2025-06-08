@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-05T01:45:08.443645+00:00",
+  "timestamp": "2025-06-08T01:53:44.801754+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1137,6 +1137,22 @@
           "updatedAt": "2025-05-15T09:00:30Z"
         }
       ]
+    },
+    {
+      "number": 33,
+      "id": "I_kwDON1dwo866MLaS",
+      "title": "Provide rationale for signaling rates beyond those enforced by congestion control",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/33",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft jumps straight into the SCONE mechanism without first explaining *why* an operator would want an explicit long-term-rate signal at all. Adding a short, non-normative \u201cMotivation\u201d paragraph would give readers, _including the operators of neutral-connectivity networks_, better context.\n\nThe paragraph can cover:\n* **Short-term fairness of congestion control.**\nModern CC algorithms equalise throughput only among flows that are simultaneously backlogged.\n\n* **Long-term unfairness between flow types.**\nWhen an always-on bulk transfer (e.g., software update or congested video) shares a path with an intermittent or bursty flow, the bulk flow can send far more data over wall-clock time than the intermittent flow, despite CC\u2019s short-term fairness.\n\n* **SCONE as the improvement.**\nSCONE lets network elements declare their desired long-term rate in-band, giving operators a transparent, standards-based tool for achieving long-horizon fairness\u2014without heuristic classification or DPI.",
+      "createdAt": "2025-06-06T06:08:55Z",
+      "updatedAt": "2025-06-06T07:38:00Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
