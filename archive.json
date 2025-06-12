@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-08T01:53:44.801754+00:00",
+  "timestamp": "2025-06-12T01:45:44.674118+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -911,7 +911,7 @@
       "labels": [],
       "body": "This has been discussed extensively both privately, at IETF 122, and in the latest interim. We should give guidance to endpoints on how often and under what circumstances they should send TRONE packets to give an opportunity to generate new advice.",
       "createdAt": "2025-04-16T15:38:18Z",
-      "updatedAt": "2025-04-22T04:14:16Z",
+      "updatedAt": "2025-06-10T15:25:56Z",
       "closedAt": null,
       "comments": [
         {
@@ -923,10 +923,17 @@
         },
         {
           "author": "martinthomson",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Not only how fast they *can* adapt, but how fast the application might need to learn about changes.  Streaming applications might be OK with several chunks of lag if their buffers are deep enough to absorb a network fluctuation.  Per-chunk might be faster than an HLS app needs, which provides it with a degree of redundancy.\n\nApps will know when marked packets are lost -- in exactly the same way that ECN markings are accounted for in QUIC -- so they can account for that in their sending, so I don't think we need anything special, other than a note about that.",
           "createdAt": "2025-04-22T04:14:15Z",
           "updatedAt": "2025-04-22T04:14:15Z"
+        },
+        {
+          "author": "DanDruta",
+          "authorAssociation": "NONE",
+          "body": "Another way to look at this would be for the network to send a \"best by\" indicator along with the network advice so the endpoint would take stop sending scone packets during that \"freshness\" period. That would align with the frequency the network expects the signal to change ",
+          "createdAt": "2025-06-10T15:25:56Z",
+          "updatedAt": "2025-06-10T15:25:56Z"
         }
       ]
     },
@@ -1153,6 +1160,46 @@
       "updatedAt": "2025-06-06T07:38:00Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 34,
+      "id": "I_kwDON1dwo866zI50",
+      "title": "Include semantics definition of the \u201cthroughput advice\u201d  in the merged draft with clarifications on what it means and how it can be measured by CSPs and CAPs",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/34",
+      "state": "OPEN",
+      "author": "DanDruta",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Current merged draft talks about rate limit signals and throughput advice but it falls short of defining what that is and more importantly how it gets computed so both CSPs and CAPs have a common understanding of the meaning as well as measure it.\nSuggest adding a section  to provide clarity. For reference the scone video session data rate  draft https://datatracker.ietf.org/doc/html/draft-druta-scone-video-session-data-rate-00",
+      "createdAt": "2025-06-10T15:06:26Z",
+      "updatedAt": "2025-06-10T15:06:26Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 35,
+      "id": "I_kwDON1dwo866_-BB",
+      "title": "Aggregate or Per-Flow Measurement?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/35",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "At the June 11 2025 interim, Marcus mentioned that some operators enforce bit rates on a per-flow basis and others aggregate flows, and (in my perception) implied that we should not try to discourage them from either approach.\n\nI have no opinion on the merits of that implication. However, if SCONE network elements are allowed to enforce on an aggregate basis, it seems critical for interoperability to have a signal in SCONE packets indicating which mode it's in.\n\n@kazuho had a response in the meeting that rate control should be on a per-flow basis, because aggregate rates are not always actionable.",
+      "createdAt": "2025-06-11T15:49:23Z",
+      "updatedAt": "2025-06-11T15:57:14Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "I will note, FWIW, that the charter specifically refers to \"UDP 4-tuples\", not flow aggregates.",
+          "createdAt": "2025-06-11T15:57:14Z",
+          "updatedAt": "2025-06-11T15:57:14Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2693,7 +2740,7 @@
       "labels": [],
       "body": "This PR explicitly includes in scope networks that do not rate limit, but wish to advise on network conditions to help achieve the optimal sender rate. \r\n\r\nNotes on changes:\r\nThroughout: replaced 'rate limit signal' with 'throughput advice signal' to account for both uses of SCONE (to signal rate limits/to signal throughput advice based on current network conditions)\r\n\r\nLine 68: Changed 'Many access networks limit the maximum data rate that attached devices are able to attain'  (because all shared access networks do this due to finite bandwidth) to 'Many access networks apply rate limits to constrain the data rate of attached devices.' (to more explicitly indicate active rate limiting).\r\n\r\nLine 164: Removed \"In that case, capacity is less likely to be split between multiple active flows.\" because capacity will always be divided between multiple active flows (otherwise they would not be active)\r\n\r\nLine 165: Added that a SCONE signal based on the network's calculation of throughput advice would take into account congestion, whereas (as stated in the original) one simply stating a rate limit would not.\r\n\r\n(Other suggested changes are editorial)",
       "createdAt": "2025-05-12T16:37:48Z",
-      "updatedAt": "2025-05-21T21:09:36Z",
+      "updatedAt": "2025-06-11T13:46:46Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0e00e6531e8e68bcd034e22c6edeede4c999acc3",
@@ -3215,6 +3262,26 @@
               "body": "> would removing 'advice' here cover it, i.e. 'The effective throughput might change without being signaled'?\r\n\r\nTo me that misses the quiescence point that @kazuho makes, since \"effective throughput\" sounds like something active that you measure.\r\n\r\nPerhaps rephrasing it to something like:\r\n\r\n\u201cNetwork conditions and rate-limit policies can change in ways that make previously signaled advice obsolete, and there are no guarantees that updated advice will be sent.\u201d\r\n\r\n\r\n\r\n",
               "createdAt": "2025-05-19T15:24:37Z",
               "updatedAt": "2025-05-19T15:24:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86t4gYP",
+          "commit": {
+            "abbreviatedOid": "7b70509"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "With this small tweak I think this PR is ready to be merged.",
+          "createdAt": "2025-06-11T13:46:13Z",
+          "updatedAt": "2025-06-11T13:46:46Z",
+          "comments": [
+            {
+              "originalPosition": 101,
+              "body": "```suggestion\r\nThe time and scope over which throughput advice applies is not specified.\r\nNetwork conditions and rate-limit policies can change in ways that make\r\npreviously signaled advice obsolete, and there are no guarantees that\r\nupdated advice will be sent at such events. The signaled\r\n```",
+              "createdAt": "2025-06-11T13:46:13Z",
+              "updatedAt": "2025-06-11T13:46:46Z"
             }
           ]
         }
