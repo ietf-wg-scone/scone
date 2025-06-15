@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-12T01:45:44.674118+00:00",
+  "timestamp": "2025-06-15T01:55:53.983436+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -828,7 +828,7 @@
       "labels": [],
       "body": "This issue is mostly in regard to  slide 11 of https://datatracker.ietf.org/meeting/122/materials/slides-122-scone-trone-questions-01, which was discussed at IETF 122.\n\nThe current draft doesn't mention this perspective so I want to open up the discussion.\n\nIn general, I think that a fixed window length specified by SCONE is preferable as it simplifies works for network elements. But meanwhile, we need to find a window that works for all users of SCONE.\n\nDifferent video applications choose to buffer different lengths of videos during playbacks. For example, App A may buffer 10s while App B buffers 20s. A 10-second window will work for app A but not work for app B. A 20-second window will work for both.\n\nA flow that complies with a short window will also comply with a longer one.\n\nThis means we should probably specify a longer window to accommodate different applications, but not too long that exceeds the average duration of a video connection. ",
       "createdAt": "2025-04-08T22:27:05Z",
-      "updatedAt": "2025-04-16T15:35:24Z",
+      "updatedAt": "2025-06-12T21:11:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -865,6 +865,13 @@
           "body": "Discussion at Interim 3: we need to pick a value now for the doc to be adopted. 20 seconds seems to be a good starting point. Keeping this issue open to make sure we don't lose the finer points here.",
           "createdAt": "2025-04-16T15:35:22Z",
           "updatedAt": "2025-04-16T15:35:22Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "This is what we presented at SCONE interim #6. https://datatracker.ietf.org/meeting/interim-2025-scone-06/materials/slides-interim-2025-scone-06-sessa-time-window-duration-for-bitrate-measurement-00.pdf",
+          "createdAt": "2025-06-12T21:11:21Z",
+          "updatedAt": "2025-06-12T21:11:21Z"
         }
       ]
     },
