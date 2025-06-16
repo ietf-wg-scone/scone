@@ -205,8 +205,10 @@ when a network element detects a flow using more bandwidth than advertised via
 SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.
 
-The time and scope over which throughput advice applies is not specified.  The
-effective throughput advice might change without being signaled.  The signaled
+The time and scope over which throughput advice applies is not specified.
+Network conditions and rate-limit policies can change in ways that make
+previously signaled advice obsolete, and there are no guarantees that
+updated advice will be sent at such events. The signaled
 advice can be assumed to apply to the flow of packets on the same UDP address
 tuple for the duration of that flow.  For rate limiting networks, rate limiting
 policies often apply on the level of a device or subscription, but endpoints
