@@ -11,9 +11,9 @@
 <meta content="Matt Joras" name="author">
 <meta content="Marcus Ihlar" name="author">
 <meta content="
-       On-path network elements can sometimes be configured to apply rate limits to
-flows that pass them.  This document describes a method for signaling to
-endpoints that rate limiting policies are in force and  what that rate limit is. 
+       This document describes a protocol where on-path network elements
+can give endpoints their perspective on what the maximum achievable
+throughput might be for QUIC flows. 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="locomotive" name="keyword">
@@ -21,17 +21,17 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.28.1
-    Python 3.12.10
+    Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
-    lxml 5.3.0
+    lxml 5.3.1
     platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
-    setuptools 70.3.0
+    requests 2.32.4
+    setuptools 80.9.0
     wcwidth 0.2.13
 -->
 <link href="draft-ietf-scone-protocol.xml" rel="alternate" type="application/rfc+xml">
@@ -1051,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">May 2025</td>
+<td class="right">June 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 29 November 2025</td>
+<td class="center">Expires 18 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-28" class="published">28 May 2025</time>
+<time datetime="2025-06-16" class="published">16 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-29">29 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-18">18 December 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,9 +1103,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Standard Communication with Network Elements (SCONE) Protocol</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">On-path network elements can sometimes be configured to apply rate limits to
-flows that pass them.  This document describes a method for signaling to
-endpoints that rate limiting policies are in force and  what that rate limit is.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes a protocol where on-path network elements
+can give endpoints their perspective on what the maximum achievable
+throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1142,7 +1142,7 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1218,7 +1218,7 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-deployment" class="internal xref">Deployment</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-applying-rate-limit-signals" class="internal xref">Applying Rate Limit Signals</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-applying-throughput-advice-" class="internal xref">Applying Throughput Advice Signals</a></p>
 </li>
             </ul>
 </li>
@@ -1226,7 +1226,7 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-version-interaction" class="internal xref">Version Interaction</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-providing-opportunities-to-" class="internal xref">Providing Opportunities to Apply Rate Limit Signals</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-providing-opportunities-to-" class="internal xref">Providing Opportunities to Apply Throughput Advice Signals</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-feedback-to-sender-about-si" class="internal xref">Feedback To Sender About Signals</a></p>
@@ -1292,18 +1292,25 @@ endpoints that rate limiting policies are in force and  what that rate limit is.
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Many access networks limit the maximum data rate that attached devices are able
-to attain.  This is often done without any indication to the applications
+<p id="section-1-1">Many access networks apply rate limits to constrain the data rate of attached
+devices. This is often done without any indication to the applications
 running on devices.  The result can be that application performance is degraded,
 as the manner in which rate limits are enforced can be incompatible with the
 rate estimation or congestion control algorithms used at endpoints.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Having the network indicate what its rate limiting policy is, in a way that is
-accessible to endpoints, might allow applications to use this information when
+accessible to endpoints, allows applications to use this information when
 adapting their send rate.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">The Standard Communication with Network Elements (SCONE) protocol is
+<p id="section-1-3">Network elements are not limited to communicating information
+about rate limiting policies.
+Network elements in access networks could provide information
+to endpoints that can help account for changes in network capacity
+that are not suited to congestion control feedback. This might include
+reduced capacity due to overuse, equipment faults, or other transient issues;
+conversely, networks might choose to signal increased availability of capacity.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">The Standard Communication with Network Elements (SCONE) protocol is
 negotiated by QUIC endpoints.  This protocol provides a means for network
 elements to signal the maximum available sustained throughput, or rate limits,
-for flows of UDP datagrams that transit that network element to a QUIC endpoint.<a href="#section-1-3" class="pilcrow">¶</a></p>
+for flows of UDP datagrams that transit that network element to a QUIC endpoint.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="overview">
@@ -1380,9 +1387,9 @@ cannot assume that rate limit indications from one path apply to new paths.<a hr
 <p id="section-3-1">This protocol only works for flows that use the SCONE packet (<a href="#packet" class="auto internal xref">Section 5</a>).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The protocol requires that packets are modified as they transit a
 network element, which provides endpoints strong evidence that the network
-element has the power to drop packets; though see <a href="#security" class="auto internal xref">Section 9</a> for potential
-limitations on this.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">The rate limit signal that this protocol carries is independent of congestion
+element has the power to apply rate limiting; though see <a href="#security" class="auto internal xref">Section 9</a> for
+potential limitations on this.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">The throughput advice signal that this protocol carries is independent of congestion
 signals, limited to a single path and UDP packet flow, unidirectional, and
 strictly advisory.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <div id="independent-of-congestion-signals">
@@ -1390,7 +1397,7 @@ strictly advisory.<a href="#section-3-3" class="pilcrow">¶</a></p>
         <h3 id="name-independent-of-congestion-s">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-independent-of-congestion-s" class="section-name selfRef">Independent of Congestion Signals</a>
         </h3>
-<p id="section-3.1-1">Rate limit signals are not a substitute for congestion feedback.  Congestion
+<p id="section-3.1-1">Throughput advice signals are not a substitute for congestion feedback.  Congestion
 signals, such as acknowledgments, provide information on loss, delay, or ECN
 markings <span>[<a href="#ECN" class="cite xref">ECN</a>]</span> that indicate the real-time condition of a network
 path.  Congestion signals might indicate a throughput that is different from the
@@ -1407,12 +1414,12 @@ congestion controller.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
         <h3 id="name-unspecified-scope">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-unspecified-scope" class="section-name selfRef">Unspecified Scope</a>
         </h3>
-<p id="section-3.2-1">Modifying a packet does not prove that the rate limit that is indicated would be
+<p id="section-3.2-1">Modifying a packet does not prove that the throughput that is indicated would be
 achievable.  A signal that is sent for a specific flow is likely enforced at a
 different scope.  The extent of that scope is not carried in the signal.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">For instance, limits might apply at a network subscription level, such
 that multiple flows receive the same signal.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2-3">Endpoints can therefore be more confident in the rate limit signal as an
+<p id="section-3.2-3">Endpoints can therefore be more confident in the throughput signal as an
 indication of the maximum achievable throughput than as any indication of
 expected throughput.  That throughput will only be achievable when there is no
 significant data flowing in the same scope.  In the presence of other flows,
@@ -1439,9 +1446,9 @@ involved.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
         <h3 id="name-undirectional-signal">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-undirectional-signal" class="section-name selfRef">Undirectional Signal</a>
         </h3>
-<p id="section-3.4-1">The endpoint that receives a rate limit signal is not the endpoint that might
+<p id="section-3.4-1">The endpoint that receives a throughput advice signal is not the endpoint that might
 adapt its sending behavior as a result of receiving the signal.  This ensures
-that the rate limit signal is attached to the flow that it is mostly likely to
+that the throughput advice signal is attached to the flow that it is mostly likely to
 apply to.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">An endpoint might need to communicate the value it receives to its peer in order
 to ensure that the limit is respected.  This document does not define how that
@@ -1465,12 +1472,14 @@ the involved applications that are capable of handling SCONE signals. Therefore,
 when a network element detects a flow using more bandwidth than advertised via
 SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.<a href="#section-3.5-2" class="pilcrow">¶</a></p>
-<p id="section-3.5-3">The time and scope over which a rate limit applies is not specified.  The
-effective rate limit might change without being signaled.  The signaled limit
-can be assumed to apply to the flow of packets on the same UDP address tuple for
-the duration of that flow.  Rate limiting policies often apply on the level of a
-device or subscription, but endpoints cannot assume that this is the case.  A
-separate signal can be sent for each flow.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
+<p id="section-3.5-3">The time and scope over which throughput advice applies is not specified.
+Network conditions and rate-limit policies can change in ways that make
+previously signaled advice obsolete, and there are no guarantees that
+updated advice will be sent at such events. The signaled
+advice can be assumed to apply to the flow of packets on the same UDP address
+tuple for the duration of that flow.  For rate limiting networks, rate limiting
+policies often apply on the level of a device or subscription, but endpoints
+cannot assume that this is the case.  A separate signal can be sent for each flow.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1692,8 +1701,8 @@ transport parameters, and frame types registries established in Sections <a href
 (<a href="#apply" class="auto internal xref">Section 7.1</a>) according to their policies.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="apply">
 <section id="section-7.1">
-        <h3 id="name-applying-rate-limit-signals">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-applying-rate-limit-signals" class="section-name selfRef">Applying Rate Limit Signals</a>
+        <h3 id="name-applying-throughput-advice-">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-applying-throughput-advice-" class="section-name selfRef">Applying Throughput Advice Signals</a>
         </h3>
 <p id="section-7.1-1">A network element detects a SCONE packet by observing that a packet has a QUIC
 long header and one of the SCONE protocol versions (0xSCONE1 or 0xSCONE2).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
@@ -1740,9 +1749,9 @@ different ranges of bitrates. This design allows for:<a href="#section-8-1" clas
 <div id="extra-packets">
 <section id="section-8.1">
         <h3 id="name-providing-opportunities-to-">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-providing-opportunities-to-" class="section-name selfRef">Providing Opportunities to Apply Rate Limit Signals</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-providing-opportunities-to-" class="section-name selfRef">Providing Opportunities to Apply Throughput Advice Signals</a>
         </h3>
-<p id="section-8.1-1">Endpoints that wish to offer network elements the option to add rate limit
+<p id="section-8.1-1">Endpoints that wish to offer network elements the option to add throughout advice
 signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams. It is recommended that endpoints promptly
 send an initial SCONE packet once the peer confirms its willingness to receive
@@ -1750,7 +1759,7 @@ them.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.1-2">Endpoints <span class="bcp14">MUST</span> send any SCONE packet they send as the first packet in a
 datagram, coalesced with additional packets. An endpoint that receives and
 discards a SCONE packet without also successfully processing another packet
-from the same datagram <span class="bcp14">SHOULD</span> ignore any rate limit signal. Such a datagram
+from the same datagram <span class="bcp14">SHOULD</span> ignore any throughput advice signal. Such a datagram
 might be entirely spoofed.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.1-3">A network element that wishes to signal an updated rate limit waits for the
 next SCONE packet in the desired direction.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
@@ -1761,13 +1770,13 @@ next SCONE packet in the desired direction.<a href="#section-8.1-3" class="pilcr
         <h3 id="name-feedback-to-sender-about-si">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-feedback-to-sender-about-si" class="section-name selfRef">Feedback To Sender About Signals</a>
         </h3>
-<p id="section-8.2-1">Information about rate limits is intended for the sending application.  Any
+<p id="section-8.2-1">Information about throughout advice is intended for the sending application.  Any
 signal from network elements can be propagated to the receiving application
 using an implementation-defined mechanism.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">This document does not define a means for indicating what was received.
 That is, the expectation is that any signal is propagated to the application
 for handling, not handled automatically by the transport layer.
-How a receiving application communicates the rate limit signal to a
+How a receiving application communicates the throughput advice signal to a
 sending application will depend on the application in use.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">Different applications can choose different approaches. For example,
 in an application where a receiver drives rate adaptation, it might
@@ -1780,7 +1789,7 @@ application might be better able to indicate what has been received and
 processed.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
 <p id="section-8.2-5">SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
-network element applied a rate limit signal.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+network element applied a throughput advice signal.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="interactions-with-congestion-control">
@@ -1792,7 +1801,8 @@ network element applied a rate limit signal.<a href="#section-8.2-5" class="pilc
 of a path capacity. They are complementary. Congestion control algorithms
 are typically designed to quickly detect and react to congestion, i.e., to
 the "minimum" capacity of a path. SCONE informs the endpoint
-of the maximum capacity of a path.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+of the maximum capacity of a path based on network rate limit policy,
+network conditions, or a combination of the two.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3-2">Consider for example a path in which the bottleneck router implements Early
 Congestion Notification as specified in the L4S architecture <span>[<a href="#RFC9330" class="cite xref">RFC9330</a>]</span>.
 If the path capacity diminishes, queues will build up and the router
@@ -1813,10 +1823,10 @@ channel.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 <a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-9-1">The modification of packets provides endpoints proof that a network element is
-in a position to drop datagrams and thereby enforce the indicated rate limit.
+in a position to drop datagrams and could apply a rate limit policy.
 <a href="#extra-packets" class="auto internal xref">Section 8.1</a> states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
-spurious rate limit signals.<a href="#section-9-1" class="pilcrow">¶</a></p>
+spurious throughput advice signals.<a href="#section-9-1" class="pilcrow">¶</a></p>
 <p id="section-9-2">Some off-path attackers may be able to both
 observe traffic and inject packets. Attackers with such capabilities could
 observe packets sent by an endpoint, create datagrams coalescing an
@@ -1827,11 +1837,11 @@ than might otherwise be permitted also need to bypass any
 rate limiters. The attacker will thus get arbitrary SCONE packets accepted by
 the peer, with the result being that the endpoint receives a false
 or misleading rate limit.<a href="#section-9-2" class="pilcrow">¶</a></p>
-<p id="section-9-3">The recipient of a rate limit signal therefore cannot guarantee that
+<p id="section-9-3">The recipient of a throughput advice signal therefore cannot guarantee that
 the signal was generated by an on-path network element. However,
 the capabilities required of an off-path attacker are substantially
 similar to those of on path elements.<a href="#section-9-3" class="pilcrow">¶</a></p>
-<p id="section-9-4">The actual value of the rate limit signal is not authenticated.  Any signal
+<p id="section-9-4">The actual value of the throughput advice signal is not authenticated.  Any signal
 might be incorrectly set in order to encourage endpoints to behave in ways that
 are not in their interests.  Endpoints are free to ignore limits that they think
 are incorrect.  The congestion controller employed by a sender provides
@@ -1942,14 +1952,14 @@ service to access the same server. The attacker sees the IP addresses
 in the packets behind VPN and proxy and also between the users and the VPN,
 but it does not know which VPN address corresponds to what user address.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
 <p id="section-10.2-2">Suppose now that the attacker selects a flow on the link between the
-VPN/proxy and server. The attacker applies rate limit signals to SCONE packets
+VPN/proxy and server. The attacker applies throughput advice signals to SCONE packets
 in that flow. The attacker chooses a bandwidth that is
 lower than the "natural" bandwidth of the connection. A reduction
 in the rate of flows between client and VPN/proxy might allow
 the attacker to link the altered flow to the client.<a href="#section-10.2-2" class="pilcrow">¶</a></p>
 <div id="section-10.2-3">
           <div class="alignLeft art-svg artwork" id="section-10.2-3.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="448" viewBox="0 0 448 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="472" viewBox="0 0 472 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
               <path d="M 8,32 L 8,64" fill="none" stroke="black"></path>
               <path d="M 8,96 L 8,128" fill="none" stroke="black"></path>
               <path d="M 8,160 L 8,192" fill="none" stroke="black"></path>
@@ -2006,9 +2016,9 @@ the attacker to link the altered flow to the client.<a href="#section-10.2-2" cl
                 <text x="232" y="132">Proxy</text>
                 <text x="44" y="180">Client</text>
                 <text x="248" y="196">Apply</text>
-                <text x="292" y="196">rate</text>
-                <text x="336" y="196">limit</text>
-                <text x="388" y="196">signal</text>
+                <text x="316" y="196">throughput</text>
+                <text x="388" y="196">advice</text>
+                <text x="444" y="196">signal</text>
                 <text x="152" y="244">Observe</text>
                 <text x="212" y="244">change</text>
               </g>
@@ -2020,7 +2030,7 @@ congestion signals by dropping packets or by setting the ECN CE bit.
 That will also likely result in changes in the congestion response by
 the affected client.<a href="#section-10.2-4" class="pilcrow">¶</a></p>
 <p id="section-10.2-5">A VPN or proxy could defend against this style of attack by removing SCONE (and
-ECN) signals. There are few reasons to provide per-flow rate limit signals in
+ECN) signals. There are few reasons to provide per-flow throughput advice signals in
 that situation.  Endpoints might also either disable this feature or ignore any
 signals when they are aware of the use of a VPN or proxy.<a href="#section-10.2-5" class="pilcrow">¶</a></p>
 </section>
