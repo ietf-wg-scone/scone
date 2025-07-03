@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-17T01:47:19.757239+00:00",
+  "timestamp": "2025-07-03T01:47:47.228237+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -828,7 +828,7 @@
       "labels": [],
       "body": "This issue is mostly in regard to  slide 11 of https://datatracker.ietf.org/meeting/122/materials/slides-122-scone-trone-questions-01, which was discussed at IETF 122.\n\nThe current draft doesn't mention this perspective so I want to open up the discussion.\n\nIn general, I think that a fixed window length specified by SCONE is preferable as it simplifies works for network elements. But meanwhile, we need to find a window that works for all users of SCONE.\n\nDifferent video applications choose to buffer different lengths of videos during playbacks. For example, App A may buffer 10s while App B buffers 20s. A 10-second window will work for app A but not work for app B. A 20-second window will work for both.\n\nA flow that complies with a short window will also comply with a longer one.\n\nThis means we should probably specify a longer window to accommodate different applications, but not too long that exceeds the average duration of a video connection. ",
       "createdAt": "2025-04-08T22:27:05Z",
-      "updatedAt": "2025-06-12T21:11:21Z",
+      "updatedAt": "2025-07-02T21:49:11Z",
       "closedAt": null,
       "comments": [
         {
@@ -872,6 +872,13 @@
           "body": "This is what we presented at SCONE interim #6. https://datatracker.ietf.org/meeting/interim-2025-scone-06/materials/slides-interim-2025-scone-06-sessa-time-window-duration-for-bitrate-measurement-00.pdf",
           "createdAt": "2025-06-12T21:11:21Z",
           "updatedAt": "2025-06-12T21:11:21Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Unfortunately, I missed the presentation, but the results are very useful.  The question I have, which relates more to how applications using this might operate is: If we have a 120s window, does that potentially mean that the entire budget can be expended in one hit?  \n\nLet's say that the limit is a relatively modest 5Mbps.  Over a 120s window, that's ~75 megabytes of data.  I can confirm that modern networks are capable of delivering that much data in a very short time.  If that data ends up being delivered, but not useful, is the application expected to sit on its hands for the remainder of those two minutes?\n\nFor me, that argues for a shorter window on the basis that we need to limit the potential dead air, even if the ideal might be that the rate is applied over that longer window.  Any value we pick is also the amount of time that someone might have to sit watching their device do nothing.\n\nThe other factor, of course, is that the longer radio timers tend to run in the order of 30s, so any window shorter than 30s might not allow battery-powered devices to enter the most power-efficient modes.  Of course, there are shorter radio timers that allow for significant savings short of the full idle state and re-awakening from that state is somewhat costly.  So perhaps it is better to avoid that state for a device that is actively being used, so maybe 30s is not that big a deal.\n\nAll of this leads me to suggest that, while 120s might be an ideal at the low end, there are reasons other than those used in the presentation to suggest a shorter value.  Could we perhaps split the difference?\n\nSeparately, I think we'd want to suggest a sliding window, though perhaps we can allow larger quanta than 0.01s.  The results show some differences (the sliding window needs more time in a few cases, probably because it is less forgetful), but they aren't particularly large differences.  Block windows risk having applications accidentally synchronize their resets, which might lead to load spikes.",
+          "createdAt": "2025-07-02T21:49:11Z",
+          "updatedAt": "2025-07-02T21:49:11Z"
         }
       ]
     },
