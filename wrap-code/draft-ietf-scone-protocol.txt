@@ -436,21 +436,22 @@ Table of Contents
    lower policy.
 
    The following pseudocode indicates how a network element might detect
-   a SCONE packet and replace an existing rate signal.
+   a SCONE packet and replace an existing rate signal, given throughput
+   advice (target_throughput).
 
    is_long = packet[0] & 0x80 == 0x80
    packet_version = ntohl(packet[1..5])
    if is_long and (packet_version == SCONE1_VERSION or
                    packet_version == SCONE2_VERSION):
-     packet_rate_value = packet[0] & 0x3f
-     (target_rate_version, target_rate_value) = \
-         convert_rate_to_signal(target_rate)
+     packet_throughput = \
+       signal_to_throughput(packet_version, packet[0] & 0x3f)
 
-     if target_rate_version != packet_version:
-       packet[1..5] = htonl(target_rate_version)
-       packet[0] = packet[0] & 0xc0 | target_rate_value
-     elif target_rate_value < packet_rate_value:
-       packet[0] = packet[0] & 0xc0 | target_rate_value
+     if target_throughput < packet_throughput:
+       target_version, target_signal = \
+         throughput_to_signal(target_throughput)
+       packet[0] = packet[0] & 0xc0 | target_signal
+       if target_version != packet_version:
+         packet[1..5] = htonl(target_version)
 
 8.  Version Interaction
 
