@@ -92,7 +92,7 @@ Networks with rate limiting policies use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals -- such as ECN, delays and loss --
 operate on a time scale of a round trip time,
-throughput advice operates over a much larger period.
+throughput advice operates over a much longer period.
 This has benefits in some networks as endpoints can fully consume
 network capacity in bursts,
 rather than extending network interaction at lower rates.
