@@ -217,14 +217,16 @@ when a network element detects a flow using more bandwidth than advertised via
 SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.
 
-The time and scope over which throughput advice applies is not specified.
-Network conditions and rate-limit policies can change in ways that make
-previously signaled advice obsolete, and there are no guarantees that
-updated advice will be sent at such events. The signaled
-advice can be assumed to apply to the flow of packets on the same UDP address
-tuple for the duration of that flow.  For rate limiting networks, rate limiting
-policies often apply on the level of a device or subscription, but endpoints
+The signaled advice can be assumed to apply
+to the flow of packets on the same UDP address tuple until updated
+or when the flow ends.
+Rate limiting policies often apply on the level of a device or subscription, but endpoints
 cannot assume that this is the case.  A separate signal can be sent for each flow.
+
+Network conditions and rate-limit policies can change in ways that make
+previously signaled advice obsolete.
+There are no guarantees that updated advice will be sent at such events.
+
 
 ## Following Advice
 
@@ -335,6 +337,19 @@ and the corresponding throughput advice for each.
 | 0xSCONE2 | 62          | 199.5 Gbps |
 | 0xSCONE2 | 63          | No limit   |
 {: #ex-rates title="Examples of signals and corresponding rates"}
+
+
+## Rough Time Span
+
+The time over which throughput advice applies is fixed
+to a period of 60 seconds.
+
+Endpoints that receive throughput advice can advise their peer of the limit.
+That peer can adhere to the limit
+by limiting the amount of data that is sent over any 60 second span.
+A sample algorithm for ensuring adherance to throughput advice
+is included in {{sliding-window}}.
+
 
 ## Endpoint Processing of SCONE Packets
 
@@ -801,9 +816,30 @@ Contact:
 
 Notes:
 : (none)
-{: spacing="compact"}
+{:compact}
 
 --- back
+
+# Sliding Window for Rate Limit Monitoring {#sliding-window}
+
+One way to account for usage
+is to divide time into multiple smaller spans.
+For instance, 60 consecutive one second intervals
+or 120 half second intervals.
+
+The amount of data transmitted in each interval is recorded
+in a circular buffer,
+as well as the total amount over 60 seconds.
+As time passes and new intervals are added,
+the overall total is reduced by the amount attributed to the oldest interval.
+The oldest interval is reset to zero and becomes the newest interval.
+
+Sample code for this algorithm is included in {{x-ta}}.
+
+~~~ pseudocode
+{::include ta.py.excerpt}
+~~~
+{: #x-ta title="Sample code for managing rate limit"}
 
 # Acknowledgments
 {:numbered="false"}
