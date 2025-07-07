@@ -12,6 +12,7 @@
 /.refcache
 /.venv/
 /.vscode/
+/__pycache__/
 /lib
 /node_modules/
 /versioned/
