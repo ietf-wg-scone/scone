@@ -359,12 +359,17 @@ packet and replace an existing rate signal.
 
 ~~~ pseudocode
 is_long = packet[0] & 0x80 == 0x80
-packet_version = packet[1..5]
-if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VERSION):
+packet_version = ntohl(packet[1..5])
+if is_long and (packet_version == SCONE1_VERSION or
+                packet_version == SCONE2_VERSION):
   packet_rate_value = packet[0] & 0x3f
-  (target_rate_version, target_rate_value) = convert_rate_to_signal(target_rate)
-  if target_rate_version < packet_version or target_rate_value < packet_rate_value
-    packet[1..5] = target_rate_version
+  (target_rate_version, target_rate_value) = \
+      convert_rate_to_signal(target_rate)
+
+  if target_rate_version < packet_version:
+    packet[1..5] = htonl(target_rate_version)
+    packet[0] = packet[0] & 0xc0 | target_rate_value
+  elif target_rate_value < packet_rate_value:
     packet[0] = packet[0] & 0xc0 | target_rate_value
 ~~~
 
