@@ -1724,7 +1724,7 @@ if is_long and (packet_version == SCONE1_VERSION or
   (target_rate_version, target_rate_value) = \
       convert_rate_to_signal(target_rate)
 
-  if target_rate_version &lt; packet_version:
+  if target_rate_version != packet_version:
     packet[1..5] = htonl(target_rate_version)
     packet[0] = packet[0] &amp; 0xc0 | target_rate_value
   elif target_rate_value &lt; packet_rate_value:
