@@ -1311,6 +1311,16 @@ conversely, networks might choose to signal increased availability of capacity.<
 negotiated by QUIC endpoints.  This protocol provides a means for network
 elements to signal the maximum available sustained throughput, or rate limits,
 for flows of UDP datagrams that transit that network element to a QUIC endpoint.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Networks with rate limiting policies use SCONE to send throughput advice
+to cooperating endpoints to limit overall network usage.
+Where congestion control signals -- such as ECN, delays and loss --
+operate on a time scale of a round trip time,
+throughput advice operates over a much longer period.
+This has benefits in some networks as endpoints can fully consume
+network capacity in bursts,
+rather than extending network interaction at lower rates.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">For endpoints, SCONE throughput advice makes network policies visible,
+which can reduce wasteful probing beyond those limits.<a href="#section-1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="overview">

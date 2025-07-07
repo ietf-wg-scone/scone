@@ -134,6 +134,17 @@ Table of Contents
    throughput, or rate limits, for flows of UDP datagrams that transit
    that network element to a QUIC endpoint.
 
+   Networks with rate limiting policies use SCONE to send throughput
+   advice to cooperating endpoints to limit overall network usage.
+   Where congestion control signals -- such as ECN, delays and loss --
+   operate on a time scale of a round trip time, throughput advice
+   operates over a much longer period.  This has benefits in some
+   networks as endpoints can fully consume network capacity in bursts,
+   rather than extending network interaction at lower rates.
+
+   For endpoints, SCONE throughput advice makes network policies
+   visible, which can reduce wasteful probing beyond those limits.
+
 2.  Overview
 
    QUIC endpoints can negotiate the use of SCONE by including a
