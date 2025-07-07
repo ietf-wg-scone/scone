@@ -17,4 +17,4 @@ endif
 draft-ietf-scone-protocol.xml: ta.py.excerpt
 
 ta.py.excerpt: ta.py
-	sed -e '1./^#>>>/d;/^#<<</,$$d' $< > $@
+	sed -e '1,/^#>>>/d;/^#<<</,$$d' $< > $@
