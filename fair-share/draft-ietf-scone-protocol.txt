@@ -138,7 +138,7 @@ Table of Contents
    advice to cooperating endpoints to limit overall network usage.
    Where congestion control signals -- such as ECN, delays and loss --
    operate on a time scale of a round trip time, throughput advice
-   operates over a much larger period.  This has benefits in some
+   operates over a much longer period.  This has benefits in some
    networks as endpoints can fully consume network capacity in bursts,
    rather than extending network interaction at lower rates.
 
@@ -792,9 +792,9 @@ Table of Contents
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-14,
-              23 April 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-14>.
+              in Progress, Internet-Draft, draft-ietf-quic-multipath-15,
+              7 July 2025, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-quic-multipath-15>.
 
    [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.
               White, "Low Latency, Low Loss, and Scalable Throughput
