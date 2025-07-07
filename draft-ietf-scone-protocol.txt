@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 18 December 2025                           Private Octopus Inc.
+Expires: 8 January 2026                             Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            16 June 2025
+                                                             7 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 December 2025.
+   This Internet-Draft will expire on 8 January 2026.
 
 Copyright Notice
 
@@ -436,16 +436,22 @@ Table of Contents
    lower policy.
 
    The following pseudocode indicates how a network element might detect
-   a SCONE packet and replace an existing rate signal.
+   a SCONE packet and replace an existing rate signal, given throughput
+   advice (target_throughput).
 
    is_long = packet[0] & 0x80 == 0x80
-   packet_version = packet[1..5]
-   if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VERSION):
-     packet_rate_value = packet[0] & 0x3f
-     (target_rate_version, target_rate_value) = convert_rate_to_signal(target_rate)
-     if target_rate_version < packet_version or target_rate_value < packet_rate_value
-       packet[1..5] = target_rate_version
-       packet[0] = packet[0] & 0xc0 | target_rate_value
+   packet_version = ntohl(packet[1..5])
+   if is_long and (packet_version == SCONE1_VERSION or
+                   packet_version == SCONE2_VERSION):
+     packet_throughput = \
+       signal_to_throughput(packet_version, packet[0] & 0x3f)
+
+     if target_throughput < packet_throughput:
+       target_version, target_signal = \
+         throughput_to_signal(target_throughput)
+       packet[0] = packet[0] & 0xc0 | target_signal
+       if target_version != packet_version:
+         packet[1..5] = htonl(target_version)
 
 8.  Version Interaction
 
@@ -781,9 +787,9 @@ Table of Contents
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-14,
-              23 April 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-14>.
+              in Progress, Internet-Draft, draft-ietf-quic-multipath-15,
+              7 July 2025, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-quic-multipath-15>.
 
    [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.
               White, "Low Latency, Low Loss, and Scalable Throughput

@@ -15,12 +15,12 @@
 can give endpoints their perspective on what the maximum achievable
 throughput might be for QUIC flows. 
     " name="description">
-<meta content="xml2rfc 3.28.1" name="generator">
+<meta content="xml2rfc 3.29.0" name="generator">
 <meta content="locomotive" name="keyword">
 <meta content="pastry" name="keyword">
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.1
+  xml2rfc 3.29.0
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
@@ -1051,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">June 2025</td>
+<td class="right">July 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 18 December 2025</td>
+<td class="center">Expires 8 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-06-16" class="published">16 June 2025</time>
+<time datetime="2025-07-07" class="published">7 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-12-18">18 December 2025</time></dd>
+<dd class="expires"><time datetime="2026-01-08">8 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1713,17 +1713,23 @@ The network element replaces the rate signal if it wishes to signal a lower
 rate limit; otherwise, the original values are retained, preserving the signal
 from the network element with the lower policy.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.1-4">The following pseudocode indicates how a network element might detect a SCONE
-packet and replace an existing rate signal.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+packet and replace an existing rate signal,
+given throughput advice (<code>target_throughput</code>).<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <div class="lang-pseudocode sourcecode" id="section-7.1-5">
 <pre>
 is_long = packet[0] &amp; 0x80 == 0x80
-packet_version = packet[1..5]
-if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VERSION):
-  packet_rate_value = packet[0] &amp; 0x3f
-  (target_rate_version, target_rate_value) = convert_rate_to_signal(target_rate)
-  if target_rate_version &lt; packet_version or target_rate_value &lt; packet_rate_value
-    packet[1..5] = target_rate_version
-    packet[0] = packet[0] &amp; 0xc0 | target_rate_value
+packet_version = ntohl(packet[1..5])
+if is_long and (packet_version == SCONE1_VERSION or
+                packet_version == SCONE2_VERSION):
+  packet_throughput = \
+    signal_to_throughput(packet_version, packet[0] &amp; 0x3f)
+
+  if target_throughput &lt; packet_throughput:
+    target_version, target_signal = \
+      throughput_to_signal(target_throughput)
+    packet[0] = packet[0] &amp; 0xc0 | target_signal
+    if target_version != packet_version:
+      packet[1..5] = htonl(target_version)
 </pre><a href="#section-7.1-5" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2224,7 +2230,7 @@ Transport Parameters" registry maintained at
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
-<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-14</span>, <time datetime="2025-04-23" class="refDate">23 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14</a>&gt;</span>. </dd>
+<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-15</span>, <time datetime="2025-07-07" class="refDate">7 July 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-15">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-15</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9330">[RFC9330]</dt>
       <dd>
