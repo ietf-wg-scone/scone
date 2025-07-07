@@ -14,7 +14,11 @@ else
 endif
 endif
 
-draft-ietf-scone-protocol.xml: ta.py.excerpt
-
+.INTERMEDIATE: ta.py.excerpt
 ta.py.excerpt: ta.py
 	sed -e '1,/^#>>>/d;/^#<<</,$$d' $< > $@
+
+draft-ietf-scone-protocol.xml: ta.py.excerpt
+
+clean::
+	-rm -rf ta.py.excerpt
