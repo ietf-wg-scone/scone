@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-06T01:55:45.456667+00:00",
+  "timestamp": "2025-07-08T01:48:34.415791+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -131,15 +131,15 @@
       "id": "I_kwDON1dwo86u3xiG",
       "title": "Adoption and Business implications of \"A single Rate Signal field\"",
       "url": "https://github.com/ietf-wg-scone/scone/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "atiwariphd",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "> The payload of a TRONE packet consists of a single Rate Signal field\n\nI would like to raise an issue to make sure everyone understands the adoption and business implication of the above constraint. \n\nA single rate value does not clearly explain how this rate should be measured and how the two parties (the sender of the rate signal and recipient of the rate signal) should interpret this signal in a consistent fashion. So if two parties (a Communication Service Provider and a Content and Application Provider) want to use this signal, they will have to have offline discussions between their business and technical teams to establish a common way of interpreting this signal. \n\nThis inherently will create barriers to entry for small app startups to use TRONE because typically small startups do not have the luxury of hiring a large partnership and technology ecosystems team to interface with multiple CSPs around the world to figure out how to interpret the \"single rate signal\" coming from their network.\n\nWe need to ask ourselves, do we want IETF to design a protocol that is only usable by large companies with plenty of resources?",
       "createdAt": "2025-03-20T02:49:44Z",
-      "updatedAt": "2025-03-20T10:44:24Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-07T23:46:59Z",
+      "closedAt": "2025-07-07T23:46:58Z",
       "comments": [
         {
           "author": "ihlar",
@@ -147,6 +147,13 @@
           "body": "I think there is a lot of value in simplicity. A single rate signal and guidance in the document around how to interpret the signal makes it easy to reason about. \nDifferent CSPs might measure conformance in different ways, but the associated action to detection of non-conforming traffic would likely be that policing is re-introduced for a flow, or that a lower rate is signaled. Both these actions can be detected and acted upon by the endpoints. ",
           "createdAt": "2025-03-20T10:44:23Z",
           "updatedAt": "2025-03-20T10:44:23Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree with @ihlar here.  The draft is presently a little loose, but changes like #37 will tighten up the semantics enough to ensure that there should be no need for per-network logic or anything like that.  The rate can be taken at face value by endpoints and networks can set the value with an expectation that endpoints will act more or less consistently to keep within that advice (for those that support the protocol, of course).\n\nAs Marcus observes, the extent to which a network operator sticks to their advertised limit in terms of engaging some form of policing of published rates will vary.  Some will allow some flexibility beyond the limit, others might have more or less allowance for excess.  Some will use a longer period for enforcement, others will not (you can't realistically use a shorter enforcement window).  But ultimately, those are all choices outside of the throughput advice.  My expectation is that some networks will advertise rates that exceed their available capacity, relying on congestion control to manage contention; others might seek to provide advice that is closer to what they can guarantee delivery of, at least to some degree.\n\nAgain, all of this is permissible within what the protocol allows, but none of it requires special dispensation or treatment.  The ability to signal throughput advice remains as a useful guide for both endpoints and networks.\n\nThat this is standardized is exactly why this does become available to small networks or small application developers.  The fact that it is simple also contributes to that, it doesn't require a whole lot of engineering to use: you just set the policy and that determines the advice; or you follow the advice.\n\n(Closing this on the basis of these.)",
+          "createdAt": "2025-07-07T23:46:59Z",
+          "updatedAt": "2025-07-07T23:46:59Z"
         }
       ]
     },
@@ -901,7 +908,7 @@
       "labels": [],
       "body": "The topic of whether network elements should be able to generate TRONE packets and insert them into expanded datagrams was discussed at IETF 122. Also discussed in #6.\nIdeally this should not be needed, given that there is proper guidance on when to send TRONE packets and making sure that updating the rate limit field of the TRONE packets is sufficiently cheap. The risk of expanding datagrams in the network is that it can result in path MTU issues with lost packets as a consequence. \n\nThere are a few paths we can take on this topic:\n\n1. Say nothing about it.\n2. Mention the possibility and give guidance on potential MTU issues that can arise. \n3. Explicitly forbid network inserted TRONE packets and design protocol mechanisms to enforce it.",
       "createdAt": "2025-04-15T15:59:14Z",
-      "updatedAt": "2025-07-03T05:33:45Z",
+      "updatedAt": "2025-07-08T01:04:46Z",
       "closedAt": null,
       "comments": [
         {
@@ -924,6 +931,13 @@
           "body": "The way I would recommend enforcement, though I don't think we need it, is to define a new QUIC frame that is enabled by the existing extension.  That frame would be included by the sender in any packet that it constructs with a SCONE packet.  If the recipient receives a SCONE packet, the validation process involves not just accepting a coalesced packet (as presently recommended), but checking for the frame.  The frame could be designated probing and non-ack-eliciting and use a 2 byte codepoint, so the overhead would be low.\n\nThat's a simple mechanism and very easy to implement for all involved.  It's also not worth it in my view.  It's not hard to retrofit this specific design cleanly, but it would eat another transport parameter codepoint if we added something later, so it's better to decide now.\n\nA protocol-free approach is to simply remember which packets were coalesced with a SCONE packet, and ask the peer to report where it saw SCONE packets.  That doesn't depend on any protocol at all, but depends on having a reporting channel at the application layer or somewhere else.  The downside of this is that it might be awkward for those applications to integrate, especially for those applications that don't have any need for signaling,\n\nLike @ianswett, I don't see much upside for either.  I'm inclined to stick with the silence option.  That discourages the practice, for all but the most technically competent networks, who are in a position to recognize the opportunity AND the risk that comes with inflating packets past the MTU.  If we say something, we inevitably encourage the practice, even if it says \"SHOULD NOT\". I don't to do that.",
           "createdAt": "2025-07-03T05:33:45Z",
           "updatedAt": "2025-07-03T05:33:45Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I would point out that we already have the capability to drop SCONE packets that are simply inserted, and that that is sufficient for preventing misuse.\n\n[Section 8.1 ](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#name-providing-opportunities-to-) states that _an endpoint that receives and discards a SCONE packet without also successfully processing another packet from the same datagram SHOULD ignore any throughput advice signal._\n\nQUIC endpoints process each packet only once, dropping duplicates.\n\nTherefore, the only case the current design does not prevent is on-path observers creating a duplicate of an observed packet, attaching a fake SCONE packet to it, and racing it to the receiver so that it reaches the receiver earlier than the original packet; a sophisticated type of attack that we deemed impossible to have a defense against in QUIC v1.",
+          "createdAt": "2025-07-08T01:04:10Z",
+          "updatedAt": "2025-07-08T01:04:46Z"
         }
       ]
     },
@@ -970,15 +984,15 @@
       "id": "I_kwDON1dwo86zZ_iG",
       "title": "Multipath",
       "url": "https://github.com/ietf-wg-scone/scone/issues/26",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The multipath extension allows sending data on multiple paths, including multiple paths bound to the same 4 tuple. I think that a QUIC application could split its traffic along multiple paths, all identified by different connection IDs. Applications could request some of these paths to announce Trone support, other not, and maybe others still to advertise the Non-Queue-Building type.\n\nDo we fill the need to say anything about that?",
       "createdAt": "2025-04-22T05:40:54Z",
-      "updatedAt": "2025-05-21T22:15:37Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-07T23:35:24Z",
+      "closedAt": "2025-07-07T23:35:24Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -1014,6 +1028,34 @@
           "body": "I'm unsure how frequently multipath will be used, but path changes are somewhat common today and may become more common.  There are some deployments of Server Preferred Address, which substantially changes the 5-tuple after the handshake, for example.",
           "createdAt": "2025-05-21T22:15:36Z",
           "updatedAt": "2025-05-21T22:15:36Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The draft presently says:\n\n> Indicated rate limits only apply to the path on which they are received.  A\nconnection that migrates or uses multipath {{?QUIC-MP=I-D.ietf-quic-multipath}}\ncannot assume that rate limit indications from one path apply to new paths.\n\nI think that is enough.",
+          "createdAt": "2025-07-07T09:36:01Z",
+          "updatedAt": "2025-07-07T09:36:01Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree. The multipath draft ended up saying something very similar about congestion control.",
+          "createdAt": "2025-07-07T14:20:39Z",
+          "updatedAt": "2025-07-07T14:20:39Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "I also think the current text in the draft should be fine.",
+          "createdAt": "2025-07-07T15:00:30Z",
+          "updatedAt": "2025-07-07T15:00:30Z"
+        },
+        {
+          "author": "ianswett",
+          "authorAssociation": "NONE",
+          "body": "LGTM",
+          "createdAt": "2025-07-07T15:15:21Z",
+          "updatedAt": "2025-07-07T15:15:21Z"
         }
       ]
     },
@@ -1128,12 +1170,12 @@
       "url": "https://github.com/ietf-wg-scone/scone/issues/32",
       "state": "OPEN",
       "author": "Kevsy",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "draft-00 does not include the use of SCONE by networks that do not apply rate limit policies. For example, a cellular network that provides throughput advice based on its view of network congestion and channel conditions.  I've drafted PR which adds that as a use of SCONE, and hence changes 'rate limit signal' to throughput advice' throughout:  #31",
       "createdAt": "2025-05-12T16:38:30Z",
-      "updatedAt": "2025-05-15T09:00:31Z",
+      "updatedAt": "2025-07-07T09:38:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -1152,7 +1194,7 @@
         },
         {
           "author": "Kevsy",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Thanks @martinthomson and @huitema for the review and suggestions: limiting the PR to (1) changing 'rate limit signals' to 'throughput advice signals', and (2) including your amended text that allows cases beyond conveying rate limiting policy, is fine by me. \n\nI've applied the suggested commits accordingly to make that clearer, reverting the contentious parts.",
           "createdAt": "2025-05-13T10:53:23Z",
           "updatedAt": "2025-05-13T10:53:23Z"
@@ -1166,10 +1208,17 @@
         },
         {
           "author": "Kevsy",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "(answering from a cellular perspective)\n\n> It would seem to me that a perfectly legitimate use of SCONE is to signal that \"you are connected via a 10 Mbit/sec Ethernet-over-copper connection, no matter what else happens, your throughput won't get higher than 10 Mbit/sec\".\n\nYeah, I was also thinking indoor cellular (constrained 800Mhz) and cell edge, i.e. conditions unlikely to change for the duration of a video session. \n\n> Congestion (the normal kind) changes too fast to be worth signaling.\n\n+1, at least for now. Radio channel conditions are signaled constantly to the radio access network, but they are ephemeral and not shared to the core in real time. So 'rapidly changing urban environment' signal strength is not worth attempting to convey at this stage, but as mentioned above, there could be a way to determine when a signal strength (and hence throughput constraints) are likely to last for the session.   ",
           "createdAt": "2025-05-15T09:00:30Z",
           "updatedAt": "2025-05-15T09:00:30Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think that we're in good shape already here.  Those networks that have changing conditions can use whatever opportunities they get to update advice.  There's advice we need to give about how often to make it possible to update advice; we can take that into account there.",
+          "createdAt": "2025-07-07T09:38:33Z",
+          "updatedAt": "2025-07-07T09:38:33Z"
         }
       ]
     },
@@ -1178,15 +1227,15 @@
       "id": "I_kwDON1dwo866MLaS",
       "title": "Provide rationale for signaling rates beyond those enforced by congestion control",
       "url": "https://github.com/ietf-wg-scone/scone/issues/33",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The draft jumps straight into the SCONE mechanism without first explaining *why* an operator would want an explicit long-term-rate signal at all. Adding a short, non-normative \u201cMotivation\u201d paragraph would give readers, _including the operators of neutral-connectivity networks_, better context.\n\nThe paragraph can cover:\n* **Short-term fairness of congestion control.**\nModern CC algorithms equalise throughput only among flows that are simultaneously backlogged.\n\n* **Long-term unfairness between flow types.**\nWhen an always-on bulk transfer (e.g., software update or congested video) shares a path with an intermittent or bursty flow, the bulk flow can send far more data over wall-clock time than the intermittent flow, despite CC\u2019s short-term fairness.\n\n* **SCONE as the improvement.**\nSCONE lets network elements declare their desired long-term rate in-band, giving operators a transparent, standards-based tool for achieving long-horizon fairness\u2014without heuristic classification or DPI.",
       "createdAt": "2025-06-06T06:08:55Z",
-      "updatedAt": "2025-06-06T07:38:00Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-07T23:35:08Z",
+      "closedAt": "2025-07-07T23:35:08Z",
       "comments": []
     },
     {
@@ -3352,6 +3401,199 @@
           "createdAt": "2025-06-16T11:28:55Z",
           "updatedAt": "2025-06-16T11:28:55Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDON1dwo86dsZOs",
+      "title": "Reformat and tweak code",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/36",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The use of multiple versions makes this worse,\r\nbut I think it's worth breaking out the version change from the rest.",
+      "createdAt": "2025-07-07T06:48:05Z",
+      "updatedAt": "2025-07-07T18:36:17Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "wrap-code",
+      "headRefOid": "22464ac3a681d8f04efb026a9c3d9857503a8536",
+      "closedAt": "2025-07-07T18:36:17Z",
+      "mergedAt": "2025-07-07T18:36:17Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "e8eaf8f87e2a5c16b8b66366dfb198ec861cd645"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Now that I think on this more, I think that we need to make more changes...  Hold that for a moment.",
+          "createdAt": "2025-07-07T07:48:21Z",
+          "updatedAt": "2025-07-07T07:48:21Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yeah, I think 7514f6b is fine in sense that we can assume the following:\r\n* bit rates in SCONE2_VERSION are above those in SCONE1_VERSION, and\r\n* within each version, bit rate signals are ordered by their bit rates.\r\n\r\nNot that 22464ac is bad, but I wonder if network elements would actually convert signals to bit rates.",
+          "createdAt": "2025-07-07T08:49:10Z",
+          "updatedAt": "2025-07-07T08:49:10Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There's several things in there that are probably ripe for optimization; the point of pseudocode is not to highlight what is optimal, but to describe - in an unambiguous fashion - what is correct.  For instance, the conversion from target throughput to a signal is something you can cache for the target throughput.  I didn't do that.\r\n\r\nGiven the current versions we have, there is a unique mapping from any rate to just one pair of version and signal.  That's not guaranteed more generally though.  I think that I'd prefer the more general form.",
+          "createdAt": "2025-07-07T09:05:18Z",
+          "updatedAt": "2025-07-07T09:05:18Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo86yXRY3",
+          "commit": {
+            "abbreviatedOid": "53c8634"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "LG modulo the comment below.",
+          "createdAt": "2025-07-07T07:05:47Z",
+          "updatedAt": "2025-07-07T07:06:03Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\n  if target_rate_version != packet_version:\r\n```\r\n\r\nThis is an issue in the original code, but I do not think we have defined ordering between the two version numbers.",
+              "createdAt": "2025-07-07T07:05:47Z",
+              "updatedAt": "2025-07-07T07:06:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86ydl8A",
+          "commit": {
+            "abbreviatedOid": "22464ac"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-07T14:17:14Z",
+          "updatedAt": "2025-07-07T14:17:14Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo86ydovx",
+          "commit": {
+            "abbreviatedOid": "22464ac"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-07T14:20:02Z",
+          "updatedAt": "2025-07-07T14:20:02Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDON1dwo86dt5Tu",
+      "title": "Add a time component of 60 seconds",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/37",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #20.",
+      "createdAt": "2025-07-07T09:19:14Z",
+      "updatedAt": "2025-07-07T09:19:14Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "time",
+      "headRefOid": "1a7eccdef90f0e10ef8cca3d8c7be9152fcbdbaa",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDON1dwo86duDUk",
+      "title": "Some more positives",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/38",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #33.",
+      "createdAt": "2025-07-07T09:35:03Z",
+      "updatedAt": "2025-07-08T00:47:04Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "fair-share",
+      "headRefOid": "06d27971bd40ea374a62816669d2e57d839ef39d",
+      "closedAt": "2025-07-07T23:35:07Z",
+      "mergedAt": "2025-07-07T23:35:07Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "d29ae5ea8becda2ecf653484a83d5948d2bed186"
+      },
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you for doing this!",
+          "createdAt": "2025-07-08T00:47:04Z",
+          "updatedAt": "2025-07-08T00:47:04Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo86yctWF",
+          "commit": {
+            "abbreviatedOid": "80d0b08"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-07T13:22:40Z",
+          "updatedAt": "2025-07-07T13:22:40Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo86yjIMK",
+          "commit": {
+            "abbreviatedOid": "80d0b08"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-07T23:34:33Z",
+          "updatedAt": "2025-07-07T23:34:33Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\nthroughput advice operates over a much longer period.\r\n```",
+              "createdAt": "2025-07-07T23:34:33Z",
+              "updatedAt": "2025-07-07T23:34:34Z"
+            }
+          ]
         }
       ]
     }
