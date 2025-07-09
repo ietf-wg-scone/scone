@@ -12,6 +12,7 @@
 /.refcache
 /.venv/
 /.vscode/
+/__pycache__/
 /lib
 /node_modules/
 /versioned/
@@ -19,4 +20,5 @@ Gemfile.lock
 archive.json
 package-lock.json
 report.xml
+ta.py.excerpt
 !requirements.txt
