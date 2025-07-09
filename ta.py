@@ -1,12 +1,12 @@
 from math import floor, ceil
 
-def now():
-  from time import time
-  return time()
-
 #>>>
 class ThroughputAdvice:
-  def __init__(self, window, interval):
+  def __init__(self, now, window, interval):
+    """Construct throughput advice, given a starting time `now`,
+       a duration over which to enforce `window`, and
+       an `interval` size that the window is evenly divided into."""
+
     self.interval = interval
     self.count = floor(window / interval)
     assert self.count == ceil(window / interval)
@@ -14,9 +14,8 @@ class ThroughputAdvice:
     self.total = 0
     self.state = [0] * self.count
 
-    time = now()
-    self.index = self.index_of(time)
-    self.next_update = self.next_time(time)
+    self.index = self.index_of(now)
+    self.next_update = self.next_time(now)
 
   def index_of(self, t):
     return floor(t / self.interval) % self.count
