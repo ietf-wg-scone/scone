@@ -1055,7 +1055,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 8 January 2026</td>
+<td class="center">Expires 10 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-07" class="published">7 July 2025</time>
+<time datetime="2025-07-09" class="published">9 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-08">8 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-01-10">10 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2244,7 +2244,7 @@ Transport Parameters" registry maintained at
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
-<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-14</span>, <time datetime="2025-04-23" class="refDate">23 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-14</a>&gt;</span>. </dd>
+<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-15</span>, <time datetime="2025-07-07" class="refDate">7 July 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-15">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-15</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9330">[RFC9330]</dt>
       <dd>
@@ -2276,7 +2276,11 @@ The oldest interval is reset to zero and becomes the newest interval.<a href="#a
         <div class="breakable lang-pseudocode sourcecode" id="appendix-A-4.1">
 <pre>
 class ThroughputAdvice:
-  def __init__(self, window, interval):
+  def __init__(self, now, window, interval):
+    """Construct throughput advice, given a starting time `now`,
+       a duration over which to enforce `window`, and
+       an `interval` size that the window is evenly divided into."""
+
     self.interval = interval
     self.count = floor(window / interval)
     assert self.count == ceil(window / interval)
@@ -2284,9 +2288,8 @@ class ThroughputAdvice:
     self.total = 0
     self.state = [0] * self.count
 
-    time = now()
-    self.index = self.index_of(time)
-    self.next_update = self.next_time(time)
+    self.index = self.index_of(now)
+    self.next_update = self.next_time(now)
 
   def index_of(self, t):
     return floor(t / self.interval) % self.count

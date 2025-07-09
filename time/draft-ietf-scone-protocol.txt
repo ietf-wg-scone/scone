@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 8 January 2026                             Private Octopus Inc.
+Expires: 10 January 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                             7 July 2025
+                                                             9 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 10 January 2026.
 
 Copyright Notice
 
@@ -793,9 +793,9 @@ Table of Contents
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-14,
-              23 April 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-14>.
+              in Progress, Internet-Draft, draft-ietf-quic-multipath-15,
+              7 July 2025, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-quic-multipath-15>.
 
    [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.
               White, "Low Latency, Low Loss, and Scalable Throughput
@@ -818,7 +818,11 @@ Appendix A.  Sliding Window for Rate Limit Monitoring
    Sample code for this algorithm is included in Figure 2.
 
    class ThroughputAdvice:
-     def __init__(self, window, interval):
+     def __init__(self, now, window, interval):
+       """Construct throughput advice, given a starting time `now`,
+          a duration over which to enforce `window`, and
+          an `interval` size that the window is evenly divided into."""
+
        self.interval = interval
        self.count = floor(window / interval)
        assert self.count == ceil(window / interval)
@@ -826,9 +830,8 @@ Appendix A.  Sliding Window for Rate Limit Monitoring
        self.total = 0
        self.state = [0] * self.count
 
-       time = now()
-       self.index = self.index_of(time)
-       self.next_update = self.next_time(time)
+       self.index = self.index_of(now)
+       self.next_update = self.next_time(now)
 
      def index_of(self, t):
        return floor(t / self.interval) % self.count
