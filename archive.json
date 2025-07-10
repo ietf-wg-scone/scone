@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-08T01:48:34.415791+00:00",
+  "timestamp": "2025-07-10T01:49:45.360728+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -530,7 +530,7 @@
       "labels": [],
       "body": "This came on repeatedly during the Bangkok IETF session. Congestion control and Trone are complementary, but we need to explain how that complementing works.",
       "createdAt": "2025-03-21T04:53:23Z",
-      "updatedAt": "2025-04-16T17:15:25Z",
+      "updatedAt": "2025-07-09T11:32:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -546,6 +546,41 @@
           "body": "During the 4/16/25 interim, we agreed to only merge part of PR #16, leaving aside a bunch of text:\n\n1. Speculative text about using congestion control signals to trigger TRONE packets when congestion eases: Consider then a condition in which congestion eases, either because the\ncompeting connections end or because the wireless transmission capacity\nimproves. The endpoints will notice that the rate of ECN marking rate has\nbecome low enough, and that the path is not congested anymore. However,\nthey don't know by how much they can increase their sending rate. Most\ncongestion control algorithms will proceed cautiously, allowing the\napplication to increase its sending rate step by step and verifying at each\nstep that they are not causing congestion. In these cases, a TRONE\nsignal can inform them about the changed capacity of the path and allow\nthem to increase capacity faster.\n\n2. Speculative text about using the TRONE signal to inform congestion control at the beginning of a connection: The TRONE signal can be particularly useful at the very beginning of a\nconnection. Congestion control algorithms typically start with a\nslow start process in which the application is allowed to double\nits sending rate after each RTT, until congestion is notified. This\nresults in a burst of excess transmission during the last RTT,\ncreating queues and possibly causing packet losses. Queues and\nlosses will affect not just the new connection that is testing the\ncapacity of the path, but also all established connections that\nshare the bottleneck. If the endpoints are using TRONE and learned the\nmaximum capacity of the path, they can exit the slow start process\nas soon as the maximum capacity has been tested, and avoid creating\nqueues or causing packet losses.\n\n3. Speculative text linking TRONE and \"careful resume\": The TRONE signal can also be useful if the applications remembers the\ncongestion control parameters of previous connections, and uses a\n\"careful resume\" process to quickly ramp up capacity as specified\nin  ({{?I-D.ietf-tsvwg-careful-resume}}). The endpoints could use\nTRONE to verify that the path characteristics have not changed\nsince the last connection before applying the careful resume\nprocess.\n\n4. General advice that if congestion uses the TRONE signal, it should be aware that if could be spoofed: In all cases, the endpoints should consider that the TRONE signal could\nhave been spoofed (see {{security}}). The congestion controller can use\nthe maximum capacity indicated by TRONE as a guide, but it\ncan also cautiously probe for available\ncapacity beyond the limit until receiving congestion signals.\n\nWe may want to use some of this text to specify whether and how congestion control use the TRONE signal. This is not obvious, because the general advice is that the two are independent, but it would be naive to believe that nobody would try plugging the capacity signaled by TRONE in their congestion controller. It might be better to explain the pitfalls of doing that, and perhaps signal the rare points where it makes sense.\n\nWe may also want to look at how \"easing of congestion\" could be used as a trigger for sending SCONE packets. This is somewhat experimental, because current congestion algorithms only detect easing of congestion if the application can push more data. An application working under the TRONE specified rate limit would not be able to do that. Updated congestion control algorithms might be able to detect easing of congestion by monitoring the rate of ECN marks, or the evolution of the RTT, but this is still a research area.",
           "createdAt": "2025-04-16T17:15:24Z",
           "updatedAt": "2025-04-16T17:15:24Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "All of these seem to be variants on the scenario where known limits from the congestion controller is (much) lower than the throughput advice.  I think that we can do a few things:\n\nFirstly, note that throughput advice is a cap, not a guarantee.\n\nThen, note that throughput advice comes from a single network element, which cannot always make claims about other elements or links on the full end-to-end path.\n\nTherefore, while it might suggest a target bitrate, there is no guarantee that that rate can be achieved.  This is weaker still than the careful resumption case, where at least you have recent evidence that a path between nominally the same endpoints supported a given throughput in the path.  Tweaking the probing of the congestion controller to move more aggressively toward the limit implied by throughput advice could be possible, but endpoints need to be especially sensitive to any congestion signals that might indicate a lower throughput in practice.\n\nI fear that attempts to use this advice as a target rate will end up doing bad things if we aren't extremely careful in how we frame guidance.",
+          "createdAt": "2025-07-09T01:31:38Z",
+          "updatedAt": "2025-07-09T01:31:38Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The prudent way to include TRONE advice is startup is indeed different from careful resume. Careful resume provides a target. TRONE provides an upper bound. Not the same, but valuable in its own right. Typical startup algorithm involve exponential increase and are probe to overshoot. Limiting startup to \"probe up to this limit\" would avoid overshooting, and the large queues that it causes.",
+          "createdAt": "2025-07-09T03:49:44Z",
+          "updatedAt": "2025-07-09T03:49:44Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@huitema I'm not sure if I agree.\n\nSCONE signals advise bandwidth over a time scale of ~60 seconds for sustained flows, whereas congestion signals indicate that per round trip regardless of the characteristics of the flow.\n\nIMO, it makes sense for congestion controllers to shoot up to their limits regardless of what SCONE signals indicate.",
+          "createdAt": "2025-07-09T06:07:09Z",
+          "updatedAt": "2025-07-09T06:09:45Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I was very specific. \"When to stop startup\" is a big issue. Typical startup process figures exponential growth, which means by the time the process has reached the desired capacity, there are twice too many packets flying. If you care about real time performance, that's not good. That does not mean the controller has to completely stop exploring. It could, but it would probably be wise to do that in a cautious way, maybe like the 2nd phase of Hystart++.",
+          "createdAt": "2025-07-09T06:20:04Z",
+          "updatedAt": "2025-07-09T06:20:04Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree about the problem. What I'm struggling to follow is how we could apply SCONE signals to Slow Start in case of real-time applications.\n\nIf the flow is going to last long (or is likely to last long), I'd argue that the applications should respect SCONE. As they are real-time applications (like video conference), they will be application-limited at the rate advice provided by SCONE. Therefore, we do not need to decide how CC should behave when going above the SCONE advice.\n\nIf the flow is to be spontaneous, then there might be benefits to go above the SCONE limit. But what exactly are those kind of applications that require low latency and but communicate only for a few seconds? How much improvement can we expect by incorporating the SCONE signals assuming that CC is tuned already for low latency?",
+          "createdAt": "2025-07-09T11:32:09Z",
+          "updatedAt": "2025-07-09T11:32:09Z"
         }
       ]
     },
@@ -670,7 +705,7 @@
       "labels": [],
       "body": "As specified, the TRONE protocol only works with QUIC. And given that it can prepend data to a datagram, it is not a drop-in with anything but QUIC.\n\nThis form of signalling is interesting to other use cases. Would it be reasonable/possible/hard/impossible to carry a TRONE packet as an ICE extension?\n",
       "createdAt": "2025-03-26T14:02:31Z",
-      "updatedAt": "2025-03-27T08:22:09Z",
+      "updatedAt": "2025-07-10T01:34:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -714,6 +749,13 @@
           "body": "Thanks for the clarification - I imagined that you were suggesting sending a single UDP packet with a TRONE message followed by the ICE message, but sending two UDP makes much more sense. Specifying a payload that would pass the TRONE inspector and be verifiable with the ICE credentials shouldn't take much more than a page.",
           "createdAt": "2025-03-27T08:22:08Z",
           "updatedAt": "2025-03-27T08:22:08Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@alvestrand does this address the concern?  I think that this is a general question about how QUIC (all QUIC versions) and ICE/STUN/TURN might interact.  That's not really in scope for this work, so I'm not clear that we should really spend words on it in the draft.  If you disagree, I'd like to understand what we might then need to say.",
+          "createdAt": "2025-07-10T01:34:25Z",
+          "updatedAt": "2025-07-10T01:34:25Z"
         }
       ]
     },
@@ -908,7 +950,7 @@
       "labels": [],
       "body": "The topic of whether network elements should be able to generate TRONE packets and insert them into expanded datagrams was discussed at IETF 122. Also discussed in #6.\nIdeally this should not be needed, given that there is proper guidance on when to send TRONE packets and making sure that updating the rate limit field of the TRONE packets is sufficiently cheap. The risk of expanding datagrams in the network is that it can result in path MTU issues with lost packets as a consequence. \n\nThere are a few paths we can take on this topic:\n\n1. Say nothing about it.\n2. Mention the possibility and give guidance on potential MTU issues that can arise. \n3. Explicitly forbid network inserted TRONE packets and design protocol mechanisms to enforce it.",
       "createdAt": "2025-04-15T15:59:14Z",
-      "updatedAt": "2025-07-08T01:04:46Z",
+      "updatedAt": "2025-07-08T07:04:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -938,6 +980,27 @@
           "body": "I would point out that we already have the capability to drop SCONE packets that are simply inserted, and that that is sufficient for preventing misuse.\n\n[Section 8.1 ](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#name-providing-opportunities-to-) states that _an endpoint that receives and discards a SCONE packet without also successfully processing another packet from the same datagram SHOULD ignore any throughput advice signal._\n\nQUIC endpoints process each packet only once, dropping duplicates.\n\nTherefore, the only case the current design does not prevent is on-path observers creating a duplicate of an observed packet, attaching a fake SCONE packet to it, and racing it to the receiver so that it reaches the receiver earlier than the original packet; a sophisticated type of attack that we deemed impossible to have a defense against in QUIC v1.",
           "createdAt": "2025-07-08T01:04:10Z",
           "updatedAt": "2025-07-08T01:04:46Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "An on-path element can drop the original; no need to race, just insert the SCONE packet in an existing packet.  (Assuming that it was valid in the first place, of which there is no guarantee.)",
+          "createdAt": "2025-07-08T02:54:18Z",
+          "updatedAt": "2025-07-08T02:54:18Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Right, so the threat comes only from on-path \u201cobservers\u201d; i.e., those that can observe and inject but cannot drop. As said, I do not think can (or need to) prevent them, based on the precedents.",
+          "createdAt": "2025-07-08T03:12:48Z",
+          "updatedAt": "2025-07-08T03:12:48Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "On path routers are explicitly authorized to change the advice contained in the packet -- that's the whole point. That means it will be very hard to prevent off path observers to change the advice and race a packet. Changing the advice seems as bad as dropping the option. Given a gaping hole like that, I would rather try some complicated solution.",
+          "createdAt": "2025-07-08T07:04:52Z",
+          "updatedAt": "2025-07-08T07:04:52Z"
         }
       ]
     },
@@ -1250,9 +1313,17 @@
       "labels": [],
       "body": "Current merged draft talks about rate limit signals and throughput advice but it falls short of defining what that is and more importantly how it gets computed so both CSPs and CAPs have a common understanding of the meaning as well as measure it.\nSuggest adding a section  to provide clarity. For reference the scone video session data rate  draft https://datatracker.ietf.org/doc/html/draft-druta-scone-video-session-data-rate-00",
       "createdAt": "2025-06-10T15:06:26Z",
-      "updatedAt": "2025-06-10T15:06:26Z",
+      "updatedAt": "2025-07-08T07:27:39Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I believe that this is largely addressed by the fixes in #37.  It doesn't have nice pictures, but I don't know that pictures are necessary for something as simple as \"bits transferred over a period of time\".  It does have code.",
+          "createdAt": "2025-07-08T07:27:39Z",
+          "updatedAt": "2025-07-08T07:27:39Z"
+        }
+      ]
     },
     {
       "number": 35,
@@ -1277,6 +1348,22 @@
           "updatedAt": "2025-06-11T15:57:14Z"
         }
       ]
+    },
+    {
+      "number": 39,
+      "id": "I_kwDON1dwo86_xdZD",
+      "title": "Make suggestions about how to maintain limits",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/39",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Do we want to talk about approaches other than asking the peer to rate-limit, such as:\r\n* the endpoint selecting different resources (like video chunks), or\r\n* using flow control to limit the amount of data being sent by the peer?\r\n\r\n_Originally posted by @kazuho in https://github.com/ietf-wg-scone/scone/pull/37#discussion_r2194954920_",
+      "createdAt": "2025-07-09T23:30:33Z",
+      "updatedAt": "2025-07-09T23:30:33Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -3513,19 +3600,132 @@
       "labels": [],
       "body": "Closes #20.",
       "createdAt": "2025-07-07T09:19:14Z",
-      "updatedAt": "2025-07-07T09:19:14Z",
+      "updatedAt": "2025-07-10T01:11:18Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "time",
-      "headRefOid": "1a7eccdef90f0e10ef8cca3d8c7be9152fcbdbaa",
+      "headRefOid": "2cb56e706e5aa62a8dbe14fe580c3929143038ed",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo86y5gRO",
+          "commit": {
+            "abbreviatedOid": "1a7eccd"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thank you for the PR. Looks good overall, just small nits.",
+          "createdAt": "2025-07-09T12:46:45Z",
+          "updatedAt": "2025-07-09T12:50:23Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "We call `now()` here, but in `data_sent`, the time is fed from the caller. I think we should better be consistent regarding who manages the time (eitner the class or the caller).",
+              "createdAt": "2025-07-09T12:46:45Z",
+              "updatedAt": "2025-07-09T12:50:23Z"
+            },
+            {
+              "originalPosition": 38,
+              "body": "Do we want to talk about approaches other than asking the peer to rate-limit, such as:\r\n* the endpoint selecting different resources (like video chunks), or\r\n* using flow control to limit the amount of data being sent by the peer?",
+              "createdAt": "2025-07-09T12:49:56Z",
+              "updatedAt": "2025-07-09T12:50:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zA_Wq",
+          "commit": {
+            "abbreviatedOid": "1a7eccd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-09T23:25:53Z",
+          "updatedAt": "2025-07-09T23:25:53Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "I wasn't planning to talk about the how in _this_ change, but it's worth noting for sure.",
+              "createdAt": "2025-07-09T23:25:53Z",
+              "updatedAt": "2025-07-09T23:25:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zBK91",
+          "commit": {
+            "abbreviatedOid": "1a7eccd"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-09T23:59:09Z",
+          "updatedAt": "2025-07-09T23:59:09Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "+1 to opening an issue dedicated to the topic (so, thank you for doing that).",
+              "createdAt": "2025-07-09T23:59:09Z",
+              "updatedAt": "2025-07-09T23:59:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zBLA7",
+          "commit": {
+            "abbreviatedOid": "2cb56e7"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-09T23:59:18Z",
+          "updatedAt": "2025-07-09T23:59:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo86zBdDe",
+          "commit": {
+            "abbreviatedOid": "1a7eccd"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-10T00:47:16Z",
+          "updatedAt": "2025-07-10T00:47:16Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "Yes, let's discuss that in a separate issue.",
+              "createdAt": "2025-07-10T00:47:16Z",
+              "updatedAt": "2025-07-10T00:47:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zBmaN",
+          "commit": {
+            "abbreviatedOid": "2cb56e7"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-10T01:11:18Z",
+          "updatedAt": "2025-07-10T01:11:18Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 38,
@@ -3596,6 +3796,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 40,
+      "id": "PR_kwDON1dwo86eNp7m",
+      "title": "Add some discussion about compliance",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/40",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This includes the suggestions from #39.  I've put this in the applicability statement.  That's a bit unusual as a place to put what amounts to implementation guidance, but the framing here seemed natural.\r\n\r\nCloses #39.",
+      "createdAt": "2025-07-10T01:35:18Z",
+      "updatedAt": "2025-07-10T01:35:18Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "how-to",
+      "headRefOid": "6e28e56fdbab73f1f261f1b920e6f87bdc339f89",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
