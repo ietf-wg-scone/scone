@@ -226,7 +226,7 @@ tuple for the duration of that flow.  For rate limiting networks, rate limiting
 policies often apply on the level of a device or subscription, but endpoints
 cannot assume that this is the case.  A separate signal can be sent for each flow.
 
-## Discretionary Compliance
+## Following Advice
 
 Applications that receive throughput advice can follow that advice in the way
 that best suits the needs of the application.
