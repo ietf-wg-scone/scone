@@ -228,8 +228,8 @@ cannot assume that this is the case.  A separate signal can be sent for each flo
 
 ## Following Advice
 
-Applications that receive throughput advice can follow that advice in the way
-that best suits the needs of the application.
+The TRONE signal is advisory (see {{advisory-signal}}).
+Applications that chose to follow it will do so in the way that best suits their needs.
 
 The most obvious way to keep within the limits set by throughput advice is to
 inform the sending peer of the limit so that the peer can do whatever rate
