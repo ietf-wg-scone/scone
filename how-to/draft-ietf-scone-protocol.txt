@@ -297,7 +297,7 @@ Table of Contents
    Some applications offer options for rate control that can offer
    superior outcomes.  Real-time and streaming video applications are
    able to adjust video quality to fit within a target throughput.  For
-   instance, an HTTP live streaming client [HLS] can ask for lower
+   instance, an HTTP Live Streaming client [HLS] can ask for lower
    bitrate, lower quality media segments.
 
 4.  Conventions and Definitions
