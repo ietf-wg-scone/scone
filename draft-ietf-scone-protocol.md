@@ -228,7 +228,7 @@ cannot assume that this is the case.  A separate signal can be sent for each flo
 
 ## Following Advice
 
-The TRONE signal is advisory (see {{advisory-signal}}).
+The SCONE throughput advice is advisory (see {{advisory-signal}}).
 Applications that chose to follow it will do so in the way that best suits their needs.
 
 The most obvious way to keep within the limits set by throughput advice is to
