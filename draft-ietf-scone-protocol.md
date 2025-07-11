@@ -226,6 +226,22 @@ tuple for the duration of that flow.  For rate limiting networks, rate limiting
 policies often apply on the level of a device or subscription, but endpoints
 cannot assume that this is the case.  A separate signal can be sent for each flow.
 
+## Following Advice
+
+The SCONE throughput advice is advisory (see {{advisory-signal}}).
+Applications that chose to follow it will do so in the way that best suits their needs.
+
+The most obvious way to keep within the limits set by throughput advice is to
+inform the sending peer of the limit so that the peer can do whatever rate
+limiting is necessary.  Alternatively, a receiver can control the release of
+flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
+rate of a peer.
+
+Some applications offer options for rate control that can offer superior
+outcomes.  Real-time and streaming video applications are able to adjust video
+quality to fit within a target throughput.  For instance, an HTTP Live Streaming
+client {{?HLS=RFC8216}} can ask for lower bitrate, lower quality media segments.
+
 
 # Conventions and Definitions
 
