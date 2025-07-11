@@ -239,7 +239,7 @@ rate of a peer.
 
 Some applications offer options for rate control that can offer superior
 outcomes.  Real-time and streaming video applications are able to adjust video
-quality to fit within a target throughput.  For instance, an HTTP live streaming
+quality to fit within a target throughput.  For instance, an HTTP Live Streaming
 client {{?HLS=RFC8216}} can ask for lower bitrate, lower quality media segments.
 
 
