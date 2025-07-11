@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 11 January 2026                            Private Octopus Inc.
+Expires: 12 January 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            10 July 2025
+                                                            11 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 January 2026.
+   This Internet-Draft will expire on 12 January 2026.
 
 Copyright Notice
 
@@ -82,7 +82,7 @@ Table of Contents
      3.3.  Per-Flow Signal
      3.4.  Undirectional Signal
      3.5.  Advisory Signal
-     3.6.  Discretionary Compliance
+     3.6.  Following Advice
    4.  Conventions and Definitions
    5.  SCONE Packet
      5.1.  Rate Signals
@@ -282,7 +282,7 @@ Table of Contents
    a device or subscription, but endpoints cannot assume that this is
    the case.  A separate signal can be sent for each flow.
 
-3.6.  Discretionary Compliance
+3.6.  Following Advice
 
    Applications that receive throughput advice can follow that advice in
    the way that best suits the needs of the application.
