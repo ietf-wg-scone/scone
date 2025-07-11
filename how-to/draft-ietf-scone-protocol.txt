@@ -284,8 +284,8 @@ Table of Contents
 
 3.6.  Following Advice
 
-   Applications that receive throughput advice can follow that advice in
-   the way that best suits the needs of the application.
+   The TRONE signal is advisory (see Section 3.5).  Applications that
+   chose to follow it will do so in the way that best suits their needs.
 
    The most obvious way to keep within the limits set by throughput
    advice is to inform the sending peer of the limit so that the peer
