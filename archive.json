@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-10T01:49:45.360728+00:00",
+  "timestamp": "2025-07-13T02:00:52.208544+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -698,15 +698,15 @@
       "id": "I_kwDON1dwo86v0U91",
       "title": "TRONE with other protocols - ICE in particular?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/15",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "alvestrand",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "As specified, the TRONE protocol only works with QUIC. And given that it can prepend data to a datagram, it is not a drop-in with anything but QUIC.\n\nThis form of signalling is interesting to other use cases. Would it be reasonable/possible/hard/impossible to carry a TRONE packet as an ICE extension?\n",
       "createdAt": "2025-03-26T14:02:31Z",
-      "updatedAt": "2025-07-10T01:34:25Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-11T02:09:42Z",
+      "closedAt": "2025-07-11T02:09:42Z",
       "comments": [
         {
           "author": "atiwariphd",
@@ -756,6 +756,13 @@
           "body": "@alvestrand does this address the concern?  I think that this is a general question about how QUIC (all QUIC versions) and ICE/STUN/TURN might interact.  That's not really in scope for this work, so I'm not clear that we should really spend words on it in the draft.  If you disagree, I'd like to understand what we might then need to say.",
           "createdAt": "2025-07-10T01:34:25Z",
           "updatedAt": "2025-07-10T01:34:25Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "Given that we can solve this by sending 2 messages, I think this is follow-on work, not impacting the document that's currently the working group focus.\n\nLet's close this for now.\n",
+          "createdAt": "2025-07-10T11:09:46Z",
+          "updatedAt": "2025-07-10T11:09:46Z"
         }
       ]
     },
@@ -3809,19 +3816,166 @@
       "labels": [],
       "body": "This includes the suggestions from #39.  I've put this in the applicability statement.  That's a bit unusual as a place to put what amounts to implementation guidance, but the framing here seemed natural.\r\n\r\nCloses #39.",
       "createdAt": "2025-07-10T01:35:18Z",
-      "updatedAt": "2025-07-10T01:35:18Z",
+      "updatedAt": "2025-07-11T08:40:10Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "how-to",
-      "headRefOid": "6e28e56fdbab73f1f261f1b920e6f87bdc339f89",
+      "headRefOid": "5e10d57bc9a03140f38ffa4cdca3a266899a005a",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo86zCer1",
+          "commit": {
+            "abbreviatedOid": "6e28e56"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you for doing this.\r\n\r\nAdded text looks good, and I agree that this is the right place.",
+          "createdAt": "2025-07-10T03:44:11Z",
+          "updatedAt": "2025-07-10T03:44:11Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo86zNry7",
+          "commit": {
+            "abbreviatedOid": "6e28e56"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-07-10T17:51:11Z",
+          "updatedAt": "2025-07-10T17:51:20Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I am a bit surprised by the section title. Compliance to what? Does \"discretionary\" means optional? It seems that you want to convey two different concepts: first, that endpoint receiving the TRONE advice may or may not decide to follow hit; and then, that if they decide to follow it, here are three ways they could go about it.\r\n\r\nThe first paragraph of the section hints at the discretionary part by stating that applications \"can follow [the] advice\". That's a pretty minimalist way of stating it, kind of passive-aggressive. I would suggest making it completely obvious:\r\n\r\n_The TRONE signal is advisory (see {{advisory-signal}}). Applications that chose to follow it will do so  in the way that best suits their needs._\r\n\r\nAs for the section title, could we change it to something like \"Following the Advice\" ?",
+              "createdAt": "2025-07-10T17:51:11Z",
+              "updatedAt": "2025-07-10T17:51:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zTXUB",
+          "commit": {
+            "abbreviatedOid": "6e28e56"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-11T02:12:30Z",
+          "updatedAt": "2025-07-11T02:12:30Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Works for me.  Will do.",
+              "createdAt": "2025-07-11T02:12:30Z",
+              "updatedAt": "2025-07-11T02:12:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zTXZW",
+          "commit": {
+            "abbreviatedOid": "6e28e56"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-11T02:12:42Z",
+          "updatedAt": "2025-07-11T02:12:42Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n## Following Advice\r\n```",
+              "createdAt": "2025-07-11T02:12:42Z",
+              "updatedAt": "2025-07-11T02:12:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zTYD1",
+          "commit": {
+            "abbreviatedOid": "4b70fd0"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-11T02:13:42Z",
+          "updatedAt": "2025-07-11T02:13:42Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nThe TRONE signal is advisory (see {{advisory-signal}}).\r\nApplications that chose to follow it will do so in the way that best suits their needs.\r\n```",
+              "createdAt": "2025-07-11T02:13:42Z",
+              "updatedAt": "2025-07-11T02:13:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zUh9m",
+          "commit": {
+            "abbreviatedOid": "48fcc97"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-11T04:20:48Z",
+          "updatedAt": "2025-07-11T04:20:48Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nThe SCONE throughput advice is advisory (see {{advisory-signal}}).\r\n```",
+              "createdAt": "2025-07-11T04:20:48Z",
+              "updatedAt": "2025-07-11T04:20:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86zUto4",
+          "commit": {
+            "abbreviatedOid": "6df424e"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-11T04:44:41Z",
+          "updatedAt": "2025-07-11T04:44:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo86zXNN_",
+          "commit": {
+            "abbreviatedOid": "6df424e"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-11T08:23:35Z",
+          "updatedAt": "2025-07-11T08:23:35Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "```suggestion\r\nquality to fit within a target throughput.  For instance, an HTTP Live Streaming\r\n```\r\nRFC 8216 uses mixed-case throughout, so maybe it makes sense to do the same here?",
+              "createdAt": "2025-07-11T08:23:35Z",
+              "updatedAt": "2025-07-11T08:23:35Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
