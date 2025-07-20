@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-13T02:00:52.208544+00:00",
+  "timestamp": "2025-07-20T02:02:28.081442+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1369,6 +1369,46 @@
       "body": "Do we want to talk about approaches other than asking the peer to rate-limit, such as:\r\n* the endpoint selecting different resources (like video chunks), or\r\n* using flow control to limit the amount of data being sent by the peer?\r\n\r\n_Originally posted by @kazuho in https://github.com/ietf-wg-scone/scone/pull/37#discussion_r2194954920_",
       "createdAt": "2025-07-09T23:30:33Z",
       "updatedAt": "2025-07-09T23:30:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 41,
+      "id": "I_kwDON1dwo87Bb0p1",
+      "title": "value of the scone_supported transport parameter",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/41",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "At the moment, the draft is silent regarding what the value of the scone_supported parameter should be.\n\nAssuming that this parameter is boolean, I believe the value should be zero-length, like the disable_active_migration TP defined in RFC 9000.",
+      "createdAt": "2025-07-19T13:08:41Z",
+      "updatedAt": "2025-07-19T22:06:44Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, zero length is the simplest.",
+          "createdAt": "2025-07-19T22:06:44Z",
+          "updatedAt": "2025-07-19T22:06:44Z"
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "I_kwDON1dwo87Bb9T5",
+      "title": "Mention UDP checksum update",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/42",
+      "state": "OPEN",
+      "author": "wesley-eddy",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I think in the protocol spec it would be good to include a specific reminder for network elements to update the UDP checksum.\n\nIf a network element updates the rate guidance in a SCONE packet, it MUST adjust the UDP checksum accordingly.  The efficient incremental update approach can be used (based on the old and new rate guidance values), rather than recomputing across the entire packet.  It MUST NOT zero the checksum.",
+      "createdAt": "2025-07-19T14:08:55Z",
+      "updatedAt": "2025-07-19T14:08:55Z",
       "closedAt": null,
       "comments": []
     }
