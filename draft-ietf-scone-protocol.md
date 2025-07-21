@@ -345,8 +345,16 @@ The time over which throughput advice applies is fixed
 to a period of 60 seconds.
 
 Endpoints that receive throughput advice can advise their peer of the limit.
-That peer can adhere to the limit
-by limiting the amount of data that is sent over any 60 second span.
+The sending peer can respect the advice
+by limiting the amount of data it sends over any 60 second span.
+
+Protocol participants can use a different period,
+depending on their role.
+Senders can limit their send rate over any time period
+up to 60 seconds.
+Network elements can monitor and apply limits to send rates
+using time period of at least 60 seconds.
+
 A sample algorithm for ensuring adherance to throughput advice
 is included in {{sliding-window}}.
 
