@@ -339,21 +339,21 @@ and the corresponding throughput advice for each.
 {: #ex-rates title="Examples of signals and corresponding rates"}
 
 
-## Rough Time Span
+## Monitoring Period {#time}
 
-The time over which throughput advice applies is fixed
-to a period of 60 seconds.
+The time over which throughput advice applies is defined to be
+a period of 67 seconds.
 
 Endpoints that receive throughput advice can advise their peer of the limit.
 The sending peer can respect the advice
-by limiting the amount of data it sends over any 60 second span.
+by limiting the amount of data it sends over any 67 second span.
 
 Protocol participants can use a different period,
 depending on their role.
 Senders can limit their send rate over any time period
-up to 60 seconds.
+up to 67 seconds.
 Network elements can monitor and apply limits to send rates
-using time period of at least 60 seconds.
+using time period of at least 67 seconds.
 
 A sample algorithm for ensuring adherance to throughput advice
 is included in {{sliding-window}}.
@@ -505,6 +505,25 @@ if is_long and (packet_version == SCONE1_VERSION or
 
 Once the throughput advice signal is updated,
 the network element updates the UDP checksum for the datagram.
+
+
+## Flows That Exceed Throughput Advicea
+
+Network elements that provide throughput advice
+can monitor flows --
+or sets of flows that are subject to the same throughput limit --
+for adherance to that advice.
+
+In the event that a flow exceeds these limits,
+a network element could immediately start
+enforcing adherence to the advice as though it were a hard limit.
+However, this risks creating a situation where communication ceases entirely
+for a significant period of time;
+that is, up to the period defined in {{time}}.
+
+A better approach is to disregard any data that was transmitted
+before engaging any hard limits to throughput.
+This ensures that the enforcement of limits is minimally disruptive.
 
 
 # Version Interaction {#version-interaction}
@@ -832,12 +851,12 @@ Notes:
 
 One way to account for usage
 is to divide time into multiple smaller spans.
-For instance, 60 consecutive one second intervals
-or 120 half second intervals.
+For instance, 67 consecutive one second intervals
+or 134 half second intervals.
 
 The amount of data transmitted in each interval is recorded
 in a circular buffer,
-as well as the total amount over 60 seconds.
+as well as the total amount over 67 seconds.
 As time passes and new intervals are added,
 the overall total is reduced by the amount attributed to the oldest interval.
 The oldest interval is reset to zero and becomes the newest interval.
