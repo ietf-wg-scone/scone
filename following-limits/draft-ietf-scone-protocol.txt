@@ -626,15 +626,17 @@ Table of Contents
    operate end-to-end.
 
    To that end, network elements MUST ensure that they do not update the
-   content of datagrams any more than a small number of times over each
-   enforcement period.
+   content of every datagram.  Limiting the rate of updates to a small
+   number of times over each enforcement period is sufficient.  Network
+   elements might update more often in response to a change in
+   throughput advice, to reduce the reaction time from senders.
 
-   Some heuristics might be used to detect SCONE-compatible QUIC flows.
-   This includes identification of a QUIC handshake on the flow,
-   watching to ensure that the ratio of the two SCONE versions is close
-   to 1 over time, or other heuristics.  If these heuristics indicate a
-   non-QUIC flow, the safest option is for network elements to disable
-   updating of datagrams.
+   In addition, some heuristics might be used to detect SCONE-compatible
+   QUIC flows.  This includes identification of a QUIC handshake on the
+   flow, watching to ensure that the ratio of the two SCONE versions is
+   close to 1 over time, or other heuristics.  If these heuristics
+   indicate a non-QUIC flow, the safest option is for network elements
+   to disable updating of datagrams.
 
 10.  Privacy Considerations
 
