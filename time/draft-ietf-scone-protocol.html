@@ -1055,7 +1055,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 22 January 2026</td>
+<td class="center">Expires 23 January 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-21" class="published">21 July 2025</time>
+<time datetime="2025-07-22" class="published">22 July 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-22">22 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-01-23">23 January 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1207,7 +1207,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-rate-signals" class="internal xref">Rate Signals</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-rough-time-span" class="internal xref">Rough Time Span</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-monitoring-period" class="internal xref">Monitoring Period</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
                 <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-endpoint-processing-of-scon" class="internal xref">Endpoint Processing of SCONE Packets</a></p>
@@ -1222,6 +1222,9 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-applying-throughput-advice-" class="internal xref">Applying Throughput Advice Signals</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-flows-that-exceed-throughpu" class="internal xref">Flows That Exceed Throughput Advicea</a></p>
 </li>
             </ul>
 </li>
@@ -1665,22 +1668,22 @@ expressed.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
         </table>
 </section>
 </div>
-<div id="rough-time-span">
+<div id="time">
 <section id="section-5.2">
-        <h3 id="name-rough-time-span">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-rough-time-span" class="section-name selfRef">Rough Time Span</a>
+        <h3 id="name-monitoring-period">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-monitoring-period" class="section-name selfRef">Monitoring Period</a>
         </h3>
-<p id="section-5.2-1">The time over which throughput advice applies is fixed
-to a period of 60 seconds.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-1">The time over which throughput advice applies is defined to be
+a period of 67 seconds.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">Endpoints that receive throughput advice can advise their peer of the limit.
 The sending peer can respect the advice
-by limiting the amount of data it sends over any 60 second span.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+by limiting the amount of data it sends over any 67 second span.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">Protocol participants can use a different period,
 depending on their role.
 Senders can limit their send rate over any time period
-up to 60 seconds.
+up to 67 seconds.
 Network elements can monitor and apply limits to send rates
-using time period of at least 60 seconds.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+using time period of at least 67 seconds.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <p id="section-5.2-4">A sample algorithm for ensuring adherance to throughput advice
 is included in <a href="#sliding-window" class="auto internal xref">Appendix A</a>.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
@@ -1752,6 +1755,26 @@ if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VER
     packet[0] = packet[0] &amp; 0xc0 | target_rate_value
 </pre><a href="#section-7.1-5" class="pilcrow">¶</a>
 </div>
+</section>
+</div>
+<div id="flows-that-exceed-throughput-advicea">
+<section id="section-7.2">
+        <h3 id="name-flows-that-exceed-throughpu">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-flows-that-exceed-throughpu" class="section-name selfRef">Flows That Exceed Throughput Advicea</a>
+        </h3>
+<p id="section-7.2-1">Network elements that provide throughput advice
+can monitor flows --
+or sets of flows that are subject to the same throughput limit --
+for adherance to that advice.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">In the event that a flow exceeds these limits,
+a network element could immediately start
+enforcing adherence to the advice as though it were a hard limit.
+However, this risks creating a situation where communication ceases entirely
+for a significant period of time;
+that is, up to the period defined in <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">A better approach is to disregard any data that was transmitted
+before engaging any hard limits to throughput.
+This ensures that the enforcement of limits is minimally disruptive.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2268,11 +2291,11 @@ Transport Parameters" registry maintained at
       </h2>
 <p id="appendix-A-1">One way to account for usage
 is to divide time into multiple smaller spans.
-For instance, 60 consecutive one second intervals
-or 120 half second intervals.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+For instance, 67 consecutive one second intervals
+or 134 half second intervals.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">The amount of data transmitted in each interval is recorded
 in a circular buffer,
-as well as the total amount over 60 seconds.
+as well as the total amount over 67 seconds.
 As time passes and new intervals are added,
 the overall total is reduced by the amount attributed to the oldest interval.
 The oldest interval is reset to zero and becomes the newest interval.<a href="#appendix-A-2" class="pilcrow">¶</a></p>

@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 22 January 2026                            Private Octopus Inc.
+Expires: 23 January 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            21 July 2025
+                                                            22 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 January 2026.
+   This Internet-Draft will expire on 23 January 2026.
 
 Copyright Notice
 
@@ -85,11 +85,12 @@ Table of Contents
    4.  Conventions and Definitions
    5.  SCONE Packet
      5.1.  Rate Signals
-     5.2.  Rough Time Span
+     5.2.  Monitoring Period
      5.3.  Endpoint Processing of SCONE Packets
    6.  Negotiating SCONE
    7.  Deployment
      7.1.  Applying Throughput Advice Signals
+     7.2.  Flows That Exceed Throughput Advicea
    8.  Version Interaction
      8.1.  Providing Opportunities to Apply Throughput Advice Signals
      8.2.  Feedback To Sender About Signals
@@ -389,19 +390,19 @@ Table of Contents
 
                                   Table 1
 
-5.2.  Rough Time Span
+5.2.  Monitoring Period
 
-   The time over which throughput advice applies is fixed to a period of
-   60 seconds.
+   The time over which throughput advice applies is defined to be a
+   period of 67 seconds.
 
    Endpoints that receive throughput advice can advise their peer of the
    limit.  The sending peer can respect the advice by limiting the
-   amount of data it sends over any 60 second span.
+   amount of data it sends over any 67 second span.
 
    Protocol participants can use a different period, depending on their
    role.  Senders can limit their send rate over any time period up to
-   60 seconds.  Network elements can monitor and apply limits to send
-   rates using time period of at least 60 seconds.
+   67 seconds.  Network elements can monitor and apply limits to send
+   rates using time period of at least 67 seconds.
 
    A sample algorithm for ensuring adherance to throughput advice is
    included in Appendix A.
@@ -465,6 +466,22 @@ Table of Contents
      if target_rate_version < packet_version or target_rate_value < packet_rate_value
        packet[1..5] = target_rate_version
        packet[0] = packet[0] & 0xc0 | target_rate_value
+
+7.2.  Flows That Exceed Throughput Advicea
+
+   Network elements that provide throughput advice can monitor flows --
+   or sets of flows that are subject to the same throughput limit -- for
+   adherance to that advice.
+
+   In the event that a flow exceeds these limits, a network element
+   could immediately start enforcing adherence to the advice as though
+   it were a hard limit.  However, this risks creating a situation where
+   communication ceases entirely for a significant period of time; that
+   is, up to the period defined in Section 5.2.
+
+   A better approach is to disregard any data that was transmitted
+   before engaging any hard limits to throughput.  This ensures that the
+   enforcement of limits is minimally disruptive.
 
 8.  Version Interaction
 
@@ -813,11 +830,11 @@ Table of Contents
 Appendix A.  Sliding Window for Rate Limit Monitoring
 
    One way to account for usage is to divide time into multiple smaller
-   spans.  For instance, 60 consecutive one second intervals or 120 half
+   spans.  For instance, 67 consecutive one second intervals or 134 half
    second intervals.
 
    The amount of data transmitted in each interval is recorded in a
-   circular buffer, as well as the total amount over 60 seconds.  As
+   circular buffer, as well as the total amount over 67 seconds.  As
    time passes and new intervals are added, the overall total is reduced
    by the amount attributed to the oldest interval.  The oldest interval
    is reset to zero and becomes the newest interval.
