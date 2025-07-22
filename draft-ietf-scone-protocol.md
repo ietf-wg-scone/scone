@@ -646,7 +646,7 @@ The most serious damage occurs when every datagram is modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
-To that end, network elements can ensure that
+To that end, network elements MUST ensure that
 they do not update the content of datagrams
 any more than a small number of times over each enforcement period.
 
