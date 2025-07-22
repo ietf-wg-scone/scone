@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-20T02:02:28.081442+00:00",
+  "timestamp": "2025-07-22T01:54:28.689365+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -884,7 +884,7 @@
       "labels": [],
       "body": "This issue is mostly in regard to  slide 11 of https://datatracker.ietf.org/meeting/122/materials/slides-122-scone-trone-questions-01, which was discussed at IETF 122.\n\nThe current draft doesn't mention this perspective so I want to open up the discussion.\n\nIn general, I think that a fixed window length specified by SCONE is preferable as it simplifies works for network elements. But meanwhile, we need to find a window that works for all users of SCONE.\n\nDifferent video applications choose to buffer different lengths of videos during playbacks. For example, App A may buffer 10s while App B buffers 20s. A 10-second window will work for app A but not work for app B. A 20-second window will work for both.\n\nA flow that complies with a short window will also comply with a longer one.\n\nThis means we should probably specify a longer window to accommodate different applications, but not too long that exceeds the average duration of a video connection. ",
       "createdAt": "2025-04-08T22:27:05Z",
-      "updatedAt": "2025-07-03T18:59:51Z",
+      "updatedAt": "2025-07-21T16:20:43Z",
       "closedAt": null,
       "comments": [
         {
@@ -942,6 +942,48 @@
           "body": "Sliding windows do seem slightly better, and even 1 second granularity would likely be fine.\n\nThe tests only indicated 120s was needed when the SCONE indicated bitrate was fairly low.  I suspect the max bandwidth was quite high in those cases, so the SCONE rate might have been 2Mbits and the congestion controller might have seen 100Mbits?  \n\nI don't expect applications to ruthlessly follow this guidance.  If you start one video playback and then skip to the next one, you might exceed the intended bitrate for a bit if those video playbacks use the same connection.  But the individual videos would still be trying to conform to the guidance.",
           "createdAt": "2025-07-03T18:59:51Z",
           "updatedAt": "2025-07-03T18:59:51Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "\n\n\n\n> Unfortunately, I missed the presentation, but the results are very useful. The question I have, which relates more to how applications using this might operate is: If we have a 120s window, does that potentially mean that the entire budget can be expended in one hit?\n> \n> Let's say that the limit is a relatively modest 5Mbps. Over a 120s window, that's ~75 megabytes of data. I can confirm that modern networks are capable of delivering that much data in a very short time. If that data ends up being delivered, but not useful, is the application expected to sit on its hands for the remainder of those two minutes?\n> \n> For me, that argues for a shorter window on the basis that we need to limit the potential dead air, even if the ideal might be that the rate is applied over that longer window. Any value we pick is also the amount of time that someone might have to sit watching their device do nothing.\n\nVideo duration size is not fixed and can vary from few seconds to many minutes.  Typically user plays/swipes many videos consecutively on a short form streaming video app so this should address the point you raised above. Key point we wanted to highlight by sharing the results that if advised bit-rate is 2 mbps or less (which is very common in the mobile n/ws ) and if window duration is less than 120 second, then in order to meet the advised bit-rate CAPs may need to flatten (aggressive pacing) the data flow  (this may end up making the video flow less bursty and may impact the QoE negatively like we saw with n/w shapers.). ",
+          "createdAt": "2025-07-21T13:30:33Z",
+          "updatedAt": "2025-07-21T13:30:33Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "> The other factor, of course, is that the longer radio timers tend to run in the order of 30s, so any window shorter than 30s might not allow battery-powered devices to enter the most power-efficient modes. Of course, there are shorter radio timers that allow for significant savings short of the full idle state and re-awakening from that state is somewhat costly. So perhaps it is better to avoid that state for a device that is actively being used, so maybe 30s is not that big a deal.\n\nIt is rather other way round. Larger window duration would allow apps to deliver the videos in large burst followed by longer idle period. And bursty data flows by capacity seeking, non-latency sensitive applications (for e.g. VOD applications) helps with UE battery power saving. This allows UEs/devices to go into longer sleep cycle. We tested this in live n/w;  with n/w shaper and w/o n/w shaper. With n/w shaper  (which flattens the data flow) UE was not able to go into CDRX(Connected mode Discontinuous Reception), resulting into more battery power consumption. Shorter window duration may force apps to pace the data transfer to meet the bit-rate conformance and it would lead to data xfer being less bursty (continuous data transfer) and would not let UE/device to go into CDRX ( long sleep cycle). ",
+          "createdAt": "2025-07-21T13:43:24Z",
+          "updatedAt": "2025-07-21T13:43:24Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "> Separately, I think we'd want to suggest a sliding window, though perhaps we can allow larger quanta than 0.01s. The results show some differences (the sliding window needs more time in a few cases, probably because it is less forgetful), but they aren't particularly large differences. Block windows risk having applications accidentally synchronize their resets, which might lead to load spikes.\n\nDuring our testing we used both sliding window and block window based measurement. We just wanted to check if we see significantly different results. Takeaway was that the results were close enough that which method to use did not matter much. However it would help if CSPs provide more insight into how they plan to measure avg bit rate over a time-window. For e.g if CSPs are not particular about window start time then they can use block window avg. However if they are particular about window start time then they may want to use sliding window to measure bit-rates with all possible start time. But in general with 120 second as a window duration it should not matter much. ",
+          "createdAt": "2025-07-21T16:11:55Z",
+          "updatedAt": "2025-07-21T16:11:55Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "> Sliding windows do seem slightly better, and even 1 second granularity would likely be fine.\n> \n> The tests only indicated 120s was needed when the SCONE indicated bitrate was fairly low. I suspect the max bandwidth was quite high in those cases, so the SCONE rate might have been 2Mbits and the congestion controller might have seen 100Mbits?\n> \n> I don't expect applications to ruthlessly follow this guidance. If you start one video playback and then skip to the next one, you might exceed the intended bitrate for a bit if those video playbacks use the same connection. But the individual videos would still be trying to conform to the guidance.\n\n\n\n> Sliding windows do seem slightly better, and even 1 second granularity would likely be fine.\n\nWith sliding window, measured bit-rate for a given duration was higher than the measured bit-rate with block window for some instances mainly during app start time as expected. ",
+          "createdAt": "2025-07-21T16:15:15Z",
+          "updatedAt": "2025-07-21T16:15:15Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "> The tests only indicated 120s was needed when the SCONE indicated bitrate was fairly low. I suspect the max bandwidth was quite high in those cases, so the SCONE rate might have been 2Mbits and the congestion controller might have seen 100Mbits?\n\nLab cellular Setup had good channel condition , FDD , 5 MHz, 2*2  ( 37 Mbps overall bandwidth in DL ). ",
+          "createdAt": "2025-07-21T16:17:58Z",
+          "updatedAt": "2025-07-21T16:17:58Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "> I don't expect applications to ruthlessly follow this guidance. If you start one video playback and then skip to the next one, you might exceed the intended bitrate for a bit if those video playbacks use the same connection. But the individual videos would still be trying to conform to the guidance.\n\nVideo duration size is not fixed and can vary from few seconds to many minutes. Typically user plays/swipes many videos consecutively so the scenario of measuring bit-rate for a connection which played only one video of less than 120 sec may not be that common.  ",
+          "createdAt": "2025-07-21T16:20:43Z",
+          "updatedAt": "2025-07-21T16:20:43Z"
         }
       ]
     },
@@ -3647,18 +3689,26 @@
       "labels": [],
       "body": "Closes #20.",
       "createdAt": "2025-07-07T09:19:14Z",
-      "updatedAt": "2025-07-10T01:11:18Z",
+      "updatedAt": "2025-07-21T16:23:21Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "time",
-      "headRefOid": "2cb56e706e5aa62a8dbe14fe580c3929143038ed",
+      "headRefOid": "f4af149234953bcbe2972330b4bced577608adfe",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "> Closes #20.\r\n\r\nNot sure how this addresses issue#20. ",
+          "createdAt": "2025-07-21T16:23:21Z",
+          "updatedAt": "2025-07-21T16:23:21Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo86y5gRO",
