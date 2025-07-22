@@ -636,6 +636,29 @@ a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
 with implementations that fully conform to the specification of {{packet}}.
 
+## Damage to Other Protocols
+
+Network elements that update SCONE packet fields might do that for datagrams
+exchanged in other protocols.
+This could result in damage to those protocols.
+
+The most serious damage occurs when every datagram is modified,
+because that could mean that the protocol is
+effectively unable to operate end-to-end.
+
+To that end, network elements can ensure that
+they do not update the content of datagrams
+any more than a small number of times over each enforcement period.
+
+Some heuristics might be used
+to detect SCONE-compatible QUIC flows.
+This includes identification of a QUIC handshake on the flow,
+watching to ensure that the ratio of the two SCONE versions
+is close to 1 over time, or other heuristics.
+If these heuristics indicate a non-QUIC flow,
+the safest option is
+for network elements to disable updating of datagrams.
+
 
 # Privacy Considerations {#privacy}
 
