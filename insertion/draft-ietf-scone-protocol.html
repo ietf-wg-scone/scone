@@ -1869,6 +1869,13 @@ if is_long and (packet_version == SCONE1_VERSION or
 with no more than a monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>) between each.
 Because this depends on the availability of SCONE packets,
 network elements might need to update at a much higher frequency.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+<p id="section-7.1-7">A network element <span class="bcp14">MUST NOT</span> alter packets to add SCONE packets
+or synthesize packets that contain SCONE packets.
+The latter will not be accepted and the former,
+even if they do not exceed the path MTU as a result,
+can be detected by applications and could be ignored.
+This document does not define a mechanism to support detection,
+but one might be added in future.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="policing">
