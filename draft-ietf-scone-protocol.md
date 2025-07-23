@@ -380,7 +380,7 @@ one recognized by the receiving endpoint.
 An endpoint that receives throughput advice
 might receive multiple different rate limits.
 If advice is applied by applications,
-applications MUST apply the lowest throughput advice 
+applications MUST apply the lowest throughput advice
 received during any monitoring period; see {{time}}.
 
 Senders can ensure that their use of network capacity
