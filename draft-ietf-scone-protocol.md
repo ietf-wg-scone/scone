@@ -88,6 +88,18 @@ negotiated by QUIC endpoints.  This protocol provides a means for network
 elements to signal the maximum available sustained throughput, or rate limits,
 for flows of UDP datagrams that transit that network element to a QUIC endpoint.
 
+Networks with rate limiting policies use SCONE to send throughput advice
+to cooperating endpoints to limit overall network usage.
+Where congestion control signals -- such as ECN, delays and loss --
+operate on a time scale of a round trip time,
+throughput advice operates over a much longer period.
+This has benefits in some networks as endpoints can fully consume
+network capacity in bursts,
+rather than extending network interaction at lower rates.
+
+For endpoints, SCONE throughput advice makes network policies visible,
+which can reduce wasteful probing beyond those limits.
+
 
 # Overview
 
@@ -214,6 +226,23 @@ cannot assume that this is the case.  A separate signal can be sent for each flo
 Network conditions and rate-limit policies can change in ways that make
 previously signaled advice obsolete.
 There are no guarantees that updated advice will be sent at such events.
+
+
+## Following Advice
+
+The SCONE throughput advice is advisory (see {{advisory-signal}}).
+Applications that chose to follow it will do so in the way that best suits their needs.
+
+The most obvious way to keep within the limits set by throughput advice is to
+inform the sending peer of the limit so that the peer can do whatever rate
+limiting is necessary.  Alternatively, a receiver can control the release of
+flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
+rate of a peer.
+
+Some applications offer options for rate control that can offer superior
+outcomes.  Real-time and streaming video applications are able to adjust video
+quality to fit within a target throughput.  For instance, an HTTP Live Streaming
+client {{?HLS=RFC8216}} can ask for lower bitrate, lower quality media segments.
 
 
 # Conventions and Definitions
@@ -377,17 +406,23 @@ rate limit; otherwise, the original values are retained, preserving the signal
 from the network element with the lower policy.
 
 The following pseudocode indicates how a network element might detect a SCONE
-packet and replace an existing rate signal.
+packet and replace an existing rate signal,
+given throughput advice (`target_throughput`).
 
 ~~~ pseudocode
 is_long = packet[0] & 0x80 == 0x80
-packet_version = packet[1..5]
-if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VERSION):
-  packet_rate_value = packet[0] & 0x3f
-  (target_rate_version, target_rate_value) = convert_rate_to_signal(target_rate)
-  if target_rate_version < packet_version or target_rate_value < packet_rate_value
-    packet[1..5] = target_rate_version
-    packet[0] = packet[0] & 0xc0 | target_rate_value
+packet_version = ntohl(packet[1..5])
+if is_long and (packet_version == SCONE1_VERSION or
+                packet_version == SCONE2_VERSION):
+  packet_throughput = \
+    signal_to_throughput(packet_version, packet[0] & 0x3f)
+
+  if target_throughput < packet_throughput:
+    target_version, target_signal = \
+      throughput_to_signal(target_throughput)
+    packet[0] = packet[0] & 0xc0 | target_signal
+    if target_version != packet_version:
+      packet[1..5] = htonl(target_version)
 ~~~
 
 ## Flows That Exceed Throughput Advicea
