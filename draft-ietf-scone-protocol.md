@@ -402,6 +402,9 @@ if is_long and (packet_version == SCONE1_VERSION or
       packet[1..5] = htonl(target_version)
 ~~~
 
+Once the throughput advice signal is updated,
+the network element updates the UDP checksum for the datagram.
+
 
 # Version Interaction {#version-interaction}
 
