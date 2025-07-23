@@ -354,7 +354,15 @@ one recognized by the receiving endpoint.
 # Negotiating SCONE {#tp}
 
 A QUIC endpoint indicates that it is willing to receive SCONE packets by
-including the scone_supported transport parameter (0xTBD).
+including the scone_supported transport parameter (0x219e).
+The scone_supported transport parameter MUST be empty.
+Receiving a non-zero length scone_supported transport parameter MUST be treated
+as a connection error of type TRANSPORT_PARAMETER_ERROR;
+see {{Section 20.1 of QUIC}}.
+
+<!--
+https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-tp;field=tp;codepoint=0x219e;size=2
+-->
 
 This transport parameter is valid for QUIC versions 1 {{QUIC}} and 2
 {{!QUICv2=RFC9369}} and any other version that recognizes the versions,
@@ -698,7 +706,7 @@ Transport Parameters" registry maintained at
 22.3 of QUIC}}.
 
 Value:
-: 0xTBD
+: 0x219e
 
 Parameter Name:
 : scone_supported
