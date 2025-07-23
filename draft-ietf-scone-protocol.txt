@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 8 January 2026                             Private Octopus Inc.
+Expires: 24 January 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                             7 July 2025
+                                                            23 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 24 January 2026.
 
 Copyright Notice
 
@@ -82,6 +82,7 @@ Table of Contents
      3.3.  Per-Flow Signal
      3.4.  Undirectional Signal
      3.5.  Advisory Signal
+     3.6.  Following Advice
    4.  Conventions and Definitions
    5.  SCONE Packet
      5.1.  Rate Signals
@@ -280,6 +281,24 @@ Table of Contents
    limiting networks, rate limiting policies often apply on the level of
    a device or subscription, but endpoints cannot assume that this is
    the case.  A separate signal can be sent for each flow.
+
+3.6.  Following Advice
+
+   The SCONE throughput advice is advisory (see Section 3.5).
+   Applications that chose to follow it will do so in the way that best
+   suits their needs.
+
+   The most obvious way to keep within the limits set by throughput
+   advice is to inform the sending peer of the limit so that the peer
+   can do whatever rate limiting is necessary.  Alternatively, a
+   receiver can control the release of flow control credit (see
+   Section 4 of [QUIC]) to indirectly limit the sending rate of a peer.
+
+   Some applications offer options for rate control that can offer
+   superior outcomes.  Real-time and streaming video applications are
+   able to adjust video quality to fit within a target throughput.  For
+   instance, an HTTP Live Streaming client [HLS] can ask for lower
+   bitrate, lower quality media segments.
 
 4.  Conventions and Definitions
 
@@ -795,6 +814,10 @@ Table of Contents
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/rfc/rfc3168>.
+
+   [HLS]      Pantos, R., Ed. and W. May, "HTTP Live Streaming",
+              RFC 8216, DOI 10.17487/RFC8216, August 2017,
+              <https://www.rfc-editor.org/rfc/rfc8216>.
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
