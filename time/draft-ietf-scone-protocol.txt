@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 23 January 2026                            Private Octopus Inc.
+Expires: 24 January 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            22 July 2025
+                                                            23 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 January 2026.
+   This Internet-Draft will expire on 24 January 2026.
 
 Copyright Notice
 
@@ -82,6 +82,7 @@ Table of Contents
      3.3.  Per-Flow Signal
      3.4.  Undirectional Signal
      3.5.  Advisory Signal
+     3.6.  Following Advice
    4.  Conventions and Definitions
    5.  SCONE Packet
      5.1.  Rate Signals
@@ -136,6 +137,17 @@ Table of Contents
    network elements to signal the maximum available sustained
    throughput, or rate limits, for flows of UDP datagrams that transit
    that network element to a QUIC endpoint.
+
+   Networks with rate limiting policies use SCONE to send throughput
+   advice to cooperating endpoints to limit overall network usage.
+   Where congestion control signals -- such as ECN, delays and loss --
+   operate on a time scale of a round trip time, throughput advice
+   operates over a much longer period.  This has benefits in some
+   networks as endpoints can fully consume network capacity in bursts,
+   rather than extending network interaction at lower rates.
+
+   For endpoints, SCONE throughput advice makes network policies
+   visible, which can reduce wasteful probing beyond those limits.
 
 2.  Overview
 
@@ -272,6 +284,24 @@ Table of Contents
    Network conditions and rate-limit policies can change in ways that
    make previously signaled advice obsolete.  There are no guarantees
    that updated advice will be sent at such events.
+
+3.6.  Following Advice
+
+   The SCONE throughput advice is advisory (see Section 3.5).
+   Applications that chose to follow it will do so in the way that best
+   suits their needs.
+
+   The most obvious way to keep within the limits set by throughput
+   advice is to inform the sending peer of the limit so that the peer
+   can do whatever rate limiting is necessary.  Alternatively, a
+   receiver can control the release of flow control credit (see
+   Section 4 of [QUIC]) to indirectly limit the sending rate of a peer.
+
+   Some applications offer options for rate control that can offer
+   superior outcomes.  Real-time and streaming video applications are
+   able to adjust video quality to fit within a target throughput.  For
+   instance, an HTTP Live Streaming client [HLS] can ask for lower
+   bitrate, lower quality media segments.
 
 4.  Conventions and Definitions
 
@@ -456,16 +486,22 @@ Table of Contents
    lower policy.
 
    The following pseudocode indicates how a network element might detect
-   a SCONE packet and replace an existing rate signal.
+   a SCONE packet and replace an existing rate signal, given throughput
+   advice (target_throughput).
 
    is_long = packet[0] & 0x80 == 0x80
-   packet_version = packet[1..5]
-   if is_long and (packet_version == SCONE1_VERSION or packet_version == SCONE2_VERSION):
-     packet_rate_value = packet[0] & 0x3f
-     (target_rate_version, target_rate_value) = convert_rate_to_signal(target_rate)
-     if target_rate_version < packet_version or target_rate_value < packet_rate_value
-       packet[1..5] = target_rate_version
-       packet[0] = packet[0] & 0xc0 | target_rate_value
+   packet_version = ntohl(packet[1..5])
+   if is_long and (packet_version == SCONE1_VERSION or
+                   packet_version == SCONE2_VERSION):
+     packet_throughput = \
+       signal_to_throughput(packet_version, packet[0] & 0x3f)
+
+     if target_throughput < packet_throughput:
+       target_version, target_signal = \
+         throughput_to_signal(target_throughput)
+       packet[0] = packet[0] & 0xc0 | target_signal
+       if target_version != packet_version:
+         packet[1..5] = htonl(target_version)
 
 7.2.  Flows That Exceed Throughput Advicea
 
@@ -814,6 +850,10 @@ Table of Contents
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/rfc/rfc3168>.
+
+   [HLS]      Pantos, R., Ed. and W. May, "HTTP Live Streaming",
+              RFC 8216, DOI 10.17487/RFC8216, August 2017,
+              <https://www.rfc-editor.org/rfc/rfc8216>.
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
