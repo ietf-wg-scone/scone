@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-22T01:54:28.689365+00:00",
+  "timestamp": "2025-07-24T01:54:12.776280+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -39,14 +39,14 @@
       "color": "e4e669"
     },
     {
+      "name": "propose-no-action",
+      "description": "The editors believe that the draft already addresses this.",
+      "color": "ffffff"
+    },
+    {
       "name": "question",
       "description": "Further information is requested",
       "color": "d876e3"
-    },
-    {
-      "name": "wontfix",
-      "description": "This will not be worked on",
-      "color": "ffffff"
     },
     {
       "name": "bike shed",
@@ -169,7 +169,7 @@
       "labels": [],
       "body": "1. Section 2 of the draft shows \"QUIC Sender\", ie, the server initiates the TRONE signal toward the client. This implies that TRONE signal is going to be server initiated. This will result in having the \"network element\" listens to all IP flows in the downlink direction. This is CPU intensive\n2. The authors should consider a design that is independent of SNI-based flow detection\n3. The authors should reconsider this design and allow for CLIENT initiated TRONE signaling (uplink direction) with implicit support for  flow detection\n\nAs a point of reference, section 6 of draft mishra-scone-usercase-00, added following requirement:\nSCONE (aka TRONE) signal MUST be a client-application endpoint initiated to assist the network element (UPF/5G or PGW/4G) with the implicit flow detection\nplease see https://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.1.1",
       "createdAt": "2025-03-20T06:13:47Z",
-      "updatedAt": "2025-06-04T18:59:21Z",
+      "updatedAt": "2025-07-23T08:49:04Z",
       "closedAt": null,
       "comments": [
         {
@@ -416,6 +416,13 @@
           "body": "Policies that shape or police an _entire connection_ based on the presence of ABR video flows on that connection are counterproductive to QoE.  We've found that coalescing video traffic with photos and dynamic requests generally gives us better control of response prioritization and corresponding QoE wins overall, except in networks that throttle, where non-video traffic experiences collateral damage.\n\nWe'd prefer that networks offer SCONE throughput advice (and remove shaping) regardless of the SNI, \"video/non-video\" or any other properties of the traffic.  Tell us what bitrate is sustainable and we will deliver the best possible QoE within that limit.",
           "createdAt": "2025-06-04T18:59:20Z",
           "updatedAt": "2025-06-04T18:59:20Z"
+        },
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Summing up my understanding from the WG meeting in Madrid, where we decided to include a client-side first-packet SCONE signal, we will:\n\n- include a \"client support\" signal in the SCONE protocol, \n- with brief guidance in the protocol document as to when to use it TBD (noting there is explicitly *no* consensus that this is signal is intended to mean \"this is a video biflow\")\n- and place expanded discussion of the applicability of the signal in the A&M document.\n\nShould we expect a new PR for this issue, or modify/reuse #23?",
+          "createdAt": "2025-07-23T08:49:04Z",
+          "updatedAt": "2025-07-23T08:49:04Z"
         }
       ]
     },
@@ -424,15 +431,15 @@
       "id": "I_kwDON1dwo86u5RKN",
       "title": "Network Element initiate TRONE packet for Dynamic update of Throughput advise based on changing RAT or subscription plan",
       "url": "https://github.com/ietf-wg-scone/scone/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "smishra1200",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Section 7.1 states \"A network element detects a TRONE packet by observing that a packet has a QUIC long header and the TRONE protocol version of 0xTBD.\" A network element then conditionally replaces the Rate Signal field with values of its choosing\"\n\nAbove implies that 'network element\" has to wait/rely on server to originate a TRONE packet for the NE to send advisory bit-rate towards the client.\n\nThis may not work well when we consider a use case such as the mobile user may move from one Radio Access Technology to another (4G to 5G or vice-versa) during an ongoing video session. Ideally, the NE should be in a position to send dynamically an  updated Throughput advisory bit-rate on its own without having to wait for server to originate a TRONE packet.\n\nIn another use case, there can be a need for the NE to send an updated Throughput advisory bitrate, if there is any change in consumption of subscribers' data plan.\n\nThere is also a requirement added in mishra-scone-usecase-00 that calls out:\nDynamic update - \"throughput advice\" MAY change during the ongoing flow and UPF/PGW SHOULD be able to send \"throughput advice\" to client-application-endpoint as soon as possible.\n\nPlease refer to https://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.5.1\n\n",
       "createdAt": "2025-03-20T06:26:49Z",
-      "updatedAt": "2025-03-20T06:54:53Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-22T12:59:24Z",
+      "closedAt": "2025-07-22T12:59:24Z",
       "comments": [
         {
           "author": "ihlar",
@@ -440,6 +447,13 @@
           "body": "Right, we do want the ability to signal rate changes in a timely fashion. \nThere are however, a number of ways to achieve this. \nIf we make it cheap enough to update the rate signal field, we can provide guidance to endpoints to generate TRONE packets at a relatively high frequency. One such advice would be to send a new advice for every new application layer \"burst\" such as the transmission of a set of HLS/DASH video segments. \nFurthermore, it is possible for network elements to insert TRONE packets of its own and expand UDP datagrams. Hopefully this will not be needed, but can be a last resort if the TRONE packet frequency is too low. Special care needs to be taken to not run into Path MTU issues, so guidance around not expanding datagrams to sizes larger than 1200 bytes (smallest maximum datagram payload size that needs to be supported for QUIC v1/v2)  could be needed.",
           "createdAt": "2025-03-20T06:54:52Z",
           "updatedAt": "2025-03-20T06:54:52Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We have a lot more discussion on this issue on #5.  I'm going to mark this as a duplicate of that.",
+          "createdAt": "2025-07-22T12:59:17Z",
+          "updatedAt": "2025-07-22T12:59:17Z"
         }
       ]
     },
@@ -448,15 +462,15 @@
       "id": "I_kwDON1dwo86u5cxB",
       "title": "Client-side explicit ACK for receipt of TRONE packet",
       "url": "https://github.com/ietf-wg-scone/scone/issues/7",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "smishra1200",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "7.3.  Feedback To Sender About Signals \n\nSuggest that the TRONE draft consider a use case for client to send an explicit ACK to the \"network element\" upon receiving a TRONE packet. Without an explicit ACK, a NE may not know if the client has received the latest Throughput advisory bit-rate. This may help the scenario where a client may not self regulate due to loss of TRONE packet with the most recent Throughput advisory bit-rate.\n\nAdding a requirement that support the ACK from client to the network element. \n\nI-D mishra-scone-usecase-00 listed the following requirement: \n\nClient-application endpoint SHOULD send acknowledgement receipt of throughput advisory signal from the network element using the SCONE (TRONE) signal\n\nhttps://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.3.1",
       "createdAt": "2025-03-20T06:50:46Z",
-      "updatedAt": "2025-04-30T21:25:22Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-23T08:57:35Z",
+      "closedAt": "2025-07-23T08:57:35Z",
       "comments": [
         {
           "author": "ihlar",
@@ -509,10 +523,17 @@
         },
         {
           "author": "martinthomson",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "My position here is that the closing of the feedback loop is something that belongs at the application layer.  We don't need this in the protocol.  As Sanjay's requirement says (eliding 2119 language and adding emphasis) \"**Client-application** endpoint [sends] acknowledgement receipt of throughput advisory signal [...]\".\n\nChanging QUIC to handle this might seem like a good idea.  It smooths the path for feedback and ensures consistent implementation.  However, this protocol operates outside of QUIC for the most part; you might equally ask why we aren't providing the feedback in HTTP/3.\n\nThe clincher for me is that it depends very much on application regarding the exact form that feedback takes.  HLS applications won't need to send any direct advice feedback, the client only needs to use the information to choose a different chunk at the next opportunity.",
           "createdAt": "2025-04-30T21:25:20Z",
           "updatedAt": "2025-04-30T21:25:20Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "At IETF 123 it was agreed to not pursue this issue further. ",
+          "createdAt": "2025-07-23T08:57:35Z",
+          "updatedAt": "2025-07-23T08:57:35Z"
         }
       ]
     },
@@ -778,9 +799,17 @@
       "labels": [],
       "body": "See discussion on #12 \n\nThe draft needs clear guidance on rounding when converting between bitrates and signal values.\n\n- Should implementers round up or down when converting from bitrates to signal values?\n- What are the practical implications of each choice? (rounding down ensures staying under capacity limits; rounding up maximizes bandwidth utilization when rate adaptation algorithms rarely use full capacity)\n- Recommend specific approach with rationale, noting the logarithmic scale means adjacent steps differ by at most ~11%\n- Include example calculations demonstrating the recommended approach\n\n\n\n",
       "createdAt": "2025-03-27T15:07:00Z",
-      "updatedAt": "2025-03-27T15:07:00Z",
+      "updatedAt": "2025-07-23T16:10:15Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think we're OK now.  It's clear how the limit is interpreted, so that creates the right set of conditions.  We don't need to hold their hands through this.",
+          "createdAt": "2025-07-23T16:10:15Z",
+          "updatedAt": "2025-07-23T16:10:15Z"
+        }
+      ]
     },
     {
       "number": 18,
@@ -1284,10 +1313,12 @@
       "author": "Kevsy",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "propose-no-action"
+      ],
       "body": "draft-00 does not include the use of SCONE by networks that do not apply rate limit policies. For example, a cellular network that provides throughput advice based on its view of network congestion and channel conditions.  I've drafted PR which adds that as a use of SCONE, and hence changes 'rate limit signal' to throughput advice' throughout:  #31",
       "createdAt": "2025-05-12T16:38:30Z",
-      "updatedAt": "2025-07-07T09:38:33Z",
+      "updatedAt": "2025-07-23T16:08:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -1359,10 +1390,12 @@
       "author": "DanDruta",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "propose-no-action"
+      ],
       "body": "Current merged draft talks about rate limit signals and throughput advice but it falls short of defining what that is and more importantly how it gets computed so both CSPs and CAPs have a common understanding of the meaning as well as measure it.\nSuggest adding a section  to provide clarity. For reference the scone video session data rate  draft https://datatracker.ietf.org/doc/html/draft-druta-scone-video-session-data-rate-00",
       "createdAt": "2025-06-10T15:06:26Z",
-      "updatedAt": "2025-07-08T07:27:39Z",
+      "updatedAt": "2025-07-23T16:11:14Z",
       "closedAt": null,
       "comments": [
         {
@@ -1383,10 +1416,12 @@
       "author": "martinduke",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "propose-no-action"
+      ],
       "body": "At the June 11 2025 interim, Marcus mentioned that some operators enforce bit rates on a per-flow basis and others aggregate flows, and (in my perception) implied that we should not try to discourage them from either approach.\n\nI have no opinion on the merits of that implication. However, if SCONE network elements are allowed to enforce on an aggregate basis, it seems critical for interoperability to have a signal in SCONE packets indicating which mode it's in.\n\n@kazuho had a response in the meeting that rate control should be on a per-flow basis, because aggregate rates are not always actionable.",
       "createdAt": "2025-06-11T15:49:23Z",
-      "updatedAt": "2025-06-11T15:57:14Z",
+      "updatedAt": "2025-07-23T17:44:01Z",
       "closedAt": null,
       "comments": [
         {
@@ -1395,6 +1430,20 @@
           "body": "I will note, FWIW, that the charter specifically refers to \"UDP 4-tuples\", not flow aggregates.",
           "createdAt": "2025-06-11T15:57:14Z",
           "updatedAt": "2025-06-11T15:57:14Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Whatever the charter says, I will argue that what is in the draft is the right answer.  Is there something there that you think we need to change?  Please review https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-3.2",
+          "createdAt": "2025-07-23T16:07:19Z",
+          "updatedAt": "2025-07-23T16:07:19Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree, the current text is saying the right thing. \nOperators might or might not enforce per-flow throughput, regardless of what we were to write in the document.\nMaking the document more specific on this would be misleading. ",
+          "createdAt": "2025-07-23T17:42:28Z",
+          "updatedAt": "2025-07-23T17:44:01Z"
         }
       ]
     },
@@ -1403,15 +1452,15 @@
       "id": "I_kwDON1dwo86_xdZD",
       "title": "Make suggestions about how to maintain limits",
       "url": "https://github.com/ietf-wg-scone/scone/issues/39",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Do we want to talk about approaches other than asking the peer to rate-limit, such as:\r\n* the endpoint selecting different resources (like video chunks), or\r\n* using flow control to limit the amount of data being sent by the peer?\r\n\r\n_Originally posted by @kazuho in https://github.com/ietf-wg-scone/scone/pull/37#discussion_r2194954920_",
       "createdAt": "2025-07-09T23:30:33Z",
-      "updatedAt": "2025-07-09T23:30:33Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-23T07:50:08Z",
+      "closedAt": "2025-07-23T07:50:08Z",
       "comments": []
     },
     {
@@ -1453,6 +1502,75 @@
       "updatedAt": "2025-07-19T14:08:55Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 43,
+      "id": "I_kwDON1dwo87B3nf3",
+      "title": "Don't require an update to every packet",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/43",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "One equipment vendor requested that we not require network elements to update every packet.  This seems reasonable to me.\n\nA proposed option here is that endpoints retain the lowest throughput advice received over the XX second window that we have for enforcement.  There is no sense in changing any faster than that, because it is possible that senders will have already consumed the available bandwidth at the start of any given window.\n\nThis increases the load on any endpoint because it means that you have to retain the time at which advice was last refreshed at a given level.  You might also have to retain advice at higher levels (though this is not mandatory, it would allow you to take advantage of an increase in the advice more quickly).  That seems pretty modest as far as I'm concerned.",
+      "createdAt": "2025-07-22T12:54:50Z",
+      "updatedAt": "2025-07-23T16:04:22Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Maybe dumb question: how is it better than discouraging endpoints sending SCONE packets more frequently than once per Y seconds?\n\nThe complexity for network elements would be the same, as these network elements have to skip modifying SCONE packets showing up too frequently, regardless of the solution.\n\nFor endpoints, retaining state to calculate the min for XX seconds sounds more complicate than having a timer to control how frequent they send SCONE packets.",
+          "createdAt": "2025-07-22T15:30:23Z",
+          "updatedAt": "2025-07-22T15:30:23Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Isn't this tied to the debate about enforcement period? The discussion in the WG seemed to go along the following lines:\n\n- multimedia applications have variable data rate, peaks followed by lower level of traffic;\n- to give them flexibility, bandwidth usage should be averaged over a long period, maybe 120 seconds;\n- if enforcement is over 120 seconds, it follows that the advice is good for that period;\n- if advice only changes every 120 seconds, Nyquist's theorem says that the advice should be sampled at least every 60 seconds.\n\nOf course, Nyquist says that, but if we accept that network elements will sometimes let the packets pass without touching them, we should recommend probing a bit more frequently and filtering advice at the receiving endpoint, such as \"min of the last 3 values\". That would mean sampling at least every 20 seconds.\n\nThen we should notice that it is probably better to send the packet at random intervals to avoid synchronized peaks of load for the intermediate elements. I would thus recommend sending the SCONE packets at random intervals between 10 and 20 seconds.\n\nEndpoints may want to send the SCONE packets sooner than the expected interval if they notice a change in network conditions, such as a congestion event. But there is of course the risking of noticing that wrong, and then repeat probing at too short intervals. \n",
+          "createdAt": "2025-07-22T19:21:56Z",
+          "updatedAt": "2025-07-22T19:21:56Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "If the network marks only some SCONE probe packets, the endpoints will send more of them in order to get the signal they want. Seems like a destructive strategy to me.\n",
+          "createdAt": "2025-07-22T21:10:46Z",
+          "updatedAt": "2025-07-22T21:10:46Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "All of this (Nyquists theorem etc) should be addressed in the pull requests.  Note that the pull requests are all stacked.",
+          "createdAt": "2025-07-23T16:04:22Z",
+          "updatedAt": "2025-07-23T16:04:22Z"
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "id": "I_kwDON1dwo87CDjOr",
+      "title": "create a 7-bit rate signal field, by allocating two QUIC versions that differ only with MSB",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/45",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "SCONE uses a 7-bit value (128 code points) for representing the rate signal.\n\nAt the moment, the most significant bit of the rate signal affects the selection of the QUIC version, and the rest of the bit is stored in the first byte of the datagram.\n\nThis construction is sub-optimal and is a pain in terms of both specification and implementation.\n\nI propose to allocate two QUIC versions that are identical for all bits expect the most significant bit.\n\n```\nSCONE Packet {\n  Header Form (1) = 1,\n  Reserved (1),\n  Rate Signal (7),\n  Common Bits of SCONE Versions (31) = 0xSCONE1 & 0x7fffffff,\n  Destination Connection ID Length (8),\n  Destination Connection ID (0..2040),\n  Source Connection ID Length (8),\n  Source Connection ID (0..2040),\n}\n```\n\nWith this change, detecting SCONE packets becomes as simple as `(first64bit & 0xc07f_ffff_ffff_ffff) == (0xc000_0000_0000_0000 | (0xSCONE1 << 24))`, and the rate signal becomes a 7-bit value that can be directly processed (without looking up different base values based on the QUIC version).",
+      "createdAt": "2025-07-23T09:54:43Z",
+      "updatedAt": "2025-07-23T15:53:26Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We can certainly select version numbers with that pattern.  That's easy.",
+          "createdAt": "2025-07-23T15:53:26Z",
+          "updatedAt": "2025-07-23T15:53:26Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -2447,7 +2565,7 @@
       "labels": [],
       "body": "As discussed in the meeting, and mentioned in #5, it is useful for an endpoint to signal its potential usage of TRONE to a network element. This initial pass uses a \"TRONE Indication\" packet which is probably excessive but is a fully reversed TRONE packet that's meant to go at the end of a datagram. This allows for the network element to first detect a QUIC initial, and then check the end of the packet for TRONE.\r\n\r\nAn alternative would be a more bespoke indicating like a concatenation of versions, or something like that.",
       "createdAt": "2025-04-15T16:23:30Z",
-      "updatedAt": "2025-06-16T13:47:44Z",
+      "updatedAt": "2025-07-22T14:14:39Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
@@ -2621,6 +2739,66 @@
               "body": "Agreed, I think all the fields here are likely excessive, but kept them in for now so we can discuss further. A new version is probably fine in terms of avoiding false positives.",
               "createdAt": "2025-04-16T15:24:25Z",
               "updatedAt": "2025-04-16T15:24:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo861Y1-5",
+          "commit": {
+            "abbreviatedOid": "2f3548f"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-22T14:08:29Z",
+          "updatedAt": "2025-07-22T14:08:29Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "Is this consistent with a Datagram that has a coalesced 0RTT packet, or Mozilla-like zero padding? The parsing rules indicate this should be the very last thing.",
+              "createdAt": "2025-07-22T14:08:29Z",
+              "updatedAt": "2025-07-22T14:08:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo861Y5fj",
+          "commit": {
+            "abbreviatedOid": "2f3548f"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-22T14:11:43Z",
+          "updatedAt": "2025-07-22T14:11:43Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "It would be helpful for understanding to elaborate more on the implications of these actions? An operator can do whatever it wants, but it is not clear to me what actions we expect them to take in terms of treatment of the flow (besides not trying to extract the SNI)",
+              "createdAt": "2025-07-22T14:11:43Z",
+              "updatedAt": "2025-07-22T14:11:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo861Y8TJ",
+          "commit": {
+            "abbreviatedOid": "2f3548f"
+          },
+          "author": "DavidSchinazi",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-22T14:14:39Z",
+          "updatedAt": "2025-07-22T14:14:39Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "Can you elaborate on how the network elements reacts to this indication? The network element needs to wait for a TRONE signal in the server-to-client direction in order to confirm that the flow supports TRONE. Why is this better than just having the network element look at the first packet in the server-to-client direction of each 5-tuple?",
+              "createdAt": "2025-07-22T14:14:39Z",
+              "updatedAt": "2025-07-22T14:14:39Z"
             }
           ]
         }
@@ -3689,13 +3867,13 @@
       "labels": [],
       "body": "Closes #20.",
       "createdAt": "2025-07-07T09:19:14Z",
-      "updatedAt": "2025-07-21T16:23:21Z",
+      "updatedAt": "2025-07-23T13:42:50Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
+      "baseRefOid": "517e54b2c40db10df3f14f55f7efb7399c7fc8f2",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "time",
-      "headRefOid": "f4af149234953bcbe2972330b4bced577608adfe",
+      "headRefOid": "3cda4b7b9ce75a332e91a8db04e43364b6b34347",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3899,24 +4077,26 @@
       "id": "PR_kwDON1dwo86eNp7m",
       "title": "Add some discussion about compliance",
       "url": "https://github.com/ietf-wg-scone/scone/pull/40",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This includes the suggestions from #39.  I've put this in the applicability statement.  That's a bit unusual as a place to put what amounts to implementation guidance, but the framing here seemed natural.\r\n\r\nCloses #39.",
       "createdAt": "2025-07-10T01:35:18Z",
-      "updatedAt": "2025-07-11T08:40:10Z",
+      "updatedAt": "2025-07-23T07:50:07Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "how-to",
       "headRefOid": "5e10d57bc9a03140f38ffa4cdca3a266899a005a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-07-23T07:50:07Z",
+      "mergedAt": "2025-07-23T07:50:07Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "517e54b2c40db10df3f14f55f7efb7399c7fc8f2"
+      },
       "comments": [],
       "reviews": [
         {
@@ -4064,6 +4244,400 @@
               "updatedAt": "2025-07-11T08:23:35Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo861XeKz",
+          "commit": {
+            "abbreviatedOid": "5e10d57"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good to me.",
+          "createdAt": "2025-07-22T12:43:52Z",
+          "updatedAt": "2025-07-22T12:43:52Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo861Xf3U",
+          "commit": {
+            "abbreviatedOid": "5e10d57"
+          },
+          "author": "mjoras",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I think this looks great to me -- it concisely summarizes the main strategies I'm aware of to achieve this both unilaterally from the client side, and with cooperation from the sending peer.",
+          "createdAt": "2025-07-22T12:44:51Z",
+          "updatedAt": "2025-07-22T12:44:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "id": "PR_kwDON1dwo86gET0A",
+      "title": "Fix the innocent protocol mangling",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/44",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This depends on an answer to #43 being as I suggested there. I won't make the pull request dependent on that though.\r\n\r\nCloses #10.",
+      "createdAt": "2025-07-22T12:58:35Z",
+      "updatedAt": "2025-07-23T07:57:56Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "following-limits",
+      "headRefOid": "6e2e6f4567c1f1ba88e9c6b5a55a1817585e48ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo861XxhW",
+          "commit": {
+            "abbreviatedOid": "6e2e6f4"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-22T13:03:43Z",
+          "updatedAt": "2025-07-22T13:03:44Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "I'm afraid this is no longer possible. In the new encoding, a sender only sends SCONE2 packets, and each bit rate maps to exactly one version.",
+              "createdAt": "2025-07-22T13:03:44Z",
+              "updatedAt": "2025-07-22T13:03:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo861kG-U",
+          "commit": {
+            "abbreviatedOid": "6e2e6f4"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-23T07:57:56Z",
+          "updatedAt": "2025-07-23T07:57:56Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "Right, that heuristic doesn't work anymore. \r\nWe should mention indications though, if they now make it into the protocol. ",
+              "createdAt": "2025-07-23T07:57:56Z",
+              "updatedAt": "2025-07-23T07:57:56Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDON1dwo86gP9iz",
+      "title": "Add a minimum rate algorithm",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/46",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
+      "createdAt": "2025-07-23T11:37:13Z",
+      "updatedAt": "2025-07-23T21:45:10Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "time",
+      "baseRefOid": "3cda4b7b9ce75a332e91a8db04e43364b6b34347",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "min-rate",
+      "headRefOid": "94e5d41ffb5519696c2667da48d109d6a22a153f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo861vnXM",
+          "commit": {
+            "abbreviatedOid": "94e5d41"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I think we need to be a bit more directive in the `#apply` section.",
+          "createdAt": "2025-07-23T21:43:35Z",
+          "updatedAt": "2025-07-23T21:45:10Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "That's where Nyquist applies. \"No more than a monitoring period\" is not wrong, but it is incomplete. I argue that:\r\n\r\n1- To detect change in appropriate times, the interval between probes should be about half the monitoring period;\r\n2- To avoid synchronization, the interval between probes should be randomized.",
+              "createdAt": "2025-07-23T21:43:36Z",
+              "updatedAt": "2025-07-23T21:45:10Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "id": "PR_kwDON1dwo86gQKLy",
+      "title": "Update CI files",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/47",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-07-23T11:55:28Z",
+      "updatedAt": "2025-07-23T13:37:27Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "517e54b2c40db10df3f14f55f7efb7399c7fc8f2",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "update-ci",
+      "headRefOid": "e7faf85c7d653e60ac31ca7c747437b6a3f39c3c",
+      "closedAt": "2025-07-23T13:37:27Z",
+      "mergedAt": "2025-07-23T13:37:27Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "7a5c958cc37d32558ef6c37687d2749c6d00c048"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 48,
+      "id": "PR_kwDON1dwo86gRnvr",
+      "title": "Forbid insertion of SCONE packets",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/48",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is one potential approach to #21.  However, it does constrain things more than I think is necessary.  I tend to think that staying quiet is best, because it gives network elements the option and endpoints the choice of ignoring those inserted SCONE packets.  I wouldn't want to *encourage* that outcome though.\r\n\r\nCloses #21.",
+      "createdAt": "2025-07-23T13:55:32Z",
+      "updatedAt": "2025-07-23T13:55:32Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "min-rate",
+      "baseRefOid": "94e5d41ffb5519696c2667da48d109d6a22a153f",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "insertion",
+      "headRefOid": "e1c4874dc6f63a84f8fbe65f13cc93ebdc6a7ae6",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 49,
+      "id": "PR_kwDON1dwo86gSeQK",
+      "title": "Add an indication",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/49",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This adds a small indicator to the end of packets, so that network elements can maybe flip their posture for those flows. That requires a bit of a gamble, because the indication doesn't mean that SCONE is supported or that throughput advice will be followed, but it seems like we have some belief that this will change how the protocol might be deployed.\r\n\r\nI didn't strongly mandate the new flow indication piece.  That's something we could do, but it turned out to be incredibly hard to specify something that works sensibly.  Tying this to PATH_CHALLENGE/PATH_RESPONSE does work, but those have more uses than initializing a flow on a new path, so the set of conditions you need to set out for when the indication is attached to a datagram end up being very complicated.\r\n\r\nGiven that we already have good reason to send SCONE packets on new paths, I don't think we need to overthink that part.\r\n\r\nCloses #5.\r\nCloses #23.",
+      "createdAt": "2025-07-23T15:07:55Z",
+      "updatedAt": "2025-07-24T00:46:22Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "indication",
+      "headRefOid": "96a96ca9d98188b71a3d74b134473fab66969595",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo861xDOL",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I have really mixed feelings about the support for indications, but this text is probably OK. The indicator is present for all new flows that negotiate SCONE, and as such merely repeats an information already contained in the transport parameters and accessible by deep packet inspection in the Initial packets, which means the privacy impact is minimal.\r\n\r\nI left a comment in the \"migrated flows\" section. We must be clear that applications MAY do that, but they don't have to. The new flows are hard to analyze by deep packet inspection. Network elements would not know whether the flow belongs to a SCONE capable connection. Providing the indication provides extra information to this network elements, and thus is a tradeoff between privacy and expected benefits.\r\n\r\nI do not see an analysis of how servers are supposed to react to indications. For example, if the Initial packets includes the SCONE TP, is the absence of indication an error? As we say that clients MUST include the indication, it would be logical to treat presence of SCONE TP + absence of indication as a protocol error. We may want to state that.\r\n\r\nWhat about the opposite, if the client first flight includes SCONE indication but does not carry the SCONE TP? I think the only reasonable behavior is for the servers to ignore that indication, because it might be the result of a random process. We should say that.",
+          "createdAt": "2025-07-24T00:31:44Z",
+          "updatedAt": "2025-07-24T00:46:22Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "If I read between the lines, this says that applications MAY send a SCONE packet on a new path, if they so chose, which they may not. But this reading between the lines is a bit ambiguous.\r\n\r\nI would rewrite the first two paragraphs as:\r\n\r\nApplications MAY decide to indicate support for SCONE on new flows. They cannot use the\r\nindicator to do that, but they can send a SCONE packet for the first few packets on a new path.\r\nThis would give network elements on that path the ability\r\nto recognize the flow as being able to receive throughput advice\r\nand also gives the network element an opportunity to provide that throughput advice.",
+              "createdAt": "2025-07-24T00:31:44Z",
+              "updatedAt": "2025-07-24T00:46:22Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "id": "PR_kwDON1dwo86gTBN8",
+      "title": "Define the transport parmeter",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/50",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Give it a value and a length (0).\r\n\r\nCloses #41.",
+      "createdAt": "2025-07-23T15:52:22Z",
+      "updatedAt": "2025-07-23T21:36:51Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "tp-len",
+      "headRefOid": "494eae2b7562cfd2884b4b49d3cf775f881adbab",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo861sHPh",
+          "commit": {
+            "abbreviatedOid": "494eae2"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-23T16:39:22Z",
+          "updatedAt": "2025-07-23T16:39:22Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo861vhpI",
+          "commit": {
+            "abbreviatedOid": "494eae2"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes. Empty TP is the simplest design.",
+          "createdAt": "2025-07-23T21:36:51Z",
+          "updatedAt": "2025-07-23T21:36:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 51,
+      "id": "PR_kwDON1dwo86gTJUk",
+      "title": "Define version numbers",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/51",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #45.",
+      "createdAt": "2025-07-23T16:04:45Z",
+      "updatedAt": "2025-07-23T17:48:40Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "define-versions",
+      "headRefOid": "4ef39186f17399447683cae3a0712e6f286c1c85",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo861shcR",
+          "commit": {
+            "abbreviatedOid": "4ef3918"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-23T17:12:50Z",
+          "updatedAt": "2025-07-23T17:12:50Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo861s4gn",
+          "commit": {
+            "abbreviatedOid": "4ef3918"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-07-23T17:48:35Z",
+          "updatedAt": "2025-07-23T17:48:40Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "I think we want to use the 7-bit field to represent a value that can be generated by shifting an integer, and that means that the MSB of the QUIC version conveys the LSB of the rate signal.\r\n\r\nBut the proposed text uses the MSB of the QUIC version field to convey the MSB of the rate signal.",
+              "createdAt": "2025-07-23T17:48:35Z",
+              "updatedAt": "2025-07-23T17:48:40Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 52,
+      "id": "PR_kwDON1dwo86gTO1A",
+      "title": "Update the UDP checksum",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/52",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This might seem obvious to some of us, but it's an easy thing to overlook when implementing.\r\n\r\nI don't want to mention the all-zero UDP checksum thing.  I'm sure that anyone looking into this will discover that and be able to reach their own conclusions about how feasible that is.\r\n\r\nCloses #42.",
+      "createdAt": "2025-07-23T16:14:27Z",
+      "updatedAt": "2025-07-23T21:47:28Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "checksum-update",
+      "headRefOid": "3af621a3fb302256741a4cb1824a38ba7e1b4afa",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo861vqfi",
+          "commit": {
+            "abbreviatedOid": "3af621a"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-23T21:47:28Z",
+          "updatedAt": "2025-07-23T21:47:28Z",
+          "comments": []
         }
       ]
     }
