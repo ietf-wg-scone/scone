@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-24T01:54:12.776280+00:00",
+  "timestamp": "2025-07-27T02:03:27.073644+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2558,21 +2558,21 @@
       "id": "PR_kwDON1dwo86SsueK",
       "title": "Add \"TRONE Indication\" strawman.",
       "url": "https://github.com/ietf-wg-scone/scone/pull/23",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjoras",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As discussed in the meeting, and mentioned in #5, it is useful for an endpoint to signal its potential usage of TRONE to a network element. This initial pass uses a \"TRONE Indication\" packet which is probably excessive but is a fully reversed TRONE packet that's meant to go at the end of a datagram. This allows for the network element to first detect a QUIC initial, and then check the end of the packet for TRONE.\r\n\r\nAn alternative would be a more bespoke indicating like a concatenation of versions, or something like that.",
       "createdAt": "2025-04-15T16:23:30Z",
-      "updatedAt": "2025-07-22T14:14:39Z",
+      "updatedAt": "2025-07-24T21:47:13Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2bc8257da0eda4e29639c1eca3da903f555332c8",
       "headRepository": "mjoras/trone",
       "headRefName": "main",
       "headRefOid": "2f3548f3523392f20915d3b492a258e288188cab",
-      "closedAt": null,
+      "closedAt": "2025-07-24T21:47:13Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -4453,7 +4453,7 @@
       "labels": [],
       "body": "This adds a small indicator to the end of packets, so that network elements can maybe flip their posture for those flows. That requires a bit of a gamble, because the indication doesn't mean that SCONE is supported or that throughput advice will be followed, but it seems like we have some belief that this will change how the protocol might be deployed.\r\n\r\nI didn't strongly mandate the new flow indication piece.  That's something we could do, but it turned out to be incredibly hard to specify something that works sensibly.  Tying this to PATH_CHALLENGE/PATH_RESPONSE does work, but those have more uses than initializing a flow on a new path, so the set of conditions you need to set out for when the indication is attached to a datagram end up being very complicated.\r\n\r\nGiven that we already have good reason to send SCONE packets on new paths, I don't think we need to overthink that part.\r\n\r\nCloses #5.\r\nCloses #23.",
       "createdAt": "2025-07-23T15:07:55Z",
-      "updatedAt": "2025-07-24T00:46:22Z",
+      "updatedAt": "2025-07-24T08:15:17Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
@@ -4485,6 +4485,32 @@
               "updatedAt": "2025-07-24T00:46:22Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86106R6",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thank you for the write up.",
+          "createdAt": "2025-07-24T07:58:53Z",
+          "updatedAt": "2025-07-24T08:15:17Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nA client that is using a QUIC version that includes length-delimited QUIC packets,\r\nwhich includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},\r\ncan include an indicator of SCONE support outside of the QUIC packet\r\n```",
+              "createdAt": "2025-07-24T07:58:53Z",
+              "updatedAt": "2025-07-24T08:15:17Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "Maybe it is a good idea to talk about NAT rebinding too.\r\n\r\nAlso, I think it would be better to state that the actor of sending these indications is the client; not the server.\r\n\r\n```suggestion\r\nBy sending a SCONE packet for the first few packets on a new path, clients\r\ngives network elements on that path the ability\r\nto recognize the flow as being able to receive throughput advice\r\nand also gives the network element an opportunity to provide that throughput advice.\r\n\r\nClients might also send send SCONE packets for the few packets after quiescence,\r\nas the tuple observed by network elements might have changed due to NAT rebinding.\r\n\r\n```",
+              "createdAt": "2025-07-24T08:13:45Z",
+              "updatedAt": "2025-07-24T08:15:17Z"
+            }
+          ]
         }
       ]
     },
@@ -4500,7 +4526,7 @@
       "labels": [],
       "body": "Give it a value and a length (0).\r\n\r\nCloses #41.",
       "createdAt": "2025-07-23T15:52:22Z",
-      "updatedAt": "2025-07-23T21:36:51Z",
+      "updatedAt": "2025-07-24T21:48:00Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
@@ -4538,6 +4564,19 @@
           "createdAt": "2025-07-23T21:36:51Z",
           "updatedAt": "2025-07-23T21:36:51Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo861__IJ",
+          "commit": {
+            "abbreviatedOid": "494eae2"
+          },
+          "author": "mjoras",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-24T21:48:00Z",
+          "updatedAt": "2025-07-24T21:48:00Z",
+          "comments": []
         }
       ]
     },
@@ -4553,7 +4592,7 @@
       "labels": [],
       "body": "Closes #45.",
       "createdAt": "2025-07-23T16:04:45Z",
-      "updatedAt": "2025-07-23T17:48:40Z",
+      "updatedAt": "2025-07-25T14:24:13Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
@@ -4598,6 +4637,26 @@
               "updatedAt": "2025-07-23T17:48:40Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862IRZJ",
+          "commit": {
+            "abbreviatedOid": "4ef3918"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-25T14:24:13Z",
+          "updatedAt": "2025-07-25T14:24:13Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "I think it's fine to use the MSB of QUIC version field to convey the MSB of the signal. It allows us to keep the spec as is, which is clear and easy to read.\r\nIt's still possible to construct and retrieve the signal and version with a shift and an addition. ",
+              "createdAt": "2025-07-25T14:24:13Z",
+              "updatedAt": "2025-07-25T14:24:13Z"
+            }
+          ]
         }
       ]
     },
@@ -4637,6 +4696,46 @@
           "body": "",
           "createdAt": "2025-07-23T21:47:28Z",
           "updatedAt": "2025-07-23T21:47:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "id": "PR_kwDON1dwo86gm2On",
+      "title": "Handle DSCP markings",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/53",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #27.  Not directly, but this is the only thing that I think was relevant from that issue.",
+      "createdAt": "2025-07-25T10:26:28Z",
+      "updatedAt": "2025-07-25T18:29:47Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "dscp-is-weird",
+      "headRefOid": "1076fd3dd714604593d11c605d1083a4d87cc297",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo862LYxB",
+          "commit": {
+            "abbreviatedOid": "1076fd3"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "That's enough said indeed.",
+          "createdAt": "2025-07-25T18:29:47Z",
+          "updatedAt": "2025-07-25T18:29:47Z",
           "comments": []
         }
       ]
