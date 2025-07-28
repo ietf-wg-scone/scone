@@ -350,6 +350,10 @@ packets, as specified in {{packet}}.
 A SCONE packet MUST be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.
 
+If a connection uses multiple DSCP markings {{!RFC2474}},
+the throughput advice that is received on datagrams with one marking
+might not apply to datagrams that have different markings.
+
 
 # Negotiating SCONE {#tp}
 
