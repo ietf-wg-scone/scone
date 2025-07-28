@@ -377,9 +377,9 @@ This indicator is derived from the first two bytes of:
 https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-indication;field=version;codepoint=0xc813e2b1
 -->
 
-A client that is using a QUIC version that includes length-delimited packets,
+A client that uses a QUIC version that includes length-delimited packets,
 which includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},
-can include an indicator of SCONE support outside of packet protection
+can include an indicator of SCONE support
 at the end of datagrams that start a flow.
 The handshakes of these protocols ensures that
 the indication can be included in every datagram the client sends
@@ -408,9 +408,10 @@ with respect to their enforcement of their rate limit policies.
 
 ## Indications for Migrated Flows
 
-For new flows where the indicator cannot be used,
-it might be possible to send a SCONE packet instead.
-This is the case for path migration in QUIC; see {{Section 9 of QUIC}}.
+Applications MAY decide to indicate support for SCONE on new flows,
+including when migrating to a new path (see {{Section 9 of QUIC}}).
+In QUIC version 1 and 2,
+the two byte indicator cannot be used.
 
 Sending a SCONE packet for the first few packets on a new path
 gives network elements on that path the ability
