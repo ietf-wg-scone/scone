@@ -658,6 +658,7 @@ to reduce the reaction time from senders.
 In addition, some heuristics might be used
 to detect SCONE-compatible QUIC flows.
 This includes identification of a QUIC handshake on the flow,
+the presence of indications ({{indication}}),
 or other heuristics.
 If these heuristics indicate a non-QUIC flow,
 the safest option is
