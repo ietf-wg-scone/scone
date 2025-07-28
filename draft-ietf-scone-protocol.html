@@ -1716,7 +1716,11 @@ one recognized by the receiving endpoint.<a href="#section-5.2-3" class="pilcrow
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-negotiating-scone" class="section-name selfRef">Negotiating SCONE</a>
       </h2>
 <p id="section-6-1">A QUIC endpoint indicates that it is willing to receive SCONE packets by
-including the scone_supported transport parameter (0xTBD).<a href="#section-6-1" class="pilcrow">¶</a></p>
+including the scone_supported transport parameter (0x219e).
+The scone_supported transport parameter <span class="bcp14">MUST</span> be empty.
+Receiving a non-zero length scone_supported transport parameter <span class="bcp14">MUST</span> be treated
+as a connection error of type TRANSPORT_PARAMETER_ERROR;
+see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-20.1" class="relref">Section 20.1</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This transport parameter is valid for QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2
 <span>[<a href="#QUICv2" class="cite xref">QUICv2</a>]</span> and any other version that recognizes the versions,
 transport parameters, and frame types registries established in Sections <a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">22.2</a>, <a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">22.3</a>, and <a href="https://rfc-editor.org/rfc/rfc9000#section-22.4" class="relref">22.4</a> of <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
@@ -2168,7 +2172,7 @@ Transport Parameters" registry maintained at
 <span class="break"></span><dl class="dlCompact dlParallel" id="section-11.2-2">
           <dt id="section-11.2-2.1">Value:</dt>
           <dd style="margin-left: 1.5em" id="section-11.2-2.2">
-            <p id="section-11.2-2.2.1">0xTBD<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-11.2-2.2.1">0x219e<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-11.2-2.3">Parameter Name:</dt>

@@ -437,7 +437,11 @@ Table of Contents
 6.  Negotiating SCONE
 
    A QUIC endpoint indicates that it is willing to receive SCONE packets
-   by including the scone_supported transport parameter (0xTBD).
+   by including the scone_supported transport parameter (0x219e).  The
+   scone_supported transport parameter MUST be empty.  Receiving a non-
+   zero length scone_supported transport parameter MUST be treated as a
+   connection error of type TRANSPORT_PARAMETER_ERROR; see Section 20.1
+   of [QUIC].
 
    This transport parameter is valid for QUIC versions 1 [QUIC] and 2
    [QUICv2] and any other version that recognizes the versions,
@@ -767,7 +771,7 @@ Table of Contents
    (https://www.iana.org/assignments/quic), following the guidance from
    Section 22.3 of [QUIC].
 
-   Value:  0xTBD
+   Value:  0x219e
    Parameter Name:  scone_supported
    Status:  Permanent
    Specification:  This document
