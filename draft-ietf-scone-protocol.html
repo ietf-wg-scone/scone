@@ -1706,6 +1706,9 @@ datagram, if the Source Connection ID is not consistent with those coalesced
 packets, as specified in <a href="#packet" class="auto internal xref">Section 5</a>.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">A SCONE packet <span class="bcp14">MUST</span> be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">If a connection uses multiple DSCP markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
+the throughput advice that is received on datagrams with one marking
+might not apply to datagrams that have different markings.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2249,8 +2252,12 @@ Transport Parameters" registry maintained at
 <span class="refAuthor">Thomson, M.</span>, <span class="refTitle">"Greasing the QUIC Bit"</span>, <span class="seriesInfo">RFC 9287</span>, <span class="seriesInfo">DOI 10.17487/RFC9287</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9287">https://www.rfc-editor.org/rfc/rfc9287</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="QUICv2">[QUICv2]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Duke, M.</span>, <span class="refTitle">"QUIC Version 2"</span>, <span class="seriesInfo">RFC 9369</span>, <span class="seriesInfo">DOI 10.17487/RFC9369</span>, <time datetime="2023-05" class="refDate">May 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9369">https://www.rfc-editor.org/rfc/rfc9369</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2474">[RFC2474]</dt>
+      <dd>
+<span class="refAuthor">Nichols, K.</span>, <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers"</span>, <span class="seriesInfo">RFC 2474</span>, <span class="seriesInfo">DOI 10.17487/RFC2474</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2474">https://www.rfc-editor.org/rfc/rfc2474</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

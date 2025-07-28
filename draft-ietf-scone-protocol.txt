@@ -434,6 +434,10 @@ Table of Contents
    A SCONE packet MUST be discarded if the Destination Connection ID
    does not match one recognized by the receiving endpoint.
 
+   If a connection uses multiple DSCP markings [RFC2474], the throughput
+   advice that is received on datagrams with one marking might not apply
+   to datagrams that have different markings.
+
 6.  Negotiating SCONE
 
    A QUIC endpoint indicates that it is willing to receive SCONE packets
@@ -814,6 +818,12 @@ Table of Contents
    [QUICv2]   Duke, M., "QUIC Version 2", RFC 9369,
               DOI 10.17487/RFC9369, May 2023,
               <https://www.rfc-editor.org/rfc/rfc9369>.
+
+   [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
+              "Definition of the Differentiated Services Field (DS
+              Field) in the IPv4 and IPv6 Headers", RFC 2474,
+              DOI 10.17487/RFC2474, December 1998,
+              <https://www.rfc-editor.org/rfc/rfc2474>.
 
 12.2.  Informative References
 
