@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 24 January 2026                            Private Octopus Inc.
+Expires: 29 January 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            23 July 2025
+                                                            28 July 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 January 2026.
+   This Internet-Draft will expire on 29 January 2026.
 
 Copyright Notice
 
@@ -482,6 +482,9 @@ Table of Contents
        packet[0] = packet[0] & 0xc0 | target_signal
        if target_version != packet_version:
          packet[1..5] = htonl(target_version)
+
+   Once the throughput advice signal is updated, the network element
+   updates the UDP checksum for the datagram.
 
 8.  Version Interaction
 
