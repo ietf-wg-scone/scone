@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-27T02:03:27.073644+00:00",
+  "timestamp": "2025-07-29T02:06:41.110177+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1205,19 +1205,19 @@
       "id": "I_kwDON1dwo86zaAay",
       "title": "CID rotation and Trone",
       "url": "https://github.com/ietf-wg-scone/scone/issues/27",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "QUIC stacks will commonly \"rotate\" the connection identifiers used on a given path. Assume a connection obtained Trone information with the old connection ID. Is it still valid with the new one?",
       "createdAt": "2025-04-22T05:43:10Z",
-      "updatedAt": "2025-04-23T01:44:55Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-28T08:47:23Z",
+      "closedAt": "2025-07-28T08:47:23Z",
       "comments": [
         {
           "author": "martinthomson",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "If the endpoint that received the signal considers the path to be the same, then it still applies.  Worth noting, but not particularly difficult to reason about.",
           "createdAt": "2025-04-22T07:21:04Z",
           "updatedAt": "2025-04-22T07:21:04Z"
@@ -1231,7 +1231,7 @@
         },
         {
           "author": "martinthomson",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "I wouldn't expect different DS markings to be applied to the same flow, but it's worth a note.  Maybe one that says \"if you use multiple DSCP markings, the throughput advice you receive from packets with one marking might not apply if packets are marked differently\".",
           "createdAt": "2025-04-23T01:44:54Z",
           "updatedAt": "2025-04-23T01:44:54Z"
@@ -1421,7 +1421,7 @@
       ],
       "body": "At the June 11 2025 interim, Marcus mentioned that some operators enforce bit rates on a per-flow basis and others aggregate flows, and (in my perception) implied that we should not try to discourage them from either approach.\n\nI have no opinion on the merits of that implication. However, if SCONE network elements are allowed to enforce on an aggregate basis, it seems critical for interoperability to have a signal in SCONE packets indicating which mode it's in.\n\n@kazuho had a response in the meeting that rate control should be on a per-flow basis, because aggregate rates are not always actionable.",
       "createdAt": "2025-06-11T15:49:23Z",
-      "updatedAt": "2025-07-23T17:44:01Z",
+      "updatedAt": "2025-07-28T14:21:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -1444,6 +1444,34 @@
           "body": "I agree, the current text is saying the right thing. \nOperators might or might not enforce per-flow throughput, regardless of what we were to write in the document.\nMaking the document more specific on this would be misleading. ",
           "createdAt": "2025-07-23T17:42:28Z",
           "updatedAt": "2025-07-23T17:44:01Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "NONE",
+          "body": "Regarding \"might or might not, .. regardless of what we write\" - I find this strange. Surely a bit that says \"this is definitely per-flow\" would only be set by people who really are sure that that's always the case? and why wouldn't that be useful information to have?",
+          "createdAt": "2025-07-27T08:30:53Z",
+          "updatedAt": "2025-07-27T08:30:53Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@mwelzl per 4 tuple enforcement makes sense in some cases, but most contractual arrangements are per subscription, so we have to expect that this will be the level of enforcement in many cases. Not a 4 tuple. Probably more like a subscriber IP address. Then we have to consider green-lighting, which typically be set by server IP, maybe resulting in enforcement by pairs of IP address. Whatever we write, contractual arrangements are going to matter more.",
+          "createdAt": "2025-07-27T15:24:09Z",
+          "updatedAt": "2025-07-27T15:24:09Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "NONE",
+          "body": "I get that - I'm just arguing for (well, really: testing the waters for) a \"this is definitely per-flow\" bit which would often be 0, as per your explanation. Right now, we don't know what devices might be doing SCONE at some point in the future.",
+          "createdAt": "2025-07-27T17:36:01Z",
+          "updatedAt": "2025-07-27T17:36:01Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "Looking at Sec 3.2 as recommended by @martinthomson, I'm happy to close this issue.",
+          "createdAt": "2025-07-28T14:21:35Z",
+          "updatedAt": "2025-07-28T14:21:35Z"
         }
       ]
     },
@@ -1468,15 +1496,15 @@
       "id": "I_kwDON1dwo87Bb0p1",
       "title": "value of the scone_supported transport parameter",
       "url": "https://github.com/ietf-wg-scone/scone/issues/41",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "At the moment, the draft is silent regarding what the value of the scone_supported parameter should be.\n\nAssuming that this parameter is boolean, I believe the value should be zero-length, like the disable_active_migration TP defined in RFC 9000.",
       "createdAt": "2025-07-19T13:08:41Z",
-      "updatedAt": "2025-07-19T22:06:44Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-28T08:45:52Z",
+      "closedAt": "2025-07-28T08:45:52Z",
       "comments": [
         {
           "author": "huitema",
@@ -1492,15 +1520,15 @@
       "id": "I_kwDON1dwo87Bb9T5",
       "title": "Mention UDP checksum update",
       "url": "https://github.com/ietf-wg-scone/scone/issues/42",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "wesley-eddy",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I think in the protocol spec it would be good to include a specific reminder for network elements to update the UDP checksum.\n\nIf a network element updates the rate guidance in a SCONE packet, it MUST adjust the UDP checksum accordingly.  The efficient incremental update approach can be used (based on the old and new rate guidance values), rather than recomputing across the entire packet.  It MUST NOT zero the checksum.",
       "createdAt": "2025-07-19T14:08:55Z",
-      "updatedAt": "2025-07-19T14:08:55Z",
-      "closedAt": null,
+      "updatedAt": "2025-07-28T08:35:45Z",
+      "closedAt": "2025-07-28T08:35:45Z",
       "comments": []
     },
     {
@@ -4285,13 +4313,13 @@
       "labels": [],
       "body": "This depends on an answer to #43 being as I suggested there. I won't make the pull request dependent on that though.\r\n\r\nCloses #10.",
       "createdAt": "2025-07-22T12:58:35Z",
-      "updatedAt": "2025-07-23T07:57:56Z",
+      "updatedAt": "2025-07-28T17:43:05Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "following-limits",
-      "headRefOid": "6e2e6f4567c1f1ba88e9c6b5a55a1817585e48ee",
+      "headRefOid": "6ece583722ce82ac98b2547ff093dbaf34be0450",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4337,6 +4365,66 @@
               "updatedAt": "2025-07-23T07:57:56Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862c8Dr",
+          "commit": {
+            "abbreviatedOid": "6e2e6f4"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-28T07:58:45Z",
+          "updatedAt": "2025-07-28T07:58:45Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "```suggestion\r\nor other heuristics.\r\n```",
+              "createdAt": "2025-07-28T07:58:45Z",
+              "updatedAt": "2025-07-28T07:58:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862c9DW",
+          "commit": {
+            "abbreviatedOid": "ce9e9a2"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-28T07:59:33Z",
+          "updatedAt": "2025-07-28T07:59:33Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\r\nthe presence of indications ({{indication}}),\r\nor other heuristics.\r\n```",
+              "createdAt": "2025-07-28T07:59:33Z",
+              "updatedAt": "2025-07-28T07:59:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862n6lJ",
+          "commit": {
+            "abbreviatedOid": "6ece583"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I am concerned that this mitigation requires the network elements to keep state by 4-tuples . That could be onerous, and could also open the door for denial of service attacks.\r\n\r\nThe other possible mitigation is to change the scone format to add entropy and reduce the risk of collision. I think that we discussed a solution like that before. For example, add a payload to the scone packet, with two numbers: a counter, and a proof of that counter such as XORing it with the version number or some other magic number. At that point the risk of repeated collision becomes really low. \r\n\r\nOf course, we have a tradeoff here. On one hand, require operators of network elements to keep some state, on the other hand, require some more complicated processing. Both fall in the category of \"you must do that but I know you wont\", with lazy operators either forgetting about checks and processing every packet that they recognize as SCONE, or just rolling the dice for every packet recognized as SCONE to decide whether to mark it.\r\n\r\nAnd of course, the \"rolling the dice\" strategy implies a heavy probability of SCONE packets not marked, which will induce end points to send way more SCONE packets than necessary. Which in turn will stress the network elements.",
+          "createdAt": "2025-07-28T17:27:04Z",
+          "updatedAt": "2025-07-28T17:43:05Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "The verifier does not like `{{indication}}`...",
+              "createdAt": "2025-07-28T17:27:04Z",
+              "updatedAt": "2025-07-28T17:42:24Z"
+            }
+          ]
         }
       ]
     },
@@ -4352,13 +4440,13 @@
       "labels": [],
       "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
       "createdAt": "2025-07-23T11:37:13Z",
-      "updatedAt": "2025-07-23T21:45:10Z",
+      "updatedAt": "2025-07-28T08:03:13Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "time",
       "baseRefOid": "3cda4b7b9ce75a332e91a8db04e43364b6b34347",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
-      "headRefOid": "94e5d41ffb5519696c2667da48d109d6a22a153f",
+      "headRefOid": "143e2354b0579f18b8ac8f97d493bb77379f4568",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4382,6 +4470,46 @@
               "body": "That's where Nyquist applies. \"No more than a monitoring period\" is not wrong, but it is incomplete. I argue that:\r\n\r\n1- To detect change in appropriate times, the interval between probes should be about half the monitoring period;\r\n2- To avoid synchronization, the interval between probes should be randomized.",
               "createdAt": "2025-07-23T21:43:36Z",
               "updatedAt": "2025-07-23T21:45:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862dA6c",
+          "commit": {
+            "abbreviatedOid": "94e5d41"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-28T08:02:44Z",
+          "updatedAt": "2025-07-28T08:02:44Z",
+          "comments": [
+            {
+              "originalPosition": 99,
+              "body": "```suggestion\r\nBecause this depends on the availability of SCONE packets,\r\nnetwork elements might need to be prepared to update\r\nat a much higher frequency.\r\nSending and updating SCONE packets at least twice per monitoring period\r\nensures that signals are always available.\r\n```",
+              "createdAt": "2025-07-28T08:02:44Z",
+              "updatedAt": "2025-07-28T08:02:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862dBam",
+          "commit": {
+            "abbreviatedOid": "143e235"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-28T08:03:10Z",
+          "updatedAt": "2025-07-28T08:03:13Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "I think that this randomization can come later.",
+              "createdAt": "2025-07-28T08:03:10Z",
+              "updatedAt": "2025-07-28T08:03:13Z"
             }
           ]
         }
@@ -4453,13 +4581,13 @@
       "labels": [],
       "body": "This adds a small indicator to the end of packets, so that network elements can maybe flip their posture for those flows. That requires a bit of a gamble, because the indication doesn't mean that SCONE is supported or that throughput advice will be followed, but it seems like we have some belief that this will change how the protocol might be deployed.\r\n\r\nI didn't strongly mandate the new flow indication piece.  That's something we could do, but it turned out to be incredibly hard to specify something that works sensibly.  Tying this to PATH_CHALLENGE/PATH_RESPONSE does work, but those have more uses than initializing a flow on a new path, so the set of conditions you need to set out for when the indication is attached to a datagram end up being very complicated.\r\n\r\nGiven that we already have good reason to send SCONE packets on new paths, I don't think we need to overthink that part.\r\n\r\nCloses #5.\r\nCloses #23.",
       "createdAt": "2025-07-23T15:07:55Z",
-      "updatedAt": "2025-07-24T08:15:17Z",
+      "updatedAt": "2025-07-28T16:47:07Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "indication",
-      "headRefOid": "96a96ca9d98188b71a3d74b134473fab66969595",
+      "headRefOid": "fae13e1469f4deb409d49e90613f675603549575",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4511,6 +4639,66 @@
               "updatedAt": "2025-07-24T08:15:17Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862ePB8",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-28T09:03:12Z",
+          "updatedAt": "2025-07-28T09:03:12Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "SCONE packets are also QUIC packets, so that doesn't work.\r\n\r\nThough I agree that the use of packet protection isn't ideal.",
+              "createdAt": "2025-07-28T09:03:12Z",
+              "updatedAt": "2025-07-28T09:03:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862ebm9",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-28T09:12:19Z",
+          "updatedAt": "2025-07-28T09:12:19Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "I'm not sure that we need to talk about NAT rebinding.  I think that our (upcoming) advice on when to add SCONE packets will help that.  That is, we'll provide more general advice to invite updated signals after a period of idleness, in addition to other triggers.",
+              "createdAt": "2025-07-28T09:12:19Z",
+              "updatedAt": "2025-07-28T09:12:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862nRqm",
+          "commit": {
+            "abbreviatedOid": "fae13e1"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "From the standpoint of an endpoint, I find this PR to be unobjectionable. As Christian says, this is just externalizes the content of a transport parameter, which is readable unless the TPs are included in an ECH. If the operators can do something useful with these two bytes, then it SGTM.",
+          "createdAt": "2025-07-28T16:45:02Z",
+          "updatedAt": "2025-07-28T16:47:07Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "The client is unaware of NAT rebinding, no?",
+              "createdAt": "2025-07-28T16:45:02Z",
+              "updatedAt": "2025-07-28T16:47:07Z"
+            }
+          ]
         }
       ]
     },
@@ -4519,24 +4707,26 @@
       "id": "PR_kwDON1dwo86gTBN8",
       "title": "Define the transport parmeter",
       "url": "https://github.com/ietf-wg-scone/scone/pull/50",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Give it a value and a length (0).\r\n\r\nCloses #41.",
       "createdAt": "2025-07-23T15:52:22Z",
-      "updatedAt": "2025-07-24T21:48:00Z",
+      "updatedAt": "2025-07-28T08:45:51Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "tp-len",
       "headRefOid": "494eae2b7562cfd2884b4b49d3cf775f881adbab",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-07-28T08:45:51Z",
+      "mergedAt": "2025-07-28T08:45:51Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "faf5431b1c6b9b54c0f7c31ea4d597058cd1f20b"
+      },
       "comments": [],
       "reviews": [
         {
@@ -4665,24 +4855,26 @@
       "id": "PR_kwDON1dwo86gTO1A",
       "title": "Update the UDP checksum",
       "url": "https://github.com/ietf-wg-scone/scone/pull/52",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This might seem obvious to some of us, but it's an easy thing to overlook when implementing.\r\n\r\nI don't want to mention the all-zero UDP checksum thing.  I'm sure that anyone looking into this will discover that and be able to reach their own conclusions about how feasible that is.\r\n\r\nCloses #42.",
       "createdAt": "2025-07-23T16:14:27Z",
-      "updatedAt": "2025-07-23T21:47:28Z",
+      "updatedAt": "2025-07-28T08:35:44Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "checksum-update",
       "headRefOid": "3af621a3fb302256741a4cb1824a38ba7e1b4afa",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-07-28T08:35:44Z",
+      "mergedAt": "2025-07-28T08:35:44Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "7e7e0c67790438cc071de3bf1607a214af62bb4a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -4705,24 +4897,26 @@
       "id": "PR_kwDON1dwo86gm2On",
       "title": "Handle DSCP markings",
       "url": "https://github.com/ietf-wg-scone/scone/pull/53",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #27.  Not directly, but this is the only thing that I think was relevant from that issue.",
       "createdAt": "2025-07-25T10:26:28Z",
-      "updatedAt": "2025-07-25T18:29:47Z",
+      "updatedAt": "2025-07-28T08:47:22Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "dscp-is-weird",
       "headRefOid": "1076fd3dd714604593d11c605d1083a4d87cc297",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-07-28T08:47:22Z",
+      "mergedAt": "2025-07-28T08:47:22Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "5df97596fa6047432a605985af2177994955efe8"
+      },
       "comments": [],
       "reviews": [
         {
