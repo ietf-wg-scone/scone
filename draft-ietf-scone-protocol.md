@@ -646,13 +646,11 @@ The most serious damage occurs when every datagram is modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
-To that end, network elements MUST ensure that
-they do not update the content of every datagram.
-Limiting the rate of updates
-to a small number of times over each enforcement period
-is sufficient.
-Network elements might update more often
-in response to a change in throughput advice,
+To that end, network elements MUST only update the content of datagrams
+on a given address tuple
+more than a few times each enforcement period.
+Network elements MAY update more often
+immediately after a change in their throughput advice,
 to reduce the reaction time from senders.
 
 In addition, some heuristics might be used
