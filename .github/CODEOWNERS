@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-scone-protocol.md mt@lowentropy.net huitema@huitema.net kazuhooku@gmail.com matt.joras@gmail.com marcus.ihlar@ericsson.com

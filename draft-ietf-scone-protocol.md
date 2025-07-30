@@ -373,11 +373,23 @@ packets, as specified in {{packet}}.
 A SCONE packet MUST be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.
 
+If a connection uses multiple DSCP markings {{!RFC2474}},
+the throughput advice that is received on datagrams with one marking
+might not apply to datagrams that have different markings.
+
 
 # Negotiating SCONE {#tp}
 
 A QUIC endpoint indicates that it is willing to receive SCONE packets by
-including the scone_supported transport parameter (0xTBD).
+including the scone_supported transport parameter (0x219e).
+The scone_supported transport parameter MUST be empty.
+Receiving a non-zero length scone_supported transport parameter MUST be treated
+as a connection error of type TRANSPORT_PARAMETER_ERROR;
+see {{Section 20.1 of QUIC}}.
+
+<!--
+https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-tp;field=tp;codepoint=0x219e;size=2
+-->
 
 This transport parameter is valid for QUIC versions 1 {{QUIC}} and 2
 {{!QUICv2=RFC9369}} and any other version that recognizes the versions,
@@ -424,6 +436,10 @@ if is_long and (packet_version == SCONE1_VERSION or
     if target_version != packet_version:
       packet[1..5] = htonl(target_version)
 ~~~
+
+Once the throughput advice signal is updated,
+the network element updates the UDP checksum for the datagram.
+
 
 ## Flows That Exceed Throughput Advicea
 
@@ -739,7 +755,7 @@ Transport Parameters" registry maintained at
 22.3 of QUIC}}.
 
 Value:
-: 0xTBD
+: 0x219e
 
 Parameter Name:
 : scone_supported
