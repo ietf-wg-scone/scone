@@ -422,7 +422,8 @@ To enable this indication,
 even if an endpoint would not otherwise send SCONE packets,
 endpoints can send a SCONE packet
 any time they send a QUIC PATH_CHALLENGE or PATH_RESPONSE frame.
-This applies to both client and server endpoints.
+This applies to both client and server endpoints,
+but only if the peer has sent the transport parameter; see {{tp}}.
 
 
 # Deployment
