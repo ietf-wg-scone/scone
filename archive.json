@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-29T02:06:41.110177+00:00",
+  "timestamp": "2025-07-31T01:56:34.823912+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3895,13 +3895,13 @@
       "labels": [],
       "body": "Closes #20.",
       "createdAt": "2025-07-07T09:19:14Z",
-      "updatedAt": "2025-07-23T13:42:50Z",
+      "updatedAt": "2025-07-30T04:30:40Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "517e54b2c40db10df3f14f55f7efb7399c7fc8f2",
+      "baseRefOid": "5df97596fa6047432a605985af2177994955efe8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "time",
-      "headRefOid": "3cda4b7b9ce75a332e91a8db04e43364b6b34347",
+      "headRefOid": "7896705a03ba2a35fa401c902016fec513dcb494",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4313,18 +4313,47 @@
       "labels": [],
       "body": "This depends on an answer to #43 being as I suggested there. I won't make the pull request dependent on that though.\r\n\r\nCloses #10.",
       "createdAt": "2025-07-22T12:58:35Z",
-      "updatedAt": "2025-07-28T17:43:05Z",
+      "updatedAt": "2025-07-30T23:59:31Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "following-limits",
-      "headRefOid": "6ece583722ce82ac98b2547ff093dbaf34be0450",
+      "headRefOid": "5c0b1cc987280c5c3216cea0f6c6d671d05d0f4e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "So the only real requirement here is not to alter every packet.  That, of course, depends on #46, but I think that's necessary for other reasons (robustness primarily).  The heuristics only apply where there is per-flow state, not everywhere.  Is there a caveat that would make that part more acceptable @huitema?",
+          "createdAt": "2025-07-29T03:09:08Z",
+          "updatedAt": "2025-07-29T03:09:08Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Assume a lazy implementer that does not want to keep state, so simply picks a random number with some probability to decide whether marking the SCONE packet. Now, suppose a systematic collision. If the probability of marking is `x`, then the fraction of mangled packets is also `x`. What is the acceptable rate of mangled packets? I think lower than 1% is probably OK, TCP is more or less designed to handle that. More than that will be severe. 10% means serious performance degradation. 50% means fully broken.\r\n\r\nAt the same time, picking a random rate of 1% means a terrible SCONE service. 50% would probably work, leading to endpoints sending twice as many SCONE packets as required. 10% would lead to 10 times as many packets, and that seems bad.\r\n\r\nMy preference would be to not mention a fraction, but rather mandate a delay. We have seen that if the signal is good for 60 seconds, endpoints should probably sample it every 30 seconds. That means repetitions at shorter interval probably indicate brokenness. If I had to implement that, I would probably use a Bloom filter to check whether the 4-tuple has been seen recently, and in that case leave the packet alone. And I would just zero the filter at short intervals, maybe 5 seconds, maybe 10. That seems something even lazy folks can implement, especially if we twist their arm.\r\n\r\nMy recommendation would be to say something like MUST NOT process a \"SCONE\" packet if the 4-tuple has been seen in the past N seconds. Pick a number for N -- 2, 5, 10 probably all work. Then even the lazy folks can think about a Bloom filter implementation, or something like that.",
+          "createdAt": "2025-07-29T04:05:08Z",
+          "updatedAt": "2025-07-29T04:05:08Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> My preference would be to not mention a fraction, but rather mandate a delay. We have seen that if the signal is good for 60 seconds, endpoints should probably sample it every 30 seconds.\r\n\r\nIsn't that what this does?\r\n\r\n> Limiting the rate of updates to a small number of times over each enforcement period is sufficient.\r\n\r\nUnless you feel like \"small number\" needs to be more concrete (2-10 seems reasonable, as you say).",
+          "createdAt": "2025-07-29T04:33:28Z",
+          "updatedAt": "2025-07-29T04:33:28Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Maybe say that a bit more directly. The first sentence says \"To that end, network elements MUST ensure that\r\nthey do not update the content of every datagram.\" I think we should be more direct, reference both the duration and the unit, i.e., a given 4-tuple. How about:\r\n\r\nTo that end, network elements SHOULD NOT update datagrams sent over a given 4-tuple more than a few times per enforcement period. Network elements MAY update more often\r\nin response to a change in throughput advice,\r\nto reduce the reaction time from senders.",
+          "createdAt": "2025-07-29T07:04:26Z",
+          "updatedAt": "2025-07-29T07:04:26Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo861XxhW",
@@ -4423,6 +4452,86 @@
               "body": "The verifier does not like `{{indication}}`...",
               "createdAt": "2025-07-28T17:27:04Z",
               "updatedAt": "2025-07-28T17:42:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862sluY",
+          "commit": {
+            "abbreviatedOid": "6ece583"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-29T03:05:28Z",
+          "updatedAt": "2025-07-29T03:05:28Z",
+          "comments": [
+            {
+              "originalPosition": 27,
+              "body": "Yeah, I expect #49 to merge first and then this is fine.",
+              "createdAt": "2025-07-29T03:05:28Z",
+              "updatedAt": "2025-07-29T03:05:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862_lcV",
+          "commit": {
+            "abbreviatedOid": "6ece583"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T06:49:10Z",
+          "updatedAt": "2025-07-30T06:49:10Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\nTo that end, network elements MUST only update the content of datagrams\r\non a given address tuple\r\nmore than a few times each enforcement period.\r\nNetwork elements MAY update more often\r\nimmediately after a change in their throughput advice,\r\nto reduce the reaction time from senders.\r\n```\r\nTweaking @huitema's suggestion.",
+              "createdAt": "2025-07-30T06:49:10Z",
+              "updatedAt": "2025-07-30T06:49:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo863G7Wy",
+          "commit": {
+            "abbreviatedOid": "5c0b1cc"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T14:56:47Z",
+          "updatedAt": "2025-07-30T14:56:47Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "OK, we are down to editorial. I suggested \"SHOULD NOT ... more than a few times\". You propose \"MUST only ... more than a few times.\" I still prefer my original proposal for two reasons:\r\n\r\n- \"MUST only ... more\" is a weird construct. I think this should be either \"MUST NOT ... more\" or \"SHOULD NOT .. more\".\r\n- I originally thought of writing \"MUST NOT\", but in general if we have a combination of mandate and exception we write \"SHOULD NOT \\<do something>\" followed by \"MAY \\<by exception do something else>\", so I would rather use the established pattern.\r\n\r\nIf you prefer a positive tone, we could also strike out \"*more than*\" in \"[SHOULD|MUST] only update the content of datagrams on a given address tuple ~more than~ a few times each enforcement period.\" That too would remove the weirdness.",
+              "createdAt": "2025-07-30T14:56:47Z",
+              "updatedAt": "2025-07-30T15:01:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo863NCnL",
+          "commit": {
+            "abbreviatedOid": "5c0b1cc"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T23:59:31Z",
+          "updatedAt": "2025-07-30T23:59:31Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "Considering that SCONE is meant to work with any version of QUIC, I'm not sure if we would want to talk about identifying handshakes, as that is a concept specific to version 1 of QUIC.",
+              "createdAt": "2025-07-30T23:59:31Z",
+              "updatedAt": "2025-07-30T23:59:31Z"
             }
           ]
         }
@@ -4581,7 +4690,7 @@
       "labels": [],
       "body": "This adds a small indicator to the end of packets, so that network elements can maybe flip their posture for those flows. That requires a bit of a gamble, because the indication doesn't mean that SCONE is supported or that throughput advice will be followed, but it seems like we have some belief that this will change how the protocol might be deployed.\r\n\r\nI didn't strongly mandate the new flow indication piece.  That's something we could do, but it turned out to be incredibly hard to specify something that works sensibly.  Tying this to PATH_CHALLENGE/PATH_RESPONSE does work, but those have more uses than initializing a flow on a new path, so the set of conditions you need to set out for when the indication is attached to a datagram end up being very complicated.\r\n\r\nGiven that we already have good reason to send SCONE packets on new paths, I don't think we need to overthink that part.\r\n\r\nCloses #5.\r\nCloses #23.",
       "createdAt": "2025-07-23T15:07:55Z",
-      "updatedAt": "2025-07-28T16:47:07Z",
+      "updatedAt": "2025-07-30T23:54:05Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
@@ -4699,13 +4808,93 @@
               "updatedAt": "2025-07-28T16:47:07Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862skmd",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-29T03:03:50Z",
+          "updatedAt": "2025-07-29T03:03:51Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Kazuho was suggesting that clients play the odds and add a SCONE packet if the connection has been idle long enough that a NAT rebinding is likely.  That's not a bad idea if your goal is to ensure that there is an indication on every flow, but I suspect that we'll get that coverage with more general advice about when to add a SCONE packet.",
+              "createdAt": "2025-07-29T03:03:51Z",
+              "updatedAt": "2025-07-29T03:03:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862s-PB",
+          "commit": {
+            "abbreviatedOid": "fae13e1"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-29T03:53:20Z",
+          "updatedAt": "2025-07-29T03:53:20Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Thanks, my intention is what you have described, and I agree that it can be spelled out differently.",
+              "createdAt": "2025-07-29T03:53:20Z",
+              "updatedAt": "2025-07-29T03:53:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8625aM_",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-29T17:20:05Z",
+          "updatedAt": "2025-07-29T17:20:05Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Fair enough; I imagine that SCONE network elements have timers too, so the after-idle advice is about much more than NATs.",
+              "createdAt": "2025-07-29T17:20:05Z",
+              "updatedAt": "2025-07-29T17:20:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo863NAz_",
+          "commit": {
+            "abbreviatedOid": "fae13e1"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T23:54:05Z",
+          "updatedAt": "2025-07-30T23:54:05Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "Aside from what @huitema says, it might make sense to refer to the use of scone_supported TP (e.g., \"endpoints can exchange the scone_supported Transport Parameter and send a SCONE packet...\"), so that the text would not be misinterpreted as a permission to send SCONE packets without receiving the TP from the peer.",
+              "createdAt": "2025-07-30T23:54:05Z",
+              "updatedAt": "2025-07-30T23:54:06Z"
+            }
+          ]
         }
       ]
     },
     {
       "number": 50,
       "id": "PR_kwDON1dwo86gTBN8",
-      "title": "Define the transport parmeter",
+      "title": "Define the transport parameter",
       "url": "https://github.com/ietf-wg-scone/scone/pull/50",
       "state": "MERGED",
       "author": "martinthomson",
@@ -4714,7 +4903,7 @@
       "labels": [],
       "body": "Give it a value and a length (0).\r\n\r\nCloses #41.",
       "createdAt": "2025-07-23T15:52:22Z",
-      "updatedAt": "2025-07-28T08:45:51Z",
+      "updatedAt": "2025-07-30T04:50:40Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
@@ -4782,7 +4971,7 @@
       "labels": [],
       "body": "Closes #45.",
       "createdAt": "2025-07-23T16:04:45Z",
-      "updatedAt": "2025-07-25T14:24:13Z",
+      "updatedAt": "2025-07-30T07:15:56Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
@@ -4845,6 +5034,66 @@
               "body": "I think it's fine to use the MSB of QUIC version field to convey the MSB of the signal. It allows us to keep the spec as is, which is clear and easy to read.\r\nIt's still possible to construct and retrieve the signal and version with a shift and an addition. ",
               "createdAt": "2025-07-25T14:24:13Z",
               "updatedAt": "2025-07-25T14:24:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862-bQN",
+          "commit": {
+            "abbreviatedOid": "4ef3918"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T04:02:04Z",
+          "updatedAt": "2025-07-30T04:02:04Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "@kazuho, changing the setup to be the LSB is possible, if you want to propose a change like that.  We can do this in stages.  But @ihlar's point is reasonable.  The difference is pretty minor.",
+              "createdAt": "2025-07-30T04:02:04Z",
+              "updatedAt": "2025-07-30T04:02:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862_bX5",
+          "commit": {
+            "abbreviatedOid": "4ef3918"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T06:33:34Z",
+          "updatedAt": "2025-07-30T06:33:34Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "Yeah let me give it a try. I think that specification-wise, the complexity would be the same, while by using the version field to carry LSB instead of MSB, we get the following benefits:\r\n* contiguous 7-bit field for carrying a log value without bit swaps,\r\n* use of two versions across the spectrum (as opposed to 0xSCONE1 essentially indicating the existence of rate limiters).",
+              "createdAt": "2025-07-30T06:33:34Z",
+              "updatedAt": "2025-07-30T07:16:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo862_2Lf",
+          "commit": {
+            "abbreviatedOid": "4ef3918"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-30T07:15:56Z",
+          "updatedAt": "2025-07-30T07:15:56Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "PTAL: https://github.com/ietf-wg-scone/scone/pull/54/files",
+              "createdAt": "2025-07-30T07:15:56Z",
+              "updatedAt": "2025-07-30T07:15:56Z"
             }
           ]
         }
@@ -4930,6 +5179,46 @@
           "body": "That's enough said indeed.",
           "createdAt": "2025-07-25T18:29:47Z",
           "updatedAt": "2025-07-25T18:29:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 54,
+      "id": "PR_kwDON1dwo86hTKTy",
+      "title": "MSB of version is LSB of the rate signal",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/54",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR is against #51, uses MSB of the version field to carry the LSB of the rate signal, so that the bit 2 to bit 8 of the first 64-bit field carries a rate signal, which is calculated by using a logarithmic function without bit swaps or any other complexity.",
+      "createdAt": "2025-07-30T07:15:17Z",
+      "updatedAt": "2025-07-30T09:31:05Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "define-versions",
+      "baseRefOid": "4ef39186f17399447683cae3a0712e6f286c1c85",
+      "headRepository": "kazuho/i-d-trone",
+      "headRefName": "kazuho/7bit-contiguous-rate",
+      "headRefOid": "927b5e3303438289f9a0c844224113ab40862529",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo863BfXP",
+          "commit": {
+            "abbreviatedOid": "927b5e3"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I don't mind either way on this one, though I will note that this is in some ways *simpler* than before (so consider this an approval).\r\n\r\nTo validate this, the code starts looking pretty lean:\r\n\r\n```rust\r\n        // Setup involves math\r\n        let v = (((target_rate / 100_000.0).log10() * 20.0) as u64).clamp(0, 63);\r\n        let target_value = (0x106f << 48) | (v << 61);\r\n\r\n        // updates\r\n        let x = u64::from_be_bytes(packet.first_chunk().unwrap().to_owned());\r\n        if (x & 0x807f_ffff_ff00_0000) == 0x106f_7dc0_fd00_0000\r\n            && target_value < (x & 0xbfff_0000_0000_0000)\r\n        {\r\n            packet[0] = (packet[0] & 0x40) | (target_value >> 56) as u8;\r\n            packet[1] = (target_value >> 48) as u8;\r\n        }\r\n```",
+          "createdAt": "2025-07-30T09:31:05Z",
+          "updatedAt": "2025-07-30T09:31:05Z",
           "comments": []
         }
       ]
