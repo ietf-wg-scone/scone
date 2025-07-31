@@ -497,6 +497,14 @@ at a much higher frequency.
 Sending and updating SCONE packets at least twice per monitoring period
 ensures that signals are always available.
 
+A network element MUST NOT alter packets to add SCONE packets
+or synthesize packets that contain SCONE packets.
+The latter will not be accepted and the former,
+even if they do not exceed the path MTU as a result,
+can be detected by applications and could be ignored.
+This document does not define a mechanism to support detection,
+but one might be added in future.
+
 
 ## Flows That Exceed Throughput Advice {#policing}
 
