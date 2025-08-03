@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-07-31T01:56:34.823912+00:00",
+  "timestamp": "2025-08-03T02:04:52.492470+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -4690,13 +4690,13 @@
       "labels": [],
       "body": "This adds a small indicator to the end of packets, so that network elements can maybe flip their posture for those flows. That requires a bit of a gamble, because the indication doesn't mean that SCONE is supported or that throughput advice will be followed, but it seems like we have some belief that this will change how the protocol might be deployed.\r\n\r\nI didn't strongly mandate the new flow indication piece.  That's something we could do, but it turned out to be incredibly hard to specify something that works sensibly.  Tying this to PATH_CHALLENGE/PATH_RESPONSE does work, but those have more uses than initializing a flow on a new path, so the set of conditions you need to set out for when the indication is attached to a datagram end up being very complicated.\r\n\r\nGiven that we already have good reason to send SCONE packets on new paths, I don't think we need to overthink that part.\r\n\r\nCloses #5.\r\nCloses #23.",
       "createdAt": "2025-07-23T15:07:55Z",
-      "updatedAt": "2025-07-30T23:54:05Z",
+      "updatedAt": "2025-07-31T04:47:57Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "indication",
-      "headRefOid": "fae13e1469f4deb409d49e90613f675603549575",
+      "headRefOid": "81dae9893279a63ce5e76afa833992dd820bad92",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4888,6 +4888,59 @@
               "updatedAt": "2025-07-30T23:54:06Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo863OHnm",
+          "commit": {
+            "abbreviatedOid": "96a96ca"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-07-31T04:19:17Z",
+          "updatedAt": "2025-07-31T04:19:17Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "Good points both.  I've tweaked the text and added both.  Check it out.",
+              "createdAt": "2025-07-31T04:19:17Z",
+              "updatedAt": "2025-07-31T04:19:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo863OJGc",
+          "commit": {
+            "abbreviatedOid": "81dae98"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-07-31T04:24:26Z",
+          "updatedAt": "2025-07-31T04:24:51Z",
+          "comments": [
+            {
+              "originalPosition": 64,
+              "body": "This text works for me.",
+              "createdAt": "2025-07-31T04:24:26Z",
+              "updatedAt": "2025-07-31T04:24:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo863OP38",
+          "commit": {
+            "abbreviatedOid": "81dae98"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you for the tweaks. LGTM.",
+          "createdAt": "2025-07-31T04:47:57Z",
+          "updatedAt": "2025-07-31T04:47:57Z",
+          "comments": []
         }
       ]
     },
