@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-03T02:04:52.492470+00:00",
+  "timestamp": "2025-08-05T01:59:35.418048+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1421,7 +1421,7 @@
       ],
       "body": "At the June 11 2025 interim, Marcus mentioned that some operators enforce bit rates on a per-flow basis and others aggregate flows, and (in my perception) implied that we should not try to discourage them from either approach.\n\nI have no opinion on the merits of that implication. However, if SCONE network elements are allowed to enforce on an aggregate basis, it seems critical for interoperability to have a signal in SCONE packets indicating which mode it's in.\n\n@kazuho had a response in the meeting that rate control should be on a per-flow basis, because aggregate rates are not always actionable.",
       "createdAt": "2025-06-11T15:49:23Z",
-      "updatedAt": "2025-07-28T14:21:35Z",
+      "updatedAt": "2025-08-04T13:06:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -1472,6 +1472,13 @@
           "body": "Looking at Sec 3.2 as recommended by @martinthomson, I'm happy to close this issue.",
           "createdAt": "2025-07-28T14:21:35Z",
           "updatedAt": "2025-07-28T14:21:35Z"
+        },
+        {
+          "author": "wesley-eddy",
+          "authorAssociation": "NONE",
+          "body": "I think the envisioned usage is per-flow, since the focus problem motivating SCONE is the throttling of video traffic in mobile networks to specific qualities/rates (which are indicated specifically for video in subscription plans, not aggregate rates).",
+          "createdAt": "2025-08-04T13:06:30Z",
+          "updatedAt": "2025-08-04T13:06:30Z"
         }
       ]
     },
