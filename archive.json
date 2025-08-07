@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-05T01:59:35.418048+00:00",
+  "timestamp": "2025-08-07T01:57:58.216165+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -617,7 +617,7 @@
       "labels": [],
       "body": "There is a bit of ambiguity in the specification of \"who uses TRONE\". The original Scone WG appears to have focused on adaptive bit rate video. If we strictly kept that focus, we have a privacy issue. Third parties could observe the presence of Trone headers, and infer that the end to end QUIC connection is engaged in video streaming.\n\nTo reduce the privacy issue, we could adopt a combined strategy, and ask more applications to support Trone, thus weakening the correlation between Trone and video.\n\nWe could also envisage greasing, with applications sending datagrams composed of a Trone packet, followed by a short header and random content. If the peer is not Trone capable, such greasing packets will be discarded because they do done decrypt correctly. But the third parties cannot check the encryption, so they will not be able to distinguish such packets from \"real\" Trone -- i.e., successful greasing.",
       "createdAt": "2025-03-21T05:04:11Z",
-      "updatedAt": "2025-03-26T17:43:15Z",
+      "updatedAt": "2025-08-06T02:12:38Z",
       "closedAt": null,
       "comments": [
         {
@@ -633,6 +633,27 @@
           "body": "@atiwariphd the network element cannot distinguish between grease and real TRONE packet. I documented that as an attack in a separate PR #13 ",
           "createdAt": "2025-03-26T17:43:14Z",
           "updatedAt": "2025-03-26T17:43:14Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "body": "I don't think that using scone automatically implies that it is or has to be video traffic (even thought is our main, or maybe only (?), use case). However, note that if you sent any scone packets on a flow, this might be taken as a signal by a throttling device that this flow is okay or even requested to be throttled (because it is adaptive and actually achieves a better user experience with a stable rate rather than the maximum rate). Not all network devices might enforce throttling but some might simply apply throttling to all scone flows (if they exceeded the singled rate). Thus you should maybe not use scone on any kind of traffic that really needs maximum bandwidth. Having that said, I would think that e.g. for short flows like web traffic, it doesn't matter if you use scone or not as it will anyway not run into the throttling limit. However, also note that if too many flows use scope and that would cause unnecessary use of resources in the network device to check rate compliance, a network device might fall-back to DPI to actually detect video traffic. Therefore I recommend to rather avoid using scone when it is know to be not necessary.",
+          "createdAt": "2025-08-05T17:14:58Z",
+          "updatedAt": "2025-08-05T17:14:58Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I generally agree.  I'm inclined to leave this to implementations rather than invent some mechanism.\n\nNote that you can grease the indication, but not packets, because if you sent a SCONE packet to a peer that doesn't support the protocol, it causes self-inflicted packet loss as they are forced to drop the entire datagram.",
+          "createdAt": "2025-08-06T00:30:34Z",
+          "updatedAt": "2025-08-06T00:30:34Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "You can send a Scone packet to a peer. You just must expect it to be lost. So sending a Scone packet concatenated with a fake 1RTT packet is completely fine. The peer will just drop it.",
+          "createdAt": "2025-08-06T02:12:23Z",
+          "updatedAt": "2025-08-06T02:12:38Z"
         }
       ]
     },
@@ -1412,7 +1433,7 @@
       "id": "I_kwDON1dwo866_-BB",
       "title": "Aggregate or Per-Flow Measurement?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/35",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -1421,8 +1442,8 @@
       ],
       "body": "At the June 11 2025 interim, Marcus mentioned that some operators enforce bit rates on a per-flow basis and others aggregate flows, and (in my perception) implied that we should not try to discourage them from either approach.\n\nI have no opinion on the merits of that implication. However, if SCONE network elements are allowed to enforce on an aggregate basis, it seems critical for interoperability to have a signal in SCONE packets indicating which mode it's in.\n\n@kazuho had a response in the meeting that rate control should be on a per-flow basis, because aggregate rates are not always actionable.",
       "createdAt": "2025-06-11T15:49:23Z",
-      "updatedAt": "2025-08-04T13:06:30Z",
-      "closedAt": null,
+      "updatedAt": "2025-08-06T00:29:16Z",
+      "closedAt": "2025-08-06T00:29:16Z",
       "comments": [
         {
           "author": "martinduke",
@@ -1479,6 +1500,13 @@
           "body": "I think the envisioned usage is per-flow, since the focus problem motivating SCONE is the throttling of video traffic in mobile networks to specific qualities/rates (which are indicated specifically for video in subscription plans, not aggregate rates).",
           "createdAt": "2025-08-04T13:06:30Z",
           "updatedAt": "2025-08-04T13:06:30Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "body": "I'm fine with the existing text (and close the issue). I don't think there is more we can say; we can't enforce anything and the rate advise is always just an upper limit and does not replace congestion control. If you have multiple flows \"competing\" for the same rate limit, that's simply congestion and you need congestion control to figure out a rate share. The scone signal is simply telling you, that you don't even need to try a higher rate than this. That signal is equally true not matter how many flow are shaped to the same max rate.",
+          "createdAt": "2025-08-05T17:03:39Z",
+          "updatedAt": "2025-08-05T17:03:39Z"
         }
       ]
     },
@@ -1606,6 +1634,38 @@
           "updatedAt": "2025-07-23T15:53:26Z"
         }
       ]
+    },
+    {
+      "number": 55,
+      "id": "I_kwDON1dwo87EjfiH",
+      "title": "Dynamic update of rate-signal field by network element - Needs clarity in draft to specify the server, client and n/w element requirements",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/55",
+      "state": "OPEN",
+      "author": "anooptomar29",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Some related aspects are covered in https://github.com/ietf-wg-scone/scone/issues/24, https://github.com/ietf-wg-scone/scone/issues/43 and https://github.com/ietf-wg-scone/scone/issues/6. However draft still lacks clarity to specify the role of server, client and n/w element to support Dynamic update of rate-signal field by network element. \n\nOne of the CSPs/equipment provider is looking for more clarity in the draft doc to cover following aspects;\n\nA. What is the periodicity of server sending SCONE packet coalesced with QUIC packet ?\n\nThis clarity will help in analyzing how fast new bit-rates can be configured in apps whenever there is a need to change the bit-rate for a flow due to any trigger in CSP n/w \n\n================================================================\nB. If the Server is sending SCONE packets with very high frequency/periodicity and if network element (PGW/UPF) does want to update the rate-signal field with for each and every SCONE packet (if there is no change in previously sent bit-rate for the subscriber) to avoid CPU usage.   How this can supported by server and client is not clearly specified in the draft. \n\nReason for asking clarification B;  In below section sec 7.1  it is stated that ***A network element might receive a packet that already includes a rate signal*** !! Does it mean that client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets ? \n \nPer IETF Sec 7.1:\n \n  A network element then conditionally replaces the Version field and\n   the Rate Signal field with values of its choosing.\n \n   ****A network element might receive a packet that already includes a rate\n   signal**.**  The network element replaces the rate signal if it wishes to\n   signal a lower rate limit; otherwise, the original values are\n   retained, preserving the signal from the network element with the\n   lower policy\n \n ===========================================================\nFor e.g. can we specify following in the draft to bring clarity to B. \n\n\n- By default, Server to set rate-signal field to a value which is not valid for the client. However client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets \n- Client to use whatever rate-signal value present in last received SCONE packet and stop using the value received in the past. \n\nOR,  if above is not the case  ( i.e if client is not required to update the server about the bit-rate and server is not required to set the rate-signal field to this updated value) can we specify following ; \n\n - Server to set rate-signal field to a value in every scone packet which is not valid for the client \n- And client to ignore the rate-signal field if rate-signal is set to this invalid value.(For e.g. 63) and continue to use previously received valid rate-signal value. \n\nWith this clarity in draft,  n/w element providers would get the clarity that \n1. If they don't update subsequent scone packets during the life time of the flow,  application continues to use bit-rate that was sent by n/w element initially. \n\n\n  ",
+      "createdAt": "2025-08-06T18:23:43Z",
+      "updatedAt": "2025-08-06T18:26:27Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 56,
+      "id": "I_kwDON1dwo87Ej4nt",
+      "title": "Clarification on Enforcement of Notable Values for Rate Signal and Bit-Rates",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/56",
+      "state": "OPEN",
+      "author": "udaykiranbokam",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "\nWe are currently evaluating the IETF specifications related to Rate Signal and bit-rates, specifically the Notable values defined therein. We would like to clarify whether these Notable values are intended as strict, hard-enforced limits or if they serve merely as recommendations or suggestions.\n\nOne of our CSP's are interested in using bit-rate values that differ from the Notable values listed in the IETF documents. Before proceeding, we want to understand if deviating from these values would be compliant or if it might cause interoperability or compliance issues.\n\nCould you please clarify on:\n\n1. Are the Notable values for Rate Signal and bit-rates in the IETF specifications mandatory to implement as-is?\nOr are they flexible guidelines that can be adjusted based on specific use cases or operator requirements?\n\n2. Will the Client and Server owners follow the logarithmic scale to derive the bit-rate sent in SCONE packet if the rate-signal value is not as per the table defined in IETF. \n\n",
+      "createdAt": "2025-08-06T18:59:59Z",
+      "updatedAt": "2025-08-06T18:59:59Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -4556,7 +4616,7 @@
       "labels": [],
       "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
       "createdAt": "2025-07-23T11:37:13Z",
-      "updatedAt": "2025-07-28T08:03:13Z",
+      "updatedAt": "2025-08-06T20:40:46Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "time",
       "baseRefOid": "3cda4b7b9ce75a332e91a8db04e43364b6b34347",
@@ -4567,7 +4627,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "wesley-eddy",
+          "authorAssociation": "NONE",
+          "body": "I think this is missing the mark a bit or making things overly complex.\r\n\r\nThe problem it's aiming to solve might be better discussed in the WG a bit more to make sure the understanding is aligned with vendors and CSPs that would be implementing and deploying, to make sure it's aligning with needs.\r\n\r\nThe notion of monitoring periods, sampling, nyquist, etc. are not needed.  The max throughput guidance is not like an analog signal that we're trying to sample and reproduce with some fidelity.  For most envisioned current cases, it's a fixed number that will not change for the duration of a flow.  It comes from the mobile user's subscriber plan (e.g. the plan says video at 720p is supported, so the SCONE signaling always indicates a corresponding fixed rate).\r\n\r\nThe text here about senders and receivers keeping state is really adding too much complexity for the typical case where a client gets SCONE advice of N Mbps, and then is able to use that knowledge in its ABR algorithm as a top limit subsequently for video chunks requested in the flow.  Allowing it to refresh or receive updated guidance does not have to be this complex IMHO.",
+          "createdAt": "2025-08-06T20:40:46Z",
+          "updatedAt": "2025-08-06T20:40:46Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo861vnXM",
