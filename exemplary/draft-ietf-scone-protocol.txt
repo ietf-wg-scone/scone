@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 8 January 2026                             Private Octopus Inc.
+Expires: 12 February 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                             7 July 2025
+                                                          11 August 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 January 2026.
+   This Internet-Draft will expire on 12 February 2026.
 
 Copyright Notice
 
@@ -82,6 +82,7 @@ Table of Contents
      3.3.  Per-Flow Signal
      3.4.  Undirectional Signal
      3.5.  Advisory Signal
+     3.6.  Following Advice
    4.  Conventions and Definitions
    5.  SCONE Packet
      5.1.  Rate Signals
@@ -133,6 +134,17 @@ Table of Contents
    network elements to signal the maximum available sustained
    throughput, or rate limits, for flows of UDP datagrams that transit
    that network element to a QUIC endpoint.
+
+   Networks with rate limiting policies use SCONE to send throughput
+   advice to cooperating endpoints to limit overall network usage.
+   Where congestion control signals -- such as ECN, delays and loss --
+   operate on a time scale of a round trip time, throughput advice
+   operates over a much longer period.  This has benefits in some
+   networks as endpoints can fully consume network capacity in bursts,
+   rather than extending network interaction at lower rates.
+
+   For endpoints, SCONE throughput advice makes network policies
+   visible, which can reduce wasteful probing beyond those limits.
 
 2.  Overview
 
@@ -270,6 +282,24 @@ Table of Contents
    a device or subscription, but endpoints cannot assume that this is
    the case.  A separate signal can be sent for each flow.
 
+3.6.  Following Advice
+
+   The SCONE throughput advice is advisory (see Section 3.5).
+   Applications that chose to follow it will do so in the way that best
+   suits their needs.
+
+   The most obvious way to keep within the limits set by throughput
+   advice is to inform the sending peer of the limit so that the peer
+   can do whatever rate limiting is necessary.  Alternatively, a
+   receiver can control the release of flow control credit (see
+   Section 4 of [QUIC]) to indirectly limit the sending rate of a peer.
+
+   Some applications offer options for rate control that can offer
+   superior outcomes.  Real-time and streaming video applications are
+   able to adjust video quality to fit within a target throughput.  For
+   instance, an HTTP Live Streaming client [HLS] can ask for lower
+   bitrate, lower quality media segments.
+
 4.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -349,7 +379,8 @@ Table of Contents
    With two versions combined, bitrates between 100 Kbps and 199.5 Gbps
    can be expressed.
 
-   Some notable values in these ranges include:
+   Table 1 lists some of the potential values for signals and the
+   corresponding throughput advice for each.
 
                   +==========+=============+============+
                   | Version  | Rate Signal | Bitrate    |
@@ -385,7 +416,8 @@ Table of Contents
                   | 0xSCONE2 | 63          | No limit   |
                   +----------+-------------+------------+
 
-                                  Table 1
+                      Table 1: Examples of signals and
+                            corresponding rates
 
 5.2.  Endpoint Processing of SCONE Packets
 
@@ -404,10 +436,18 @@ Table of Contents
    A SCONE packet MUST be discarded if the Destination Connection ID
    does not match one recognized by the receiving endpoint.
 
+   If a connection uses multiple DSCP markings [RFC2474], the throughput
+   advice that is received on datagrams with one marking might not apply
+   to datagrams that have different markings.
+
 6.  Negotiating SCONE
 
    A QUIC endpoint indicates that it is willing to receive SCONE packets
-   by including the scone_supported transport parameter (0xTBD).
+   by including the scone_supported transport parameter (0x219e).  The
+   scone_supported transport parameter MUST be empty.  Receiving a non-
+   zero length scone_supported transport parameter MUST be treated as a
+   connection error of type TRANSPORT_PARAMETER_ERROR; see Section 20.1
+   of [QUIC].
 
    This transport parameter is valid for QUIC versions 1 [QUIC] and 2
    [QUICv2] and any other version that recognizes the versions,
@@ -452,6 +492,9 @@ Table of Contents
        packet[0] = packet[0] & 0xc0 | target_signal
        if target_version != packet_version:
          packet[1..5] = htonl(target_version)
+
+   Once the throughput advice signal is updated, the network element
+   updates the UDP checksum for the datagram.
 
 8.  Version Interaction
 
@@ -734,7 +777,7 @@ Table of Contents
    (https://www.iana.org/assignments/quic), following the guidance from
    Section 22.3 of [QUIC].
 
-   Value:  0xTBD
+   Value:  0x219e
    Parameter Name:  scone_supported
    Status:  Permanent
    Specification:  This document
@@ -778,12 +821,22 @@ Table of Contents
               DOI 10.17487/RFC9369, May 2023,
               <https://www.rfc-editor.org/rfc/rfc9369>.
 
+   [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
+              "Definition of the Differentiated Services Field (DS
+              Field) in the IPv4 and IPv6 Headers", RFC 2474,
+              DOI 10.17487/RFC2474, December 1998,
+              <https://www.rfc-editor.org/rfc/rfc2474>.
+
 12.2.  Informative References
 
    [ECN]      Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/rfc/rfc3168>.
+
+   [HLS]      Pantos, R., Ed. and W. May, "HTTP Live Streaming",
+              RFC 8216, DOI 10.17487/RFC8216, August 2017,
+              <https://www.rfc-editor.org/rfc/rfc8216>.
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
