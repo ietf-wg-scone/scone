@@ -1051,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">July 2025</td>
+<td class="right">August 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 29 January 2026</td>
+<td class="center">Expires 13 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-07-28" class="published">28 July 2025</time>
+<time datetime="2025-08-12" class="published">12 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-01-29">29 January 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-13">13 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 January 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2437,6 +2437,8 @@ class ThroughputAdvice:
 
     self.total = 0
     self.state = [0] * self.count
+    self.advice = float('Infinity')
+    self.last_advice = t - window
 
     self.index = self.index_of(now)
     self.next_update = self.next_time(now)
@@ -2446,7 +2448,6 @@ class ThroughputAdvice:
 
   def next_time(self, t):
     return (floor(t / self.interval) + 1) * self.interval
-
 
   def update_time(self, t):
     if t &lt; self.next_update:
@@ -2470,6 +2471,19 @@ class ThroughputAdvice:
     self.index = new_index
     self.next_update = self.next_time(t)
 
+  def set_advice(self, t, advice):
+    """Update the throughput advice based on a received signal."""
+
+    if advice &lt; self.advice:
+      self.state = [0] * self.count
+      self.total = 0
+    elif self.advice_updated + self.interval * self.count &gt; t:
+      # Ignore increases too soon after an update.
+      # This could be smarter about increases, but this is safe.
+      return
+    self.advice = advice
+    self.advice_updated = t
+
   def data_sent(self, t, amount):
     """Record that at time `t`, data of length `amount` was sent."""
 
@@ -2477,12 +2491,12 @@ class ThroughputAdvice:
     self.state[self.index] = self.state[self.index] + amount
     self.total = self.total + amount
 
-  def is_within_advice(self, t, amount, advice):
+  def is_within_advice(self, t, amount):
     """Test whether at time `t`, data of length `amount`
-       is within the provided throughput `advice`."""
+       is within the provided throughput advice."""
 
     self.update_time(t)
-    return self.total + amount &lt;= advice
+    return self.total + amount &lt;= self.advice
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
