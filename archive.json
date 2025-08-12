@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-10T02:01:07.161181+00:00",
+  "timestamp": "2025-08-12T01:46:26.351990+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1647,7 +1647,7 @@
       "labels": [],
       "body": "Some related aspects are covered in https://github.com/ietf-wg-scone/scone/issues/24, https://github.com/ietf-wg-scone/scone/issues/43 and https://github.com/ietf-wg-scone/scone/issues/6. However draft still lacks clarity to specify the role of server, client and n/w element to support Dynamic update of rate-signal field by network element. \n\nOne of the CSPs/equipment provider is looking for more clarity in the draft doc to cover following aspects;\n\nA. What is the periodicity of server sending SCONE packet coalesced with QUIC packet ?\n\nThis clarity will help in analyzing how fast new bit-rates can be configured in apps whenever there is a need to change the bit-rate for a flow due to any trigger in CSP n/w \n\n================================================================\nB. If the Server is sending SCONE packets with very high frequency/periodicity and if network element (PGW/UPF) does want to update the rate-signal field with for each and every SCONE packet (if there is no change in previously sent bit-rate for the subscriber) to avoid CPU usage.   How this can supported by server and client is not clearly specified in the draft. \n\nReason for asking clarification B;  In below section sec 7.1  it is stated that ***A network element might receive a packet that already includes a rate signal*** !! Does it mean that client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets ? \n \nPer IETF Sec 7.1:\n \n  A network element then conditionally replaces the Version field and\n   the Rate Signal field with values of its choosing.\n \n   ****A network element might receive a packet that already includes a rate\n   signal**.**  The network element replaces the rate signal if it wishes to\n   signal a lower rate limit; otherwise, the original values are\n   retained, preserving the signal from the network element with the\n   lower policy\n \n ===========================================================\nFor e.g. can we specify following in the draft to bring clarity to B. \n\n\n- By default, Server to set rate-signal field to a value which is not valid for the client. However client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets \n- Client to use whatever rate-signal value present in last received SCONE packet and stop using the value received in the past. \n\nOR,  if above is not the case  ( i.e if client is not required to update the server about the bit-rate and server is not required to set the rate-signal field to this updated value) can we specify following ; \n\n - Server to set rate-signal field to a value in every scone packet which is not valid for the client \n- And client to ignore the rate-signal field if rate-signal is set to this invalid value.(For e.g. 63) and continue to use previously received valid rate-signal value. \n\nWith this clarity in draft,  n/w element providers would get the clarity that \n1. If they don't update subsequent scone packets during the life time of the flow,  application continues to use bit-rate that was sent by n/w element initially. \n\n\n  ",
       "createdAt": "2025-08-06T18:23:43Z",
-      "updatedAt": "2025-08-08T23:17:57Z",
+      "updatedAt": "2025-08-11T03:42:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -1670,6 +1670,13 @@
           "body": "> I can't see how this is consistent with what you are asking for. If you fail to update a packet, that's the same as the network signaling \"unlimited\" bandwidth, or that SCONE is not supported (any more).\n\nSorry, it seems, I was not clear. Let me try to explain the requirement clearly.\n\n- Server to set rate-signal field to a value which suggests \"no-action\" (SCONEv2 this value is 63 and we should reserve 63 for SCONEv1 also i.e, no-action)\n\n- Client to ignore the rate-signal field if rate-signal is set to no-action.(For e.g. 63) and client to continue to use previously received valid rate-signal value, if any.\n\n- N/w element to update the rate-signal field only when it needs to send a value other than 63 or when it needs to send updated bit-rate value (which is different from the value that was sent by the n/w earlier)\n\nAdding an example below to make it clear;\n\n- Connection gets established\n- Server sends SCONE packet. rate-signal = 63 (scone v1 or scone v2 )\n- N/w element updates rate-signal to some value say 15. rate-signal (n)= 15 ( and for e.g scone version = version 1)\n- N/W element updates a few subsequent scone pkts to update rate-signal (n)= 15 to do proactive retx to address potential pkt loss\n- Client reads scone pkt and calculates bit-rate based on n = 15 and performs self-adaptation\n- Server keeps sending SCONE packet. rate-signal = 63 (scone v1 or scone v2 )\n- N/w element does not update SCONE pkt as it does not want to change the bit-rate\n- Client receives SCONE packet. rate-signal = 63 (scone v1 or scone v2 ) i.e no-action\n- Client keeps using bit-rate based on n = 15 and keeps perform self-adaptation\n- Some point in time during the ongoing media flow, n/w element needs to update bit rate value to lower or higher value. In this case, n/w element waits for next SCONE pkt from server and updates rate-signal field to new value say 10.\n- Client reads scone pkt and calculates bit-rate based on n = 10 and performs self-adaptation .\n\nThis way , protocol provides the flexibility to n/w element to not to update every scone pkt if there is no need (to optimize CPU usage). And if some n/w element/s wants to update every scone pkt (I am not sure why) then they can do it w/o any change in the final outcome.\n\nOnly open question is ( question A) - What is the frequency at which server is required to send SCONE pkt ? And this should consider ability to support retx of scone pkts with updated bit-rate by the n/w element whenever there is a change in the bit-rate.\n\nIf we ignore retx requirement, frequency at which server is required to send SCONE, is not required to be very high. May be we want to address retx issue by adding ack based retx instead of proactive retx !!",
           "createdAt": "2025-08-08T23:16:47Z",
           "updatedAt": "2025-08-08T23:17:57Z"
+        },
+        {
+          "author": "udaykiranbokam",
+          "authorAssociation": "NONE",
+          "body": "The current discussions, or potential interpretations of the specification, could lead to a scenario where these signals are updated for every packet of every flow hosted on the network. This approach presents a severe and potentially prohibitive operational challenge when considering Large Scale CSP deployments. Imagine a typical network environment: hundreds of thousands of clients, each potentially running multiple concurrent  #flows as well as new flow creation with change in 4 Tuples. If a network element were required to generate and update a unique SCONE Rate-Signal and Version for each packet of every one of these flows, the processing overhead would be astronomical. This would directly translate into:\n\nMassive CPU and Memory Consumption: Network elements would be burdened with an immense volume of state tracking, computation, and packet modification, leading to significant resource exhaustion.\nUnnecessary Overhead: The Rate-Signal and Version are intended to convey advice about network conditions. These conditions, while dynamic, typically do not fluctuate on a per-packet timescale in a way that necessitates such granular signaling.\n\nWith these considerations in mind, I'd like to like to expand on the suggestion by @anooptomar29 ., that the specification could benefit from explicitly clarifying that network elements might update the SCONE Rate-Signal and Version primarily when there is a material change in the advised bit rate or network conditions, or perhaps at a defined, reasonable periodicity.\n\n**Implementing a Configurable Timer for Rate-Signal Updates:** A configurable timer could be introduced to govern the minimum interval between SCONE Rate-Signal updates for a given flow or aggregate. This approach could help manage the load on network elements, ensuring they are not overwhelmed by continuous updates even during rapid network fluctuations. Updates could then occur if the timer has expired and there's a material change, or as a periodic refresh. This mechanism could offer a good balance between responsiveness and processing overhead, allowing operators to fine-tune performance.\n\n**Considering an Optional Client Acknowledgment Mechanism for SCONE Packets**: To improve reliability and provide confirmation that the client has indeed received and processed the SCONE Rate-Signal, perhaps an optional, lightweight acknowledgment (ACK) mechanism from the client back to the network element could be beneficial. While we would naturally need to be mindful of any added overhead, a carefully designed, perhaps rate-limited or conditional, ACK could offer valuable feedback to the network element. This might enable the network element to:\n\n- Confirm successful delivery of the SCONE advice.\n- Potentially retransmit advice if an ACK is not received within a certain timeframe.\n\n**Defining a Default Rate-Signal and Client Fallback Behavior**: To enhance robustness, it might be beneficial to define a specific default Rate-Signal value (e.g., 63 as a neutral or \"no specific advice\" indicator) that a server could include. Crucially, the client should be instructed not to take any specific action based on this default value. Instead, the client should always prioritize and act upon the latest received non-default Rate-Signal from the network element. Furthermore, if a client has not yet received any Rate-Signal from a network element, or if its stored Rate-Signal becomes stale or is explicitly invalidated, it should gracefully fall back to its default non-SCONE behavior for that QUIC flow until a valid Rate-Signal is successfully received and processed. This approach would provide a clear and safe operational state for clients in the absence of active SCONE advice, preventing unintended behaviors and improving overall system stability\n\n",
+          "createdAt": "2025-08-11T03:32:08Z",
+          "updatedAt": "2025-08-11T03:42:16Z"
         }
       ]
     },
@@ -1685,7 +1692,7 @@
       "labels": [],
       "body": "\nWe are currently evaluating the IETF specifications related to Rate Signal and bit-rates, specifically the Notable values defined therein. We would like to clarify whether these Notable values are intended as strict, hard-enforced limits or if they serve merely as recommendations or suggestions.\n\nOne of our CSP's are interested in using bit-rate values that differ from the Notable values listed in the IETF documents. Before proceeding, we want to understand if deviating from these values would be compliant or if it might cause interoperability or compliance issues.\n\nCould you please clarify on:\n\n1. Are the Notable values for Rate Signal and bit-rates in the IETF specifications mandatory to implement as-is?\nOr are they flexible guidelines that can be adjusted based on specific use cases or operator requirements?\n\n2. Will the Client and Server owners follow the logarithmic scale to derive the bit-rate sent in SCONE packet if the rate-signal value is not as per the table defined in IETF. \n\n",
       "createdAt": "2025-08-06T18:59:59Z",
-      "updatedAt": "2025-08-08T00:17:28Z",
+      "updatedAt": "2025-08-11T16:56:00Z",
       "closedAt": null,
       "comments": [
         {
@@ -1701,6 +1708,13 @@
           "body": "> To be fair, I'm not sure that \"Notable\" is the right characterization of these. The values in the table are just examples. They aren't much good for anything other than testing your code, if you are into that sort of thing.\n\nI think \"notable\" word can be confusing. Changing it to \"example\" may avoid the confusion. ",
           "createdAt": "2025-08-08T00:17:28Z",
           "updatedAt": "2025-08-08T00:17:28Z"
+        },
+        {
+          "author": "udaykiranbokam",
+          "authorAssociation": "NONE",
+          "body": "> > To be fair, I'm not sure that \"Notable\" is the right characterization of these. The values in the table are just examples. They aren't much good for anything other than testing your code, if you are into that sort of thing.\n> \n> I think \"notable\" word can be confusing. Changing it to \"example\" may avoid the confusion.\n\nI strongly agree with the suggestion to change 'Notable' to 'Example' for the values listed in the table. This change would significantly reduce  confusion regarding their intent and avoid the impression that they are prescriptive limits.\n\nCan it also be reinforced that the mechanism for deriving the bit-rate from the 63 defined signal values (i.e., the exponential formula) is the normative part of the specification. Implementations must adhere to this derivation process, regardless of whether the resulting bit-rate happens to align with one of the 'example' values.\n",
+          "createdAt": "2025-08-11T16:56:00Z",
+          "updatedAt": "2025-08-11T16:56:00Z"
         }
       ]
     }
@@ -5394,6 +5408,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 57,
+      "id": "PR_kwDON1dwo86jJYAK",
+      "title": "The table is just a selection of examples",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/57",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\"Notable\" was not a great choice of words.\r\n\r\nCloses #56.",
+      "createdAt": "2025-08-11T23:14:56Z",
+      "updatedAt": "2025-08-11T23:14:57Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "5df97596fa6047432a605985af2177994955efe8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "exemplary",
+      "headRefOid": "8420b85f4cbed8783cbf61390b119599097a9e40",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
