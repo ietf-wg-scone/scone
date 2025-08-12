@@ -455,6 +455,10 @@ Table of Contents
    A SCONE packet MUST be discarded if the Destination Connection ID
    does not match one recognized by the receiving endpoint.
 
+   If a connection uses multiple DSCP markings [RFC2474], the throughput
+   advice that is received on datagrams with one marking might not apply
+   to datagrams that have different markings.
+
 5.4.  Lowest Rate Algorithm
 
    An endpoint that receives throughput advice might receive multiple
@@ -514,7 +518,11 @@ Table of Contents
 6.  Negotiating SCONE
 
    A QUIC endpoint indicates that it is willing to receive SCONE packets
-   by including the scone_supported transport parameter (0xTBD).
+   by including the scone_supported transport parameter (0x219e).  The
+   scone_supported transport parameter MUST be empty.  Receiving a non-
+   zero length scone_supported transport parameter MUST be treated as a
+   connection error of type TRANSPORT_PARAMETER_ERROR; see Section 20.1
+   of [QUIC].
 
    This transport parameter is valid for QUIC versions 1 [QUIC] and 2
    [QUICv2] and any other version that recognizes the versions,
@@ -559,6 +567,9 @@ Table of Contents
        packet[0] = packet[0] & 0xc0 | target_signal
        if target_version != packet_version:
          packet[1..5] = htonl(target_version)
+
+   Once the throughput advice signal is updated, the network element
+   updates the UDP checksum for the datagram.
 
    A network element needs to ensure that it sends updated rate signals
    with no more than a monitoring period (Section 5.2) between each.
@@ -864,7 +875,7 @@ Table of Contents
    (https://www.iana.org/assignments/quic), following the guidance from
    Section 22.3 of [QUIC].
 
-   Value:  0xTBD
+   Value:  0x219e
    Parameter Name:  scone_supported
    Status:  Permanent
    Specification:  This document
@@ -907,6 +918,12 @@ Table of Contents
    [QUICv2]   Duke, M., "QUIC Version 2", RFC 9369,
               DOI 10.17487/RFC9369, May 2023,
               <https://www.rfc-editor.org/rfc/rfc9369>.
+
+   [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
+              "Definition of the Differentiated Services Field (DS
+              Field) in the IPv4 and IPv6 Headers", RFC 2474,
+              DOI 10.17487/RFC2474, December 1998,
+              <https://www.rfc-editor.org/rfc/rfc2474>.
 
 12.2.  Informative References
 

@@ -1738,6 +1738,9 @@ it in the same datagram, if the Source Connection ID is not consistent with
 those coalesced packets, as specified in <a href="#packet" class="auto internal xref">Section 5</a>.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
 <p id="section-5.3-3">A SCONE packet <span class="bcp14">MUST</span> be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3-4">If a connection uses multiple DSCP markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
+the throughput advice that is received on datagrams with one marking
+might not apply to datagrams that have different markings.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="lowest-rate-algorithm">
@@ -1818,7 +1821,11 @@ ensures that it is more likely that the signal is received.<a href="#section-5.4
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-negotiating-scone" class="section-name selfRef">Negotiating SCONE</a>
       </h2>
 <p id="section-6-1">A QUIC endpoint indicates that it is willing to receive SCONE packets by
-including the scone_supported transport parameter (0xTBD).<a href="#section-6-1" class="pilcrow">¶</a></p>
+including the scone_supported transport parameter (0x219e).
+The scone_supported transport parameter <span class="bcp14">MUST</span> be empty.
+Receiving a non-zero length scone_supported transport parameter <span class="bcp14">MUST</span> be treated
+as a connection error of type TRANSPORT_PARAMETER_ERROR;
+see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-20.1" class="relref">Section 20.1</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This transport parameter is valid for QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2
 <span>[<a href="#QUICv2" class="cite xref">QUICv2</a>]</span> and any other version that recognizes the versions,
 transport parameters, and frame types registries established in Sections <a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">22.2</a>, <a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">22.3</a>, and <a href="https://rfc-editor.org/rfc/rfc9000#section-22.4" class="relref">22.4</a> of <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
@@ -1865,13 +1872,15 @@ if is_long and (packet_version == SCONE1_VERSION or
       packet[1..5] = htonl(target_version)
 </pre><a href="#section-7.1-5" class="pilcrow">¶</a>
 </div>
-<p id="section-7.1-6">A network element needs to ensure that it sends updated rate signals
+<p id="section-7.1-6">Once the throughput advice signal is updated,
+the network element updates the UDP checksum for the datagram.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+<p id="section-7.1-7">A network element needs to ensure that it sends updated rate signals
 with no more than a monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>) between each.
 Because this depends on the availability of SCONE packets,
 network elements might need to be prepared to update
 at a much higher frequency.
 Sending and updating SCONE packets at least twice per monitoring period
-ensures that signals are always available.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+ensures that signals are always available.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="policing">
@@ -2295,7 +2304,7 @@ Transport Parameters" registry maintained at
 <span class="break"></span><dl class="dlCompact dlParallel" id="section-11.2-2">
           <dt id="section-11.2-2.1">Value:</dt>
           <dd style="margin-left: 1.5em" id="section-11.2-2.2">
-            <p id="section-11.2-2.2.1">0xTBD<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-11.2-2.2.1">0x219e<a href="#section-11.2-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-11.2-2.3">Parameter Name:</dt>
@@ -2372,8 +2381,12 @@ Transport Parameters" registry maintained at
 <span class="refAuthor">Thomson, M.</span>, <span class="refTitle">"Greasing the QUIC Bit"</span>, <span class="seriesInfo">RFC 9287</span>, <span class="seriesInfo">DOI 10.17487/RFC9287</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9287">https://www.rfc-editor.org/rfc/rfc9287</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="QUICv2">[QUICv2]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Duke, M.</span>, <span class="refTitle">"QUIC Version 2"</span>, <span class="seriesInfo">RFC 9369</span>, <span class="seriesInfo">DOI 10.17487/RFC9369</span>, <time datetime="2023-05" class="refDate">May 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9369">https://www.rfc-editor.org/rfc/rfc9369</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2474">[RFC2474]</dt>
+      <dd>
+<span class="refAuthor">Nichols, K.</span>, <span class="refAuthor">Blake, S.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">D. Black</span>, <span class="refTitle">"Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers"</span>, <span class="seriesInfo">RFC 2474</span>, <span class="seriesInfo">DOI 10.17487/RFC2474</span>, <time datetime="1998-12" class="refDate">December 1998</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2474">https://www.rfc-editor.org/rfc/rfc2474</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
