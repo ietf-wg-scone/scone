@@ -291,6 +291,7 @@ SCONE packets SHOULD be included as the first packet in a datagram.  This is
 necessary in many cases for QUIC versions 1 and 2 because packets with a short
 header cannot precede any other packets.
 
+
 ## Rate Signals {#rate-signal}
 
 The Rate Signal field in SCONE uses the low 6 bits (0x3f) of the first byte.
@@ -367,10 +368,10 @@ datagram is successfully processed.  Therefore, a SCONE packet always needs to
 be coalesced with other QUIC packets.
 
 A SCONE packet is defined by the use of the longer header bit (0x80 in the first
-byte) and the SCONE protocol version (0xTBD in the next four bytes).  A SCONE
-packet MAY be discarded, along with any packets that come after it in the same
-datagram, if the Source Connection ID is not consistent with those coalesced
-packets, as specified in {{packet}}.
+byte) and the SCONE protocol version (0xSCONE1 or 0xSCONE2 in the next four
+bytes).  A SCONE packet MAY be discarded, along with any packets that come after
+it in the same datagram, if the Source Connection ID is not consistent with
+those coalesced packets, as specified in {{packet}}.
 
 A SCONE packet MUST be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.
@@ -378,6 +379,71 @@ one recognized by the receiving endpoint.
 If a connection uses multiple DSCP markings {{!RFC2474}},
 the throughput advice that is received on datagrams with one marking
 might not apply to datagrams that have different markings.
+
+
+## Lowest Rate Algorithm {#algorithm}
+
+An endpoint that receives throughput advice
+might receive multiple different rate limits.
+If advice is applied by applications,
+applications MUST apply the lowest throughput advice
+received during any monitoring period; see {{time}}.
+
+Senders can ensure that their use of network capacity
+remains within throughput advice
+using a lowest rate algorithm as follows.
+
+To operate this algorithm,
+the minimal state that an application --
+which is often, but not always a sender --
+maintains is
+* the current rate limit,
+* any state necessary to monitor throughput
+  (that is, throughput usage state, such as the state in {{sliding-window}}), and
+* the time at which that rate limit was last updated.
+
+When updated advice is received:
+
+* If the signaled rate is the same as the current rate,
+  set the last update time to the current time.
+
+* If the signaled rate is higher than the current value,
+  then:
+
+  * If the time since the last update is greater than the monitoring period,
+    the current rate limit is increased to the received value
+    and the last update time is set to the current time.
+
+  * Otherwise, the throughput advice is not applied.
+    An implementation can optionally remember throughput advice,
+    so that it might increase send rates more quickly,
+    but this is not necessary
+    as long as there are frequent opportunities
+    to receive updated throughput signals.
+
+* If the signaled rate is lower than the current value,
+  set the current rate limit to match the advice,
+  optionally discard all rate monitoring state,
+  and set the last update time to the current time.
+
+Applications MAY discard throughput usage state when reducing rates.
+Otherwise, data that was sent at a higher rate
+might force the available rate to zero; see also {{policing}}.
+Even though loss of information about recent send rate
+might result in temporarily exceeding the rates indicated by throughput advice,
+the relatively long duration of the monitoring period
+means that this is preferable to disabling sending completely.
+Applications retain throughput usage state when increasing state.
+
+This approach ensures that network elements
+are able to reduce the frequency with which they send updated signals
+to as low as once per monitoring period.
+However, applying signals at a low frequency
+risks throughput advice being reset to the unbounded default
+if no SCONE packet is available for applying signals ({{apply}}),
+or the rewritten packets are lost.
+Sending the signal multiple times
+ensures that it is more likely that the signal is received.
 
 
 # Negotiating SCONE {#tp}
@@ -506,8 +572,21 @@ if is_long and (packet_version == SCONE1_VERSION or
 Once the throughput advice signal is updated,
 the network element updates the UDP checksum for the datagram.
 
+A network element needs to ensure that it sends updated rate signals
+with no more than a monitoring period ({{time}}) between each.
+Because this depends on the availability of SCONE packets
+and packet loss can cause signals to be missed,
+network elements might need to update more often.
 
-## Flows That Exceed Throughput Advicea
+Senders that send a SCONE packet
+or network elements that update SCONE packets
+every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
+Senders can avoid synchronization of SCONE packets,
+which might cause network elements to miss updates,
+by adding a small amount of random delay.
+
+
+## Flows That Exceed Throughput Advice {#policing}
 
 Network elements that provide throughput advice
 can monitor flows --
@@ -520,6 +599,14 @@ enforcing adherence to the advice as though it were a hard limit.
 However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
 that is, up to the period defined in {{time}}.
+
+A network element that reduces the throughput advice it provides
+MUST also discard any state it maintains
+about the consumption of that throughput.
+This is necessary to allow senders to discard state
+when advice is reduced (see {{algorithm}}).
+This avoids cases where an application that has planned usage
+might otherwise be completely unable to send due to a lower limits.
 
 A better approach is to disregard any data that was transmitted
 before engaging any hard limits to throughput.
