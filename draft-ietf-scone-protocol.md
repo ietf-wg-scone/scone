@@ -314,25 +314,27 @@ For SCONE protocol version 0xSCONE2, the rate limits use a logarithmic scale wit
 With two versions combined, bitrates between 100 Kbps and 199.5 Gbps can be
 expressed.
 
-Some notable values in these ranges include:
+{{ex-rates}} lists some of the potential values for signals
+and the corresponding throughput advice for each.
 
-| Version  | Rate Signal |  Bitrate  |
-|:---------|:------------|:----------|
-| 0xSCONE1 | 0           | 100 Kbps  |
-| 0xSCONE1 | 10          | 316 Kbps  |
-| 0xSCONE1 | 20          | 1 Mbps    |
-| 0xSCONE1 | 30          | 3.16 Mbps |
-| 0xSCONE1 | 40          | 10 Mbps   |
-| 0xSCONE1 | 50          | 31.6 Mbps |
-| 0xSCONE1 | 60          | 100 Mbps  |
-| 0xSCONE2 | 6           | 316 Mbps  |
-| 0xSCONE2 | 16          | 1 Gbps    |
-| 0xSCONE2 | 26          | 3.16 Gbps |
-| 0xSCONE2 | 36          | 10 Gbps   |
-| 0xSCONE2 | 46          | 31.6 Gbps |
-| 0xSCONE2 | 56          | 100 Gbps  |
-| 0xSCONE2 | 62          | 199.5 Gbps  |
-| 0xSCONE2 | 63          | No limit  |
+| Version  | Rate Signal |  Bitrate   |
+|:---------|:------------|:-----------|
+| 0xSCONE1 | 0           | 100 Kbps   |
+| 0xSCONE1 | 10          | 316 Kbps   |
+| 0xSCONE1 | 20          | 1 Mbps     |
+| 0xSCONE1 | 30          | 3.16 Mbps  |
+| 0xSCONE1 | 40          | 10 Mbps    |
+| 0xSCONE1 | 50          | 31.6 Mbps  |
+| 0xSCONE1 | 60          | 100 Mbps   |
+| 0xSCONE2 | 6           | 316 Mbps   |
+| 0xSCONE2 | 16          | 1 Gbps     |
+| 0xSCONE2 | 26          | 3.16 Gbps  |
+| 0xSCONE2 | 36          | 10 Gbps    |
+| 0xSCONE2 | 46          | 31.6 Gbps  |
+| 0xSCONE2 | 56          | 100 Gbps   |
+| 0xSCONE2 | 62          | 199.5 Gbps |
+| 0xSCONE2 | 63          | No limit   |
+{: #ex-rates title="Examples of signals and corresponding rates"}
 
 ## Endpoint Processing of SCONE Packets
 
