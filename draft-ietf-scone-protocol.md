@@ -574,11 +574,16 @@ the network element updates the UDP checksum for the datagram.
 
 A network element needs to ensure that it sends updated rate signals
 with no more than a monitoring period ({{time}}) between each.
-Because this depends on the availability of SCONE packets,
-network elements might need to be prepared to update
-at a much higher frequency.
-Sending and updating SCONE packets at least twice per monitoring period
-ensures that signals are always available.
+Because this depends on the availability of SCONE packets
+and packet loss can cause signals to be missed,
+network elements might need to update more often.
+
+Senders that send a SCONE packet
+or network elements that update SCONE packets
+every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
+Senders can avoid synchronization of SCONE packets,
+which might cause network elements to miss updates,
+by adding a small amount of random delay.
 
 
 ## Flows That Exceed Throughput Advice {#policing}
