@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-12T01:46:26.351990+00:00",
+  "timestamp": "2025-08-14T01:48:50.428638+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -162,15 +162,15 @@
       "id": "I_kwDON1dwo86u5K3z",
       "title": "Client-initiated signal",
       "url": "https://github.com/ietf-wg-scone/scone/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "smishra1200",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "1. Section 2 of the draft shows \"QUIC Sender\", ie, the server initiates the TRONE signal toward the client. This implies that TRONE signal is going to be server initiated. This will result in having the \"network element\" listens to all IP flows in the downlink direction. This is CPU intensive\n2. The authors should consider a design that is independent of SNI-based flow detection\n3. The authors should reconsider this design and allow for CLIENT initiated TRONE signaling (uplink direction) with implicit support for  flow detection\n\nAs a point of reference, section 6 of draft mishra-scone-usercase-00, added following requirement:\nSCONE (aka TRONE) signal MUST be a client-application endpoint initiated to assist the network element (UPF/5G or PGW/4G) with the implicit flow detection\nplease see https://www.ietf.org/archive/id/draft-mishra-scone-usecase-00.html#section-6-1.1.1",
       "createdAt": "2025-03-20T06:13:47Z",
-      "updatedAt": "2025-07-23T08:49:04Z",
-      "closedAt": null,
+      "updatedAt": "2025-08-14T01:09:43Z",
+      "closedAt": "2025-08-14T01:09:43Z",
       "comments": [
         {
           "author": "ihlar",
@@ -1647,7 +1647,7 @@
       "labels": [],
       "body": "Some related aspects are covered in https://github.com/ietf-wg-scone/scone/issues/24, https://github.com/ietf-wg-scone/scone/issues/43 and https://github.com/ietf-wg-scone/scone/issues/6. However draft still lacks clarity to specify the role of server, client and n/w element to support Dynamic update of rate-signal field by network element. \n\nOne of the CSPs/equipment provider is looking for more clarity in the draft doc to cover following aspects;\n\nA. What is the periodicity of server sending SCONE packet coalesced with QUIC packet ?\n\nThis clarity will help in analyzing how fast new bit-rates can be configured in apps whenever there is a need to change the bit-rate for a flow due to any trigger in CSP n/w \n\n================================================================\nB. If the Server is sending SCONE packets with very high frequency/periodicity and if network element (PGW/UPF) does want to update the rate-signal field with for each and every SCONE packet (if there is no change in previously sent bit-rate for the subscriber) to avoid CPU usage.   How this can supported by server and client is not clearly specified in the draft. \n\nReason for asking clarification B;  In below section sec 7.1  it is stated that ***A network element might receive a packet that already includes a rate signal*** !! Does it mean that client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets ? \n \nPer IETF Sec 7.1:\n \n  A network element then conditionally replaces the Version field and\n   the Rate Signal field with values of its choosing.\n \n   ****A network element might receive a packet that already includes a rate\n   signal**.**  The network element replaces the rate signal if it wishes to\n   signal a lower rate limit; otherwise, the original values are\n   retained, preserving the signal from the network element with the\n   lower policy\n \n ===========================================================\nFor e.g. can we specify following in the draft to bring clarity to B. \n\n\n- By default, Server to set rate-signal field to a value which is not valid for the client. However client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets \n- Client to use whatever rate-signal value present in last received SCONE packet and stop using the value received in the past. \n\nOR,  if above is not the case  ( i.e if client is not required to update the server about the bit-rate and server is not required to set the rate-signal field to this updated value) can we specify following ; \n\n - Server to set rate-signal field to a value in every scone packet which is not valid for the client \n- And client to ignore the rate-signal field if rate-signal is set to this invalid value.(For e.g. 63) and continue to use previously received valid rate-signal value. \n\nWith this clarity in draft,  n/w element providers would get the clarity that \n1. If they don't update subsequent scone packets during the life time of the flow,  application continues to use bit-rate that was sent by n/w element initially. \n\n\n  ",
       "createdAt": "2025-08-06T18:23:43Z",
-      "updatedAt": "2025-08-11T03:42:16Z",
+      "updatedAt": "2025-08-13T21:18:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -1677,6 +1677,41 @@
           "body": "The current discussions, or potential interpretations of the specification, could lead to a scenario where these signals are updated for every packet of every flow hosted on the network. This approach presents a severe and potentially prohibitive operational challenge when considering Large Scale CSP deployments. Imagine a typical network environment: hundreds of thousands of clients, each potentially running multiple concurrent  #flows as well as new flow creation with change in 4 Tuples. If a network element were required to generate and update a unique SCONE Rate-Signal and Version for each packet of every one of these flows, the processing overhead would be astronomical. This would directly translate into:\n\nMassive CPU and Memory Consumption: Network elements would be burdened with an immense volume of state tracking, computation, and packet modification, leading to significant resource exhaustion.\nUnnecessary Overhead: The Rate-Signal and Version are intended to convey advice about network conditions. These conditions, while dynamic, typically do not fluctuate on a per-packet timescale in a way that necessitates such granular signaling.\n\nWith these considerations in mind, I'd like to like to expand on the suggestion by @anooptomar29 ., that the specification could benefit from explicitly clarifying that network elements might update the SCONE Rate-Signal and Version primarily when there is a material change in the advised bit rate or network conditions, or perhaps at a defined, reasonable periodicity.\n\n**Implementing a Configurable Timer for Rate-Signal Updates:** A configurable timer could be introduced to govern the minimum interval between SCONE Rate-Signal updates for a given flow or aggregate. This approach could help manage the load on network elements, ensuring they are not overwhelmed by continuous updates even during rapid network fluctuations. Updates could then occur if the timer has expired and there's a material change, or as a periodic refresh. This mechanism could offer a good balance between responsiveness and processing overhead, allowing operators to fine-tune performance.\n\n**Considering an Optional Client Acknowledgment Mechanism for SCONE Packets**: To improve reliability and provide confirmation that the client has indeed received and processed the SCONE Rate-Signal, perhaps an optional, lightweight acknowledgment (ACK) mechanism from the client back to the network element could be beneficial. While we would naturally need to be mindful of any added overhead, a carefully designed, perhaps rate-limited or conditional, ACK could offer valuable feedback to the network element. This might enable the network element to:\n\n- Confirm successful delivery of the SCONE advice.\n- Potentially retransmit advice if an ACK is not received within a certain timeframe.\n\n**Defining a Default Rate-Signal and Client Fallback Behavior**: To enhance robustness, it might be beneficial to define a specific default Rate-Signal value (e.g., 63 as a neutral or \"no specific advice\" indicator) that a server could include. Crucially, the client should be instructed not to take any specific action based on this default value. Instead, the client should always prioritize and act upon the latest received non-default Rate-Signal from the network element. Furthermore, if a client has not yet received any Rate-Signal from a network element, or if its stored Rate-Signal becomes stale or is explicitly invalidated, it should gracefully fall back to its default non-SCONE behavior for that QUIC flow until a valid Rate-Signal is successfully received and processed. This approach would provide a clear and safe operational state for clients in the absence of active SCONE advice, preventing unintended behaviors and improving overall system stability\n\n",
           "createdAt": "2025-08-11T03:32:08Z",
           "updatedAt": "2025-08-11T03:42:16Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think that we have a basic misunderstanding of what this protocol can achieve in this thread.\n\nWe have, on the one hand, a rate limit over a span of time.  Any signal that says you can send X over period Y (Y is fixed in the protocol) means that you can send X\\*Y over any period shorter than Y.  Fundamentally, that means that you can't expect a change to be accepted in any time less than Y.  That is what #46 lays out, including a method for ensuring that when the limit becomes Z (where Z < X) you haven't already sent more than Z\\*Y on the expectation that there would be more capacity available.  Otherwise, compliance would mean ceasing all transmission.\n\nAs @udaykiranbokam points out, the requirement to update every packet might be onerous (I pointed out also that it is unrealistic to expect perfect coverage).  #46 also addresses that by requiring that any value be respect for the full duration (Y) after it is received.  If you endpoints remember the lowest rate like that, which is reasonable, you can't expect them to be able to change instantly when throughput advice reduces.  (Same reason as above.)  Rate increases are fine, though you also can't act while a lower rate is active because there can be multiple on-path actors with different policies.\n\nThat there might be multiple on-path elements updating packets is why 63 is not \"no action\", but \"no limit\".  Any logic you might do with respect to 15 vs 63 applies equally to 10 vs 15 as well.  (It is also not necessary to reserve 63 in both versions; you only need one combination of values to mean \"no limit\".)\n\n> With these considerations in mind, I'd like to like to expand on the suggestion by @anooptomar29 ., that the specification could benefit from explicitly clarifying that network elements might update the SCONE Rate-Signal and Version primarily when there is a material change in the advised bit rate or network conditions, or perhaps at a defined, reasonable periodicity.\n\nThis is precisely what is in the pull requests.  The advice is that network elements update at least a few times (2 or more) each enforcement period.  That ensures that the limits are never lost and endpoints switch to uncapped use.  It also suggests more updates when throughput advice changes, exactly as you suggest.",
+          "createdAt": "2025-08-12T03:23:00Z",
+          "updatedAt": "2025-08-12T04:25:45Z"
+        },
+        {
+          "author": "udaykiranbokam",
+          "authorAssociation": "NONE",
+          "body": "\n> This is precisely what is in the pull requests. The advice is that network elements update at least a few times (2 or more) each enforcement period. That ensures that the limits are never lost and endpoints switch to uncapped use. It also suggests more updates when throughput advice changes, exactly as you suggest.\n\nCan we get clarification on some points regarding rate enforcement and signaling in the Scone protocol, especially in light of the current pull request where the enforcement period (Y) is set to 67 seconds.\n\n1. With Y set to 67 seconds, what is the minimum required frequency at which a network element must update packets with new rate-signal values within each enforcement period? will the value be somewhere around 20-30 Secs. ?\n2. Is the 67-second enforcement period intended to be a fixed constant for all deployments and connections, or is there any flexibility for CSPs, clients, or application owners to set this value in the network?\n3. If a network element fails to update the rate-signal within the 67-second enforcement period, what is the expected behavior for the endpoint? Should it assume \"no limit,\" continue with the last known rate, or follow another fallback procedure?",
+          "createdAt": "2025-08-12T21:42:18Z",
+          "updatedAt": "2025-08-12T21:42:18Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> With Y set to 67 seconds, what is the minimum required frequency at which a network element must update packets with new rate-signal values within each enforcement period? will the value be somewhere around 20-30 Secs. ?\n\nIdeally, you would aim for something in that region, yes.  Though you could probably get away with less often.\n\n> Is the 67-second enforcement period intended to be a fixed constant for all deployments and connections, or is there any flexibility for CSPs, clients, or application owners to set this value in the network?\n\nIt's a maximum for senders/endpoints and a minimum for network elements.  It needs to be fixed at some point or you will have a network enforcing over a period lower than a sender is following and that leads to bad outcomes.\n\n> If a network element fails to update the rate-signal within the 67-second enforcement period, what is the expected behavior for the endpoint? Should it assume \"no limit,\" continue with the last known rate, or follow another fallback procedure?\n\nIn that case, it will fall back to no limit.  Hence the suggestion to send every 20-30 seconds, rather than every 66.  Sending every 66 seconds would - if it gets through reliably - work perfectly well.",
+          "createdAt": "2025-08-13T01:28:13Z",
+          "updatedAt": "2025-08-13T01:28:13Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "I'm a bit confused about what should happen if the path includes multiple network elements with SCONE capability.\nConsider a path sender -> element A -> (10 Mbits) -> elememt B (5 Mbits) -> receiver.\nThe original idea (\"update every packet\") would have A stamp 10 Mbits and B stamp 5 Mbits, and receiver get the correct lower bound (5 Mbits).\nHowever, if B statistically updates only some packets, receiver will see some 10 Mbit signals and some 5 Mbit signals. Since it has no way of telling that the 10 Mbit signals come from further upstream, it has no way to tell that this is a missed mark rather than a fluctuating bandwidth at bottleneck.\n\nNote that if sender were to put what it knows into the SCONE packet bandwidth field as if it was a network element (5 Mbits), and B were to have an increased capacity, that increased capacity signal would never reach the receiver. So the sender needs to mark the SCONE probe in a way that ensures that it will gather the right signal - putting +inf in the capacity field achieves this.\n",
+          "createdAt": "2025-08-13T11:06:40Z",
+          "updatedAt": "2025-08-13T11:06:40Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> However, if B statistically updates only some packets, receiver will see some 10 Mbit signals and some 5 Mbit signals\n\nI think the network element should attempt to update every SCONE packet is sees. \n\nI also think some of the fears around the cost of updating SCONE packets are overstated (will try to do some measurements on this soon).\n\n\n",
+          "createdAt": "2025-08-13T21:18:22Z",
+          "updatedAt": "2025-08-13T21:18:52Z"
         }
       ]
     },
@@ -1685,15 +1720,15 @@
       "id": "I_kwDON1dwo87Ej4nt",
       "title": "Clarification on Enforcement of Notable Values for Rate Signal and Bit-Rates",
       "url": "https://github.com/ietf-wg-scone/scone/issues/56",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "udaykiranbokam",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "\nWe are currently evaluating the IETF specifications related to Rate Signal and bit-rates, specifically the Notable values defined therein. We would like to clarify whether these Notable values are intended as strict, hard-enforced limits or if they serve merely as recommendations or suggestions.\n\nOne of our CSP's are interested in using bit-rate values that differ from the Notable values listed in the IETF documents. Before proceeding, we want to understand if deviating from these values would be compliant or if it might cause interoperability or compliance issues.\n\nCould you please clarify on:\n\n1. Are the Notable values for Rate Signal and bit-rates in the IETF specifications mandatory to implement as-is?\nOr are they flexible guidelines that can be adjusted based on specific use cases or operator requirements?\n\n2. Will the Client and Server owners follow the logarithmic scale to derive the bit-rate sent in SCONE packet if the rate-signal value is not as per the table defined in IETF. \n\n",
       "createdAt": "2025-08-06T18:59:59Z",
-      "updatedAt": "2025-08-11T16:56:00Z",
-      "closedAt": null,
+      "updatedAt": "2025-08-14T01:07:35Z",
+      "closedAt": "2025-08-14T01:07:35Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -1715,6 +1750,30 @@
           "body": "> > To be fair, I'm not sure that \"Notable\" is the right characterization of these. The values in the table are just examples. They aren't much good for anything other than testing your code, if you are into that sort of thing.\n> \n> I think \"notable\" word can be confusing. Changing it to \"example\" may avoid the confusion.\n\nI strongly agree with the suggestion to change 'Notable' to 'Example' for the values listed in the table. This change would significantly reduce  confusion regarding their intent and avoid the impression that they are prescriptive limits.\n\nCan it also be reinforced that the mechanism for deriving the bit-rate from the 63 defined signal values (i.e., the exponential formula) is the normative part of the specification. Implementations must adhere to this derivation process, regardless of whether the resulting bit-rate happens to align with one of the 'example' values.\n",
           "createdAt": "2025-08-11T16:56:00Z",
           "updatedAt": "2025-08-11T16:56:00Z"
+        }
+      ]
+    },
+    {
+      "number": 58,
+      "id": "I_kwDON1dwo87FqdEL",
+      "title": "Support for Batch Transmission of Rate-Signal Packets to Prevent Loss (No ACK Mechanism in SCONE)",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/58",
+      "state": "OPEN",
+      "author": "sachinvasanthakumar",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "\t\n > The pull requests answer Question A.\n> \n> The network element needs to ensure that they send at least once every enforcement period (67s in the PR presently).  Because they do not control opportunities, they should try to update a small number of packets over that period.  I would go with every 20-30s based on that, but there is flexibility.\n> \n\n\nRaising this issue to get more clarification based on the issue being discussed in [#55.](https://github.com/ietf-wg-scone/scone/issues/55)\n\nCurrently, is it considered sufficient to send only two packets within the 67-second window that carry updated rate-signal values? Or, given the absence of an ACK mechanism in SCONE, should multiple packets containing the rate-signal be transmitted as a batch within this window? The intent is to reduce the risk of losing critical rate-signal information due to potential packet loss.\n\nFor reference, QUIC provides an ACK mechanism to help with loss detection and retransmission. However, if a packet containing both QUIC and SCONE information is lost, will the server automatically retry sending the SCONE data, or could the rate-signal be lost entirely?\n\nI would like to propose that, to enhance reliability, rate-signal values should be sent in batches rather than relying on single or minimal packet transmissions. This approach would help ensure delivery even in the absence of explicit loss detection or retransmission for SCONE.\n\nIn Summary:\n\n1. Is sending two packets within the 67-second window sufficient for reliable rate-signal delivery?\n2. Would batching multiple packets with the rate-signal improve robustness against packet loss in the absence of a SCONE ACK mechanism?\n3. What is the current behavior if a QUIC+SCONE packet is lost\u2014will the SCONE portion be retransmitted by the server?",
+      "createdAt": "2025-08-12T23:08:51Z",
+      "updatedAt": "2025-08-13T01:35:17Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The goal is only to ensure that at least one packet within each 67 second period has a SCONE packet that is updated by the network element.  How you achieve that is up to senders to manage.\n\nIt's definitely the case that a small batch of SCONE packets will improve the chances of getting a signal from network elements.  It is also the case that you can use QUIC's ACK to track the receipt of the non-SCONE packets that the SCONE packet is sent with to get a good understanding of which SCONE packets made it.\n\nThe specification doesn't need to proscribe particular behaviour.  Though batching is perfectly fine, it might be better to send just one SCONE packet every 20-30 seconds, track receipt of the datagram through QUIC ACK feedback, and resend any SCONE packet that appears to have been lost.\n\nHowever, other applications might decide to put a SCONE packet in far more often.  The folks who are talking about using this with video streaming floated the idea of including a SCONE packet with every burst of video frames they send out.  That would mean sending packets quite a bit more often than 20 seconds, making it so they don't have to do anything fancy regarding tracking and whatnot because there will be many opportunities for the network to make throughput advice known.",
+          "createdAt": "2025-08-13T01:35:17Z",
+          "updatedAt": "2025-08-13T01:35:17Z"
         }
       ]
     }
@@ -4013,13 +4072,13 @@
       "labels": [],
       "body": "Closes #20.",
       "createdAt": "2025-07-07T09:19:14Z",
-      "updatedAt": "2025-07-30T04:30:40Z",
+      "updatedAt": "2025-08-14T01:34:16Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "5df97596fa6047432a605985af2177994955efe8",
+      "baseRefOid": "c45a82dc51e07db1a711c75c638422fe47324a1f",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "time",
-      "headRefOid": "7896705a03ba2a35fa401c902016fec513dcb494",
+      "headRefOid": "1907b12b012e5e56764abcbb09b446fa49f2fba9",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4667,13 +4726,13 @@
       "labels": [],
       "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
       "createdAt": "2025-07-23T11:37:13Z",
-      "updatedAt": "2025-08-07T17:30:52Z",
+      "updatedAt": "2025-08-14T01:41:00Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "time",
-      "baseRefOid": "3cda4b7b9ce75a332e91a8db04e43364b6b34347",
+      "baseRefOid": "1907b12b012e5e56764abcbb09b446fa49f2fba9",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
-      "headRefOid": "143e2354b0579f18b8ac8f97d493bb77379f4568",
+      "headRefOid": "6fe24ab0b0c4deb0fd96a25ee96fbdcd8f568767",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4692,6 +4751,41 @@
           "body": "I think we need to balance a few tensions there:\r\n\r\n1. Time limited advice. The conditions will change. They may change randomly. The application will usually get some advice if conditions change for the worse, but probably not if they change for the better. They could easily trigger a SCONE probe in case of worsening, but they do have to resort to periodic or quasi periodic probing to detect easing. The PR helps here with a number, 67. If the advice is supposed good for 67 seconds, the client has no reason to probe more than every 20 to 30 seconds.\r\n\r\n2. Load of network intermediaries. Ideally, intermediaries should be able to process all incoming packets at line rate, but that may not be realistic. Stateless solutions such as only marking a random fraction of packets wont work well: if the application sends 3 probes in 67seconds, any significant non marking rate incurs the risk of none of these 3 packets being processed. Thus, we need some state per flow.\r\n\r\n3. Difficulty of keeping state in network intermediaries. The number of flow could be very large, but if applications only send a stone packet every 20-30 seconds and send video at 720p, that's one mark per 2000 to 3000 packets. This can be used as a design criteria -- if the intermediary monitors a link carrying 1M pps, it should be able to handle 1K SCONE per second. That can be used for example to dimension a Bloom filter. The network element can use a Bloom filter that is zeroed every 10 seconds, check whether the flow is already in the filter, not process the packet if it is there, process the SCONE packet and add a mark in the filter if it is not.\r\n\r\nBottom line, I think the advice is correct.",
           "createdAt": "2025-08-07T17:30:52Z",
           "updatedAt": "2025-08-07T17:30:52Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've updated this pull request with an implementation (and tests) for the algorithm.  It really is very simple to implement:\r\n\r\n```python\r\n  def set_advice(self, t, advice):\r\n    \"\"\"Update the throughput advice based on a received signal.\"\"\"\r\n\r\n    if advice < self.advice:\r\n      # Flush state if the advice reduces.\r\n      self.state = [0] * self.count\r\n      self.total = 0\r\n    elif self.advice_updated + self.interval * self.count > t:\r\n      # Ignore increases too soon after an update.\r\n      # This could be smarter about increases, but this is safe.\r\n      return\r\n    self.advice = advice\r\n    self.advice_updated = t\r\n```",
+          "createdAt": "2025-08-12T04:07:27Z",
+          "updatedAt": "2025-08-12T04:07:27Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson I'm not sure if the snippet (or the script included in the PR) is correct.\r\n\r\nConsider the case following case:\r\n1. At t=0, an endpoint receives an advice of 1Mbps.\r\n2. The endpoint notifies the peer and immediately receives from peer `1Mb * duration` bits of data.\r\n3. At t=1, the endpoint receives an advice of 500Kbps.\r\n\r\nAt this moment, how much additional budget does the endpoint have? I would argue that the budget is zero. However, based on the proposed snippet, I think the endpoints would assume it can receive additionally `500Kb * duration` bits of data?\r\n\r\nPS. To paraphrase, in the example above, one network element is indicating that between t=0 and t=duration, the average bandwidth should be no greater than 1Mbps, while another network element is indicating that between t=1 and t=duration+1, the average bandwidth should be no greater than 500Kbps. But by resetting `self.state`, the endpoints consume 1.5Mbps in the first _duration_ seconds.",
+          "createdAt": "2025-08-12T06:53:09Z",
+          "updatedAt": "2025-08-12T07:10:29Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "At the point where throughput advice is *reduced* any remembered use is forgotten (and needs to be forgiven).\r\n\r\nThe example you give spends the entirety of the 1Mbps budget in the one shot, which is less likely than a case where:\r\n\r\n1. advice is received for 1Mbps, \r\n2. the application plans for use of 1Mbps and starts spending it according to that plan,\r\n3. advice is received for 500Kbps,\r\n4. one of three things is possible:\r\n    a. The expended bytes until now are low enough that the application can continue at 500K happily\r\n    b. The expended bytes until now mean that 500K has already been exceeded and to meet the lower limit, the application has to stop entirely for up to `$duration`\r\n    c. The expended bytes until now are forgive and the application needs to plan for a 500K limit from now on\r\n\r\nThis PR adopts 4c.  Yes, it comes with some risk that - in the short term - the limits is greatly exceeded whenever there is a reduction.  For the network, consider this like a commitment: if you break that commitment, then you pay a small penalty.  In practice, it would be unlikely that an application would blow the entire `$duration` worth of data instantaneously like that.  Even a bursty application would spread the load across several bursts.  So while you might exceed the budget, it wouldn't be the worst case (which for 67 seconds at 1Mbps is quite a lot higher than 500Kbps in the short term, though if this holds, it's only 3x over the full `$duration` period).",
+          "createdAt": "2025-08-12T08:03:00Z",
+          "updatedAt": "2025-08-12T08:03:00Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": ">  Yes, it comes with some risk that - in the short term - the limits is greatly exceeded whenever there is a reduction. For the network, consider this like a commitment: if you break that commitment, then you pay a small penalty. In practice, it would be unlikely that an application would blow the entire $duration worth of data instantaneously like that.\r\n\r\nThe second advice coming at t=1 is nothing more than an example. Network elements can send 1Mbps at t=0, 800Kbps at t=10, 600Kbps at t=20, 400Kbps at t=30, .... Under a scenario like this, endpoints would might enough time to consume the entire window before receiving a smaller signal, which under the currently proposed design, opens an entirely new window.\r\n\r\nBut taking a step back, I think the question is if we really want to provide applications how to set the send / receive window to allow bursts at maximum rate. IIUC, the use cases that we have discussed are: video playback, realtime video, and large file downloads. For first two, cases what the applications need is average send rate, not the window size. Even for the last case (i.e., large file download), I'm not sure if the receiver wants to adopt the window size available by SCONE.\r\n\r\nConsidering these aspects, I'm inclined to argue that we do not need to specify a minimum rate algorithm that tracks the amount of bytes that can be sent by an endpoint. If we are to document something, maybe what we need is a more concrete advice for each type of application (e.g., video).",
+          "createdAt": "2025-08-12T08:24:22Z",
+          "updatedAt": "2025-08-12T08:24:22Z"
+        },
+        {
+          "author": "wesley-eddy",
+          "authorAssociation": "NONE",
+          "body": "I think this conversation is still going down the wrong track of getting into how elements and endpoints are using the advice.\r\n\r\nWe just need a way to signal advice.   How enforcement of rates happens is totally separate from SCONE.  It should be able to vary  on vendor-by-vendor or provider-by-provider basis.  The throughput advice is not a contract, guarantee, etc., just advice to help choose variable rate media streams, etc.",
+          "createdAt": "2025-08-13T17:49:28Z",
+          "updatedAt": "2025-08-13T17:49:28Z"
         }
       ],
       "reviews": [
@@ -4754,6 +4848,92 @@
               "updatedAt": "2025-07-28T08:03:13Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo865zW6_",
+          "commit": {
+            "abbreviatedOid": "c8f1765"
+          },
+          "author": "afrind",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-13T18:39:20Z",
+          "updatedAt": "2025-08-13T18:48:22Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "I thought the sender never receives a SCONE packet containing advice for _its_ sending rate?  The sender _sends_ SCONE packets which the NE marks with the rate.  Communication of a rate from receiver back to sender can possibly happen out of band, but I think building an algorithm around it is overly complex (+1 @wesley-eddy).\r\n\r\nWith the current design, it's easiest for applications where receivers exert some control on sending rate to do so, for example: asking for media renditions that are below the rate, asking for fewer resources per unit time, or reading from the connection at the advised rate to control the release of sender side flow-control.",
+              "createdAt": "2025-08-13T18:39:20Z",
+              "updatedAt": "2025-08-13T18:48:22Z"
+            },
+            {
+              "originalPosition": 70,
+              "body": "This MUST feels out of place in for an informative rather than normative algorithm.",
+              "createdAt": "2025-08-13T18:46:29Z",
+              "updatedAt": "2025-08-13T18:48:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8653JRw",
+          "commit": {
+            "abbreviatedOid": "c8f1765"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-14T01:25:02Z",
+          "updatedAt": "2025-08-14T01:25:02Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "Too complex?  It's essential to understand what the expectations are.  Having an algorithm like this makes it precise and the expectations clear.\n\nYour point about what receives the signal is well-taken though.  I've modified this to not focus on the specific role.",
+              "createdAt": "2025-08-14T01:25:02Z",
+              "updatedAt": "2025-08-14T01:25:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8653Lnk",
+          "commit": {
+            "abbreviatedOid": "c8f1765"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-14T01:27:31Z",
+          "updatedAt": "2025-08-14T01:27:31Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "It is normative.  It defines what the expectations are for applications that receive advice (and wish to comply).  If an applications follows this algorithm - and they are the only one using the flow, and other caveats - they should expect that they will not be cut of due to *policy* limits on usage.  Now, there are enough others reasons that stuff might not get through, so it's not a guarantee of any sort, but hopefully that is clear enough from other text we have.",
+              "createdAt": "2025-08-14T01:27:31Z",
+              "updatedAt": "2025-08-14T01:27:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8653XCe",
+          "commit": {
+            "abbreviatedOid": "6fe24ab"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-14T01:41:00Z",
+          "updatedAt": "2025-08-14T01:41:00Z",
+          "comments": [
+            {
+              "originalPosition": 100,
+              "body": "I've added some text about both.",
+              "createdAt": "2025-08-14T01:41:00Z",
+              "updatedAt": "2025-08-14T01:41:00Z"
+            }
+          ]
         }
       ]
     },
@@ -4797,10 +4977,10 @@
       "labels": [],
       "body": "This is one potential approach to #21.  However, it does constrain things more than I think is necessary.  I tend to think that staying quiet is best, because it gives network elements the option and endpoints the choice of ignoring those inserted SCONE packets.  I wouldn't want to *encourage* that outcome though.\r\n\r\nCloses #21.",
       "createdAt": "2025-07-23T13:55:32Z",
-      "updatedAt": "2025-07-23T13:55:32Z",
+      "updatedAt": "2025-08-14T01:34:49Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "min-rate",
-      "baseRefOid": "94e5d41ffb5519696c2667da48d109d6a22a153f",
+      "baseRefOid": "0a64439071d31bf8ff71538c37a87b8afabe3473",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "insertion",
       "headRefOid": "e1c4874dc6f63a84f8fbe65f13cc93ebdc6a7ae6",
@@ -4816,24 +4996,26 @@
       "id": "PR_kwDON1dwo86gSeQK",
       "title": "Add an indication",
       "url": "https://github.com/ietf-wg-scone/scone/pull/49",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This adds a small indicator to the end of packets, so that network elements can maybe flip their posture for those flows. That requires a bit of a gamble, because the indication doesn't mean that SCONE is supported or that throughput advice will be followed, but it seems like we have some belief that this will change how the protocol might be deployed.\r\n\r\nI didn't strongly mandate the new flow indication piece.  That's something we could do, but it turned out to be incredibly hard to specify something that works sensibly.  Tying this to PATH_CHALLENGE/PATH_RESPONSE does work, but those have more uses than initializing a flow on a new path, so the set of conditions you need to set out for when the indication is attached to a datagram end up being very complicated.\r\n\r\nGiven that we already have good reason to send SCONE packets on new paths, I don't think we need to overthink that part.\r\n\r\nCloses #5.\r\nCloses #23.",
       "createdAt": "2025-07-23T15:07:55Z",
-      "updatedAt": "2025-07-31T04:47:57Z",
+      "updatedAt": "2025-08-14T01:09:46Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "indication",
       "headRefOid": "81dae9893279a63ce5e76afa833992dd820bad92",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-08-14T01:09:42Z",
+      "mergedAt": "2025-08-14T01:09:42Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "c45a82dc51e07db1a711c75c638422fe47324a1f"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5073,6 +5255,19 @@
           "body": "Thank you for the tweaks. LGTM.",
           "createdAt": "2025-07-31T04:47:57Z",
           "updatedAt": "2025-07-31T04:47:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo865sRNw",
+          "commit": {
+            "abbreviatedOid": "81dae98"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks for writing this up, this solution should be sufficient. ",
+          "createdAt": "2025-08-13T11:24:49Z",
+          "updatedAt": "2025-08-13T11:24:49Z",
           "comments": []
         }
       ]
@@ -5414,26 +5609,55 @@
       "id": "PR_kwDON1dwo86jJYAK",
       "title": "The table is just a selection of examples",
       "url": "https://github.com/ietf-wg-scone/scone/pull/57",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "\"Notable\" was not a great choice of words.\r\n\r\nCloses #56.",
       "createdAt": "2025-08-11T23:14:56Z",
-      "updatedAt": "2025-08-11T23:14:57Z",
+      "updatedAt": "2025-08-14T01:07:34Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "5df97596fa6047432a605985af2177994955efe8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "exemplary",
       "headRefOid": "8420b85f4cbed8783cbf61390b119599097a9e40",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-08-14T01:07:34Z",
+      "mergedAt": "2025-08-14T01:07:34Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "79c046e2911d82a200dd97eb9593e4900418c4eb"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo865RzbU",
+          "commit": {
+            "abbreviatedOid": "8420b85"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-12T03:49:03Z",
+          "updatedAt": "2025-08-12T03:49:03Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo865r03w",
+          "commit": {
+            "abbreviatedOid": "8420b85"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-13T11:00:02Z",
+          "updatedAt": "2025-08-13T11:00:02Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
