@@ -376,6 +376,70 @@ transport parameters, and frame types registries established in {{Sections 22.2,
 22.3, and 22.4 of QUIC}}.
 
 
+## Indicating Support on New Flows {#indication}
+
+All new flows that are initiated by a client that supports SCONE
+MUST include bytes with values 0xc8 and 0x13
+as the last two bytes of datagrams
+that commence a new flow if the protocol permits it.
+This indication MUST be sent in every datagram
+until the client receives any datagram from the server,
+at which point the client can be confident that the indication was received.
+
+<!--
+This indicator is derived from the first two bytes of:
+https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-indication;field=version;codepoint=0xc813e2b1
+-->
+
+A client that uses a QUIC version that includes length-delimited packets,
+which includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},
+can include an indicator of SCONE support
+at the end of datagrams that start a flow.
+The handshakes of these protocols ensures that
+the indication can be included in every datagram the client sends
+until it receives a response -- of any kind -- from the server.
+
+
+## Limitations of Indication
+
+This indication does not mean that SCONE signals will be respected,
+only that the client is able to negotiate SCONE.
+A server might not support SCONE
+or might choose not to send SCONE packets.
+Finally, applications might be unable to apply throughput advice
+or choose to ignore it.
+
+This indication being just two bytes
+means that there is a non-negligible risk of collision with other protocols
+or even QUIC usage without SCONE indications.
+This means that the indication alone is not sufficient to indicate
+that a flow is QUIC with the potential for SCONE support.
+
+Despite these limitations,
+having an indication might allow network elements to change their starting posture
+with respect to their enforcement of their rate limit policies.
+
+
+## Indications for Migrated Flows
+
+Applications MAY decide to indicate support for SCONE on new flows,
+including when migrating to a new path (see {{Section 9 of QUIC}}).
+In QUIC version 1 and 2,
+the two byte indicator cannot be used.
+
+Sending a SCONE packet for the first few packets on a new path
+gives network elements on that path the ability
+to recognize the flow as being able to receive throughput advice
+and also gives the network element an opportunity to provide that throughput advice.
+
+To enable this indication,
+even if an endpoint would not otherwise send SCONE packets,
+endpoints can send a SCONE packet
+any time they send a QUIC PATH_CHALLENGE or PATH_RESPONSE frame.
+This applies to both client and server endpoints,
+but only if the peer has sent the transport parameter; see {{tp}}.
+
+
 # Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
