@@ -381,7 +381,7 @@ the throughput advice that is received on datagrams with one marking
 might not apply to datagrams that have different markings.
 
 
-## Lowest Rate Algorithm
+## Lowest Rate Algorithm {#algorithm}
 
 An endpoint that receives throughput advice
 might receive multiple different rate limits.
@@ -394,13 +394,15 @@ remains within throughput advice
 using a lowest rate algorithm as follows.
 
 To operate this algorithm,
-the minimal state that a sender maintains is
+the minimal state that an application --
+which is often, but not always a sender --
+maintains is
 * the current rate limit,
 * any state necessary to monitor throughput
   (that is, throughput usage state, such as the state in {{sliding-window}}), and
 * the time at which that rate limit was last updated.
 
-When a SCONE packet containing updated advice is received:
+When updated advice is received:
 
 * If the signaled rate is the same as the current rate,
   set the last update time to the current time.
@@ -421,17 +423,17 @@ When a SCONE packet containing updated advice is received:
 
 * If the signaled rate is lower than the current value,
   set the current rate limit to match the advice,
-  discard all rate monitoring state,
+  optionally discard all rate monitoring state,
   and set the last update time to the current time.
 
-Senders MUST discard throughput usage state when reducing rates.
+Applications MAY discard throughput usage state when reducing rates.
 Otherwise, data that was sent at a higher rate
-might force the updated send rate to zero; see also {{policing}}.
+might force the available rate to zero; see also {{policing}}.
 Even though loss of information about recent send rate
 might result in temporarily exceeding the rates indicated by throughput advice,
 the relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
-Senders MUST retain throughput usage state when increasing state.
+Applications retain throughput usage state when increasing state.
 
 This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
@@ -592,6 +594,14 @@ enforcing adherence to the advice as though it were a hard limit.
 However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
 that is, up to the period defined in {{time}}.
+
+A network element that reduces the throughput advice it provides
+MUST also discard any state it maintains
+about the consumption of that throughput.
+This is necessary to allow senders to discard state
+when advice is reduced (see {{algorithm}}).
+This avoids cases where an application that has planned usage
+might otherwise be completely unable to send due to a lower limits.
 
 A better approach is to disregard any data that was transmitted
 before engaging any hard limits to throughput.
