@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-14T01:48:50.428638+00:00",
+  "timestamp": "2025-08-17T01:54:32.748318+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1647,7 +1647,7 @@
       "labels": [],
       "body": "Some related aspects are covered in https://github.com/ietf-wg-scone/scone/issues/24, https://github.com/ietf-wg-scone/scone/issues/43 and https://github.com/ietf-wg-scone/scone/issues/6. However draft still lacks clarity to specify the role of server, client and n/w element to support Dynamic update of rate-signal field by network element. \n\nOne of the CSPs/equipment provider is looking for more clarity in the draft doc to cover following aspects;\n\nA. What is the periodicity of server sending SCONE packet coalesced with QUIC packet ?\n\nThis clarity will help in analyzing how fast new bit-rates can be configured in apps whenever there is a need to change the bit-rate for a flow due to any trigger in CSP n/w \n\n================================================================\nB. If the Server is sending SCONE packets with very high frequency/periodicity and if network element (PGW/UPF) does want to update the rate-signal field with for each and every SCONE packet (if there is no change in previously sent bit-rate for the subscriber) to avoid CPU usage.   How this can supported by server and client is not clearly specified in the draft. \n\nReason for asking clarification B;  In below section sec 7.1  it is stated that ***A network element might receive a packet that already includes a rate signal*** !! Does it mean that client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets ? \n \nPer IETF Sec 7.1:\n \n  A network element then conditionally replaces the Version field and\n   the Rate Signal field with values of its choosing.\n \n   ****A network element might receive a packet that already includes a rate\n   signal**.**  The network element replaces the rate signal if it wishes to\n   signal a lower rate limit; otherwise, the original values are\n   retained, preserving the signal from the network element with the\n   lower policy\n \n ===========================================================\nFor e.g. can we specify following in the draft to bring clarity to B. \n\n\n- By default, Server to set rate-signal field to a value which is not valid for the client. However client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets \n- Client to use whatever rate-signal value present in last received SCONE packet and stop using the value received in the past. \n\nOR,  if above is not the case  ( i.e if client is not required to update the server about the bit-rate and server is not required to set the rate-signal field to this updated value) can we specify following ; \n\n - Server to set rate-signal field to a value in every scone packet which is not valid for the client \n- And client to ignore the rate-signal field if rate-signal is set to this invalid value.(For e.g. 63) and continue to use previously received valid rate-signal value. \n\nWith this clarity in draft,  n/w element providers would get the clarity that \n1. If they don't update subsequent scone packets during the life time of the flow,  application continues to use bit-rate that was sent by n/w element initially. \n\n\n  ",
       "createdAt": "2025-08-06T18:23:43Z",
-      "updatedAt": "2025-08-13T21:18:52Z",
+      "updatedAt": "2025-08-14T03:33:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -1712,6 +1712,20 @@
           "body": "> However, if B statistically updates only some packets, receiver will see some 10 Mbit signals and some 5 Mbit signals\n\nI think the network element should attempt to update every SCONE packet is sees. \n\nI also think some of the fears around the cost of updating SCONE packets are overstated (will try to do some measurements on this soon).\n\n\n",
           "createdAt": "2025-08-13T21:18:22Z",
           "updatedAt": "2025-08-13T21:18:52Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There's \"should attempt to update every packet\" and \"can guarantee that it updates every packet\".  Networks are messy and I don't want senders to see \"unlimited\" when a packet slips the net and end up going wild.  The process in #46 assumes that you can't make a guarantee, so there is no point in making network elements attempt to update every packet.\n\nThen there is the pure math of the situation: if you advertise a limit of 10 over a period of 67 seconds, changing it to 5 won't mean that you can take back the past however long of data that was sent on the assumption of there being a higher limit.  The effect of #46 is then that increases are delayed and decreases reset state rather than expect applications to accept the risk that they might have to be completely quiet for the next 67 seconds.",
+          "createdAt": "2025-08-14T01:54:25Z",
+          "updatedAt": "2025-08-14T01:54:25Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1 to @ihlar, as [stated elsewhere](https://github.com/ietf-wg-scone/scone/issues/43#issuecomment-3103397516).\n\nEven though some network elements might fail to update some SCONE packets, I'm not sure if it is a good idea to build a scheme based on an assumption that SCONE packets are rarely updated.\n\nThe concern is that it becomes hard for endpoints to determine what the correct rate is; #46 makes short cuts, however [it still has flaws](https://github.com/ietf-wg-scone/scone/pull/46#issuecomment-3178271255).\n\nI hope we can converge on something simpler, e.g.:\n* applicable bitrate is the minimum of the two most-recently-received SCONE packets\n* endpoints SHOULD send one SCONE packet every 5 seconds on an active flow, but no more\n* network elements SHOULD update every SCONE packet they observe.\n\nThe first bullet point takes care of network elements that occasionally fail to update SCONE packets. Other bullet points say that if an endpoint sends SCONE packets too frequently, it is considered an abuse (or an attack), and that network elements can apply other policies (e.g., apply rate limiters without updating SCONE packets).",
+          "createdAt": "2025-08-14T03:32:00Z",
+          "updatedAt": "2025-08-14T03:33:26Z"
         }
       ]
     },
@@ -4726,7 +4740,7 @@
       "labels": [],
       "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
       "createdAt": "2025-07-23T11:37:13Z",
-      "updatedAt": "2025-08-14T01:41:00Z",
+      "updatedAt": "2025-08-14T20:26:26Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "time",
       "baseRefOid": "1907b12b012e5e56764abcbb09b446fa49f2fba9",
@@ -4786,6 +4800,20 @@
           "body": "I think this conversation is still going down the wrong track of getting into how elements and endpoints are using the advice.\r\n\r\nWe just need a way to signal advice.   How enforcement of rates happens is totally separate from SCONE.  It should be able to vary  on vendor-by-vendor or provider-by-provider basis.  The throughput advice is not a contract, guarantee, etc., just advice to help choose variable rate media streams, etc.",
           "createdAt": "2025-08-13T17:49:28Z",
           "updatedAt": "2025-08-13T17:49:28Z"
+        },
+        {
+          "author": "afrind",
+          "authorAssociation": "NONE",
+          "body": "I think it might be better to orient this algorithm towards how a network element that gives advice is supposed to enforce it, and let the application figure out how to operate within those constraints.",
+          "createdAt": "2025-08-14T18:02:27Z",
+          "updatedAt": "2025-08-14T18:02:27Z"
+        },
+        {
+          "author": "anooptomar29",
+          "authorAssociation": "NONE",
+          "body": "I agree with @wesley-eddy @afrind , different applications may act differently to meet the advised bit-rate. We should limit the scope of the protocol to how advised bit-rate is sent by n/w element and what is the minimum averaging window ( 120 sec or 60 sec  -  closest prime number)   for n/w element to measure the advised bit-rate. How enforcement of rates happens by n/w element and application is totally out of the scope from SCONE protocol perspective. ",
+          "createdAt": "2025-08-14T20:25:52Z",
+          "updatedAt": "2025-08-14T20:26:26Z"
         }
       ],
       "reviews": [
@@ -5576,7 +5604,7 @@
       "labels": [],
       "body": "This PR is against #51, uses MSB of the version field to carry the LSB of the rate signal, so that the bit 2 to bit 8 of the first 64-bit field carries a rate signal, which is calculated by using a logarithmic function without bit swaps or any other complexity.",
       "createdAt": "2025-07-30T07:15:17Z",
-      "updatedAt": "2025-07-30T09:31:05Z",
+      "updatedAt": "2025-08-14T08:05:51Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "define-versions",
       "baseRefOid": "4ef39186f17399447683cae3a0712e6f286c1c85",
@@ -5587,7 +5615,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@ihlar WDYT?",
+          "createdAt": "2025-08-14T08:05:51Z",
+          "updatedAt": "2025-08-14T08:05:51Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo863BfXP",
