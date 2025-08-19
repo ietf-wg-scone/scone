@@ -390,50 +390,21 @@ applications MUST apply the lowest throughput advice
 received during any monitoring period; see {{time}}.
 
 Senders can ensure that their use of network capacity
-remains within throughput advice
-using a lowest rate algorithm as follows.
+remains within throughput advice.
 
-To operate this algorithm,
-the minimal state that an application --
-which is often, but not always a sender --
-maintains is
-* the current rate limit,
-* any state necessary to monitor throughput
-  (that is, throughput usage state, such as the state in {{sliding-window}}), and
-* the time at which that rate limit was last updated.
-
-When updated advice is received:
-
-* If the signaled rate is the same as the current rate,
-  set the last update time to the current time.
-
-* If the signaled rate is higher than the current value,
-  then:
-
-  * If the time since the last update is greater than the monitoring period,
-    the current rate limit is increased to the received value
-    and the last update time is set to the current time.
-
-  * Otherwise, the throughput advice is not applied.
-    An implementation can optionally remember throughput advice,
-    so that it might increase send rates more quickly,
-    but this is not necessary
-    as long as there are frequent opportunities
-    to receive updated throughput signals.
-
-* If the signaled rate is lower than the current value,
-  set the current rate limit to match the advice,
-  optionally discard all rate monitoring state,
-  and set the last update time to the current time.
-
-Applications MAY discard throughput usage state when reducing rates.
+Applications MAY discard throughput usage state
+when they receive throughput advice that indicates a reduced rate.
 Otherwise, data that was sent at a higher rate
-might force the available rate to zero; see also {{policing}}.
-Even though loss of information about recent send rate
-might result in temporarily exceeding the rates indicated by throughput advice,
-the relatively long duration of the monitoring period
+might force the available rate to zero
+for the remainder of the monitoring period; see also {{monitoring}}.
+
+The relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
-Applications retain throughput usage state when increasing state.
+The cost is that loss of information about recent send rate
+might result in temporarily exceeding the rates indicated by throughput advice.
+In comparison,
+applications retain throughput usage state
+when increasing state.
 
 This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
@@ -586,6 +557,65 @@ which might cause network elements to miss updates,
 by adding a small amount of random delay.
 
 
+## Monitoring Flows {#monitoring}
+
+Network elements can monitor flows
+to determine which flows are from applications
+that respect throughput advice.
+This section outlines an exemplary algorithm
+for network elements.
+
+To operate this algorithm,
+the minimal state a network element maintains is:
+* the current rate limit,
+* any state necessary to monitor throughput
+  (that is, throughput usage state, such as the state in {{sliding-window}}),
+* a timer used for rate increases, and
+* the time at which that rate limit was last updated,
+
+When advice is updated,
+the network element waits until
+it receives the next SCONE packet on affected flows.
+It then updates the throughput advice in that packet ({{apply}})
+and updates its monitoring state as follows:
+
+* If the signaled rate is the same as the current rate,
+  set the last update time to the current time.
+
+* If the signaled rate is higher than the current value,
+  then:
+
+  * If the time since the last SCONE packet was updated
+    is greater than the monitoring period,
+    the current rate limit is increased to the received value
+    and the last update time is set to the current time.
+
+  * Otherwise, the throughput advice is deferred.
+    The implementation sets the rate increase timer
+    to one monitoring period
+    relative to the time that the last SCONE packet was updated.
+    When the timer lapses,
+    change the rate monitoring to the higher rate.
+
+* If the signaled rate is lower than the current value,
+  set the current rate limit to match the advice,
+  cancel any rate increase timer,
+  discard all rate monitoring state,
+  and set the last update time to the current time.
+
+A network element that reduces the throughput advice it provides
+MUST also discard any state it maintains
+about the use of the network under previous, higher rates.
+This is necessary to allow senders to discard state
+when advice is reduced (see {{algorithm}}).
+This avoids cases where an application that has planned usage
+might otherwise be completely unable to send due to a lower limits.
+
+A network element that reduces its throughput advice
+might also need to add a small delay to allow applications time
+to receive and act on the updated advice.
+
+
 ## Flows That Exceed Throughput Advice {#policing}
 
 Network elements that provide throughput advice
@@ -599,14 +629,6 @@ enforcing adherence to the advice as though it were a hard limit.
 However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
 that is, up to the period defined in {{time}}.
-
-A network element that reduces the throughput advice it provides
-MUST also discard any state it maintains
-about the consumption of that throughput.
-This is necessary to allow senders to discard state
-when advice is reduced (see {{algorithm}}).
-This avoids cases where an application that has planned usage
-might otherwise be completely unable to send due to a lower limits.
 
 A better approach is to disregard any data that was transmitted
 before engaging any hard limits to throughput.
@@ -637,8 +659,51 @@ discards a SCONE packet without also successfully processing another packet
 from the same datagram SHOULD ignore any throughput advice signal. Such a datagram
 might be entirely spoofed.
 
+Once negotiated, endpoints that seek to receive throughput advice on a flow
+MUST send a SCONE packet at least twice each monitoring period; see {{time}}.
+
+Sending SCONE packets more often might be necessary to:
+
+Avoid missing advice:
+: If SCONE packets are not sent, updated, and received
+  for an entire monitoring period,
+  an application might incorrectly assume that no advice is being provided.
+
+Reduce latency:
+: The time between SCONE packets determines the maximum delay
+  between changes in throughput advice
+  and when that advice can be received and acted upon.
+
+A sender can track the receipt of the coalesced QUIC packet
+and send another SCONE packet if when loss is detected.
+However, it is likely simpler to send SCONE packets more often.
+
+Sending a SCONE packet every 20&ndash;30 seconds
+is likely sufficient to ensure that throughput advice is not lost,
+though endpoints might send a packet every few seconds
+to improve responsiveness.
+This period could be determined by how quickly an application
+is able to respond to a change in throughput advice.
+
+For example, a streaming application
+that fetches video segments that are 5 seconds in length
+might send SCONE packets on a similar cadence.
+A real-time conferencing application might send more often.
+In either case, the length of the monitoring period ({{time}})
+limits how fast any application can react.
+
+Though sending SCONE packets more than once each round trip time
+might help reduce exposure to packet loss,
+it is better to spread updates over time
+rather than to send multiple SCONE packets in less frequent bursts.
+
+The main cost associated with sending SCONE packets
+is the reduction in available space in datagrams
+for application data.
+
 A network element that wishes to signal an updated rate limit waits for the
-next SCONE packet in the desired direction.
+next SCONE packet in the desired direction; see {{apply}}.
+
 
 ## Feedback To Sender About Signals {#feedback}
 
@@ -667,7 +732,7 @@ SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
 network element applied a throughput advice signal.
 
-## Interactions with congestion control
+## Interactions with Congestion Control
 
 SCONE and congestion control both provide the application with estimates
 of a path capacity. They are complementary. Congestion control algorithms
