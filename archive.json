@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-17T01:54:32.748318+00:00",
+  "timestamp": "2025-08-19T01:43:08.014885+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1779,7 +1779,7 @@
       "labels": [],
       "body": "\t\n > The pull requests answer Question A.\n> \n> The network element needs to ensure that they send at least once every enforcement period (67s in the PR presently).  Because they do not control opportunities, they should try to update a small number of packets over that period.  I would go with every 20-30s based on that, but there is flexibility.\n> \n\n\nRaising this issue to get more clarification based on the issue being discussed in [#55.](https://github.com/ietf-wg-scone/scone/issues/55)\n\nCurrently, is it considered sufficient to send only two packets within the 67-second window that carry updated rate-signal values? Or, given the absence of an ACK mechanism in SCONE, should multiple packets containing the rate-signal be transmitted as a batch within this window? The intent is to reduce the risk of losing critical rate-signal information due to potential packet loss.\n\nFor reference, QUIC provides an ACK mechanism to help with loss detection and retransmission. However, if a packet containing both QUIC and SCONE information is lost, will the server automatically retry sending the SCONE data, or could the rate-signal be lost entirely?\n\nI would like to propose that, to enhance reliability, rate-signal values should be sent in batches rather than relying on single or minimal packet transmissions. This approach would help ensure delivery even in the absence of explicit loss detection or retransmission for SCONE.\n\nIn Summary:\n\n1. Is sending two packets within the 67-second window sufficient for reliable rate-signal delivery?\n2. Would batching multiple packets with the rate-signal improve robustness against packet loss in the absence of a SCONE ACK mechanism?\n3. What is the current behavior if a QUIC+SCONE packet is lost\u2014will the SCONE portion be retransmitted by the server?",
       "createdAt": "2025-08-12T23:08:51Z",
-      "updatedAt": "2025-08-13T01:35:17Z",
+      "updatedAt": "2025-08-18T16:55:55Z",
       "closedAt": null,
       "comments": [
         {
@@ -1788,6 +1788,20 @@
           "body": "The goal is only to ensure that at least one packet within each 67 second period has a SCONE packet that is updated by the network element.  How you achieve that is up to senders to manage.\n\nIt's definitely the case that a small batch of SCONE packets will improve the chances of getting a signal from network elements.  It is also the case that you can use QUIC's ACK to track the receipt of the non-SCONE packets that the SCONE packet is sent with to get a good understanding of which SCONE packets made it.\n\nThe specification doesn't need to proscribe particular behaviour.  Though batching is perfectly fine, it might be better to send just one SCONE packet every 20-30 seconds, track receipt of the datagram through QUIC ACK feedback, and resend any SCONE packet that appears to have been lost.\n\nHowever, other applications might decide to put a SCONE packet in far more often.  The folks who are talking about using this with video streaming floated the idea of including a SCONE packet with every burst of video frames they send out.  That would mean sending packets quite a bit more often than 20 seconds, making it so they don't have to do anything fancy regarding tracking and whatnot because there will be many opportunities for the network to make throughput advice known.",
           "createdAt": "2025-08-13T01:35:17Z",
           "updatedAt": "2025-08-13T01:35:17Z"
+        },
+        {
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "body": "The point that it might be useful to track if a QUIC packet that was sent together with the scone packet got lost might still be useful to mention in the draft if we e.g. have an implementation guidance section. ",
+          "createdAt": "2025-08-18T13:42:56Z",
+          "updatedAt": "2025-08-18T13:42:56Z"
+        },
+        {
+          "author": "udaykiranbokam",
+          "authorAssociation": "NONE",
+          "body": "While briefly discussed in [#55 ] , would like add to this discussion here on the SCONE Reliability. \n\n> The point that it might be useful to track if a QUIC packet that was sent together with the scone packet got lost might still be useful to mention in the draft if we e.g. have an implementation guidance section.\n\nAgree with the this statement , it would be greatly useful to have a mention in the draft on the actions needed to be taken in case of QUIC packet carrying SCONE is lost. \n\nPerhaps we could consider approaches that provide stronger assurances for SCONE data, such as:\n\nEncouraging or providing guidance on batch transmission of SCONE packets: While implementers certainly have flexibility, a suggestion within the specification about sending SCONE packets in small batches could be a practical way to improve their chances of successful delivery, particularly if other retransmission strategies aren't always in play. This could be an implementation detail for CSPs to manage.\n\nExploring clearer expectations for server behavior regarding lost QUIC+SCONE packets: It might be helpful to discuss whether, upon detecting a lost QUIC packet that carried SCONE data, there's an expectation for the server to eventually ensure that SCONE information is re-sent. Defining such a general principle could guide implementations without prescribing specific mechanisms, leaving the exact retry logic to CSPs.\n\nInvestigating how QUIC's existing ACK framework might be leveraged for SCONE-specific feedback (piggybacking): While QUIC's ACK confirms the delivery of the datagram, it does not inherently confirm the application-level processing of the SCONE rate-signal itself. We could explore if there are ways for clients to subtly signal, perhaps by 'piggybacking' a small SCONE-specific acknowledgment message within a new QUIC packet (e.g., on a dedicated stream or as a DATAGRAM frame), that the SCONE portion was not only received but also successfully processed. This could offer a valuable feedback loop for SCONE data delivery without requiring a separate, complex SCONE-specific ACK mechanism, with the precise signaling method being an implementation choice for CSPs.\"",
+          "createdAt": "2025-08-18T16:55:55Z",
+          "updatedAt": "2025-08-18T16:55:55Z"
         }
       ]
     }
