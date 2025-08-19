@@ -1055,7 +1055,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 15 February 2026</td>
+<td class="center">Expires 20 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-14" class="published">14 August 2025</time>
+<time datetime="2025-08-19" class="published">19 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-02-15">15 February 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-20">20 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1241,7 +1241,10 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
                 <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-applying-throughput-advice-" class="internal xref">Applying Throughput Advice Signals</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-flows-that-exceed-throughpu" class="internal xref">Flows That Exceed Throughput Advice</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-monitoring-flows" class="internal xref">Monitoring Flows</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-flows-that-exceed-throughpu" class="internal xref">Flows That Exceed Throughput Advice</a></p>
 </li>
             </ul>
 </li>
@@ -1255,7 +1258,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-feedback-to-sender-about-si" class="internal xref">Feedback To Sender About Signals</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-interactions-with-congestio" class="internal xref">Interactions with congestion control</a></p>
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-interactions-with-congestio" class="internal xref">Interactions with Congestion Control</a></p>
 </li>
             </ul>
 </li>
@@ -1771,57 +1774,20 @@ If advice is applied by applications,
 applications <span class="bcp14">MUST</span> apply the lowest throughput advice
 received during any monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.4-2">Senders can ensure that their use of network capacity
-remains within throughput advice
-using a lowest rate algorithm as follows.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.4-3">To operate this algorithm,
-the minimal state that an application --
-which is often, but not always a sender --
-maintains is
-* the current rate limit,
-* any state necessary to monitor throughput
-  (that is, throughput usage state, such as the state in <a href="#sliding-window" class="auto internal xref">Appendix A</a>), and
-* the time at which that rate limit was last updated.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
-<p id="section-5.4-4">When updated advice is received:<a href="#section-5.4-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.4-5.1">
-            <p id="section-5.4-5.1.1">If the signaled rate is the same as the current rate,
-set the last update time to the current time.<a href="#section-5.4-5.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.4-5.2">
-            <p id="section-5.4-5.2.1">If the signaled rate is higher than the current value,
-then:<a href="#section-5.4-5.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.4-5.2.2.1">
-                <p id="section-5.4-5.2.2.1.1">If the time since the last update is greater than the monitoring period,
-the current rate limit is increased to the received value
-and the last update time is set to the current time.<a href="#section-5.4-5.2.2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-5.4-5.2.2.2">
-                <p id="section-5.4-5.2.2.2.1">Otherwise, the throughput advice is not applied.
-An implementation can optionally remember throughput advice,
-so that it might increase send rates more quickly,
-but this is not necessary
-as long as there are frequent opportunities
-to receive updated throughput signals.<a href="#section-5.4-5.2.2.2.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</li>
-          <li class="normal" id="section-5.4-5.3">
-            <p id="section-5.4-5.3.1">If the signaled rate is lower than the current value,
-set the current rate limit to match the advice,
-optionally discard all rate monitoring state,
-and set the last update time to the current time.<a href="#section-5.4-5.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.4-6">Applications <span class="bcp14">MAY</span> discard throughput usage state when reducing rates.
+remains within throughput advice.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3">Applications <span class="bcp14">MAY</span> discard throughput usage state
+when they receive throughput advice that indicates a reduced rate.
 Otherwise, data that was sent at a higher rate
-might force the available rate to zero; see also <a href="#policing" class="auto internal xref">Section 7.2</a>.
-Even though loss of information about recent send rate
-might result in temporarily exceeding the rates indicated by throughput advice,
-the relatively long duration of the monitoring period
+might force the available rate to zero
+for the remainder of the monitoring period; see also <a href="#monitoring" class="auto internal xref">Section 7.2</a>.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-4">The relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
-Applications retain throughput usage state when increasing state.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
-<p id="section-5.4-7">This approach ensures that network elements
+The cost is that loss of information about recent send rate
+might result in temporarily exceeding the rates indicated by throughput advice.
+In comparison,
+applications retain throughput usage state
+when increasing state.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
+<p id="section-5.4-5">This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
 to as low as once per monitoring period.
 However, applying signals at a low frequency
@@ -1829,7 +1795,7 @@ risks throughput advice being reset to the unbounded default
 if no SCONE packet is available for applying signals (<a href="#apply" class="auto internal xref">Section 7.1</a>),
 or the rewritten packets are lost.
 Sending the signal multiple times
-ensures that it is more likely that the signal is received.<a href="#section-5.4-7" class="pilcrow">¶</a></p>
+ensures that it is more likely that the signal is received.<a href="#section-5.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1969,31 +1935,91 @@ which might cause network elements to miss updates,
 by adding a small amount of random delay.<a href="#section-7.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="policing">
+<div id="monitoring">
 <section id="section-7.2">
-        <h3 id="name-flows-that-exceed-throughpu">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-flows-that-exceed-throughpu" class="section-name selfRef">Flows That Exceed Throughput Advice</a>
+        <h3 id="name-monitoring-flows">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-monitoring-flows" class="section-name selfRef">Monitoring Flows</a>
         </h3>
-<p id="section-7.2-1">Network elements that provide throughput advice
+<p id="section-7.2-1">Network elements can monitor flows
+to determine which flows are from applications
+that respect throughput advice.
+This section outlines an exemplary algorithm
+for network elements.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">To operate this algorithm,
+the minimal state a network element maintains is:
+* the current rate limit,
+* any state necessary to monitor throughput
+  (that is, throughput usage state, such as the state in <a href="#sliding-window" class="auto internal xref">Appendix A</a>),
+* a timer used for rate increases, and
+* the time at which that rate limit was last updated,<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">When advice is updated,
+the network element waits until
+it receives the next SCONE packet on affected flows.
+It then updates the throughput advice in that packet (<a href="#apply" class="auto internal xref">Section 7.1</a>)
+and updates its monitoring state as follows:<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-4.1">
+            <p id="section-7.2-4.1.1">If the signaled rate is the same as the current rate,
+set the last update time to the current time.<a href="#section-7.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-7.2-4.2">
+            <p id="section-7.2-4.2.1">If the signaled rate is higher than the current value,
+then:<a href="#section-7.2-4.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7.2-4.2.2.1">
+                <p id="section-7.2-4.2.2.1.1">If the time since the last SCONE packet was updated
+is greater than the monitoring period,
+the current rate limit is increased to the received value
+and the last update time is set to the current time.<a href="#section-7.2-4.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-7.2-4.2.2.2">
+                <p id="section-7.2-4.2.2.2.1">Otherwise, the throughput advice is deferred.
+The implementation sets the rate increase timer
+to one monitoring period
+relative to the time that the last SCONE packet was updated.
+When the timer lapses,
+change the rate monitoring to the higher rate.<a href="#section-7.2-4.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-7.2-4.3">
+            <p id="section-7.2-4.3.1">If the signaled rate is lower than the current value,
+set the current rate limit to match the advice,
+cancel any rate increase timer,
+discard all rate monitoring state,
+and set the last update time to the current time.<a href="#section-7.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-7.2-5">A network element that reduces the throughput advice it provides
+<span class="bcp14">MUST</span> also discard any state it maintains
+about the use of the network under previous, higher rates.
+This is necessary to allow senders to discard state
+when advice is reduced (see <a href="#algorithm" class="auto internal xref">Section 5.4</a>).
+This avoids cases where an application that has planned usage
+might otherwise be completely unable to send due to a lower limits.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
+<p id="section-7.2-6">A network element that reduces its throughput advice
+might also need to add a small delay to allow applications time
+to receive and act on the updated advice.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="policing">
+<section id="section-7.3">
+        <h3 id="name-flows-that-exceed-throughpu">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-flows-that-exceed-throughpu" class="section-name selfRef">Flows That Exceed Throughput Advice</a>
+        </h3>
+<p id="section-7.3-1">Network elements that provide throughput advice
 can monitor flows --
 or sets of flows that are subject to the same throughput limit --
-for adherance to that advice.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">In the event that a flow exceeds these limits,
+for adherance to that advice.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">In the event that a flow exceeds these limits,
 a network element could immediately start
 enforcing adherence to the advice as though it were a hard limit.
 However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
-that is, up to the period defined in <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2-3">A network element that reduces the throughput advice it provides
-<span class="bcp14">MUST</span> also discard any state it maintains
-about the consumption of that throughput.
-This is necessary to allow senders to discard state
-when advice is reduced (see <a href="#algorithm" class="auto internal xref">Section 5.4</a>).
-This avoids cases where an application that has planned usage
-might otherwise be completely unable to send due to a lower limits.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.2-4">A better approach is to disregard any data that was transmitted
+that is, up to the period defined in <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">A better approach is to disregard any data that was transmitted
 before engaging any hard limits to throughput.
-This ensures that the enforcement of limits is minimally disruptive.<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+This ensures that the enforcement of limits is minimally disruptive.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2029,8 +2055,49 @@ datagram, coalesced with additional packets. An endpoint that receives and
 discards a SCONE packet without also successfully processing another packet
 from the same datagram <span class="bcp14">SHOULD</span> ignore any throughput advice signal. Such a datagram
 might be entirely spoofed.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">A network element that wishes to signal an updated rate limit waits for the
-next SCONE packet in the desired direction.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">Once negotiated, endpoints that seek to receive throughput advice on a flow
+<span class="bcp14">MUST</span> send a SCONE packet at least twice each monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">Sending SCONE packets more often might be necessary to:<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-8.1-5">
+          <dt id="section-8.1-5.1">Avoid missing advice:</dt>
+          <dd style="margin-left: 1.5em" id="section-8.1-5.2">
+            <p id="section-8.1-5.2.1">If SCONE packets are not sent, updated, and received
+for an entire monitoring period,
+an application might incorrectly assume that no advice is being provided.<a href="#section-8.1-5.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-8.1-5.3">Reduce latency:</dt>
+          <dd style="margin-left: 1.5em" id="section-8.1-5.4">
+            <p id="section-8.1-5.4.1">The time between SCONE packets determines the maximum delay
+between changes in throughput advice
+and when that advice can be received and acted upon.<a href="#section-8.1-5.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-8.1-6">A sender can track the receipt of the coalesced QUIC packet
+and send another SCONE packet if when loss is detected.
+However, it is likely simpler to send SCONE packets more often.<a href="#section-8.1-6" class="pilcrow">¶</a></p>
+<p id="section-8.1-7">Sending a SCONE packet every 20–30 seconds
+is likely sufficient to ensure that throughput advice is not lost,
+though endpoints might send a packet every few seconds
+to improve responsiveness.
+This period could be determined by how quickly an application
+is able to respond to a change in throughput advice.<a href="#section-8.1-7" class="pilcrow">¶</a></p>
+<p id="section-8.1-8">For example, a streaming application
+that fetches video segments that are 5 seconds in length
+might send SCONE packets on a similar cadence.
+A real-time conferencing application might send more often.
+In either case, the length of the monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>)
+limits how fast any application can react.<a href="#section-8.1-8" class="pilcrow">¶</a></p>
+<p id="section-8.1-9">Though sending SCONE packets more than once each round trip time
+might help reduce exposure to packet loss,
+it is better to spread updates over time
+rather than to send multiple SCONE packets in less frequent bursts.<a href="#section-8.1-9" class="pilcrow">¶</a></p>
+<p id="section-8.1-10">The main cost associated with sending SCONE packets
+is the reduction in available space in datagrams
+for application data.<a href="#section-8.1-10" class="pilcrow">¶</a></p>
+<p id="section-8.1-11">A network element that wishes to signal an updated rate limit waits for the
+next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback">
@@ -2063,7 +2130,7 @@ network element applied a throughput advice signal.<a href="#section-8.2-5" clas
 <div id="interactions-with-congestion-control">
 <section id="section-8.3">
         <h3 id="name-interactions-with-congestio">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-interactions-with-congestio" class="section-name selfRef">Interactions with congestion control</a>
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-interactions-with-congestio" class="section-name selfRef">Interactions with Congestion Control</a>
         </h3>
 <p id="section-8.3-1">SCONE and congestion control both provide the application with estimates
 of a path capacity. They are complementary. Congestion control algorithms
