@@ -282,6 +282,10 @@ header packet.  The next bit (0x40) is reserved and can be set according to
 The low 6 bits (0x3f) of the first byte contain the Rate Signal field. Values
 for this field are described in {{rate-signal}}.
 
+The Version field contains either 0x6f7dc0fd or 0xef7dc0fd. To facilitate
+detection and modification of SCONE packets, the only difference between the
+two version numbers is the most significant bit; all other bits are identical.
+
 This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
 
@@ -307,39 +311,40 @@ the path. All other values (0x00 through 0x3F for protocol version 0x6f7dc0fd an
 0x00 through 0x3E for protocol version 0xef7dc0fd) represent the ceiling of rates
 being advised by the network element(s) on the path.
 
-For SCONE protocol version 0x6f7dc0fd, the rate limits use a logarithmic scale with:
+The rate limits use a logarithmic scale with:
 
 * Base rate (b_min) = 100 Kbps
 * Bitrate at value n = b_min * 10^(n/20)
 
-For SCONE protocol version 0xef7dc0fd, the rate limits use a logarithmic scale with:
+where n is an integer between 0 and 126.
 
-* Bitrate at value n = b_min * 10^((n + 64)/20)
-
-With two versions combined, bitrates between 100 Kbps and 199.5 Gbps can be
-expressed.
+The upper 6 bits of n is represented by the Rate Signal field. The least
+significant bit is represented by the first bit of the protocol version.
 
 {{ex-rates}} lists some of the potential values for signals
 and the corresponding throughput advice for each.
 
-| Version    | Rate Signal |  Bitrate   |
+| Bitrate    | Rate Signal | Version    |
 |:-----------|:------------|:-----------|
-| 0x6f7dc0fd | 0           | 100 Kbps   |
-| 0x6f7dc0fd | 10          | 316 Kbps   |
-| 0x6f7dc0fd | 20          | 1 Mbps     |
-| 0x6f7dc0fd | 30          | 3.16 Mbps  |
-| 0x6f7dc0fd | 40          | 10 Mbps    |
-| 0x6f7dc0fd | 50          | 31.6 Mbps  |
-| 0x6f7dc0fd | 60          | 100 Mbps   |
-| 0xef7dc0fd | 6           | 316 Mbps   |
-| 0xef7dc0fd | 16          | 1 Gbps     |
-| 0xef7dc0fd | 26          | 3.16 Gbps  |
-| 0xef7dc0fd | 36          | 10 Gbps    |
-| 0xef7dc0fd | 46          | 31.6 Gbps  |
-| 0xef7dc0fd | 56          | 100 Gbps   |
-| 0xef7dc0fd | 62          | 199.5 Gbps |
-| 0xef7dc0fd | 63          | No limit   |
-{: #ex-rates title="Examples of signals and corresponding rates"}
+| 100 Kbps   | 0           | 0x6f7dc0fd |
+| 112 Kbps   | 0           | 0xef7dc0fd |
+| 126 Kbps   | 1           | 0x6f7dc0fd |
+| 141 Kbps   | 1           | 0xef7dc0fd |
+| 1 Mbps     | 10          | 0x6f7dc0fd |
+| 1.12 Mbps  | 10          | 0xef7dc0fd |
+| 10 Mbps    | 20          | 0x6f7dc0fd |
+| 11.2 Mbps  | 20          | 0xef7dc0fd |
+| 100 Mbps   | 30          | 0x6f7dc0fd |
+| 112 Mbps   | 30          | 0xef7dc0fd |
+| 1 Gbps     | 40          | 0x6f7dc0fd |
+| 1.12 Gbps  | 40          | 0xef7dc0fd |
+| 10 Gbps    | 50          | 0x6f7dc0fd |
+| 11.2 Gbps  | 50          | 0xef7dc0fd |
+| 100 Gbps   | 60          | 0x6f7dc0fd |
+| 112 Gbps   | 60          | 0xef7dc0fd |
+| 199.5 Gbps | 63          | 0x6f7dc0fd |
+| No limit   | 63          | 0xef7dc0fd |
+{: #ex-rates title="Examples of SCONE signals and corresponding rates"}
 
 
 ## Endpoint Processing of SCONE Packets
@@ -476,10 +481,10 @@ packet_version = ntohl(packet[1..5])
 if is_long and (packet_version == SCONE1_VERSION or
                 packet_version == SCONE2_VERSION):
   packet_throughput = \
-    signal_to_throughput(packet_version, packet[0] & 0x3f)
+    signal_to_throughput(packet[0] & 0x3f, packet_version)
 
   if target_throughput < packet_throughput:
-    target_version, target_signal = \
+    target_signal, target_version = \
       throughput_to_signal(target_throughput)
     packet[0] = packet[0] & 0xc0 | target_signal
     if target_version != packet_version:
