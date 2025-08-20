@@ -344,7 +344,7 @@ and the corresponding throughput advice for each.
 | 112 Gbps   | 60          | 0xef7dc0fd |
 | 199.5 Gbps | 63          | 0x6f7dc0fd |
 | No limit   | 63          | 0xef7dc0fd |
-{: #ex-rates title="Examples of signals and corresponding rates"}
+{: #ex-rates title="Examples of SCONE signals and corresponding rates"}
 
 
 ## Endpoint Processing of SCONE Packets
