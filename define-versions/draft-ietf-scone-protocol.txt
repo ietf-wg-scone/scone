@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 24 January 2026                            Private Octopus Inc.
+Expires: 21 February 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            23 July 2025
+                                                          20 August 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 January 2026.
+   This Internet-Draft will expire on 21 February 2026.
 
 Copyright Notice
 
@@ -88,6 +88,9 @@ Table of Contents
      5.1.  Rate Signals
      5.2.  Endpoint Processing of SCONE Packets
    6.  Negotiating SCONE
+     6.1.  Indicating Support on New Flows
+     6.2.  Limitations of Indication
+     6.3.  Indications for Migrated Flows
    7.  Deployment
      7.1.  Applying Throughput Advice Signals
    8.  Version Interaction
@@ -379,7 +382,8 @@ Table of Contents
    With two versions combined, bitrates between 100 Kbps and 199.5 Gbps
    can be expressed.
 
-   Some notable values in these ranges are shown in Table 1.
+   Table 1 lists some of the potential values for signals and the
+   corresponding throughput advice for each.
 
                  +============+=============+============+
                  | Version    | Rate Signal | Bitrate    |
@@ -415,7 +419,8 @@ Table of Contents
                  | 0xef7dc0fd | 63          | No limit   |
                  +------------+-------------+------------+
 
-                    Table 1: A selection of SCONE rates
+                      Table 1: Examples of signals and
+                            corresponding rates
 
 5.2.  Endpoint Processing of SCONE Packets
 
@@ -434,15 +439,74 @@ Table of Contents
    A SCONE packet MUST be discarded if the Destination Connection ID
    does not match one recognized by the receiving endpoint.
 
+   If a connection uses multiple DSCP markings [RFC2474], the throughput
+   advice that is received on datagrams with one marking might not apply
+   to datagrams that have different markings.
+
 6.  Negotiating SCONE
 
    A QUIC endpoint indicates that it is willing to receive SCONE packets
-   by including the scone_supported transport parameter (0xTBD).
+   by including the scone_supported transport parameter (0x219e).  The
+   scone_supported transport parameter MUST be empty.  Receiving a non-
+   zero length scone_supported transport parameter MUST be treated as a
+   connection error of type TRANSPORT_PARAMETER_ERROR; see Section 20.1
+   of [QUIC].
 
    This transport parameter is valid for QUIC versions 1 [QUIC] and 2
    [QUICv2] and any other version that recognizes the versions,
    transport parameters, and frame types registries established in
    Sections 22.2, 22.3, and 22.4 of [QUIC].
+
+6.1.  Indicating Support on New Flows
+
+   All new flows that are initiated by a client that supports SCONE MUST
+   include bytes with values 0xc8 and 0x13 as the last two bytes of
+   datagrams that commence a new flow if the protocol permits it.  This
+   indication MUST be sent in every datagram until the client receives
+   any datagram from the server, at which point the client can be
+   confident that the indication was received.
+
+   A client that uses a QUIC version that includes length-delimited
+   packets, which includes QUIC versions 1 [QUIC] and 2 [QUICv2], can
+   include an indicator of SCONE support at the end of datagrams that
+   start a flow.  The handshakes of these protocols ensures that the
+   indication can be included in every datagram the client sends until
+   it receives a response -- of any kind -- from the server.
+
+6.2.  Limitations of Indication
+
+   This indication does not mean that SCONE signals will be respected,
+   only that the client is able to negotiate SCONE.  A server might not
+   support SCONE or might choose not to send SCONE packets.  Finally,
+   applications might be unable to apply throughput advice or choose to
+   ignore it.
+
+   This indication being just two bytes means that there is a non-
+   negligible risk of collision with other protocols or even QUIC usage
+   without SCONE indications.  This means that the indication alone is
+   not sufficient to indicate that a flow is QUIC with the potential for
+   SCONE support.
+
+   Despite these limitations, having an indication might allow network
+   elements to change their starting posture with respect to their
+   enforcement of their rate limit policies.
+
+6.3.  Indications for Migrated Flows
+
+   Applications MAY decide to indicate support for SCONE on new flows,
+   including when migrating to a new path (see Section 9 of [QUIC]).  In
+   QUIC version 1 and 2, the two byte indicator cannot be used.
+
+   Sending a SCONE packet for the first few packets on a new path gives
+   network elements on that path the ability to recognize the flow as
+   being able to receive throughput advice and also gives the network
+   element an opportunity to provide that throughput advice.
+
+   To enable this indication, even if an endpoint would not otherwise
+   send SCONE packets, endpoints can send a SCONE packet any time they
+   send a QUIC PATH_CHALLENGE or PATH_RESPONSE frame.  This applies to
+   both client and server endpoints, but only if the peer has sent the
+   transport parameter; see Section 6.
 
 7.  Deployment
 
@@ -482,6 +546,9 @@ Table of Contents
        packet[0] = packet[0] & 0xc0 | target_signal
        if target_version != packet_version:
          packet[1..5] = htonl(target_version)
+
+   Once the throughput advice signal is updated, the network element
+   updates the UDP checksum for the datagram.
 
 8.  Version Interaction
 
@@ -764,7 +831,7 @@ Table of Contents
    (https://www.iana.org/assignments/quic), following the guidance from
    Section 22.3 of [QUIC].
 
-   Value:  0xTBD
+   Value:  0x219e
    Parameter Name:  scone_supported
    Status:  Permanent
    Specification:  This document
@@ -807,6 +874,12 @@ Table of Contents
    [QUICv2]   Duke, M., "QUIC Version 2", RFC 9369,
               DOI 10.17487/RFC9369, May 2023,
               <https://www.rfc-editor.org/rfc/rfc9369>.
+
+   [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
+              "Definition of the Differentiated Services Field (DS
+              Field) in the IPv4 and IPv6 Headers", RFC 2474,
+              DOI 10.17487/RFC2474, December 1998,
+              <https://www.rfc-editor.org/rfc/rfc2474>.
 
 12.2.  Informative References
 
