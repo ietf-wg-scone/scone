@@ -321,7 +321,8 @@ where n is an integer between 0 and 126.
 The upper 6 bits of n is represented by the Rate Signal field. The least
 significant bit is represented by the first bit of the protocol version.
 
-Some notable values in these ranges are shown in {{t-sample-rates}}.
+{{ex-rates}} lists some of the potential values for signals
+and the corresponding throughput advice for each.
 
 | Bitrate    | Rate Signal | Version    |
 |:-----------|:------------|:-----------|
@@ -343,7 +344,8 @@ Some notable values in these ranges are shown in {{t-sample-rates}}.
 | 112 Gbps   | 60          | 0xef7dc0fd |
 | 199.5 Gbps | 63          | 0x6f7dc0fd |
 | No limit   | 63          | 0xef7dc0fd |
-{: #t-sample-rates title="A selection of SCONE rates"}
+{: #ex-rates title="Examples of signals and corresponding rates"}
+
 
 ## Endpoint Processing of SCONE Packets
 
@@ -361,16 +363,92 @@ packets, as specified in {{packet}}.
 A SCONE packet MUST be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.
 
+If a connection uses multiple DSCP markings {{!RFC2474}},
+the throughput advice that is received on datagrams with one marking
+might not apply to datagrams that have different markings.
+
 
 # Negotiating SCONE {#tp}
 
 A QUIC endpoint indicates that it is willing to receive SCONE packets by
-including the scone_supported transport parameter (0xTBD).
+including the scone_supported transport parameter (0x219e).
+The scone_supported transport parameter MUST be empty.
+Receiving a non-zero length scone_supported transport parameter MUST be treated
+as a connection error of type TRANSPORT_PARAMETER_ERROR;
+see {{Section 20.1 of QUIC}}.
+
+<!--
+https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-tp;field=tp;codepoint=0x219e;size=2
+-->
 
 This transport parameter is valid for QUIC versions 1 {{QUIC}} and 2
 {{!QUICv2=RFC9369}} and any other version that recognizes the versions,
 transport parameters, and frame types registries established in {{Sections 22.2,
 22.3, and 22.4 of QUIC}}.
+
+
+## Indicating Support on New Flows {#indication}
+
+All new flows that are initiated by a client that supports SCONE
+MUST include bytes with values 0xc8 and 0x13
+as the last two bytes of datagrams
+that commence a new flow if the protocol permits it.
+This indication MUST be sent in every datagram
+until the client receives any datagram from the server,
+at which point the client can be confident that the indication was received.
+
+<!--
+This indicator is derived from the first two bytes of:
+https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-indication;field=version;codepoint=0xc813e2b1
+-->
+
+A client that uses a QUIC version that includes length-delimited packets,
+which includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},
+can include an indicator of SCONE support
+at the end of datagrams that start a flow.
+The handshakes of these protocols ensures that
+the indication can be included in every datagram the client sends
+until it receives a response -- of any kind -- from the server.
+
+
+## Limitations of Indication
+
+This indication does not mean that SCONE signals will be respected,
+only that the client is able to negotiate SCONE.
+A server might not support SCONE
+or might choose not to send SCONE packets.
+Finally, applications might be unable to apply throughput advice
+or choose to ignore it.
+
+This indication being just two bytes
+means that there is a non-negligible risk of collision with other protocols
+or even QUIC usage without SCONE indications.
+This means that the indication alone is not sufficient to indicate
+that a flow is QUIC with the potential for SCONE support.
+
+Despite these limitations,
+having an indication might allow network elements to change their starting posture
+with respect to their enforcement of their rate limit policies.
+
+
+## Indications for Migrated Flows
+
+Applications MAY decide to indicate support for SCONE on new flows,
+including when migrating to a new path (see {{Section 9 of QUIC}}).
+In QUIC version 1 and 2,
+the two byte indicator cannot be used.
+
+Sending a SCONE packet for the first few packets on a new path
+gives network elements on that path the ability
+to recognize the flow as being able to receive throughput advice
+and also gives the network element an opportunity to provide that throughput advice.
+
+To enable this indication,
+even if an endpoint would not otherwise send SCONE packets,
+endpoints can send a SCONE packet
+any time they send a QUIC PATH_CHALLENGE or PATH_RESPONSE frame.
+This applies to both client and server endpoints,
+but only if the peer has sent the transport parameter; see {{tp}}.
 
 
 # Deployment
@@ -412,6 +490,9 @@ if is_long and (packet_version == SCONE1_VERSION or
     if target_version != packet_version:
       packet[1..5] = htonl(target_version)
 ~~~
+
+Once the throughput advice signal is updated,
+the network element updates the UDP checksum for the datagram.
 
 
 # Version Interaction {#version-interaction}
@@ -709,7 +790,7 @@ Transport Parameters" registry maintained at
 22.3 of QUIC}}.
 
 Value:
-: 0xTBD
+: 0x219e
 
 Parameter Name:
 : scone_supported
