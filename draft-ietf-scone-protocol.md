@@ -250,8 +250,8 @@ client {{?HLS=RFC8216}} can ask for lower bitrate, lower quality media segments.
 
 # SCONE Packet {#packet}
 
-A SCONE packet is a QUIC long header packet that follows the QUIC invariants;
-see {{Section 5.1 of INVARIANTS}}.
+A SCONE packet is a QUIC long header packet that follows the QUIC invariants
+and is compliant with RFC 8999; see {{Section 5.1 of INVARIANTS}}.
 
 {{fig-scone-packet}} shows the format of the SCONE packet using the conventions
 from {{Section 4 of INVARIANTS}}.
@@ -260,8 +260,8 @@ from {{Section 4 of INVARIANTS}}.
 SCONE Packet {
   Header Form (1) = 1,
   Reserved (1),
-  Rate Signal (6),
-  Version (32) = 0x6f7dc0fd or 0xef7dc0fd,
+  Rate Signal (7),
+  Common version bits (31) = 0x6f7dc0fd,
   Destination Connection ID Length (8),
   Destination Connection ID (0..2040),
   Source Connection ID Length (8),
@@ -279,12 +279,16 @@ The most significant bit (0x80) of the packet indicates that this is a QUIC long
 header packet.  The next bit (0x40) is reserved and can be set according to
 {{!QUIC-BIT=RFC9287}}.
 
-The low 6 bits (0x3f) of the first byte contain the Rate Signal field. Values
-for this field are described in {{rate-signal}}.
+The Rate Signal field uses 7 bits spanning the low 6 bits (0x3f) of the first
+byte and the most significant bit of the version field. This creates a
+contiguous 7-bit field with values from 0 to 127. Values for this field are
+described in {{rate-signal}}.
 
-The Version field contains either 0x6f7dc0fd or 0xef7dc0fd. To facilitate
-detection and modification of SCONE packets, the only difference between the
-two version numbers is the most significant bit; all other bits are identical.
+The remaining 31 bits of the version field contain the common version bits
+0x6f7dc0fd. The complete version field is either 0x6f7dc0fd (when the
+least significant bit of the Rate Signal is 0) or 0xef7dc0fd (when the least
+significant bit of the Rate Signal is 1). This design facilitates detection
+and modification of SCONE packets while maintaining RFC 8999 compliance.
 
 This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
@@ -300,50 +304,45 @@ header cannot precede any other packets.
 
 ## Rate Signals {#rate-signal}
 
-The Rate Signal field in SCONE uses the low 6 bits (0x3f) of the first byte.
-This field is encoded as a logarithmically spaced distribution over a range
-defined by the SCONE protocol version.
+The Rate Signal field in SCONE uses 7 bits: the low 6 bits (0x3f) of the first
+byte combined with the most significant bit (0x80000000) of the version field.
+This creates a contiguous 7-bit field with values from 0 to 127.
 
-When sent by a QUIC endpoint, the Version field of a SCONE packet is set to
-0xef7dc0fd and the Rate Signal field is set to 0x3F (63), indicating no rate limit
-is in place or that the SCONE protocol is not supported by network elements on
-the path. All other values (0x00 through 0x3F for protocol version 0x6f7dc0fd and
-0x00 through 0x3E for protocol version 0xef7dc0fd) represent the ceiling of rates
-being advised by the network element(s) on the path.
+When sent by a QUIC endpoint, the Rate Signal field is set to 127, indicating
+no rate limit is in place or that the SCONE protocol is not supported by
+network elements on the path. All other values (0 through 126) represent the
+ceiling of rates being advised by the network element(s) on the path.
 
 The rate limits use a logarithmic scale with:
 
 * Base rate (b_min) = 100 Kbps
 * Bitrate at value n = b_min * 10^(n/20)
 
-where n is an integer between 0 and 126.
-
-The upper 6 bits of n is represented by the Rate Signal field. The least
-significant bit is represented by the first bit of the protocol version.
+where n is an integer between 0 and 126 represented by the Rate Signal field.
 
 {{ex-rates}} lists some of the potential values for signals
 and the corresponding throughput advice for each.
 
-| Bitrate    | Rate Signal | Version    |
-|:-----------|:------------|:-----------|
-| 100 Kbps   | 0           | 0x6f7dc0fd |
-| 112 Kbps   | 0           | 0xef7dc0fd |
-| 126 Kbps   | 1           | 0x6f7dc0fd |
-| 141 Kbps   | 1           | 0xef7dc0fd |
-| 1 Mbps     | 10          | 0x6f7dc0fd |
-| 1.12 Mbps  | 10          | 0xef7dc0fd |
-| 10 Mbps    | 20          | 0x6f7dc0fd |
-| 11.2 Mbps  | 20          | 0xef7dc0fd |
-| 100 Mbps   | 30          | 0x6f7dc0fd |
-| 112 Mbps   | 30          | 0xef7dc0fd |
-| 1 Gbps     | 40          | 0x6f7dc0fd |
-| 1.12 Gbps  | 40          | 0xef7dc0fd |
-| 10 Gbps    | 50          | 0x6f7dc0fd |
-| 11.2 Gbps  | 50          | 0xef7dc0fd |
-| 100 Gbps   | 60          | 0x6f7dc0fd |
-| 112 Gbps   | 60          | 0xef7dc0fd |
-| 199.5 Gbps | 63          | 0x6f7dc0fd |
-| No limit   | 63          | 0xef7dc0fd |
+| Bitrate     | Rate Signal |
+|:------------|:------------|
+| 100 Kbps    | 0           |
+| 112 Kbps    | 1           |
+| 126 Kbps    | 2           |
+| 141 Kbps    | 3           |
+| 1 Mbps      | 20          |
+| 1.12 Mbps   | 21          |
+| 10 Mbps     | 40          |
+| 11.2 Mbps   | 41          |
+| 100 Mbps    | 60          |
+| 112 Mbps    | 61          |
+| 1 Gbps      | 80          |
+| 1.12 Gbps   | 81          |
+| 10 Gbps     | 100         |
+| 11.2 Gbps   | 101         |
+| 100 Gbps    | 120         |
+| 112 Gbps    | 121         |
+| 199.5 Gbps  | 126         |
+| No limit    | 127         |
 {: #ex-rates title="Examples of SCONE signals and corresponding rates"}
 
 
@@ -354,8 +353,10 @@ However, this value MUST NOT be used unless another packet from the same
 datagram is successfully processed.  Therefore, a SCONE packet always needs to
 be coalesced with other QUIC packets.
 
-A SCONE packet is defined by the use of the longer header bit (0x80 in the first
-byte) and the SCONE protocol version (0xTBD in the next four bytes).  A SCONE
+A SCONE packet is defined by the use of the long header bit (0x80 in the first
+byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
+bytes). The 7-bit Rate Signal value can be extracted by combining the low 6 bits
+of the first byte with the most significant bit of the version field. A SCONE
 packet MAY be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
 packets, as specified in {{packet}}.
