@@ -1542,8 +1542,8 @@ appear in all capitals, as shown here.<a href="#section-4-1" class="pilcrow">¶<
       <h2 id="name-scone-packet">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-scone-packet" class="section-name selfRef">SCONE Packet</a>
       </h2>
-<p id="section-5-1">A SCONE packet is a QUIC long header packet that follows the QUIC invariants
-and is compliant with RFC 8999; see <span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.1" class="relref">Section 5.1</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">A SCONE packet is a QUIC long header packet that follows the QUIC invariants;
+see <span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.1" class="relref">Section 5.1</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2"><a href="#fig-scone-packet" class="auto internal xref">Figure 1</a> shows the format of the SCONE packet using the conventions
 from <span><a href="https://rfc-editor.org/rfc/rfc8999#section-4" class="relref">Section 4</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <span id="name-scone-packet-format"></span><div id="fig-scone-packet">
@@ -1577,7 +1577,8 @@ described in <a href="#rate-signal" class="auto internal xref">Section 5.1</a>.<
 0x6f7dc0fd. The complete version field is either 0x6f7dc0fd (when the
 least significant bit of the Rate Signal is 0) or 0xef7dc0fd (when the least
 significant bit of the Rate Signal is 1). This design facilitates detection
-and modification of SCONE packets while maintaining RFC 8999 compliance.<a href="#section-5-6" class="pilcrow">¶</a></p>
+and modification of SCONE packets while maintaining compliance with the QUIC
+invariants.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <p id="section-5-7">This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-12.2" class="relref">Section 12.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-5-8">The Source Connection ID field is set to match the Source Connection ID field of
@@ -1593,7 +1594,7 @@ header cannot precede any other packets.<a href="#section-5-9" class="pilcrow">�
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-rate-signals" class="section-name selfRef">Rate Signals</a>
         </h3>
 <p id="section-5.1-1">The Rate Signal field in SCONE uses 7 bits: the low 6 bits (0x3f) of the first
-byte combined with the most significant bit (0x80000000) of the version field.
+byte combined with the most significant bit (0x80) of the second byte.
 This creates a contiguous 7-bit field with values from 0 to 127.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">When sent by a QUIC endpoint, the Rate Signal field is set to 127, indicating
 no rate limit is in place or that the SCONE protocol is not supported by

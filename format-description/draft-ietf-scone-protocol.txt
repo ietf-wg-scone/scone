@@ -314,8 +314,7 @@ Table of Contents
 5.  SCONE Packet
 
    A SCONE packet is a QUIC long header packet that follows the QUIC
-   invariants and is compliant with RFC 8999; see Section 5.1 of
-   [INVARIANTS].
+   invariants; see Section 5.1 of [INVARIANTS].
 
    Figure 1 shows the format of the SCONE packet using the conventions
    from Section 4 of [INVARIANTS].
@@ -347,7 +346,7 @@ Table of Contents
    (when the least significant bit of the Rate Signal is 0) or
    0xef7dc0fd (when the least significant bit of the Rate Signal is 1).
    This design facilitates detection and modification of SCONE packets
-   while maintaining RFC 8999 compliance.
+   while maintaining compliance with the QUIC invariants.
 
    This packet includes a Destination Connection ID field that is set to
    the same value as other packets in the same datagram; see
@@ -366,9 +365,9 @@ Table of Contents
 5.1.  Rate Signals
 
    The Rate Signal field in SCONE uses 7 bits: the low 6 bits (0x3f) of
-   the first byte combined with the most significant bit (0x80000000) of
-   the version field.  This creates a contiguous 7-bit field with values
-   from 0 to 127.
+   the first byte combined with the most significant bit (0x80) of the
+   second byte.  This creates a contiguous 7-bit field with values from
+   0 to 127.
 
    When sent by a QUIC endpoint, the Rate Signal field is set to 127,
    indicating no rate limit is in place or that the SCONE protocol is
