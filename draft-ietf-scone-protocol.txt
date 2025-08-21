@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 15 February 2026                           Private Octopus Inc.
+Expires: 22 February 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          14 August 2025
+                                                          21 August 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 February 2026.
+   This Internet-Draft will expire on 22 February 2026.
 
 Copyright Notice
 
@@ -323,7 +323,7 @@ Table of Contents
      Header Form (1) = 1,
      Reserved (1),
      Rate Signal (6),
-     Version (32) = 0xSCONE1 or 0xSCONE2,
+     Version (32) = 0x6f7dc0fd or 0xef7dc0fd,
      Destination Connection ID Length (8),
      Destination Connection ID (0..2040),
      Source Connection ID Length (8),
@@ -338,6 +338,11 @@ Table of Contents
 
    The low 6 bits (0x3f) of the first byte contain the Rate Signal
    field.  Values for this field are described in Section 5.1.
+
+   The Version field contains either 0x6f7dc0fd or 0xef7dc0fd.  To
+   facilitate detection and modification of SCONE packets, the only
+   difference between the two version numbers is the most significant
+   bit; all other bits are identical.
 
    This packet includes a Destination Connection ID field that is set to
    the same value as other packets in the same datagram; see
@@ -360,67 +365,70 @@ Table of Contents
    distribution over a range defined by the SCONE protocol version.
 
    When sent by a QUIC endpoint, the Version field of a SCONE packet is
-   set to 0xSCONE2 and the Rate Signal field is set to 0x3F (63),
+   set to 0xef7dc0fd and the Rate Signal field is set to 0x3F (63),
    indicating no rate limit is in place or that the SCONE protocol is
    not supported by network elements on the path.  All other values
-   (0x00 through 0x3F for protocol version 0xSCONE1 and 0x00 through
-   0x3E for protocol version 0xSCONE2) represent the ceiling of rates
+   (0x00 through 0x3F for protocol version 0x6f7dc0fd and 0x00 through
+   0x3E for protocol version 0xef7dc0fd) represent the ceiling of rates
    being advised by the network element(s) on the path.
 
-   For SCONE protocol version 0xSCONE1, the rate limits use a
-   logarithmic scale with:
+   The rate limits use a logarithmic scale with:
 
    *  Base rate (b_min) = 100 Kbps
 
    *  Bitrate at value n = b_min * 10^(n/20)
 
-   For SCONE protocol version 0xSCONE2, the rate limits use a
-   logarithmic scale with:
+   where n is an integer between 0 and 126.
 
-   *  Bitrate at value n = b_min * 10^((n + 64)/20)
-
-   With two versions combined, bitrates between 100 Kbps and 199.5 Gbps
-   can be expressed.
+   The upper 6 bits of n is represented by the Rate Signal field.  The
+   least significant bit is represented by the first bit of the protocol
+   version.
 
    Table 1 lists some of the potential values for signals and the
    corresponding throughput advice for each.
 
-                  +==========+=============+============+
-                  | Version  | Rate Signal | Bitrate    |
-                  +==========+=============+============+
-                  | 0xSCONE1 | 0           | 100 Kbps   |
-                  +----------+-------------+------------+
-                  | 0xSCONE1 | 10          | 316 Kbps   |
-                  +----------+-------------+------------+
-                  | 0xSCONE1 | 20          | 1 Mbps     |
-                  +----------+-------------+------------+
-                  | 0xSCONE1 | 30          | 3.16 Mbps  |
-                  +----------+-------------+------------+
-                  | 0xSCONE1 | 40          | 10 Mbps    |
-                  +----------+-------------+------------+
-                  | 0xSCONE1 | 50          | 31.6 Mbps  |
-                  +----------+-------------+------------+
-                  | 0xSCONE1 | 60          | 100 Mbps   |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 6           | 316 Mbps   |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 16          | 1 Gbps     |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 26          | 3.16 Gbps  |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 36          | 10 Gbps    |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 46          | 31.6 Gbps  |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 56          | 100 Gbps   |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 62          | 199.5 Gbps |
-                  +----------+-------------+------------+
-                  | 0xSCONE2 | 63          | No limit   |
-                  +----------+-------------+------------+
+                 +============+=============+============+
+                 | Bitrate    | Rate Signal | Version    |
+                 +============+=============+============+
+                 | 100 Kbps   | 0           | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 112 Kbps   | 0           | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 126 Kbps   | 1           | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 141 Kbps   | 1           | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 1 Mbps     | 10          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 1.12 Mbps  | 10          | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 10 Mbps    | 20          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 11.2 Mbps  | 20          | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 100 Mbps   | 30          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 112 Mbps   | 30          | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 1 Gbps     | 40          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 1.12 Gbps  | 40          | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 10 Gbps    | 50          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 11.2 Gbps  | 50          | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 100 Gbps   | 60          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | 112 Gbps   | 60          | 0xef7dc0fd |
+                 +------------+-------------+------------+
+                 | 199.5 Gbps | 63          | 0x6f7dc0fd |
+                 +------------+-------------+------------+
+                 | No limit   | 63          | 0xef7dc0fd |
+                 +------------+-------------+------------+
 
-                      Table 1: Examples of signals and
-                            corresponding rates
+                     Table 1: Examples of SCONE signals
+                          and corresponding rates
 
 5.2.  Endpoint Processing of SCONE Packets
 
@@ -518,7 +526,7 @@ Table of Contents
 
    A network element detects a SCONE packet by observing that a packet
    has a QUIC long header and one of the SCONE protocol versions
-   (0xSCONE1 or 0xSCONE2).
+   (0x6f7dc0fd or 0xef7dc0fd).
 
    A network element then conditionally replaces the Version field and
    the Rate Signal field with values of its choosing.
@@ -538,10 +546,10 @@ Table of Contents
    if is_long and (packet_version == SCONE1_VERSION or
                    packet_version == SCONE2_VERSION):
      packet_throughput = \
-       signal_to_throughput(packet_version, packet[0] & 0x3f)
+       signal_to_throughput(packet[0] & 0x3f, packet_version)
 
      if target_throughput < packet_throughput:
-       target_version, target_signal = \
+       target_signal, target_version = \
          throughput_to_signal(target_throughput)
        packet[0] = packet[0] & 0xc0 | target_signal
        if target_version != packet_version:
@@ -552,8 +560,8 @@ Table of Contents
 
 8.  Version Interaction
 
-   The SCONE protocol defines two versions (0xSCONE1 and 0xSCONE2) that
-   cover different ranges of bitrates.  This design allows for:
+   The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
+   that cover different ranges of bitrates.  This design allows for:
 
    *  Support for both very low bitrates (down to 100 Kbps) and very
       high bitrates (up to 199.5 Gbps)
@@ -809,14 +817,14 @@ Table of Contents
    (https://www.iana.org/assignments/quic), following the guidance from
    Section 22.2 of [QUIC].
 
-   Value:  0xSCONE1
+   Value:  0x6f7dc0fd
    Status:  permanent
    Specification:  This document
    Change Controller:  IETF (iesg@ietf.org)
    Contact:  QUIC Working Group (quic@ietf.org)
    Notes:  SCONE Protocol - Low Range
 
-   Value:  0xSCONE2
+   Value:  0xef7dc0fd
    Status:  permanent
    Specification:  This document
    Change Controller:  IETF (iesg@ietf.org)

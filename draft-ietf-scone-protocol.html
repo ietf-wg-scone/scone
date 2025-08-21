@@ -1055,7 +1055,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 15 February 2026</td>
+<td class="center">Expires 22 February 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-14" class="published">14 August 2025</time>
+<time datetime="2025-08-21" class="published">21 August 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-02-15">15 February 2026</time></dd>
+<dd class="expires"><time datetime="2026-02-22">22 February 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 February 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1554,7 +1554,7 @@ SCONE Packet {
   Header Form (1) = 1,
   Reserved (1),
   Rate Signal (6),
-  Version (32) = 0xSCONE1 or 0xSCONE2,
+  Version (32) = 0x6f7dc0fd or 0xef7dc0fd,
   Destination Connection ID Length (8),
   Destination Connection ID (0..2040),
   Source Connection ID Length (8),
@@ -1571,15 +1571,18 @@ header packet.  The next bit (0x40) is reserved and can be set according to
 <span>[<a href="#QUIC-BIT" class="cite xref">QUIC-BIT</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">The low 6 bits (0x3f) of the first byte contain the Rate Signal field. Values
 for this field are described in <a href="#rate-signal" class="auto internal xref">Section 5.1</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">This packet includes a Destination Connection ID field that is set to the same
-value as other packets in the same datagram; see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-12.2" class="relref">Section 12.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">The Source Connection ID field is set to match the Source Connection ID field of
+<p id="section-5-6">The Version field contains either 0x6f7dc0fd or 0xef7dc0fd. To facilitate
+detection and modification of SCONE packets, the only difference between the
+two version numbers is the most significant bit; all other bits are identical.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-7">This packet includes a Destination Connection ID field that is set to the same
+value as other packets in the same datagram; see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-12.2" class="relref">Section 12.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-5-7" class="pilcrow">¶</a></p>
+<p id="section-5-8">The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
-(<span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.2" class="relref">Section 5.2</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>), the Source Connection ID field is empty.<a href="#section-5-7" class="pilcrow">¶</a></p>
-<p id="section-5-8">SCONE packets <span class="bcp14">SHOULD</span> be included as the first packet in a datagram.  This is
+(<span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.2" class="relref">Section 5.2</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>), the Source Connection ID field is empty.<a href="#section-5-8" class="pilcrow">¶</a></p>
+<p id="section-5-9">SCONE packets <span class="bcp14">SHOULD</span> be included as the first packet in a datagram.  This is
 necessary in many cases for QUIC versions 1 and 2 because packets with a short
-header cannot precede any other packets.<a href="#section-5-8" class="pilcrow">¶</a></p>
+header cannot precede any other packets.<a href="#section-5-9" class="pilcrow">¶</a></p>
 <div id="rate-signal">
 <section id="section-5.1">
         <h3 id="name-rate-signals">
@@ -1589,12 +1592,12 @@ header cannot precede any other packets.<a href="#section-5-8" class="pilcrow">�
 This field is encoded as a logarithmically spaced distribution over a range
 defined by the SCONE protocol version.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">When sent by a QUIC endpoint, the Version field of a SCONE packet is set to
-0xSCONE2 and the Rate Signal field is set to 0x3F (63), indicating no rate limit
+0xef7dc0fd and the Rate Signal field is set to 0x3F (63), indicating no rate limit
 is in place or that the SCONE protocol is not supported by network elements on
-the path. All other values (0x00 through 0x3F for protocol version 0xSCONE1 and
-0x00 through 0x3E for protocol version 0xSCONE2) represent the ceiling of rates
+the path. All other values (0x00 through 0x3F for protocol version 0x6f7dc0fd and
+0x00 through 0x3E for protocol version 0xef7dc0fd) represent the ceiling of rates
 being advised by the network element(s) on the path.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">For SCONE protocol version 0xSCONE1, the rate limits use a logarithmic scale with:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The rate limits use a logarithmic scale with:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-4.1">
             <p id="section-5.1-4.1.1">Base rate (b_min) = 100 Kbps<a href="#section-5.1-4.1.1" class="pilcrow">¶</a></p>
@@ -1603,104 +1606,114 @@ being advised by the network element(s) on the path.<a href="#section-5.1-2" cla
             <p id="section-5.1-4.2.1">Bitrate at value n = b_min * 10^(n/20)<a href="#section-5.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-5.1-5">For SCONE protocol version 0xSCONE2, the rate limits use a logarithmic scale with:<a href="#section-5.1-5" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.1-6.1">
-            <p id="section-5.1-6.1.1">Bitrate at value n = b_min * 10^((n + 64)/20)<a href="#section-5.1-6.1.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-5.1-7">With two versions combined, bitrates between 100 Kbps and 199.5 Gbps can be
-expressed.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
-<p id="section-5.1-8"><a href="#ex-rates" class="auto internal xref">Table 1</a> lists some of the potential values for signals
-and the corresponding throughput advice for each.<a href="#section-5.1-8" class="pilcrow">¶</a></p>
-<span id="name-examples-of-signals-and-cor"></span><div id="ex-rates">
+<p id="section-5.1-5">where n is an integer between 0 and 126.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1-6">The upper 6 bits of n is represented by the Rate Signal field. The least
+significant bit is represented by the first bit of the protocol version.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+<p id="section-5.1-7"><a href="#ex-rates" class="auto internal xref">Table 1</a> lists some of the potential values for signals
+and the corresponding throughput advice for each.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
+<span id="name-examples-of-scone-signals-a"></span><div id="ex-rates">
 <table class="center" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-examples-of-signals-and-cor" class="selfRef">Examples of signals and corresponding rates</a>
+<a href="#name-examples-of-scone-signals-a" class="selfRef">Examples of SCONE signals and corresponding rates</a>
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">Version</th>
-              <th class="text-left" rowspan="1" colspan="1">Rate Signal</th>
               <th class="text-left" rowspan="1" colspan="1">Bitrate</th>
+              <th class="text-left" rowspan="1" colspan="1">Rate Signal</th>
+              <th class="text-left" rowspan="1" colspan="1">Version</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">0</td>
               <td class="text-left" rowspan="1" colspan="1">100 Kbps</td>
+              <td class="text-left" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">10</td>
-              <td class="text-left" rowspan="1" colspan="1">316 Kbps</td>
+              <td class="text-left" rowspan="1" colspan="1">112 Kbps</td>
+              <td class="text-left" rowspan="1" colspan="1">0</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">20</td>
+              <td class="text-left" rowspan="1" colspan="1">126 Kbps</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">141 Kbps</td>
+              <td class="text-left" rowspan="1" colspan="1">1</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
+            </tr>
+            <tr>
               <td class="text-left" rowspan="1" colspan="1">1 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">10</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">30</td>
-              <td class="text-left" rowspan="1" colspan="1">3.16 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">1.12 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">10</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">40</td>
               <td class="text-left" rowspan="1" colspan="1">10 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">20</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">50</td>
-              <td class="text-left" rowspan="1" colspan="1">31.6 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">11.2 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">20</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE1</td>
-              <td class="text-left" rowspan="1" colspan="1">60</td>
               <td class="text-left" rowspan="1" colspan="1">100 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">30</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">6</td>
-              <td class="text-left" rowspan="1" colspan="1">316 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">112 Mbps</td>
+              <td class="text-left" rowspan="1" colspan="1">30</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">16</td>
               <td class="text-left" rowspan="1" colspan="1">1 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">40</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">26</td>
-              <td class="text-left" rowspan="1" colspan="1">3.16 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">1.12 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">40</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">36</td>
               <td class="text-left" rowspan="1" colspan="1">10 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">50</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">46</td>
-              <td class="text-left" rowspan="1" colspan="1">31.6 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">11.2 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">50</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">56</td>
               <td class="text-left" rowspan="1" colspan="1">100 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">60</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">62</td>
+              <td class="text-left" rowspan="1" colspan="1">112 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">60</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
+            </tr>
+            <tr>
               <td class="text-left" rowspan="1" colspan="1">199.5 Gbps</td>
+              <td class="text-left" rowspan="1" colspan="1">63</td>
+              <td class="text-left" rowspan="1" colspan="1">0x6f7dc0fd</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0xSCONE2</td>
-              <td class="text-left" rowspan="1" colspan="1">63</td>
               <td class="text-left" rowspan="1" colspan="1">No limit</td>
+              <td class="text-left" rowspan="1" colspan="1">63</td>
+              <td class="text-left" rowspan="1" colspan="1">0xef7dc0fd</td>
             </tr>
           </tbody>
         </table>
@@ -1823,7 +1836,7 @@ but only if the peer has sent the transport parameter; see <a href="#tp" class="
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-applying-throughput-advice-" class="section-name selfRef">Applying Throughput Advice Signals</a>
         </h3>
 <p id="section-7.1-1">A network element detects a SCONE packet by observing that a packet has a QUIC
-long header and one of the SCONE protocol versions (0xSCONE1 or 0xSCONE2).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+long header and one of the SCONE protocol versions (0x6f7dc0fd or 0xef7dc0fd).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
 <p id="section-7.1-2">A network element then conditionally replaces the Version field and the Rate
 Signal field with values of its choosing.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">A network element might receive a packet that already includes a rate signal.
@@ -1840,10 +1853,10 @@ packet_version = ntohl(packet[1..5])
 if is_long and (packet_version == SCONE1_VERSION or
                 packet_version == SCONE2_VERSION):
   packet_throughput = \
-    signal_to_throughput(packet_version, packet[0] &amp; 0x3f)
+    signal_to_throughput(packet[0] &amp; 0x3f, packet_version)
 
   if target_throughput &lt; packet_throughput:
-    target_version, target_signal = \
+    target_signal, target_version = \
       throughput_to_signal(target_throughput)
     packet[0] = packet[0] &amp; 0xc0 | target_signal
     if target_version != packet_version:
@@ -1861,7 +1874,7 @@ the network element updates the UDP checksum for the datagram.<a href="#section-
       <h2 id="name-version-interaction">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-version-interaction" class="section-name selfRef">Version Interaction</a>
       </h2>
-<p id="section-8-1">The SCONE protocol defines two versions (0xSCONE1 and 0xSCONE2) that cover
+<p id="section-8-1">The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd) that cover
 different ranges of bitrates. This design allows for:<a href="#section-8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-8-2.1">
@@ -2181,7 +2194,7 @@ from <span><a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relr
 <span class="break"></span><dl class="dlCompact dlParallel" id="section-11.1-2">
           <dt id="section-11.1-2.1">Value:</dt>
           <dd style="margin-left: 1.5em" id="section-11.1-2.2">
-            <p id="section-11.1-2.2.1">0xSCONE1<a href="#section-11.1-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-11.1-2.2.1">0x6f7dc0fd<a href="#section-11.1-2.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-11.1-2.3">Status:</dt>
@@ -2213,7 +2226,7 @@ from <span><a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relr
 <span class="break"></span><dl class="dlCompact dlParallel" id="section-11.1-3">
           <dt id="section-11.1-3.1">Value:</dt>
           <dd style="margin-left: 1.5em" id="section-11.1-3.2">
-            <p id="section-11.1-3.2.1">0xSCONE2<a href="#section-11.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-11.1-3.2.1">0xef7dc0fd<a href="#section-11.1-3.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-11.1-3.3">Status:</dt>
