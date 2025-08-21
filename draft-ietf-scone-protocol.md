@@ -261,7 +261,7 @@ SCONE Packet {
   Header Form (1) = 1,
   Reserved (1),
   Rate Signal (6),
-  Version (32) = 0xSCONE1 or 0xSCONE2,
+  Version (32) = 0x6f7dc0fd or 0xef7dc0fd,
   Destination Connection ID Length (8),
   Destination Connection ID (0..2040),
   Source Connection ID Length (8),
@@ -270,12 +270,21 @@ SCONE Packet {
 ~~~
 {: #fig-scone-packet title="SCONE Packet Format"}
 
+<!--
+https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-version;field=version;codepoint=0x6f7dc0fd
+Plus https://github.com/ietf-wg-scone/scone/issues/45
+-->
+
 The most significant bit (0x80) of the packet indicates that this is a QUIC long
 header packet.  The next bit (0x40) is reserved and can be set according to
 {{!QUIC-BIT=RFC9287}}.
 
 The low 6 bits (0x3f) of the first byte contain the Rate Signal field. Values
 for this field are described in {{rate-signal}}.
+
+The Version field contains either 0x6f7dc0fd or 0xef7dc0fd. To facilitate
+detection and modification of SCONE packets, the only difference between the
+two version numbers is the most significant bit; all other bits are identical.
 
 This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
@@ -296,45 +305,47 @@ This field is encoded as a logarithmically spaced distribution over a range
 defined by the SCONE protocol version.
 
 When sent by a QUIC endpoint, the Version field of a SCONE packet is set to
-0xSCONE2 and the Rate Signal field is set to 0x3F (63), indicating no rate limit
+0xef7dc0fd and the Rate Signal field is set to 0x3F (63), indicating no rate limit
 is in place or that the SCONE protocol is not supported by network elements on
-the path. All other values (0x00 through 0x3F for protocol version 0xSCONE1 and
-0x00 through 0x3E for protocol version 0xSCONE2) represent the ceiling of rates
+the path. All other values (0x00 through 0x3F for protocol version 0x6f7dc0fd and
+0x00 through 0x3E for protocol version 0xef7dc0fd) represent the ceiling of rates
 being advised by the network element(s) on the path.
 
-For SCONE protocol version 0xSCONE1, the rate limits use a logarithmic scale with:
+The rate limits use a logarithmic scale with:
 
 * Base rate (b_min) = 100 Kbps
 * Bitrate at value n = b_min * 10^(n/20)
 
-For SCONE protocol version 0xSCONE2, the rate limits use a logarithmic scale with:
+where n is an integer between 0 and 126.
 
-* Bitrate at value n = b_min * 10^((n + 64)/20)
-
-With two versions combined, bitrates between 100 Kbps and 199.5 Gbps can be
-expressed.
+The upper 6 bits of n is represented by the Rate Signal field. The least
+significant bit is represented by the first bit of the protocol version.
 
 {{ex-rates}} lists some of the potential values for signals
 and the corresponding throughput advice for each.
 
-| Version  | Rate Signal |  Bitrate   |
-|:---------|:------------|:-----------|
-| 0xSCONE1 | 0           | 100 Kbps   |
-| 0xSCONE1 | 10          | 316 Kbps   |
-| 0xSCONE1 | 20          | 1 Mbps     |
-| 0xSCONE1 | 30          | 3.16 Mbps  |
-| 0xSCONE1 | 40          | 10 Mbps    |
-| 0xSCONE1 | 50          | 31.6 Mbps  |
-| 0xSCONE1 | 60          | 100 Mbps   |
-| 0xSCONE2 | 6           | 316 Mbps   |
-| 0xSCONE2 | 16          | 1 Gbps     |
-| 0xSCONE2 | 26          | 3.16 Gbps  |
-| 0xSCONE2 | 36          | 10 Gbps    |
-| 0xSCONE2 | 46          | 31.6 Gbps  |
-| 0xSCONE2 | 56          | 100 Gbps   |
-| 0xSCONE2 | 62          | 199.5 Gbps |
-| 0xSCONE2 | 63          | No limit   |
-{: #ex-rates title="Examples of signals and corresponding rates"}
+| Bitrate    | Rate Signal | Version    |
+|:-----------|:------------|:-----------|
+| 100 Kbps   | 0           | 0x6f7dc0fd |
+| 112 Kbps   | 0           | 0xef7dc0fd |
+| 126 Kbps   | 1           | 0x6f7dc0fd |
+| 141 Kbps   | 1           | 0xef7dc0fd |
+| 1 Mbps     | 10          | 0x6f7dc0fd |
+| 1.12 Mbps  | 10          | 0xef7dc0fd |
+| 10 Mbps    | 20          | 0x6f7dc0fd |
+| 11.2 Mbps  | 20          | 0xef7dc0fd |
+| 100 Mbps   | 30          | 0x6f7dc0fd |
+| 112 Mbps   | 30          | 0xef7dc0fd |
+| 1 Gbps     | 40          | 0x6f7dc0fd |
+| 1.12 Gbps  | 40          | 0xef7dc0fd |
+| 10 Gbps    | 50          | 0x6f7dc0fd |
+| 11.2 Gbps  | 50          | 0xef7dc0fd |
+| 100 Gbps   | 60          | 0x6f7dc0fd |
+| 112 Gbps   | 60          | 0xef7dc0fd |
+| 199.5 Gbps | 63          | 0x6f7dc0fd |
+| No limit   | 63          | 0xef7dc0fd |
+{: #ex-rates title="Examples of SCONE signals and corresponding rates"}
+
 
 ## Endpoint Processing of SCONE Packets
 
@@ -450,7 +461,7 @@ QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 ## Applying Throughput Advice Signals {#apply}
 
 A network element detects a SCONE packet by observing that a packet has a QUIC
-long header and one of the SCONE protocol versions (0xSCONE1 or 0xSCONE2).
+long header and one of the SCONE protocol versions (0x6f7dc0fd or 0xef7dc0fd).
 
 A network element then conditionally replaces the Version field and the Rate
 Signal field with values of its choosing.
@@ -470,10 +481,10 @@ packet_version = ntohl(packet[1..5])
 if is_long and (packet_version == SCONE1_VERSION or
                 packet_version == SCONE2_VERSION):
   packet_throughput = \
-    signal_to_throughput(packet_version, packet[0] & 0x3f)
+    signal_to_throughput(packet[0] & 0x3f, packet_version)
 
   if target_throughput < packet_throughput:
-    target_version, target_signal = \
+    target_signal, target_version = \
       throughput_to_signal(target_throughput)
     packet[0] = packet[0] & 0xc0 | target_signal
     if target_version != packet_version:
@@ -486,7 +497,7 @@ the network element updates the UDP checksum for the datagram.
 
 # Version Interaction {#version-interaction}
 
-The SCONE protocol defines two versions (0xSCONE1 and 0xSCONE2) that cover
+The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd) that cover
 different ranges of bitrates. This design allows for:
 
 *  Support for both very low bitrates (down to 100 Kbps) and very high bitrates
@@ -733,7 +744,7 @@ maintained at <https://www.iana.org/assignments/quic>, following the guidance
 from {{Section 22.2 of QUIC}}.
 
 Value:
-: 0xSCONE1
+: 0x6f7dc0fd
 
 Status:
 : permanent
@@ -752,7 +763,7 @@ Notes:
 {: spacing="compact"}
 
 Value:
-: 0xSCONE2
+: 0xef7dc0fd
 
 Status:
 : permanent
