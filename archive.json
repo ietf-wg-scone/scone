@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-19T01:43:08.014885+00:00",
+  "timestamp": "2025-08-21T01:40:36.220227+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1616,15 +1616,15 @@
       "id": "I_kwDON1dwo87CDjOr",
       "title": "create a 7-bit rate signal field, by allocating two QUIC versions that differ only with MSB",
       "url": "https://github.com/ietf-wg-scone/scone/issues/45",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "SCONE uses a 7-bit value (128 code points) for representing the rate signal.\n\nAt the moment, the most significant bit of the rate signal affects the selection of the QUIC version, and the rest of the bit is stored in the first byte of the datagram.\n\nThis construction is sub-optimal and is a pain in terms of both specification and implementation.\n\nI propose to allocate two QUIC versions that are identical for all bits expect the most significant bit.\n\n```\nSCONE Packet {\n  Header Form (1) = 1,\n  Reserved (1),\n  Rate Signal (7),\n  Common Bits of SCONE Versions (31) = 0xSCONE1 & 0x7fffffff,\n  Destination Connection ID Length (8),\n  Destination Connection ID (0..2040),\n  Source Connection ID Length (8),\n  Source Connection ID (0..2040),\n}\n```\n\nWith this change, detecting SCONE packets becomes as simple as `(first64bit & 0xc07f_ffff_ffff_ffff) == (0xc000_0000_0000_0000 | (0xSCONE1 << 24))`, and the rate signal becomes a 7-bit value that can be directly processed (without looking up different base values based on the QUIC version).",
       "createdAt": "2025-07-23T09:54:43Z",
-      "updatedAt": "2025-07-23T15:53:26Z",
-      "closedAt": null,
+      "updatedAt": "2025-08-21T00:00:25Z",
+      "closedAt": "2025-08-21T00:00:25Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -4754,13 +4754,13 @@
       "labels": [],
       "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
       "createdAt": "2025-07-23T11:37:13Z",
-      "updatedAt": "2025-08-14T20:26:26Z",
+      "updatedAt": "2025-08-19T04:32:31Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "time",
       "baseRefOid": "1907b12b012e5e56764abcbb09b446fa49f2fba9",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
-      "headRefOid": "6fe24ab0b0c4deb0fd96a25ee96fbdcd8f568767",
+      "headRefOid": "9b94b9dd76667f6a6919b5eb6c8c123602801f30",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4828,6 +4828,13 @@
           "body": "I agree with @wesley-eddy @afrind , different applications may act differently to meet the advised bit-rate. We should limit the scope of the protocol to how advised bit-rate is sent by n/w element and what is the minimum averaging window ( 120 sec or 60 sec  -  closest prime number)   for n/w element to measure the advised bit-rate. How enforcement of rates happens by n/w element and application is totally out of the scope from SCONE protocol perspective. ",
           "createdAt": "2025-08-14T20:25:52Z",
           "updatedAt": "2025-08-14T20:26:26Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for the feedback.  I've done as Alan suggests and added a bunch of advice on how to send SCONE packets (because it fit).  Those who were unhappy with this should take another look.",
+          "createdAt": "2025-08-19T04:32:31Z",
+          "updatedAt": "2025-08-19T04:32:31Z"
         }
       ],
       "reviews": [
@@ -5387,24 +5394,26 @@
       "id": "PR_kwDON1dwo86gTJUk",
       "title": "Define version numbers",
       "url": "https://github.com/ietf-wg-scone/scone/pull/51",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #45.",
       "createdAt": "2025-07-23T16:04:45Z",
-      "updatedAt": "2025-07-30T07:15:56Z",
+      "updatedAt": "2025-08-21T00:00:24Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "7a5c958cc37d32558ef6c37687d2749c6d00c048",
+      "baseRefOid": "c45a82dc51e07db1a711c75c638422fe47324a1f",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "define-versions",
-      "headRefOid": "4ef39186f17399447683cae3a0712e6f286c1c85",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "d11a61e413a6584e9be722de8a823f4508f88780",
+      "closedAt": "2025-08-21T00:00:24Z",
+      "mergedAt": "2025-08-21T00:00:24Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "838decdefcea0ca21a7a42802815274d6256d005"
+      },
       "comments": [],
       "reviews": [
         {
@@ -5427,10 +5436,10 @@
           },
           "author": "kazuho",
           "authorAssociation": "CONTRIBUTOR",
-          "state": "CHANGES_REQUESTED",
+          "state": "DISMISSED",
           "body": "",
           "createdAt": "2025-07-23T17:48:35Z",
-          "updatedAt": "2025-07-23T17:48:40Z",
+          "updatedAt": "2025-08-21T00:00:12Z",
           "comments": [
             {
               "originalPosition": 31,
@@ -5611,24 +5620,26 @@
       "id": "PR_kwDON1dwo86hTKTy",
       "title": "MSB of version is LSB of the rate signal",
       "url": "https://github.com/ietf-wg-scone/scone/pull/54",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR is against #51, uses MSB of the version field to carry the LSB of the rate signal, so that the bit 2 to bit 8 of the first 64-bit field carries a rate signal, which is calculated by using a logarithmic function without bit swaps or any other complexity.",
       "createdAt": "2025-07-30T07:15:17Z",
-      "updatedAt": "2025-08-14T08:05:51Z",
+      "updatedAt": "2025-08-20T23:59:30Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "define-versions",
-      "baseRefOid": "4ef39186f17399447683cae3a0712e6f286c1c85",
+      "baseRefOid": "757481f7f8c2c69f8dd7a2b54fa798a3b15bc5e8",
       "headRepository": "kazuho/i-d-trone",
       "headRefName": "kazuho/7bit-contiguous-rate",
-      "headRefOid": "927b5e3303438289f9a0c844224113ab40862529",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "e4cc5fc734ebb138cae8a9991d11891d1266a1c5",
+      "closedAt": "2025-08-20T23:59:30Z",
+      "mergedAt": "2025-08-20T23:59:30Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "d11a61e413a6584e9be722de8a823f4508f88780"
+      },
       "comments": [
         {
           "author": "kazuho",
@@ -5636,6 +5647,20 @@
           "body": "@ihlar WDYT?",
           "createdAt": "2025-08-14T08:05:51Z",
           "updatedAt": "2025-08-14T08:05:51Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@ihlar Thank you for the review.\r\n\r\n> I think we need to consider whether we need to explicitly talk about two versions now. In my implementation I only need to care about the lower 31 bits (0x6f7dc0fd). Since the actual rate signal 7 contiguous bits, I think it would make since to define the Rate Signal Field to be that and the version bits as a 31 bit field in the SCONE packet Format. We could then also have a nicer table with examples between 0 and 127.\r\n> \r\n> I see that's exactly what @kazuho proposes in https://github.com/ietf-wg-scone/scone/issues/45. I'd prefer that approach, but we can merge this first and continue that discussion separately.\r\n\r\n+1 to merging this to #51 and merging #51 to main, as they change the bits on the wire.\r\n\r\nAfter that, we can look into changing the explanation to talk about 7-bit and a 31-bit fields. That is going to be *editorial* and does not have an impact on code; therefore it is easier to land whenever it becomes ready.",
+          "createdAt": "2025-08-20T23:54:19Z",
+          "updatedAt": "2025-08-20T23:54:19Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "OK, I'm going to do that.  Once I resolve all these conflicts.",
+          "createdAt": "2025-08-20T23:57:22Z",
+          "updatedAt": "2025-08-20T23:57:22Z"
         }
       ],
       "reviews": [
@@ -5651,6 +5676,39 @@
           "createdAt": "2025-07-30T09:31:05Z",
           "updatedAt": "2025-07-30T09:31:05Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo86637-4",
+          "commit": {
+            "abbreviatedOid": "927b5e3"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I think this approach is fine. Implemented it and it definitely makes the implementation even more lean and efficient. \r\n\r\nI think we need to consider whether we need to explicitly talk about two versions now. In my implementation I only need to care about the lower 31 bits (0x6f7dc0fd). Since the actual rate signal 7 contiguous bits, I think it would make since to define the Rate Signal Field to be that and the version bits as a 31 bit field in the SCONE packet Format. We could then also have a nicer table with examples between 0 and 127.  \r\n\r\nI see that's exactly what @kazuho proposes in #45. I'd prefer that approach, but we can merge this first and continue that discussion separately. ",
+          "createdAt": "2025-08-20T07:43:05Z",
+          "updatedAt": "2025-08-20T08:09:45Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo867E2qy",
+          "commit": {
+            "abbreviatedOid": "c0d088d"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-20T23:58:50Z",
+          "updatedAt": "2025-08-20T23:58:51Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "```suggestion\n{: #ex-rates title=\"Examples of SCONE signals and corresponding rates\"}\n```",
+              "createdAt": "2025-08-20T23:58:50Z",
+              "updatedAt": "2025-08-20T23:58:51Z"
+            }
+          ]
         }
       ]
     },
