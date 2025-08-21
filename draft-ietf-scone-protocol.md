@@ -250,8 +250,8 @@ client {{?HLS=RFC8216}} can ask for lower bitrate, lower quality media segments.
 
 # SCONE Packet {#packet}
 
-A SCONE packet is a QUIC long header packet that follows the QUIC invariants
-and is compliant with RFC 8999; see {{Section 5.1 of INVARIANTS}}.
+A SCONE packet is a QUIC long header packet that follows the QUIC invariants;
+see {{Section 5.1 of INVARIANTS}}.
 
 {{fig-scone-packet}} shows the format of the SCONE packet using the conventions
 from {{Section 4 of INVARIANTS}}.
@@ -288,7 +288,8 @@ The remaining 31 bits of the version field contain the common version bits
 0x6f7dc0fd. The complete version field is either 0x6f7dc0fd (when the
 least significant bit of the Rate Signal is 0) or 0xef7dc0fd (when the least
 significant bit of the Rate Signal is 1). This design facilitates detection
-and modification of SCONE packets while maintaining RFC 8999 compliance.
+and modification of SCONE packets while maintaining compliance with the QUIC
+invariants.
 
 This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
@@ -305,7 +306,7 @@ header cannot precede any other packets.
 ## Rate Signals {#rate-signal}
 
 The Rate Signal field in SCONE uses 7 bits: the low 6 bits (0x3f) of the first
-byte combined with the most significant bit (0x80000000) of the version field.
+byte combined with the most significant bit (0x80) of the second byte.
 This creates a contiguous 7-bit field with values from 0 to 127.
 
 When sent by a QUIC endpoint, the Rate Signal field is set to 127, indicating
