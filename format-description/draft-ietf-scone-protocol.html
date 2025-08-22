@@ -1569,16 +1569,14 @@ SCONE Packet {
 <p id="section-5-4">The most significant bit (0x80) of the packet indicates that this is a QUIC long
 header packet.  The next bit (0x40) is reserved and can be set according to
 <span>[<a href="#QUIC-BIT" class="cite xref">QUIC-BIT</a>]</span>.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">The Rate Signal field uses 7 bits spanning the low 6 bits (0x3f) of the first
-byte and the most significant bit of the version field. This creates a
-contiguous 7-bit field with values from 0 to 127. Values for this field are
-described in <a href="#rate-signal" class="auto internal xref">Section 5.1</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">The remaining 31 bits of the version field contain the common version bits
-0x6f7dc0fd. The complete version field is either 0x6f7dc0fd (when the
-least significant bit of the Rate Signal is 0) or 0xef7dc0fd (when the least
-significant bit of the Rate Signal is 1). This design facilitates detection
-and modification of SCONE packets while maintaining compliance with the QUIC
-invariants.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-5">The Rate Signal High Bits field consists of the low six bits (0x3f) of the
+first byte. Together with the most significant bit of the Version field,
+this forms the 7-bit Rate Signal. Values for the Rate Signal are described in
+<a href="#rate-signal" class="auto internal xref">Section 5.1</a>.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">The Version field contains either 0x6f7dc0fd or 0xef7dc0fd. The only difference
+between these two values is the most significant bit, which also contributes to
+the Rate Signal. All other bits are identical, which facilitates detection and
+modification of SCONE packets.<a href="#section-5-6" class="pilcrow">¶</a></p>
 <p id="section-5-7">This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-12.2" class="relref">Section 12.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-5-8">The Source Connection ID field is set to match the Source Connection ID field of
@@ -1593,14 +1591,14 @@ header cannot precede any other packets.<a href="#section-5-9" class="pilcrow">�
         <h3 id="name-rate-signals">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-rate-signals" class="section-name selfRef">Rate Signals</a>
         </h3>
-<p id="section-5.1-1">The Rate Signal field in SCONE uses 7 bits: the low 6 bits (0x3f) of the first
-byte combined with the most significant bit (0x80) of the second byte.
-This creates a contiguous 7-bit field with values from 0 to 127.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<p id="section-5.1-2">When sent by a QUIC endpoint, the Rate Signal field is set to 127, indicating
+<p id="section-5.1-1">A Rate Signal is a 7-bit unsigned integer (0-127). The high six bits are the
+Rate Signal High Bits, and the least significant bit also serves as the most
+significant bit of the Version field.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-2">When sent by a QUIC endpoint, the Rate Signal is set to 127, to indicate that
 no rate limit is in place or that the SCONE protocol is not supported by
 network elements on the path. All other values (0 through 126) represent the
-ceiling of rates being advised by the network element(s) on the path.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">The rate limits use a logarithmic scale with:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+ceiling of rates advised by the network element(s) on the path.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">The rate limits follow a logarithmic scale defined as:<a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.1-4.1">
             <p id="section-5.1-4.1.1">Base rate (b_min) = 100 Kbps<a href="#section-5.1-4.1.1" class="pilcrow">¶</a></p>
@@ -1609,9 +1607,9 @@ ceiling of rates being advised by the network element(s) on the path.<a href="#s
             <p id="section-5.1-4.2.1">Bitrate at value n = b_min * 10^(n/20)<a href="#section-5.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-5.1-5">where n is an integer between 0 and 126 represented by the Rate Signal field.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1-5">where n is an integer between 0 and 126 represented by the Rate Signal.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 <p id="section-5.1-6"><a href="#ex-rates" class="auto internal xref">Table 1</a> lists some of the potential values for signals
-and the corresponding throughput advice for each.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
+and the corresponding bitrate for each.<a href="#section-5.1-6" class="pilcrow">¶</a></p>
 <span id="name-examples-of-scone-signals-a"></span><div id="ex-rates">
 <table class="center" id="table-1">
           <caption>
@@ -1713,7 +1711,7 @@ datagram is successfully processed.  Therefore, a SCONE packet always needs to
 be coalesced with other QUIC packets.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">A SCONE packet is defined by the use of the long header bit (0x80 in the first
 byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
-bytes). The 7-bit Rate Signal value can be extracted by combining the low 6 bits
+bytes). The 7-bit Rate Signal can be extracted by combining the low 6 bits
 of the first byte with the most significant bit of the version field. A SCONE
 packet <span class="bcp14">MAY</span> be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
