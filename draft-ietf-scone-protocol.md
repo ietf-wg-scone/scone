@@ -279,17 +279,15 @@ The most significant bit (0x80) of the packet indicates that this is a QUIC long
 header packet.  The next bit (0x40) is reserved and can be set according to
 {{!QUIC-BIT=RFC9287}}.
 
-The Rate Signal field uses 7 bits spanning the low 6 bits (0x3f) of the first
-byte and the most significant bit of the version field. This creates a
-contiguous 7-bit field with values from 0 to 127. Values for this field are
-described in {{rate-signal}}.
+The Rate Signal High Bits field consists of the low six bits (0x3f) of the
+first byte. Together with the most significant bit of the Version field,
+this forms the 7-bit Rate Signal. Values for the Rate Signal are described in
+{{rate-signal}}.
 
-The remaining 31 bits of the version field contain the common version bits
-0x6f7dc0fd. The complete version field is either 0x6f7dc0fd (when the
-least significant bit of the Rate Signal is 0) or 0xef7dc0fd (when the least
-significant bit of the Rate Signal is 1). This design facilitates detection
-and modification of SCONE packets while maintaining compliance with the QUIC
-invariants.
+The Version field contains either 0x6f7dc0fd or 0xef7dc0fd. The only difference
+between these two values is the most significant bit, which also contributes to
+the Rate Signal. All other bits are identical, which facilitates detection and
+modification of SCONE packets.
 
 This packet includes a Destination Connection ID field that is set to the same
 value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
@@ -305,24 +303,24 @@ header cannot precede any other packets.
 
 ## Rate Signals {#rate-signal}
 
-The Rate Signal field in SCONE uses 7 bits: the low 6 bits (0x3f) of the first
-byte combined with the most significant bit (0x80) of the second byte.
-This creates a contiguous 7-bit field with values from 0 to 127.
+A Rate Signal is a 7-bit unsigned integer (0-127). The high six bits are the
+Rate Signal High Bits, and the least significant bit also serves as the most
+significant bit of the Version field.
 
-When sent by a QUIC endpoint, the Rate Signal field is set to 127, indicating
+When sent by a QUIC endpoint, the Rate Signal is set to 127, to indicate that
 no rate limit is in place or that the SCONE protocol is not supported by
 network elements on the path. All other values (0 through 126) represent the
-ceiling of rates being advised by the network element(s) on the path.
+ceiling of rates advised by the network element(s) on the path.
 
-The rate limits use a logarithmic scale with:
+The rate limits follow a logarithmic scale defined as:
 
 * Base rate (b_min) = 100 Kbps
 * Bitrate at value n = b_min * 10^(n/20)
 
-where n is an integer between 0 and 126 represented by the Rate Signal field.
+where n is an integer between 0 and 126 represented by the Rate Signal.
 
 {{ex-rates}} lists some of the potential values for signals
-and the corresponding throughput advice for each.
+and the corresponding bitrate for each.
 
 | Bitrate     | Rate Signal |
 |:------------|:------------|
@@ -356,7 +354,7 @@ be coalesced with other QUIC packets.
 
 A SCONE packet is defined by the use of the long header bit (0x80 in the first
 byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
-bytes). The 7-bit Rate Signal value can be extracted by combining the low 6 bits
+bytes). The 7-bit Rate Signal can be extracted by combining the low 6 bits
 of the first byte with the most significant bit of the version field. A SCONE
 packet MAY be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
