@@ -260,8 +260,8 @@ from {{Section 4 of INVARIANTS}}.
 SCONE Packet {
   Header Form (1) = 1,
   Reserved (1),
-  Rate Signal (7),
-  Common version bits (31) = 0x6f7dc0fd,
+  Rate Signal High Bits (6),
+  Version (32) = 0x6f7dc0fd or 0xef7dc0fd,
   Destination Connection ID Length (8),
   Destination Connection ID (0..2040),
   Source Connection ID Length (8),
