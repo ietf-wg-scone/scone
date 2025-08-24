@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-21T01:40:36.220227+00:00",
+  "timestamp": "2025-08-24T01:50:23.077408+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -5627,7 +5627,7 @@
       "labels": [],
       "body": "This PR is against #51, uses MSB of the version field to carry the LSB of the rate signal, so that the bit 2 to bit 8 of the first 64-bit field carries a rate signal, which is calculated by using a logarithmic function without bit swaps or any other complexity.",
       "createdAt": "2025-07-30T07:15:17Z",
-      "updatedAt": "2025-08-20T23:59:30Z",
+      "updatedAt": "2025-08-22T05:17:56Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "define-versions",
       "baseRefOid": "757481f7f8c2c69f8dd7a2b54fa798a3b15bc5e8",
@@ -5661,6 +5661,13 @@
           "body": "OK, I'm going to do that.  Once I resolve all these conflicts.",
           "createdAt": "2025-08-20T23:57:22Z",
           "updatedAt": "2025-08-20T23:57:22Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thank you!",
+          "createdAt": "2025-08-22T05:17:56Z",
+          "updatedAt": "2025-08-22T05:17:56Z"
         }
       ],
       "reviews": [
@@ -5763,6 +5770,211 @@
           "body": "",
           "createdAt": "2025-08-13T11:00:02Z",
           "updatedAt": "2025-08-13T11:00:02Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 59,
+      "id": "PR_kwDON1dwo86kw81B",
+      "title": "Update format description",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/59",
+      "state": "OPEN",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Editorial proposal where focus is on the 7-bit rate signal field as opposed to the 6-bits + version focus. \r\nWe can discuss whether we want to do anything with the pseudo code as well. ",
+      "createdAt": "2025-08-21T21:09:45Z",
+      "updatedAt": "2025-08-23T07:41:03Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "838decdefcea0ca21a7a42802815274d6256d005",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "format-description",
+      "headRefOid": "cf835e6f404f93737acd1b2502da4403ef8d32ac",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for the reviews. I've updated the PR to keep the original packet format and instead describe a Rate Signal constructed by the Rate Signal High Bits and MSB of Version.",
+          "createdAt": "2025-08-22T14:31:08Z",
+          "updatedAt": "2025-08-22T14:31:08Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo867TpHo",
+          "commit": {
+            "abbreviatedOid": "30e0253"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-21T22:48:17Z",
+          "updatedAt": "2025-08-21T23:29:53Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "I don't think that we should make this change.  I would prefer that we instead note that the rate signal and high bit of the version field form a contiguous span of bits (assuming big-endian bytes) and so can be interpreted as a single field.  Messing with the packet layout this way is likely to be confusing.\n\nInstead, describe it as it was, but add text explaining an alternative approach for extracting the signal. You can say that this might be an effective optimization for network elements in particular.  But I would suggest keeping the basic layout as it was to keep things better aligned with other QUIC specifications.",
+              "createdAt": "2025-08-21T22:48:17Z",
+              "updatedAt": "2025-08-21T23:29:53Z"
+            },
+            {
+              "originalPosition": 90,
+              "body": "This part is nice, I agree.  But maybe we can just describe how to generate that value `(signal <<1 | version >> 31)`.",
+              "createdAt": "2025-08-21T23:00:57Z",
+              "updatedAt": "2025-08-21T23:29:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo867U9HF",
+          "commit": {
+            "abbreviatedOid": "30e0253"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-22T01:46:43Z",
+          "updatedAt": "2025-08-22T01:46:44Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "+1 to @martinthomson that the definition of these fields should better be consistent with that of RFC 8999 and 9000. At the same time, +1 to @ihlar to describe the signal as a 7-bit value, rather than a combination of a 6-bit field and the two QUIC versions.\r\n\r\nTherefore, maybe change the field definitions to something like below, and explain that the Rate Signal is conveyed as a 7-bit value spanning across the two consecutive fields? Then, in the rest of the document, we can just talk about the \"Rate Signal.\"\r\n\r\n```suggestion\r\n  Lower 6 Bits (6),\r\n  Version (32) = 0x6f7dc0fd or 0xef7dc0fd,\r\n```",
+              "createdAt": "2025-08-22T01:46:43Z",
+              "updatedAt": "2025-08-22T01:46:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo867VYyp",
+          "commit": {
+            "abbreviatedOid": "30e0253"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-22T03:05:26Z",
+          "updatedAt": "2025-08-22T03:05:26Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\n  Rate Signal High Bits (6),\r\n  Version (32) = 0x6f7dc0fd or 0xef7dc0fd,\r\n```\r\n\r\nThen we can say a Rate Signal comprises \"Rate Signal High Bits\" and an LSB which is the MSB of the \"Version\" field.",
+              "createdAt": "2025-08-22T03:05:26Z",
+              "updatedAt": "2025-08-22T03:05:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo867V0cS",
+          "commit": {
+            "abbreviatedOid": "30e0253"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "The 7 bit field is a great idea, but it is important that we remain compatible with QUIC invariants.",
+          "createdAt": "2025-08-22T04:43:55Z",
+          "updatedAt": "2025-08-22T04:48:14Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "+1\r\nScone is defined to be compatible with QUIC invariants, and the invariants describe the version as 32 bits. Let's keep it that way. Then maybe redefine _Rate Signal (6)_ as _Rate Signal_MSB (6)_, and add text on how to extract the _Rate Signal (7)_ from the MSB and the top bit of version.",
+              "createdAt": "2025-08-22T04:43:55Z",
+              "updatedAt": "2025-08-22T04:48:14Z"
+            },
+            {
+              "originalPosition": 7,
+              "body": "Yes. That's exactly what I suggested in my previous comment.",
+              "createdAt": "2025-08-22T04:44:38Z",
+              "updatedAt": "2025-08-22T04:48:14Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "Can we tie that to the proposed definition of the field as _Rate Signal High Bits (6)_ ?",
+              "createdAt": "2025-08-22T04:46:01Z",
+              "updatedAt": "2025-08-22T04:48:14Z"
+            },
+            {
+              "originalPosition": 44,
+              "body": "Same comment. If we end up calling the 6 bits Rate _Signal High Bits (6)_ in the diagrams, lets reuse the name here.",
+              "createdAt": "2025-08-22T04:46:54Z",
+              "updatedAt": "2025-08-22T04:48:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo867cKz2",
+          "commit": {
+            "abbreviatedOid": "cf835e6"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-22T14:28:18Z",
+          "updatedAt": "2025-08-22T14:28:18Z",
+          "comments": [
+            {
+              "originalPosition": 44,
+              "body": "Fixed in latest commit.",
+              "createdAt": "2025-08-22T14:28:18Z",
+              "updatedAt": "2025-08-22T14:28:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo867ceJq",
+          "commit": {
+            "abbreviatedOid": "cf835e6"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-22T14:47:41Z",
+          "updatedAt": "2025-08-22T14:47:41Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "Good point. Text is updated along these lines now. ",
+              "createdAt": "2025-08-22T14:47:41Z",
+              "updatedAt": "2025-08-22T14:47:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo867egy9",
+          "commit": {
+            "abbreviatedOid": "cf835e6"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good after the recent changes.",
+          "createdAt": "2025-08-22T17:52:35Z",
+          "updatedAt": "2025-08-22T17:52:35Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo867mI5K",
+          "commit": {
+            "abbreviatedOid": "cf835e6"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thank you for doing this.\r\n\r\nI think we have to modify the pseudo code too, but the changes all look good.",
+          "createdAt": "2025-08-23T07:41:03Z",
+          "updatedAt": "2025-08-23T07:41:03Z",
           "comments": []
         }
       ]
