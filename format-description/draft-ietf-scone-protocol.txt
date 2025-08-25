@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 23 February 2026                           Private Octopus Inc.
+Expires: 26 February 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          22 August 2025
+                                                          25 August 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 February 2026.
+   This Internet-Draft will expire on 26 February 2026.
 
 Copyright Notice
 
@@ -364,8 +364,8 @@ Table of Contents
 5.1.  Rate Signals
 
    A Rate Signal is a 7-bit unsigned integer (0-127).  The high six bits
-   are the Rate Signal High Bits, and the least significant bit also
-   serves as the most significant bit of the Version field.
+   are the Rate Signal High Bits, and the least significant bit is the
+   most significant bit of the Version field.
 
    When sent by a QUIC endpoint, the Rate Signal is set to 127, to
    indicate that no rate limit is in place or that the SCONE protocol is
