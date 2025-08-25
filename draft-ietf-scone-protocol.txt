@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 22 February 2026                           Private Octopus Inc.
+Expires: 26 February 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          21 August 2025
+                                                          25 August 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 February 2026.
+   This Internet-Draft will expire on 26 February 2026.
 
 Copyright Notice
 
@@ -322,7 +322,7 @@ Table of Contents
    SCONE Packet {
      Header Form (1) = 1,
      Reserved (1),
-     Rate Signal (6),
+     Rate Signal High Bits (6),
      Version (32) = 0x6f7dc0fd or 0xef7dc0fd,
      Destination Connection ID Length (8),
      Destination Connection ID (0..2040),
@@ -336,13 +336,16 @@ Table of Contents
    a QUIC long header packet.  The next bit (0x40) is reserved and can
    be set according to [QUIC-BIT].
 
-   The low 6 bits (0x3f) of the first byte contain the Rate Signal
-   field.  Values for this field are described in Section 5.1.
+   The Rate Signal High Bits field consists of the low six bits (0x3f)
+   of the first byte.  Together with the most significant bit of the
+   Version field, this forms the 7-bit Rate Signal.  Values for the Rate
+   Signal are described in Section 5.1.
 
-   The Version field contains either 0x6f7dc0fd or 0xef7dc0fd.  To
-   facilitate detection and modification of SCONE packets, the only
-   difference between the two version numbers is the most significant
-   bit; all other bits are identical.
+   The Version field contains either 0x6f7dc0fd or 0xef7dc0fd.  The only
+   difference between these two values is the most significant bit,
+   which also contributes to the Rate Signal.  All other bits are
+   identical, which facilitates detection and modification of SCONE
+   packets.
 
    This packet includes a Destination Connection ID field that is set to
    the same value as other packets in the same datagram; see
@@ -360,75 +363,71 @@ Table of Contents
 
 5.1.  Rate Signals
 
-   The Rate Signal field in SCONE uses the low 6 bits (0x3f) of the
-   first byte.  This field is encoded as a logarithmically spaced
-   distribution over a range defined by the SCONE protocol version.
+   A Rate Signal is a 7-bit unsigned integer (0-127).  The high six bits
+   are the Rate Signal High Bits, and the least significant bit is the
+   most significant bit of the Version field.
 
-   When sent by a QUIC endpoint, the Version field of a SCONE packet is
-   set to 0xef7dc0fd and the Rate Signal field is set to 0x3F (63),
-   indicating no rate limit is in place or that the SCONE protocol is
-   not supported by network elements on the path.  All other values
-   (0x00 through 0x3F for protocol version 0x6f7dc0fd and 0x00 through
-   0x3E for protocol version 0xef7dc0fd) represent the ceiling of rates
-   being advised by the network element(s) on the path.
+   When sent by a QUIC endpoint, the Rate Signal is set to 127, to
+   indicate that no rate limit is in place or that the SCONE protocol is
+   not supported by network elements on the path.  All other values (0
+   through 126) represent the ceiling of rates advised by the network
+   element(s) on the path.
 
-   The rate limits use a logarithmic scale with:
+   The rate limits follow a logarithmic scale defined as:
 
    *  Base rate (b_min) = 100 Kbps
 
    *  Bitrate at value n = b_min * 10^(n/20)
 
-   where n is an integer between 0 and 126.
-
-   The upper 6 bits of n is represented by the Rate Signal field.  The
-   least significant bit is represented by the first bit of the protocol
-   version.
+   where n is an integer between 0 and 126 represented by the Rate
+   Signal.
 
    Table 1 lists some of the potential values for signals and the
-   corresponding throughput advice for each.
+   corresponding bitrate for each.
 
-                 +============+=============+============+
-                 | Bitrate    | Rate Signal | Version    |
-                 +============+=============+============+
-                 | 100 Kbps   | 0           | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 112 Kbps   | 0           | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 126 Kbps   | 1           | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 141 Kbps   | 1           | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 1 Mbps     | 10          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 1.12 Mbps  | 10          | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 10 Mbps    | 20          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 11.2 Mbps  | 20          | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 100 Mbps   | 30          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 112 Mbps   | 30          | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 1 Gbps     | 40          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 1.12 Gbps  | 40          | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 10 Gbps    | 50          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 11.2 Gbps  | 50          | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 100 Gbps   | 60          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | 112 Gbps   | 60          | 0xef7dc0fd |
-                 +------------+-------------+------------+
-                 | 199.5 Gbps | 63          | 0x6f7dc0fd |
-                 +------------+-------------+------------+
-                 | No limit   | 63          | 0xef7dc0fd |
-                 +------------+-------------+------------+
+                       +============+=============+
+                       | Bitrate    | Rate Signal |
+                       +============+=============+
+                       | 100 Kbps   | 0           |
+                       +------------+-------------+
+                       | 112 Kbps   | 1           |
+                       +------------+-------------+
+                       | 126 Kbps   | 2           |
+                       +------------+-------------+
+                       | 141 Kbps   | 3           |
+                       +------------+-------------+
+                       | 1 Mbps     | 20          |
+                       +------------+-------------+
+                       | 1.12 Mbps  | 21          |
+                       +------------+-------------+
+                       | 10 Mbps    | 40          |
+                       +------------+-------------+
+                       | 11.2 Mbps  | 41          |
+                       +------------+-------------+
+                       | 100 Mbps   | 60          |
+                       +------------+-------------+
+                       | 112 Mbps   | 61          |
+                       +------------+-------------+
+                       | 1 Gbps     | 80          |
+                       +------------+-------------+
+                       | 1.12 Gbps  | 81          |
+                       +------------+-------------+
+                       | 10 Gbps    | 100         |
+                       +------------+-------------+
+                       | 11.2 Gbps  | 101         |
+                       +------------+-------------+
+                       | 100 Gbps   | 120         |
+                       +------------+-------------+
+                       | 112 Gbps   | 121         |
+                       +------------+-------------+
+                       | 199.5 Gbps | 126         |
+                       +------------+-------------+
+                       | No limit   | 127         |
+                       +------------+-------------+
 
-                     Table 1: Examples of SCONE signals
-                          and corresponding rates
+                           Table 1: Examples of
+                            SCONE signals and
+                           corresponding rates
 
 5.2.  Endpoint Processing of SCONE Packets
 
@@ -437,12 +436,14 @@ Table of Contents
    packet from the same datagram is successfully processed.  Therefore,
    a SCONE packet always needs to be coalesced with other QUIC packets.
 
-   A SCONE packet is defined by the use of the longer header bit (0x80
-   in the first byte) and the SCONE protocol version (0xTBD in the next
-   four bytes).  A SCONE packet MAY be discarded, along with any packets
-   that come after it in the same datagram, if the Source Connection ID
-   is not consistent with those coalesced packets, as specified in
-   Section 5.
+   A SCONE packet is defined by the use of the long header bit (0x80 in
+   the first byte) and the SCONE protocol version (0x6f7dc0fd or
+   0xef7dc0fd in the next four bytes).  The 7-bit Rate Signal can be
+   extracted by combining the low 6 bits of the first byte with the most
+   significant bit of the version field.  A SCONE packet MAY be
+   discarded, along with any packets that come after it in the same
+   datagram, if the Source Connection ID is not consistent with those
+   coalesced packets, as specified in Section 5.
 
    A SCONE packet MUST be discarded if the Destination Connection ID
    does not match one recognized by the receiving endpoint.
@@ -902,9 +903,9 @@ Table of Contents
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-15,
-              7 July 2025, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-quic-multipath-15>.
+              in Progress, Internet-Draft, draft-ietf-quic-multipath-16,
+              21 August 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-quic-multipath-16>.
 
    [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.
               White, "Low Latency, Low Loss, and Scalable Throughput
