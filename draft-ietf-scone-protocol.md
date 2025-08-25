@@ -304,8 +304,8 @@ header cannot precede any other packets.
 ## Rate Signals {#rate-signal}
 
 A Rate Signal is a 7-bit unsigned integer (0-127). The high six bits are the
-Rate Signal High Bits, and the least significant bit also serves as the most
-significant bit of the Version field.
+Rate Signal High Bits, and the least significant bit is the most significant
+bit of the Version field.
 
 When sent by a QUIC endpoint, the Rate Signal is set to 127, to indicate that
 no rate limit is in place or that the SCONE protocol is not supported by
