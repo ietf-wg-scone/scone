@@ -392,7 +392,7 @@ the throughput advice that is received on datagrams with one marking
 might not apply to datagrams that have different markings.
 
 
-## Lowest Rate Algorithm {#algorithm}
+## Following Throughput Advice {#algorithm}
 
 An endpoint that receives throughput advice
 might receive multiple different rate limits.
@@ -421,7 +421,7 @@ This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
 to as low as once per monitoring period.
 However, applying signals at a low frequency
-risks throughput advice being reset to the unbounded default
+risks throughput advice being reset
 if no SCONE packet is available for applying signals ({{apply}}),
 or the rewritten packets are lost.
 Sending the signal multiple times
