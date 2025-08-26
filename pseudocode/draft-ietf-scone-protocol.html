@@ -1819,15 +1819,16 @@ but only if the peer has sent the transport parameter; see <a href="#tp" class="
         </h3>
 <p id="section-7.1-1">A network element detects a SCONE packet by observing that a packet has a QUIC
 long header and one of the SCONE protocol versions (0x6f7dc0fd or 0xef7dc0fd).<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.1-2">A network element then conditionally replaces the Version field and the Rate
-Signal field with values of its choosing.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">A network element then conditionally replaces the most significant bit of the
+Version field and the Rate Signal High Bits field with values of its choosing.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.1-3">A network element might receive a packet that already includes a rate signal.
 The network element replaces the rate signal if it wishes to signal a lower
 rate limit; otherwise, the original values are retained, preserving the signal
 from the network element with the lower policy.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
 <p id="section-7.1-4">The following pseudocode indicates how a network element might detect a SCONE
-packet and replace an existing rate signal,
-with an encoded throughput advice (<code>target_signal</code>).<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+packet and replace the existing rate signal (<code>packet_signal</code>) with a new rate
+signal (<code>target_signal</code>) that encodes the throughput advice of this network
+element.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <div class="lang-pseudocode sourcecode" id="section-7.1-5">
 <pre>
 is_long = packet[0] &amp; 0x80 == 0x80
