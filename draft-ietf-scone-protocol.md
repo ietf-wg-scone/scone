@@ -576,6 +576,16 @@ that respect throughput advice.
 This section outlines an exemplary algorithm
 for network elements.
 
+This monitoring algorithm is guidance only.
+Network elements are advised that monitoring
+any more strictly than the following likely invalidates their advice.
+Network elements could choose not to monitor in this way
+or use a looser monitoring approach.
+For instance, monitoring over a longer time window
+than the monitoring period (67s)
+or using a higher rate than is signaled
+is possible.
+
 To operate this algorithm,
 the minimal state a network element maintains is:
 * the current rate limit,
