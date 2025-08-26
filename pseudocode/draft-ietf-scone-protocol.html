@@ -1833,7 +1833,7 @@ element.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <pre>
 is_long = packet[0] &amp; 0x80 == 0x80
 packet_version = ntohl(packet[1..5])
-if is_long and packet_version &amp;0x7fffffff == SCONE1_VERSION:
+if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
   packet_signal = ((packet[0] &amp; 0x3f) &lt;&lt; 1) | (packet_version &gt;&gt; 31)
   if target_signal &lt; packet_signal:
     packet[0] = (packet[0] &amp; 0xc0) | (target_signal &gt;&gt; 1)
