@@ -463,8 +463,8 @@ QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 A network element detects a SCONE packet by observing that a packet has a QUIC
 long header and one of the SCONE protocol versions (0x6f7dc0fd or 0xef7dc0fd).
 
-A network element then conditionally replaces the Version field and the Rate
-Signal field with values of its choosing.
+A network element then conditionally replaces the most significant bit of the
+Version field and the Rate Signal High Bits field with values of its choosing.
 
 A network element might receive a packet that already includes a rate signal.
 The network element replaces the rate signal if it wishes to signal a lower
@@ -472,23 +472,18 @@ rate limit; otherwise, the original values are retained, preserving the signal
 from the network element with the lower policy.
 
 The following pseudocode indicates how a network element might detect a SCONE
-packet and replace an existing rate signal,
-given throughput advice (`target_throughput`).
+packet and replace the existing rate signal (`packet_signal`) with a new rate
+signal (`target_signal`) that encodes the throughput advice of this network
+element.
 
 ~~~ pseudocode
 is_long = packet[0] & 0x80 == 0x80
 packet_version = ntohl(packet[1..5])
-if is_long and (packet_version == SCONE1_VERSION or
-                packet_version == SCONE2_VERSION):
-  packet_throughput = \
-    signal_to_throughput(packet[0] & 0x3f, packet_version)
-
-  if target_throughput < packet_throughput:
-    target_signal, target_version = \
-      throughput_to_signal(target_throughput)
-    packet[0] = packet[0] & 0xc0 | target_signal
-    if target_version != packet_version:
-      packet[1..5] = htonl(target_version)
+if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
+  packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
+  if target_signal < packet_signal:
+    packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)
+    packet[1] = (packet[1] & 0x7f) | (target_signal << 7)
 ~~~
 
 Once the throughput advice signal is updated,
