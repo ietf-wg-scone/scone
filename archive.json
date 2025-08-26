@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-24T01:50:23.077408+00:00",
+  "timestamp": "2025-08-26T01:41:50.465887+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -5779,24 +5779,26 @@
       "id": "PR_kwDON1dwo86kw81B",
       "title": "Update format description",
       "url": "https://github.com/ietf-wg-scone/scone/pull/59",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ihlar",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Editorial proposal where focus is on the 7-bit rate signal field as opposed to the 6-bits + version focus. \r\nWe can discuss whether we want to do anything with the pseudo code as well. ",
       "createdAt": "2025-08-21T21:09:45Z",
-      "updatedAt": "2025-08-23T07:41:03Z",
+      "updatedAt": "2025-08-25T09:08:44Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "838decdefcea0ca21a7a42802815274d6256d005",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "format-description",
-      "headRefOid": "cf835e6f404f93737acd1b2502da4403ef8d32ac",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "b529289c753be282085e71b8e37fa6265469d7b3",
+      "closedAt": "2025-08-25T09:08:44Z",
+      "mergedAt": "2025-08-25T09:08:44Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "c27812a9318f7ca3c30d2dcd751cec645ee6b059"
+      },
       "comments": [
         {
           "author": "ihlar",
@@ -5975,6 +5977,118 @@
           "body": "Thank you for doing this.\r\n\r\nI think we have to modify the pseudo code too, but the changes all look good.",
           "createdAt": "2025-08-23T07:41:03Z",
           "updatedAt": "2025-08-23T07:41:03Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo867uwjY",
+          "commit": {
+            "abbreviatedOid": "cf835e6"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-25T01:00:56Z",
+          "updatedAt": "2025-08-25T01:03:34Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "```suggestion\nA Rate Signal is a 7-bit unsigned integer (0-127). The high six bits are the\nRate Signal High Bits, and the least significant bit is the most significant\nbit of the Version field.\n```",
+              "createdAt": "2025-08-25T01:00:56Z",
+              "updatedAt": "2025-08-25T01:03:34Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDON1dwo86lSKD-",
+      "title": "use 7-bit rate signal in pseudo code",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/60",
+      "state": "OPEN",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Given the current design, it makes sense to compare the rate signals directly. \r\nThis is not the most optimal code, but trying to prioritize readability. \r\n",
+      "createdAt": "2025-08-25T20:55:20Z",
+      "updatedAt": "2025-08-26T00:37:01Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "c27812a9318f7ca3c30d2dcd751cec645ee6b059",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "pseudocode",
+      "headRefOid": "27ef0fa4d527e6611add66819d5e2392b8fa88ff",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo8678rgc",
+          "commit": {
+            "abbreviatedOid": "27ef0fa"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "There's a version of this that is even uglier :)\n\n```python\ntarget_signal <<= 55\nv = ntohll(packet[..8])\nif (v & 0x87ff_f000_0000_0000) == (((SCONE_VERSION & 0x7fff_ffff) << 24) | (1 << 63)) and \\\n    (v & 0x7800_0000_0000_0000) > target_signal:\n    v = (v & ~0x7800_0000_0000_0000) | target_signal\n    packet[..8] = htonll(v)\n```",
+          "createdAt": "2025-08-25T22:41:01Z",
+          "updatedAt": "2025-08-25T23:29:52Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "SCONE1_VERSION is probably not right.  It would be right, but the variable name is a bit misleading.  I'd go with:\n\n```suggestion\nif is_long and \\\n    (packet_version & 0x7fffffff) == (SCONE1_VERSION & 0x7fffffff):\n```\n\nEven though the latter `&` is a noop in this case.  Or:\n\n```suggestion\nif is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:\n```\n\nWhere you set that value above to the right value.\n",
+              "createdAt": "2025-08-25T22:41:01Z",
+              "updatedAt": "2025-08-25T23:29:52Z"
+            },
+            {
+              "originalPosition": 22,
+              "body": "```suggestion\n  packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)\n```",
+              "createdAt": "2025-08-25T22:41:13Z",
+              "updatedAt": "2025-08-25T23:29:52Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\n    packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)\n    packet[1] = (packet[1] & 0x7f) | (target_signal << 7)\n```",
+              "createdAt": "2025-08-25T22:42:12Z",
+              "updatedAt": "2025-08-25T23:29:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8679Gvt",
+          "commit": {
+            "abbreviatedOid": "27ef0fa"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "On the right track, but the sentence introducing the pseudo-code could be clarified.",
+          "createdAt": "2025-08-25T23:52:36Z",
+          "updatedAt": "2025-08-25T23:53:34Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Doesn't read very well. Suggestion: \"... replace an existing rate signal (`packet_signal`) with a new rate signal encoding the throughput advice of this network element (`target_signal`).\" \r\n\r\n",
+              "createdAt": "2025-08-25T23:52:36Z",
+              "updatedAt": "2025-08-25T23:53:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8679W_4",
+          "commit": {
+            "abbreviatedOid": "27ef0fa"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-26T00:37:01Z",
+          "updatedAt": "2025-08-26T00:37:01Z",
           "comments": []
         }
       ]
