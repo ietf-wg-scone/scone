@@ -307,10 +307,11 @@ A Rate Signal is a 7-bit unsigned integer (0-127). The high six bits are the
 Rate Signal High Bits, and the least significant bit is the most significant
 bit of the Version field.
 
-When sent by a QUIC endpoint, the Rate Signal is set to 127, to indicate that
-no rate limit is in place or that the SCONE protocol is not supported by
-network elements on the path. All other values (0 through 126) represent the
-ceiling of rates advised by the network element(s) on the path.
+When sent by a QUIC endpoint, the Rate Signal is set to 127.  Receiving a value
+of 127 indicates that throughput advice is unknown, either because network
+elements on the path are not providing advice or they do not support SCONE. All
+other values (0 through 126) represent the ceiling of rates advised by the
+network element(s) on the path.
 
 The rate limits follow a logarithmic scale defined as:
 
@@ -341,7 +342,7 @@ and the corresponding bitrate for each.
 | 100 Gbps    | 120         |
 | 112 Gbps    | 121         |
 | 199.5 Gbps  | 126         |
-| No limit    | 127         |
+| Unknown     | 127         |
 {: #ex-rates title="Examples of SCONE signals and corresponding rates"}
 
 
@@ -359,6 +360,8 @@ of the first byte with the most significant bit of the version field. A SCONE
 packet MAY be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
 packets, as specified in {{packet}}.
+
+A SCONE packet is discarded if the rate signal is unknown (127).
 
 A SCONE packet MUST be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.
