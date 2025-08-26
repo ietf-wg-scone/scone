@@ -463,7 +463,7 @@ QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 A network element detects a SCONE packet by observing that a packet has a QUIC
 long header and one of the SCONE protocol versions (0x6f7dc0fd or 0xef7dc0fd).
 
-A network element then conditionally replaces the most significant bit of the 
+A network element then conditionally replaces the most significant bit of the
 Version field and the Rate Signal High Bits field with values of its choosing.
 
 A network element might receive a packet that already includes a rate signal.
