@@ -479,7 +479,7 @@ with an encoded throughput advice (`target_signal`).
 is_long = packet[0] & 0x80 == 0x80
 packet_version = ntohl(packet[1..5])
 if is_long and packet_version &0x7fffffff == SCONE1_VERSION:
-  packet_signal = (packet[0] & 0x3f) << 1 | packet_version >> 31
+  packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
   if target_signal < packet_signal:
     packet[0] = packet[0] & 0xc0 | target_signal >> 1
     packet[1] = packet[1] & 0x7f | target_signal << 7
