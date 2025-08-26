@@ -648,7 +648,7 @@ effectively unable to operate end-to-end.
 
 To that end, network elements MUST only update the content of datagrams
 on a given address tuple
-more than a few times each enforcement period.
+a few times each monitoring period.
 Network elements MAY update more often
 immediately after a change in their throughput advice,
 to reduce the reaction time from senders.
