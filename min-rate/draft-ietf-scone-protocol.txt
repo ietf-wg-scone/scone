@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 27 February 2026                           Private Octopus Inc.
+Expires: 28 February 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          26 August 2025
+                                                          27 August 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 February 2026.
+   This Internet-Draft will expire on 28 February 2026.
 
 Copyright Notice
 
@@ -493,7 +493,8 @@ Table of Contents
    is preferable to disabling sending completely.  The cost is that loss
    of information about recent send rate might result in temporarily
    exceeding the rates indicated by throughput advice.  In comparison,
-   applications retain throughput usage state when increasing state.
+   applications retain throughput usage state when throughput advice
+   increases.
 
    This approach ensures that network elements are able to reduce the
    frequency with which they send updated signals to as low as once per
@@ -611,16 +612,17 @@ Table of Contents
    updates the UDP checksum for the datagram.
 
    A network element needs to ensure that it sends updated rate signals
-   with no more than a monitoring period (Section 5.2) between each.
-   Because this depends on the availability of SCONE packets and packet
-   loss can cause signals to be missed, network elements might need to
-   update more often.
+   with no more than a monitoring period (Section 5.2) between each
+   update.  Because this depends on the availability of SCONE packets
+   and packet loss can cause signals to be missed, network elements
+   might need to update more often.
 
    Senders that send a SCONE packet or network elements that update
    SCONE packets every 20–30 seconds is likely sufficient to ensure that
    throughput advice is not lost.  Senders can avoid synchronization of
-   SCONE packets, which might cause network elements to miss updates, by
-   adding a small amount of random delay.
+   the sending SCONE packets with other senders, which might cause
+   network elements to miss updates, by adding a small amount of random
+   delay.
 
 7.2.  Monitoring Flows
 
@@ -641,9 +643,9 @@ Table of Contents
    state in Appendix A), * a timer used for rate increases, and * the
    time at which that rate limit was last updated,
 
-   When advice is updated, the network element waits until it receives
-   the next SCONE packet on affected flows.  It then updates the
-   throughput advice in that packet (Section 7.1) and updates its
+   When advice is set or updated, the network element waits until it
+   receives the next SCONE packet on affected flows.  It then updates
+   the throughput advice in that packet (Section 7.1) and updates its
    monitoring state as follows:
 
    *  If the signaled rate is the same as the current rate, set the last
@@ -734,7 +736,7 @@ Table of Contents
       advice can be received and acted upon.
 
    A sender can track the receipt of the coalesced QUIC packet and send
-   another SCONE packet if when loss is detected.  However, it is likely
+   another SCONE packet when loss is detected.  However, it is likely
    simpler to send SCONE packets more often.
 
    Sending a SCONE packet every 20–30 seconds is likely sufficient to
