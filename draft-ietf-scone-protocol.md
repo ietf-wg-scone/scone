@@ -415,7 +415,7 @@ The cost is that loss of information about recent send rate
 might result in temporarily exceeding the rates indicated by throughput advice.
 In comparison,
 applications retain throughput usage state
-when increasing state.
+when throughput advice increases.
 
 This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
@@ -555,7 +555,7 @@ Once the throughput advice signal is updated,
 the network element updates the UDP checksum for the datagram.
 
 A network element needs to ensure that it sends updated rate signals
-with no more than a monitoring period ({{time}}) between each.
+with no more than a monitoring period ({{time}}) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
@@ -563,7 +563,8 @@ network elements might need to update more often.
 Senders that send a SCONE packet
 or network elements that update SCONE packets
 every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
-Senders can avoid synchronization of SCONE packets,
+Senders can avoid synchronization of the sending SCONE packets
+with other senders,
 which might cause network elements to miss updates,
 by adding a small amount of random delay.
 
@@ -594,7 +595,7 @@ the minimal state a network element maintains is:
 * a timer used for rate increases, and
 * the time at which that rate limit was last updated,
 
-When advice is updated,
+When advice is set or updated,
 the network element waits until
 it receives the next SCONE packet on affected flows.
 It then updates the throughput advice in that packet ({{apply}})
@@ -696,7 +697,7 @@ Reduce latency:
   and when that advice can be received and acted upon.
 
 A sender can track the receipt of the coalesced QUIC packet
-and send another SCONE packet if when loss is detected.
+and send another SCONE packet when loss is detected.
 However, it is likely simpler to send SCONE packets more often.
 
 Sending a SCONE packet every 20&ndash;30 seconds
