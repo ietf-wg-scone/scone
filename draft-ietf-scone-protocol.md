@@ -693,7 +693,8 @@ discards a SCONE packet without also successfully processing another packet
 from the same datagram SHOULD ignore any throughput advice signal. Such a datagram
 might be entirely spoofed.
 
-Once negotiated, endpoints that seek to receive throughput advice on a flow
+Once negotiated,
+applications that seek to receive throughput advice on a flow
 MUST send a SCONE packet at least twice each monitoring period; see {{time}}.
 
 Sending SCONE packets more often might be necessary to:
