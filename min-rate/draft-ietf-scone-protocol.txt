@@ -629,7 +629,7 @@ Table of Contents
    SCONE packets every 20–30 seconds is likely sufficient to ensure that
    throughput advice is not lost.  To reduce the risk of synchronization
    across multiple senders, which may cause network elements to miss
-   updates, senders can add a small random delay.
+   updates, senders can include a small random delay.
 
 7.2.  Monitoring Flows
 
