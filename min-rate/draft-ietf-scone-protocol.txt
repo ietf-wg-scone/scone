@@ -655,8 +655,8 @@ Table of Contents
    the throughput advice in that packet (Section 7.1) and updates its
    monitoring state as follows:
 
-   *  If the signaled rate is the same as the current rate, set the last
-      update time to the current time.
+   *  If the signaled rate limit is the same as the current rate limit,
+      set the last update time to the current time.
 
    *  If the signaled rate is higher than the current value, then:
 
