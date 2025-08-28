@@ -636,8 +636,8 @@ A network element that reduces its throughput advice
 might also need to add a small delay to allow applications time
 to receive and act on the updated advice.
 
-A network element MUST NOT alter packets to add SCONE packets
-or synthesize packets that contain SCONE packets.
+A network element MUST NOT alter datagrams to add SCONE packets
+or synthesize datagrams that contain SCONE packets.
 The latter will not be accepted and the former,
 even if they do not exceed the path MTU as a result,
 can be detected by applications and could be ignored.
