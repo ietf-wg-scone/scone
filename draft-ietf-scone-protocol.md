@@ -218,8 +218,8 @@ SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.
 
 The signaled advice can be assumed to apply
-to the flow of packets on the same UDP address tuple until updated
-or when the flow ends.
+to the flow of packets on the same UDP address tuple
+until the advice is updated or the flow ends.
 Rate limiting policies often apply on the level of a device or subscription, but endpoints
 cannot assume that this is the case.  A separate signal can be sent for each flow.
 
@@ -354,10 +354,6 @@ and the corresponding bitrate for each.
 The time over which throughput advice applies is defined to be
 a period of 67 seconds.
 
-Endpoints that receive throughput advice can advise their peer of the limit.
-The sending peer can respect the advice
-by limiting the amount of data it sends over any 67 second span.
-
 Protocol participants can use a different period,
 depending on their role.
 Senders can limit their send rate over any time period
@@ -394,14 +390,18 @@ might not apply to datagrams that have different markings.
 
 ## Following Throughput Advice {#algorithm}
 
+Endpoints that receive throughput advice can advise their peer of the limit
+so that the peer might limit the amount of data it sends
+over any monitoring period ({{time}}).
+Alternatively, the endpoint might change its own behavior
+to effect a similar outcome indirectly,
+which might use flow control or changes to request patterns.
+
 An endpoint that receives throughput advice
 might receive multiple different rate limits.
 If advice is applied by applications,
 applications MUST apply the lowest throughput advice
 received during any monitoring period; see {{time}}.
-
-Senders can ensure that their use of network capacity
-remains within throughput advice.
 
 Applications MAY discard throughput usage state
 when they receive throughput advice that indicates a reduced rate.
