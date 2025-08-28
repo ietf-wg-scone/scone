@@ -577,7 +577,7 @@ or network elements that update SCONE packets
 every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
 To reduce the risk of synchronization across multiple senders,
 which may cause network elements to miss updates,
-senders can add a small random delay.
+senders can include a small random delay.
 
 
 ## Monitoring Flows {#monitoring}
