@@ -627,10 +627,9 @@ Table of Contents
 
    Senders that send a SCONE packet or network elements that update
    SCONE packets every 20–30 seconds is likely sufficient to ensure that
-   throughput advice is not lost.  Senders can avoid synchronization of
-   the sending SCONE packets with other senders, which might cause
-   network elements to miss updates, by adding a small amount of random
-   delay.
+   throughput advice is not lost.  To reduce the risk of synchronization
+   across multiple senders, which may cause network elements to miss
+   updates, senders can add a small random delay.
 
 7.2.  Monitoring Flows
 
