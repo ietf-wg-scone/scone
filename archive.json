@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-26T01:41:50.465887+00:00",
+  "timestamp": "2025-08-28T01:38:21.994825+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1049,7 +1049,7 @@
       "labels": [],
       "body": "The topic of whether network elements should be able to generate TRONE packets and insert them into expanded datagrams was discussed at IETF 122. Also discussed in #6.\nIdeally this should not be needed, given that there is proper guidance on when to send TRONE packets and making sure that updating the rate limit field of the TRONE packets is sufficiently cheap. The risk of expanding datagrams in the network is that it can result in path MTU issues with lost packets as a consequence. \n\nThere are a few paths we can take on this topic:\n\n1. Say nothing about it.\n2. Mention the possibility and give guidance on potential MTU issues that can arise. \n3. Explicitly forbid network inserted TRONE packets and design protocol mechanisms to enforce it.",
       "createdAt": "2025-04-15T15:59:14Z",
-      "updatedAt": "2025-07-08T07:04:52Z",
+      "updatedAt": "2025-08-27T17:57:40Z",
       "closedAt": null,
       "comments": [
         {
@@ -1097,9 +1097,9 @@
         {
           "author": "huitema",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "On path routers are explicitly authorized to change the advice contained in the packet -- that's the whole point. That means it will be very hard to prevent off path observers to change the advice and race a packet. Changing the advice seems as bad as dropping the option. Given a gaping hole like that, I would rather try some complicated solution.",
+          "body": "On path routers are explicitly authorized to change the advice contained in the packet -- that's the whole point. That means it will be very hard to prevent off path observers to change the advice and race a packet. Changing the advice seems as bad as dropping the option. Given a gaping hole like that, I would rather not try some complicated solution.",
           "createdAt": "2025-07-08T07:04:52Z",
-          "updatedAt": "2025-07-08T07:04:52Z"
+          "updatedAt": "2025-08-27T17:57:40Z"
         }
       ]
     },
@@ -1779,7 +1779,7 @@
       "labels": [],
       "body": "\t\n > The pull requests answer Question A.\n> \n> The network element needs to ensure that they send at least once every enforcement period (67s in the PR presently).  Because they do not control opportunities, they should try to update a small number of packets over that period.  I would go with every 20-30s based on that, but there is flexibility.\n> \n\n\nRaising this issue to get more clarification based on the issue being discussed in [#55.](https://github.com/ietf-wg-scone/scone/issues/55)\n\nCurrently, is it considered sufficient to send only two packets within the 67-second window that carry updated rate-signal values? Or, given the absence of an ACK mechanism in SCONE, should multiple packets containing the rate-signal be transmitted as a batch within this window? The intent is to reduce the risk of losing critical rate-signal information due to potential packet loss.\n\nFor reference, QUIC provides an ACK mechanism to help with loss detection and retransmission. However, if a packet containing both QUIC and SCONE information is lost, will the server automatically retry sending the SCONE data, or could the rate-signal be lost entirely?\n\nI would like to propose that, to enhance reliability, rate-signal values should be sent in batches rather than relying on single or minimal packet transmissions. This approach would help ensure delivery even in the absence of explicit loss detection or retransmission for SCONE.\n\nIn Summary:\n\n1. Is sending two packets within the 67-second window sufficient for reliable rate-signal delivery?\n2. Would batching multiple packets with the rate-signal improve robustness against packet loss in the absence of a SCONE ACK mechanism?\n3. What is the current behavior if a QUIC+SCONE packet is lost\u2014will the SCONE portion be retransmitted by the server?",
       "createdAt": "2025-08-12T23:08:51Z",
-      "updatedAt": "2025-08-18T16:55:55Z",
+      "updatedAt": "2025-08-28T00:34:48Z",
       "closedAt": null,
       "comments": [
         {
@@ -1802,6 +1802,27 @@
           "body": "While briefly discussed in [#55 ] , would like add to this discussion here on the SCONE Reliability. \n\n> The point that it might be useful to track if a QUIC packet that was sent together with the scone packet got lost might still be useful to mention in the draft if we e.g. have an implementation guidance section.\n\nAgree with the this statement , it would be greatly useful to have a mention in the draft on the actions needed to be taken in case of QUIC packet carrying SCONE is lost. \n\nPerhaps we could consider approaches that provide stronger assurances for SCONE data, such as:\n\nEncouraging or providing guidance on batch transmission of SCONE packets: While implementers certainly have flexibility, a suggestion within the specification about sending SCONE packets in small batches could be a practical way to improve their chances of successful delivery, particularly if other retransmission strategies aren't always in play. This could be an implementation detail for CSPs to manage.\n\nExploring clearer expectations for server behavior regarding lost QUIC+SCONE packets: It might be helpful to discuss whether, upon detecting a lost QUIC packet that carried SCONE data, there's an expectation for the server to eventually ensure that SCONE information is re-sent. Defining such a general principle could guide implementations without prescribing specific mechanisms, leaving the exact retry logic to CSPs.\n\nInvestigating how QUIC's existing ACK framework might be leveraged for SCONE-specific feedback (piggybacking): While QUIC's ACK confirms the delivery of the datagram, it does not inherently confirm the application-level processing of the SCONE rate-signal itself. We could explore if there are ways for clients to subtly signal, perhaps by 'piggybacking' a small SCONE-specific acknowledgment message within a new QUIC packet (e.g., on a dedicated stream or as a DATAGRAM frame), that the SCONE portion was not only received but also successfully processed. This could offer a valuable feedback loop for SCONE data delivery without requiring a separate, complex SCONE-specific ACK mechanism, with the precise signaling method being an implementation choice for CSPs.\"",
           "createdAt": "2025-08-18T16:55:55Z",
           "updatedAt": "2025-08-18T16:55:55Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think the most recent text in #46 [(Providing Opportunities to Apply Throughput Advice Signals)](https://github.com/ietf-wg-scone/scone/blob/9b94b9dd76667f6a6919b5eb6c8c123602801f30/draft-ietf-scone-protocol.md#providing-opportunities-to-apply-throughput-advice-signals-extra-packets) covers this pretty well. It does mention that you can track loss, but that you're probably better off just sending packets a bit more frequently. We don't need stronger guidance than this imo. ",
+          "createdAt": "2025-08-26T10:05:53Z",
+          "updatedAt": "2025-08-26T10:05:53Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If we were to provide guidance to clients above what we have, I would strongly advice against any form of \"batch\" transmission. Packet losses on the Internet tends to happen in batches. Even when the packet loss rate is low, say 1%, the conditional probability of packet N+1 being lost if packet N was lost is much higher. If the goal of sending multiple times is to ensure that at least one packet makes it, it is much better to spread these packets over the 67 seconds interval than to send them in a batch.",
+          "createdAt": "2025-08-27T18:30:43Z",
+          "updatedAt": "2025-08-27T18:30:43Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree with Christian.  This is what the present advice in #61 does, so I think we're good to close this once that lands.",
+          "createdAt": "2025-08-28T00:34:48Z",
+          "updatedAt": "2025-08-28T00:34:48Z"
         }
       ]
     }
@@ -4093,21 +4114,21 @@
       "id": "PR_kwDON1dwo86dt5Tu",
       "title": "Add a time component of 60 seconds",
       "url": "https://github.com/ietf-wg-scone/scone/pull/37",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #20.",
       "createdAt": "2025-07-07T09:19:14Z",
-      "updatedAt": "2025-08-14T01:34:16Z",
+      "updatedAt": "2025-08-26T22:53:43Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "c45a82dc51e07db1a711c75c638422fe47324a1f",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "time",
       "headRefOid": "1907b12b012e5e56764abcbb09b446fa49f2fba9",
-      "closedAt": null,
+      "closedAt": "2025-08-26T22:53:43Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -4518,13 +4539,13 @@
       "labels": [],
       "body": "This depends on an answer to #43 being as I suggested there. I won't make the pull request dependent on that though.\r\n\r\nCloses #10.",
       "createdAt": "2025-07-22T12:58:35Z",
-      "updatedAt": "2025-07-30T23:59:31Z",
+      "updatedAt": "2025-08-27T11:33:03Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "d29ae5ea8becda2ecf653484a83d5948d2bed186",
+      "baseRefOid": "c27812a9318f7ca3c30d2dcd751cec645ee6b059",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "following-limits",
-      "headRefOid": "5c0b1cc987280c5c3216cea0f6c6d671d05d0f4e",
+      "headRefOid": "950b3dedeec6aa90c8df242f433b16afb29e3e52",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -4557,6 +4578,20 @@
           "body": "Maybe say that a bit more directly. The first sentence says \"To that end, network elements MUST ensure that\r\nthey do not update the content of every datagram.\" I think we should be more direct, reference both the duration and the unit, i.e., a given 4-tuple. How about:\r\n\r\nTo that end, network elements SHOULD NOT update datagrams sent over a given 4-tuple more than a few times per enforcement period. Network elements MAY update more often\r\nin response to a change in throughput advice,\r\nto reduce the reaction time from senders.",
           "createdAt": "2025-07-29T07:04:26Z",
           "updatedAt": "2025-07-29T07:04:26Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The risk of protocol mangling could be an argument for creating a maximum sending frequency of SCONE packets. If a network element counts more than N SCONE packets during a monitoring period it could just stop updating datagrams on that 4-tuple. \r\nThe current text already mitigates the potential harm quite well, but this would reduce the potential harm even further. \r\n",
+          "createdAt": "2025-08-27T11:20:41Z",
+          "updatedAt": "2025-08-27T11:20:41Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@ihlar, maybe open an issue.  I'm not sure that this is necessary (consistent SCONE detection is unlikely and not every packet is updated), but setting a floor on the addition of SCONE packets and also the updating of the rate signal would be more robust.  Whether we need that robustness is really the key question.",
+          "createdAt": "2025-08-27T11:33:03Z",
+          "updatedAt": "2025-08-27T11:33:03Z"
         }
       ],
       "reviews": [
@@ -4739,6 +4774,59 @@
               "updatedAt": "2025-07-30T23:59:31Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868M3fX",
+          "commit": {
+            "abbreviatedOid": "5c0b1cc"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-26T22:24:24Z",
+          "updatedAt": "2025-08-26T22:24:24Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "I think that this is fine in the context of applying heuristics.",
+              "createdAt": "2025-08-26T22:24:24Z",
+              "updatedAt": "2025-08-26T22:24:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868M3lj",
+          "commit": {
+            "abbreviatedOid": "5c0b1cc"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-26T22:24:32Z",
+          "updatedAt": "2025-08-26T22:24:35Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Done.  Thanks.",
+              "createdAt": "2025-08-26T22:24:32Z",
+              "updatedAt": "2025-08-26T22:24:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868PbNw",
+          "commit": {
+            "abbreviatedOid": "950b3de"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T03:33:26Z",
+          "updatedAt": "2025-08-27T03:33:26Z",
+          "comments": []
         }
       ]
     },
@@ -4747,21 +4835,21 @@
       "id": "PR_kwDON1dwo86gP9iz",
       "title": "Add a minimum rate algorithm",
       "url": "https://github.com/ietf-wg-scone/scone/pull/46",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This approach ensures that we don't have blackout periods (an issue raised in the meeting).  But it makes the whole rate limit signaling more robust.  It also allows network elements the option of skipping updates.",
       "createdAt": "2025-07-23T11:37:13Z",
-      "updatedAt": "2025-08-19T04:32:31Z",
+      "updatedAt": "2025-08-27T01:16:33Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "time",
       "baseRefOid": "1907b12b012e5e56764abcbb09b446fa49f2fba9",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
       "headRefOid": "9b94b9dd76667f6a6919b5eb6c8c123602801f30",
-      "closedAt": null,
+      "closedAt": "2025-08-26T22:53:44Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -4835,6 +4923,13 @@
           "body": "Thanks for the feedback.  I've done as Alan suggests and added a bunch of advice on how to send SCONE packets (because it fit).  Those who were unhappy with this should take another look.",
           "createdAt": "2025-08-19T04:32:31Z",
           "updatedAt": "2025-08-19T04:32:31Z"
+        },
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "from the 26 August interim: \r\n\r\n- please review language to make sure it's clear this is guidance, client behavior doesn't need to be standardized for interop\r\n- consider how this operates with occasional drops / missing advice\r\n- wait until EOD AOE then merge it.\r\n\r\nWe'll spend some time testing this in Montreal",
+          "createdAt": "2025-08-26T22:04:15Z",
+          "updatedAt": "2025-08-26T22:04:15Z"
         }
       ],
       "reviews": [
@@ -4983,6 +5078,122 @@
               "updatedAt": "2025-08-14T01:41:00Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868IFO8",
+          "commit": {
+            "abbreviatedOid": "9b94b9d"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-26T15:35:14Z",
+          "updatedAt": "2025-08-26T19:35:42Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\nwhen the advised rate increases.\r\n```",
+              "createdAt": "2025-08-26T15:35:14Z",
+              "updatedAt": "2025-08-26T19:35:42Z"
+            },
+            {
+              "originalPosition": 73,
+              "body": "```suggestion\r\nwith no more than a monitoring period ({{time}}) between each update.\r\n```",
+              "createdAt": "2025-08-26T15:41:02Z",
+              "updatedAt": "2025-08-26T19:35:42Z"
+            },
+            {
+              "originalPosition": 169,
+              "body": "```suggestion\r\nand send another SCONE packet when loss is detected.\r\n```",
+              "createdAt": "2025-08-26T15:45:33Z",
+              "updatedAt": "2025-08-26T19:35:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868Lmb1",
+          "commit": {
+            "abbreviatedOid": "9b94b9d"
+          },
+          "author": "afrind",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "Thanks for the update, this seems much better to me.",
+          "createdAt": "2025-08-26T20:09:39Z",
+          "updatedAt": "2025-08-26T20:26:11Z",
+          "comments": [
+            {
+              "originalPosition": 81,
+              "body": "A few more words explaining the kind of synchronization to be avoided might add clarity - I had a to read this a couple times before I realized what you meant.      ",
+              "createdAt": "2025-08-26T20:09:40Z",
+              "updatedAt": "2025-08-26T20:26:11Z"
+            },
+            {
+              "originalPosition": 82,
+              "body": "I'm not sure why synchronization might cause missed updates, but maybe it doesn't matter.",
+              "createdAt": "2025-08-26T20:10:28Z",
+              "updatedAt": "2025-08-26T20:26:11Z"
+            },
+            {
+              "originalPosition": 102,
+              "body": "Maybe \"set or updated\" to capture the first time advice is given?",
+              "createdAt": "2025-08-26T20:11:59Z",
+              "updatedAt": "2025-08-26T20:26:11Z"
+            },
+            {
+              "originalPosition": 156,
+              "body": "I'm trying to understand the consequence of not conforming to the above MUST (2x/period).  I assume it's not \"or the NE drops the flow\".\r\n\r\nI read this bit and the section that follow as why a sender should send than 2x/period, but maybe its just line 665 that is misleading me?",
+              "createdAt": "2025-08-26T20:17:46Z",
+              "updatedAt": "2025-08-26T20:26:11Z"
+            },
+            {
+              "originalPosition": 191,
+              "body": "Is there any compute cost on the network element that we should mention?",
+              "createdAt": "2025-08-26T20:20:23Z",
+              "updatedAt": "2025-08-26T20:26:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868OYVp",
+          "commit": {
+            "abbreviatedOid": "9b94b9d"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-27T01:12:40Z",
+          "updatedAt": "2025-08-27T01:12:40Z",
+          "comments": [
+            {
+              "originalPosition": 191,
+              "body": "I am going to assume that the cost is modest because the network element can (now) ignore most SCONE packets.  Any they do update will require effort, but that's effort that they balance against the benefits they deliver (better user experience, better adherence to network policy, etc...).",
+              "createdAt": "2025-08-27T01:12:40Z",
+              "updatedAt": "2025-08-27T01:12:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868Oala",
+          "commit": {
+            "abbreviatedOid": "9b94b9d"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-27T01:16:33Z",
+          "updatedAt": "2025-08-27T01:16:33Z",
+          "comments": [
+            {
+              "originalPosition": 156,
+              "body": "Good to ask about consequence, but I'm not sure that it's worth listing that consequence.\r\n\r\nThe consequence is that the throughput advice might reset to the \"no SCONE\" state, which generally means that there is no limit in network policy.  Endpoint might then flip to sending at whatever the path can tolerate, well outside the policy limits that exist.  For the endpoints, they are then risking having the network bring on a shaper/policer, which will tank their throughput and lead to things being much worse.\r\n\r\nThat is, this is the same as if we didn't have the protocol operating.  I could add:\r\n\r\n> Endpoints that fail to send SCONE packets often enough cannot receive throughput advice.\r\n\r\nBut that seems a bit redundant.",
+              "createdAt": "2025-08-27T01:16:33Z",
+              "updatedAt": "2025-08-27T01:16:33Z"
+            }
+          ]
         }
       ]
     },
@@ -5019,25 +5230,40 @@
       "id": "PR_kwDON1dwo86gRnvr",
       "title": "Forbid insertion of SCONE packets",
       "url": "https://github.com/ietf-wg-scone/scone/pull/48",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This is one potential approach to #21.  However, it does constrain things more than I think is necessary.  I tend to think that staying quiet is best, because it gives network elements the option and endpoints the choice of ignoring those inserted SCONE packets.  I wouldn't want to *encourage* that outcome though.\r\n\r\nCloses #21.",
       "createdAt": "2025-07-23T13:55:32Z",
-      "updatedAt": "2025-08-14T01:34:49Z",
+      "updatedAt": "2025-08-26T23:10:24Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "min-rate",
-      "baseRefOid": "0a64439071d31bf8ff71538c37a87b8afabe3473",
+      "baseRefOid": "91a837738bd9561dfdb1d7c28eb0fa5068581732",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "insertion",
       "headRefOid": "e1c4874dc6f63a84f8fbe65f13cc93ebdc6a7ae6",
-      "closedAt": null,
+      "closedAt": "2025-08-26T23:10:24Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "guidance from August 26th interim: ship it, close 21.",
+          "createdAt": "2025-08-26T21:26:18Z",
+          "updatedAt": "2025-08-26T21:26:18Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Closing in favour of #62.",
+          "createdAt": "2025-08-26T23:10:24Z",
+          "updatedAt": "2025-08-26T23:10:24Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -6006,24 +6232,26 @@
       "id": "PR_kwDON1dwo86lSKD-",
       "title": "use 7-bit rate signal in pseudo code",
       "url": "https://github.com/ietf-wg-scone/scone/pull/60",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ihlar",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Given the current design, it makes sense to compare the rate signals directly. \r\nThis is not the most optimal code, but trying to prioritize readability. \r\n",
       "createdAt": "2025-08-25T20:55:20Z",
-      "updatedAt": "2025-08-26T00:37:01Z",
+      "updatedAt": "2025-08-26T22:25:37Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "c27812a9318f7ca3c30d2dcd751cec645ee6b059",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "pseudocode",
-      "headRefOid": "27ef0fa4d527e6611add66819d5e2392b8fa88ff",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "edbdc0246875443d26dc7c404450e9d5b03c626b",
+      "closedAt": "2025-08-26T22:25:37Z",
+      "mergedAt": "2025-08-26T22:25:37Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c"
+      },
       "comments": [],
       "reviews": [
         {
@@ -6089,6 +6317,338 @@
           "body": "",
           "createdAt": "2025-08-26T00:37:01Z",
           "updatedAt": "2025-08-26T00:37:01Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868Cgqs",
+          "commit": {
+            "abbreviatedOid": "27ef0fa"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-26T09:28:43Z",
+          "updatedAt": "2025-08-26T09:28:43Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "I think I prefer the latter. If we want to be very explicit we could define SCONE_VERSION_BITS as SCONE1_VERSION & SCONE2_VERSION.",
+              "createdAt": "2025-08-26T09:28:43Z",
+              "updatedAt": "2025-08-26T09:28:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868Hqrq",
+          "commit": {
+            "abbreviatedOid": "edbdc02"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-26T15:12:20Z",
+          "updatedAt": "2025-08-26T15:12:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 61,
+      "id": "PR_kwDON1dwo86lgCit",
+      "title": "Monitoring and time changes",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/61",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is a big set of changes, discussed in #46 and #37, which started to get a little messy.  This includes:\r\n\r\n1. Defining a monitoring period is 67 seconds.  Network elements can monitor usage for adherence to the advice they give over this period or longer.  Endpoints can consider this to be the upper bound on the window they spread their usage over.\r\n2. Describing a sample process for monitoring adherence.  As an example only.\r\n3. Allowing network elements to miss updates, but recommending that they update at least twice each monitoring period; or, more specifically, every 20-30s.\r\n4. Recommending that endpoints follow the lowest throughput advice they have received in the last 67s.\r\n5. Allowing endpoints to discard state when the advice reduces.\r\n6. Advising endpoints on how often to include SCONE packets and why (to avoid missing advice and to reduce latency when advice changes).\r\n\r\nThis is what we discussed during the meeting.  The direction we agreed to broadly was to give this a spin and try to improve it.  There are some small tweaks we discussed that can be pursued separately, but this batch was pretty substantial already.",
+      "createdAt": "2025-08-26T23:01:05Z",
+      "updatedAt": "2025-08-28T00:20:16Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "min-rate",
+      "headRefOid": "a351078725dfec8a14c680a409e242c3b4bf96d5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo868PlWN",
+          "commit": {
+            "abbreviatedOid": "8fbe0dd"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2025-08-27T04:09:41Z",
+          "updatedAt": "2025-08-27T04:09:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868Wnnt",
+          "commit": {
+            "abbreviatedOid": "8fbe0dd"
+          },
+          "author": "afrind",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-27T14:28:43Z",
+          "updatedAt": "2025-08-27T15:27:50Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "maybe \"until the advice is updated\", otherwise it can be read as until the tuple updates.",
+              "createdAt": "2025-08-27T14:28:43Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            },
+            {
+              "originalPosition": 43,
+              "body": "Should we list other actions the receiving endpoint can take independent of the sender, such as reading more slowly or requesting fewer or smaller resources?",
+              "createdAt": "2025-08-27T14:31:04Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            },
+            {
+              "originalPosition": 74,
+              "body": "Senders can do this if they are informed of the advice.  As noted above, receivers can also influence what gets send and how fast.",
+              "createdAt": "2025-08-27T14:33:08Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            },
+            {
+              "originalPosition": 98,
+              "body": "\"ensures that it is more likely\" is awkward.  Perhaps \"increases the likelihood\" ",
+              "createdAt": "2025-08-27T14:34:57Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            },
+            {
+              "originalPosition": 109,
+              "body": "Is the effect of receiving no advice after 67 seconds that it becomes unlimited?  If so, we might want to state that.",
+              "createdAt": "2025-08-27T14:36:34Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            },
+            {
+              "originalPosition": 206,
+              "body": "Is there a better verb than \"disregard\" that means \"don't include the already sent volume in the hard limit monitoring\"?\r\n\r\nIs it the same to say that the hard limits should work as if they were engaged at the beginning of a new monitoring period?",
+              "createdAt": "2025-08-27T14:40:27Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            },
+            {
+              "originalPosition": 218,
+              "body": "This is slightly awkward because the endpoint sending the packets is different from the endpoint that might be seeking to receive it, and if they are the same, then additional out-of-scope coordination is required.\r\n\r\nMaybe \"applications that seek to receive advice\"?",
+              "createdAt": "2025-08-27T14:46:34Z",
+              "updatedAt": "2025-08-27T15:27:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868fSU9",
+          "commit": {
+            "abbreviatedOid": "8fbe0dd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thanks for the review Alan.  Much better as a result.  Only one question remains, I think.",
+          "createdAt": "2025-08-28T00:04:33Z",
+          "updatedAt": "2025-08-28T00:19:23Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "I've moved this to the section below (where it more properly belongs) and done as you suggest.",
+              "createdAt": "2025-08-28T00:04:34Z",
+              "updatedAt": "2025-08-28T00:19:23Z"
+            },
+            {
+              "originalPosition": 74,
+              "body": "This part has been removed and replaced by more complete text about respecting advice.",
+              "createdAt": "2025-08-28T00:04:55Z",
+              "updatedAt": "2025-08-28T00:19:23Z"
+            },
+            {
+              "originalPosition": 109,
+              "body": "The effect will be that there is no operative advice, which isn't *quite* the same.  But it does mean that you are unlimited (hence the distinction between \"no signal\" and \"unlimited\" being somewhat academic).\r\n\r\nI've added some text below.",
+              "createdAt": "2025-08-28T00:07:02Z",
+              "updatedAt": "2025-08-28T00:19:56Z"
+            },
+            {
+              "originalPosition": 206,
+              "body": "Perhaps:\r\n\r\n> A better approach is to exclude any data transmitted\r\n> before sending reduced throughput advice\r\n> from any monitoring that uses the reduced rate.",
+              "createdAt": "2025-08-28T00:17:22Z",
+              "updatedAt": "2025-08-28T00:19:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868flus",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T00:20:16Z",
+          "updatedAt": "2025-08-28T00:20:16Z",
+          "comments": [
+            {
+              "originalPosition": 219,
+              "body": "```suggestion\r\nA better approach is to exclude any data transmitted\r\nbefore sending reduced throughput advice\r\nfrom any monitoring that uses the reduced rate.\r\n```",
+              "createdAt": "2025-08-28T00:20:16Z",
+              "updatedAt": "2025-08-28T00:20:16Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 62,
+      "id": "PR_kwDON1dwo86lgGGO",
+      "title": "Forbid SCONE packet insertion",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/62",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed at the meeting, we should discourage insertion of SCONE packets by network elements.  (We are reserving the right to allow insert or forbid it more strongly in future by taking this path.)",
+      "createdAt": "2025-08-26T23:10:00Z",
+      "updatedAt": "2025-08-27T20:07:00Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "min-rate",
+      "baseRefOid": "91a837738bd9561dfdb1d7c28eb0fa5068581732",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "forbid-insertion",
+      "headRefOid": "587cec671815668353065c2c7522ba375b3e9b0d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo868PlnC",
+          "commit": {
+            "abbreviatedOid": "587cec6"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T04:10:44Z",
+          "updatedAt": "2025-08-27T04:10:44Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868P_M2",
+          "commit": {
+            "abbreviatedOid": "587cec6"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T05:29:52Z",
+          "updatedAt": "2025-08-27T05:29:52Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868avzW",
+          "commit": {
+            "abbreviatedOid": "587cec6"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Sorry, I was not at the meeting. If we want a placeholder, this text is OK. I would like it a bit more precise.\r\n\r\nI would add a cross reference to the section \"Endpoint Processing of SCONE Packets\" after the \"latter\" part of the 2nd sentence, as in \"The latter will not be accepted *(see section ...)* and the former...\"\r\n\r\nI have mixed feelings about the \"could be ignored\" statement in the \"former\" part of the second sentence -- as it stands, it is a bit of an empty threat. Can we make a reference to the issue of spoofed packets discussed in the security section? That would be a good reason for applications to detect and discard spurious SCONE packets.\r\n\r\n\r\n",
+          "createdAt": "2025-08-27T17:54:13Z",
+          "updatedAt": "2025-08-27T20:07:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 63,
+      "id": "PR_kwDON1dwo86lgKpy",
+      "title": "127 means unknown",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/63",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The effect is the same as meaning \"no limit\" under the rules in #61, but this is clearer and seems to be what people generally want.\r\n\r\nCloses #18.",
+      "createdAt": "2025-08-26T23:23:21Z",
+      "updatedAt": "2025-08-27T18:00:22Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "unlimited-unknown",
+      "headRefOid": "adbc37acaaf4a26c095336dc5ff4a5f9eb665958",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo868Pucb",
+          "commit": {
+            "abbreviatedOid": "adbc37a"
+          },
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Combined with the timing rules in the other PR, I believe this is robust to the multi-NE case that I was so worried about in today's meeting.",
+          "createdAt": "2025-08-27T04:41:53Z",
+          "updatedAt": "2025-08-27T04:41:53Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868P-8z",
+          "commit": {
+            "abbreviatedOid": "adbc37a"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T05:29:06Z",
+          "updatedAt": "2025-08-27T05:29:06Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868UFFv",
+          "commit": {
+            "abbreviatedOid": "adbc37a"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-27T11:22:09Z",
+          "updatedAt": "2025-08-27T11:22:09Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868a2uN",
+          "commit": {
+            "abbreviatedOid": "adbc37a"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes. I think we have consensus on that.",
+          "createdAt": "2025-08-27T18:00:22Z",
+          "updatedAt": "2025-08-27T18:00:22Z",
           "comments": []
         }
       ]
