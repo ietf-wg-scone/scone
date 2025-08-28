@@ -2016,6 +2016,13 @@ might otherwise be completely unable to send due to a lower limits.<a href="#sec
 <p id="section-7.2-7">A network element that reduces its throughput advice
 might also need to add a small delay to allow applications time
 to receive and act on the updated advice.<a href="#section-7.2-7" class="pilcrow">¶</a></p>
+<p id="section-7.2-8">A network element <span class="bcp14">MUST NOT</span> alter datagrams to add SCONE packets
+or synthesize datagrams that contain SCONE packets.
+The latter will not be accepted and the former,
+even if they do not exceed the path MTU as a result,
+can be detected by applications and could be ignored.
+This document does not define a mechanism to support detection,
+but one might be added in future.<a href="#section-7.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="policing">
