@@ -612,7 +612,7 @@ it receives the next SCONE packet on affected flows.
 It then updates the throughput advice in that packet ({{apply}})
 and updates its monitoring state as follows:
 
-* If the signaled rate is the same as the current rate,
+* If the signaled rate limit is the same as the current rate limit,
   set the last update time to the current time.
 
 * If the signaled rate is higher than the current value,
