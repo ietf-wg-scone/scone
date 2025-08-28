@@ -2033,8 +2033,9 @@ enforcing adherence to the advice as though it were a hard limit.
 However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
 that is, up to the period defined in <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">A better approach is to disregard any data that was transmitted
-before engaging any hard limits to throughput.
+<p id="section-7.3-3">A better approach is to exclude any data transmitted
+before sending reduced throughput advice
+from any monitoring that uses the reduced rate.
 This ensures that the enforcement of limits is minimally disruptive.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
