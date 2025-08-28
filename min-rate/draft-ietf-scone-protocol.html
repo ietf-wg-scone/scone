@@ -1771,19 +1771,30 @@ might receive multiple different rate limits.
 If advice is applied by applications,
 applications <span class="bcp14">MUST</span> apply the lowest throughput advice
 received during any monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.4-3">Applications <span class="bcp14">MAY</span> discard throughput usage state
+<p id="section-5.4-3">After a monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>)
+without receiving throughput advice,
+any previous advice expires.
+Endpoints can remove any constraints
+placed on throughput based on receiving throughput advice.
+This does not mean that there are no limits,
+either in policy or due to network conditions,
+only that these limits are now unknown.
+Other constraints on usage will still apply,
+which necessarily includes congestion control
+and might include other, application-specific constraints.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-4">Applications <span class="bcp14">MAY</span> discard throughput usage state
 when they receive throughput advice that indicates a reduced rate.
 Otherwise, data that was sent at a higher rate
 might force the available rate to zero
-for the remainder of the monitoring period; see also <a href="#monitoring" class="auto internal xref">Section 7.2</a>.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
-<p id="section-5.4-4">The relatively long duration of the monitoring period
+for the remainder of the monitoring period; see also <a href="#monitoring" class="auto internal xref">Section 7.2</a>.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
+<p id="section-5.4-5">The relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
 The cost is that loss of information about recent send rate
 might result in temporarily exceeding the rates indicated by throughput advice.
 In comparison,
 applications retain throughput usage state
-when throughput advice increases.<a href="#section-5.4-4" class="pilcrow">¶</a></p>
-<p id="section-5.4-5">This approach ensures that network elements
+when throughput advice increases.<a href="#section-5.4-5" class="pilcrow">¶</a></p>
+<p id="section-5.4-6">This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
 to as low as once per monitoring period.
 However, applying signals at a low frequency
@@ -1791,7 +1802,7 @@ risks throughput advice being reset
 if no SCONE packet is available for applying signals (<a href="#apply" class="auto internal xref">Section 7.1</a>),
 or the rewritten packets are lost.
 Sending the signal multiple times
-ensures that it is more likely that the signal is received.<a href="#section-5.4-5" class="pilcrow">¶</a></p>
+increases the likelihood that the signal is received.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2061,7 +2072,8 @@ datagram, coalesced with additional packets. An endpoint that receives and
 discards a SCONE packet without also successfully processing another packet
 from the same datagram <span class="bcp14">SHOULD</span> ignore any throughput advice signal. Such a datagram
 might be entirely spoofed.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">Once negotiated, endpoints that seek to receive throughput advice on a flow
+<p id="section-8.1-3">Once negotiated,
+applications that seek to receive throughput advice on a flow
 <span class="bcp14">MUST</span> send a SCONE packet at least twice each monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 <p id="section-8.1-4">Sending SCONE packets more often might be necessary to:<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-8.1-5">
