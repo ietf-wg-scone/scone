@@ -663,8 +663,9 @@ However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
 that is, up to the period defined in {{time}}.
 
-A better approach is to disregard any data that was transmitted
-before engaging any hard limits to throughput.
+A better approach is to exclude any data transmitted
+before sending reduced throughput advice
+from any monitoring that uses the reduced rate.
 This ensures that the enforcement of limits is minimally disruptive.
 
 
