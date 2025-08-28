@@ -403,6 +403,18 @@ If advice is applied by applications,
 applications MUST apply the lowest throughput advice
 received during any monitoring period; see {{time}}.
 
+After a monitoring period ({{time}})
+without receiving throughput advice,
+any previous advice expires.
+Endpoints can remove any constraints
+placed on throughput based on receiving throughput advice.
+This does not mean that there are no limits,
+either in policy or due to network conditions,
+only that these limits are now unknown.
+Other constraints on usage will still apply,
+which necessarily includes congestion control
+and might include other, application-specific constraints.
+
 Applications MAY discard throughput usage state
 when they receive throughput advice that indicates a reduced rate.
 Otherwise, data that was sent at a higher rate
@@ -425,7 +437,7 @@ risks throughput advice being reset
 if no SCONE packet is available for applying signals ({{apply}}),
 or the rewritten packets are lost.
 Sending the signal multiple times
-ensures that it is more likely that the signal is received.
+increases the likelihood that the signal is received.
 
 
 # Negotiating SCONE {#tp}
