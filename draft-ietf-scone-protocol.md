@@ -136,10 +136,6 @@ which include asymmetry of link capacity and path diversity.
 Applications may choose to enable SCONE signals in either or both directions
 as they see fit.
 
-Indicated rate limits apply only in a single direction.  Separate indications
-can be sent for the client-to-server direction and server-to-client direction.
-The indicated rates do not need to be the same.
-
 Indicated rate limits only apply to the path on which they are received.  A
 connection that migrates or uses multipath {{?QUIC-MP=I-D.ietf-quic-multipath}}
 cannot assume that rate limit indications from one path apply to new paths.
