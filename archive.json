@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-28T01:38:21.994825+00:00",
+  "timestamp": "2025-08-31T01:42:55.462669+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1647,7 +1647,7 @@
       "labels": [],
       "body": "Some related aspects are covered in https://github.com/ietf-wg-scone/scone/issues/24, https://github.com/ietf-wg-scone/scone/issues/43 and https://github.com/ietf-wg-scone/scone/issues/6. However draft still lacks clarity to specify the role of server, client and n/w element to support Dynamic update of rate-signal field by network element. \n\nOne of the CSPs/equipment provider is looking for more clarity in the draft doc to cover following aspects;\n\nA. What is the periodicity of server sending SCONE packet coalesced with QUIC packet ?\n\nThis clarity will help in analyzing how fast new bit-rates can be configured in apps whenever there is a need to change the bit-rate for a flow due to any trigger in CSP n/w \n\n================================================================\nB. If the Server is sending SCONE packets with very high frequency/periodicity and if network element (PGW/UPF) does want to update the rate-signal field with for each and every SCONE packet (if there is no change in previously sent bit-rate for the subscriber) to avoid CPU usage.   How this can supported by server and client is not clearly specified in the draft. \n\nReason for asking clarification B;  In below section sec 7.1  it is stated that ***A network element might receive a packet that already includes a rate signal*** !! Does it mean that client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets ? \n \nPer IETF Sec 7.1:\n \n  A network element then conditionally replaces the Version field and\n   the Rate Signal field with values of its choosing.\n \n   ****A network element might receive a packet that already includes a rate\n   signal**.**  The network element replaces the rate signal if it wishes to\n   signal a lower rate limit; otherwise, the original values are\n   retained, preserving the signal from the network element with the\n   lower policy\n \n ===========================================================\nFor e.g. can we specify following in the draft to bring clarity to B. \n\n\n- By default, Server to set rate-signal field to a value which is not valid for the client. However client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets \n- Client to use whatever rate-signal value present in last received SCONE packet and stop using the value received in the past. \n\nOR,  if above is not the case  ( i.e if client is not required to update the server about the bit-rate and server is not required to set the rate-signal field to this updated value) can we specify following ; \n\n - Server to set rate-signal field to a value in every scone packet which is not valid for the client \n- And client to ignore the rate-signal field if rate-signal is set to this invalid value.(For e.g. 63) and continue to use previously received valid rate-signal value. \n\nWith this clarity in draft,  n/w element providers would get the clarity that \n1. If they don't update subsequent scone packets during the life time of the flow,  application continues to use bit-rate that was sent by n/w element initially. \n\n\n  ",
       "createdAt": "2025-08-06T18:23:43Z",
-      "updatedAt": "2025-08-14T03:33:26Z",
+      "updatedAt": "2025-08-28T20:53:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -1726,6 +1726,13 @@
           "body": "+1 to @ihlar, as [stated elsewhere](https://github.com/ietf-wg-scone/scone/issues/43#issuecomment-3103397516).\n\nEven though some network elements might fail to update some SCONE packets, I'm not sure if it is a good idea to build a scheme based on an assumption that SCONE packets are rarely updated.\n\nThe concern is that it becomes hard for endpoints to determine what the correct rate is; #46 makes short cuts, however [it still has flaws](https://github.com/ietf-wg-scone/scone/pull/46#issuecomment-3178271255).\n\nI hope we can converge on something simpler, e.g.:\n* applicable bitrate is the minimum of the two most-recently-received SCONE packets\n* endpoints SHOULD send one SCONE packet every 5 seconds on an active flow, but no more\n* network elements SHOULD update every SCONE packet they observe.\n\nThe first bullet point takes care of network elements that occasionally fail to update SCONE packets. Other bullet points say that if an endpoint sends SCONE packets too frequently, it is considered an abuse (or an attack), and that network elements can apply other policies (e.g., apply rate limiters without updating SCONE packets).",
           "createdAt": "2025-08-14T03:32:00Z",
           "updatedAt": "2025-08-14T03:33:26Z"
+        },
+        {
+          "author": "smishra1200",
+          "authorAssociation": "NONE",
+          "body": "1. Update every SCONE packet: From the network element POV, inspecting and updating packet for hundreds and thousands of connections appears unwieldy\n2. Periodicity: Marking at some specific period, it is possible, but, we do not know what is the right periodicity\n3. Having network only update SCONE packet when there is a change - to send to the client end-point - removes the burden ( from 1 above) and also removes the uncertainty on right sizing the periodicity window (from 2 above), where the NE updates the SCONE packet only when there is a bit-rate change",
+          "createdAt": "2025-08-28T20:53:26Z",
+          "updatedAt": "2025-08-28T20:53:51Z"
         }
       ]
     },
@@ -1779,7 +1786,7 @@
       "labels": [],
       "body": "\t\n > The pull requests answer Question A.\n> \n> The network element needs to ensure that they send at least once every enforcement period (67s in the PR presently).  Because they do not control opportunities, they should try to update a small number of packets over that period.  I would go with every 20-30s based on that, but there is flexibility.\n> \n\n\nRaising this issue to get more clarification based on the issue being discussed in [#55.](https://github.com/ietf-wg-scone/scone/issues/55)\n\nCurrently, is it considered sufficient to send only two packets within the 67-second window that carry updated rate-signal values? Or, given the absence of an ACK mechanism in SCONE, should multiple packets containing the rate-signal be transmitted as a batch within this window? The intent is to reduce the risk of losing critical rate-signal information due to potential packet loss.\n\nFor reference, QUIC provides an ACK mechanism to help with loss detection and retransmission. However, if a packet containing both QUIC and SCONE information is lost, will the server automatically retry sending the SCONE data, or could the rate-signal be lost entirely?\n\nI would like to propose that, to enhance reliability, rate-signal values should be sent in batches rather than relying on single or minimal packet transmissions. This approach would help ensure delivery even in the absence of explicit loss detection or retransmission for SCONE.\n\nIn Summary:\n\n1. Is sending two packets within the 67-second window sufficient for reliable rate-signal delivery?\n2. Would batching multiple packets with the rate-signal improve robustness against packet loss in the absence of a SCONE ACK mechanism?\n3. What is the current behavior if a QUIC+SCONE packet is lost\u2014will the SCONE portion be retransmitted by the server?",
       "createdAt": "2025-08-12T23:08:51Z",
-      "updatedAt": "2025-08-28T00:34:48Z",
+      "updatedAt": "2025-08-28T04:41:04Z",
       "closedAt": null,
       "comments": [
         {
@@ -1823,6 +1830,112 @@
           "body": "I agree with Christian.  This is what the present advice in #61 does, so I think we're good to close this once that lands.",
           "createdAt": "2025-08-28T00:34:48Z",
           "updatedAt": "2025-08-28T00:34:48Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1 that the advice in #61 (i.e., send a SCONE packet every 20-30 second) is correct.\n\nIt might be worth pointing out that, even when the connection is idle, QUIC endpoints will be probing the path as often as that, in order to prvent NAT table expiry ([section 10.1.2 of RFC 9000](https://datatracker.ietf.org/doc/html/rfc9000#section-10.1.2-4)).",
+          "createdAt": "2025-08-28T04:41:04Z",
+          "updatedAt": "2025-08-28T04:41:04Z"
+        }
+      ]
+    },
+    {
+      "number": 64,
+      "id": "I_kwDON1dwo87IYKzC",
+      "title": "Is bursty sending what we want?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/64",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "If we say that rates apply over relatively long time frames, then we are also implicitly saying that rates can spike up well above that rate.  Arbitrarily high, even.  For instance, if we say that the average throughput needs to be X over 67 seconds (#61), then that might be the same as saying 67X over one second, followed by silence for 66 seconds.  Nothing says that can't be half a second, or one millisecond, if that is physically possible.\n\nI have heard a few things with respect to this:\n\n1. This sort of spikiness might be desirable for some cases, such as downloading software updates over a mobile network.  There, the radio link can often support very high transmission rates, but seeks to serve many terminals (or UEs) so that high rate cannot be allocated to a single network user over a longer period.  Having data delivered in spikes allows the device to return its radio off and save energy.  It also simplifies delivery in the network, which can open a dedicated channel for a short time, rather than have to switch between multiple terminals.  This argues FOR allowing spikes in send rates as high as the network can tolerate.\n2. Spikes in send rate might cause buffers to overflow, which might degrade performance or cause spikes in latency.  For both the affected flow and potentially other network users.  This is true, but only to the extent that the congestion controller permits that to happen.  And we are not chartered to change how congestion control operates.  We require that the congestion controller remain an independent limit on sending.  It is the congestion controller's task to ensure that endpoints don't damage the network, so as long as they continue to do that job, throughput advice can't damage the network.  This seems fine.\n3. Spikes in sending rate might not be achievable for congestion controllers because it depends on very fast increases in send rate and long pauses.  As a reminder: We are not seeking to change the constraints that congestion controllers might place on send rates, nor are we looking to override any aspect of their operation.  This doesn't argue for anything to my mind, because we are not chartered to change how congestion controllers work.\n4. It might be hard to reason about how to manage bandwidth if you can spend all your data budget in a short time then have no ability to get more when someone changes their mind.  This doesn't argue for anything in particular in my mind, other than to highlight that this is a sharp tool that might cut you if you operate it incorrectly.  That's true of most protocols.\n\n@huitema @kazuho, is there another factor here that I'm missing?",
+      "createdAt": "2025-08-28T04:47:35Z",
+      "updatedAt": "2025-08-28T07:41:43Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks, I think bursty sending is fine.\n\nI think the question I have is if bursty sending is a recommendation, or a requirement. My understanding is that it is neither, as real-time video appliocations are target of SCONE too. While applications might have good reasons trying to use the budget as early as possible, networks cannot assume or expect such behavior (in fact, application might stay in idle for 60 seconds before bursting).",
+          "createdAt": "2025-08-28T04:52:14Z",
+          "updatedAt": "2025-08-28T04:57:11Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I don't think that we would *recommend* bursting.  It's really the domain of congestion controls to manage what send profiles are possible.  And applications/endpoints to find sending patterns within those constraints that work for their needs.",
+          "createdAt": "2025-08-28T05:07:48Z",
+          "updatedAt": "2025-08-28T05:07:48Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree that specifying pacing is fraught, that we only want to specify the network element behavior, not the client, and that the network that does not like bursting can implement some kind of policing in the network to limit the effect of bursts. \n\nMy specific concern with bursting is \"what happens if the network element wants to reduce the rate\". We have an example in the discussion of #61 of having the rate drop from 1Mbps to 100kbps. Suppose that the network element does something like:\n\n- advises 1 Mbps\n- oops, that's too fast, starts advising 500 kbps 20 sec later\n- re-oops, still too fast, starts advising 200 kbps 20 sec after the previous step\n- oh well, let's be drastic, starts advising 200 kbps 10 sec after the previous step\n\nIf each steps \"wipes the plate\", a batch oriented application like your \"software update\" gets 67s\\*1Mpbs of credit the first time, then another 67s\\*500kpbs 20 seconds later, then 67s\\*200kpbs 20 seconds after that, then 67s\\*100kpbs. That does not seem a very good way to drive down consumption. As written above, \"It might be hard to reason about how to manage bandwidth...\"\n\nI would recommend doing three things:\n\n1. Leave the nominal monitoring algorithm as is;\n2. Explain that we do have a very sharp edge there;\n3. Explain that networks have other tools to police bursts if they don't like them, such as deploying some form of active queue management, which will cause the data senders to receive congestion control signals.",
+          "createdAt": "2025-08-28T05:24:22Z",
+          "updatedAt": "2025-08-28T05:29:45Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Agree that we should specify as little as possible here.  \n\n> 1. Leave the nominal monitoring algorithm as is;\n> 2. Explain that we do have a very sharp edge there;\n> 3. Explain that networks have other tools to police bursts if they don't like them, such as deploying some form of active queue management, which will cause the data senders to receive congestion control signals.\n\nThis should be sufficient imo. \n\n",
+          "createdAt": "2025-08-28T07:41:43Z",
+          "updatedAt": "2025-08-28T07:41:43Z"
+        }
+      ]
+    },
+    {
+      "number": 65,
+      "id": "I_kwDON1dwo87IbeaN",
+      "title": "Make the grace period for rate reductions reasonable",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/65",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@kazuho observed in #61:\n\n> My high order point is that the logic used by network elements for testing conformance should reflect what applications can do, taking into considerations the time required to adapt and the impact of packet loss; otherwise we would have may false positives.\n\nRight now, #61 has advice on allowing a grace period for applications that is vague, but probably it will be too short.  It only really considers the time that a signal might take to propagate to applications.  In practice, a lot of applications will need some time to adjust downward.  A network element that signals a lower rate cannot reasonably start enforcing that rate until applications have time to receive the signal **and react**.  While some applications will be able to adjust quickly (real-time applications are particularly good at this), none can react immediately without disruption and some might take a little while.\n\nStreaming video applications are generally pretty good at adjusting and advice will help a lot.  However, they can't flip states instantaneously without disruption.  We probably want to allow enough time for a smoother reaction than having the video stall out until a lower quality stream can be found, buffered, and started.  That might take more than a few seconds.  Especially when you consider that quality ladder changes need I-frames, which are not always immediately available.\n\nWe don't need to be too precise in the advice, we just need to signal that while the network might be inclined to engage a policer/shaper during a change in rate, network elements should reassess once applications have had a little time to settle their usage out.  We might even suggest that the network apply monitoring based on the *maximum* rate active in the last period, where the endpoints sending follows the *minimum* rate received over the same period.  That would be the most generous interpretation and would allow the most time (67 seconds, perhaps) for endpoints to follow the advice.",
+      "createdAt": "2025-08-28T09:52:12Z",
+      "updatedAt": "2025-08-28T09:56:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 66,
+      "id": "I_kwDON1dwo87IkGyH",
+      "title": "Rate Signal  in scone packet does not carry direction ( DL /UL) information",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/66",
+      "state": "OPEN",
+      "author": "anooptomar29",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In current draft \"overview\" section it is stated that \n\n**\"Indicated rate limits apply only in a single direction. Separate indications can be sent for the client-to-server direction and server-to-client direction. The indicated rates do not need to be the same**.\"\n\nAs per my understanding no information element within SCONE Packet carry \"direction\" information to let client know whether rate limit is for client-to-server ( UL) direction and server-to-client  (DL) direction. \n\nWe should update \"overview'' section  and remove \"client-to-server\" direction.  CSP networks typically use rate-limiters to limit bit rate in DL direction ie. \"server-to-client direction\" for on-demand streaming video application. \n",
+      "createdAt": "2025-08-28T23:02:34Z",
+      "updatedAt": "2025-08-29T08:13:57Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That the signal is not useful in a given deployment doesn't mean that it won't be useful in another context.\n\nThe protocol is symmetrical now at no cost.  Making it asymmetrical would cost extra.\n\nThe answer is to not use the signal on the client-to-server direction if you don't expect clients to alter their sending behaviour.",
+          "createdAt": "2025-08-29T08:03:51Z",
+          "updatedAt": "2025-08-29T08:03:51Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "If Peer-to-Peer QUIC happens, and if videoconferences ever switch to using P2P QUIC, and if they find SCONE to be useful (three big ifs), the client/server distinction will be uninteresting to the application (DTLS as used in WebRTC uses \"active/passive\" instead), and it will want SCONE signals in both directions.\n\nI do think that we should update the overview, but the section \"Separate indications... \" should be replaced with something like \"Rates on the client-to-server direction and the server-to-client direction are independent, expected to be different, and applications may choose to utilize SCONE in either or both directions as they see fit.\"\n",
+          "createdAt": "2025-08-29T08:11:10Z",
+          "updatedAt": "2025-08-29T08:11:10Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Oh, I like that Harald, thanks for the contribution.  I'll open a pull request.",
+          "createdAt": "2025-08-29T08:13:57Z",
+          "updatedAt": "2025-08-29T08:13:57Z"
         }
       ]
     }
@@ -6366,18 +6479,47 @@
       "labels": [],
       "body": "This is a big set of changes, discussed in #46 and #37, which started to get a little messy.  This includes:\r\n\r\n1. Defining a monitoring period is 67 seconds.  Network elements can monitor usage for adherence to the advice they give over this period or longer.  Endpoints can consider this to be the upper bound on the window they spread their usage over.\r\n2. Describing a sample process for monitoring adherence.  As an example only.\r\n3. Allowing network elements to miss updates, but recommending that they update at least twice each monitoring period; or, more specifically, every 20-30s.\r\n4. Recommending that endpoints follow the lowest throughput advice they have received in the last 67s.\r\n5. Allowing endpoints to discard state when the advice reduces.\r\n6. Advising endpoints on how often to include SCONE packets and why (to avoid missing advice and to reduce latency when advice changes).\r\n\r\nThis is what we discussed during the meeting.  The direction we agreed to broadly was to give this a spin and try to improve it.  There are some small tweaks we discussed that can be pursued separately, but this batch was pretty substantial already.",
       "createdAt": "2025-08-26T23:01:05Z",
-      "updatedAt": "2025-08-28T00:20:16Z",
+      "updatedAt": "2025-08-28T23:11:35Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
-      "headRefOid": "a351078725dfec8a14c680a409e242c3b4bf96d5",
+      "headRefOid": "dceda38bd1dc03157495365e2af8091b29b6cb99",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@huitema\r\n> Maybe we should say that the maximum pacing rate should be no more that Y times the advice, and discuss whether Y should be 1, 2, 8, 67 or something more.\r\n\r\nMy understanding was that such bursts were in fact desirable in many networks, modulo actual achievable rates, congestion control, buffers, etc...  Because it does in fact allow endpoints to go to sleep.\r\n\r\nMoreover, real congestion controllers don't allow that to happen.  They just can't be quiet for extended periods (like 30 seconds) and immediately switch to sending at line rate.  So you have a smoothing function present anyway to protect the network.  Even the most aggressive resumption \r\n\r\nThose combined mean that I'm not concerned about this leading to a real problem.  I don't think it's crazy to put a secondary cap on send rate that is some multiple of the baseline rate, but I expect that the number could be quiet high.",
+          "createdAt": "2025-08-28T03:22:09Z",
+          "updatedAt": "2025-08-28T03:22:09Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Given the question about bursting, I think that it's worth taking that up separately.  I'll open an issue for that.",
+          "createdAt": "2025-08-28T04:30:37Z",
+          "updatedAt": "2025-08-28T04:30:37Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson I think we need the \"batch of 67 seconds worth of packet\" issue right on. I agree that in practice, other mechanisms may come in play, such as congestion control, access rate limits, or the limited size of intermediate buffers. But the most shocking issue is the idea that if the network element advertises a lower rate, it must entirely thrown out the per-tuple state. It is a logical design, because saying otherwise requires us to delineate a more complex model. At the very moment when the network element wants applications to slowdown, it gives them more credits!\r\n\r\nI don't really want to specify a pacing rate. We have consensus that we should only specify the behavior of the network elements, not that of the client. But we can have the equivalent of a pacing function if we specify that the server must *only keep a fraction* of the client state. Suppose we want a pacing rate Y and the advice arrives T seconds into the pacing period. The network element could assume that a could compute a credit equal to the lesser of `advice*67` and `Y*advice*T`. If the accumulated consumption is lower than that, the entire client state is wiped; otherwise, it is reduced by the credit.\r\n\r\nSomething like that will force the clients to pace their traffic somewhat, instead of sending series of batches. But OK, maybe that's too complicated. Maybe congestion control forced the client to only send a fraction of the \"maximum batch\", and so wiping the all state is acceptable. Fine, but need to explain that.",
+          "createdAt": "2025-08-28T04:50:48Z",
+          "updatedAt": "2025-08-28T04:50:48Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> At the very moment when the network element wants applications to slowdown, it gives them more credits!\r\n\r\nI was not happy with this either, until I reminded myself that this is a policy signal, not a congestion control signal.  If the network has the capacity, then the choice to change its policy might have a temporary effect on load (not a huge one in the grand scheme of things, to be clear, even if there are bursty senders).  But congestion controllers should protect the infrastructure.\r\n\r\nWe already talk about the interaction between this and congestion control and make it very clear that a congestion controller remains an essential part of the protocol.  https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-8.3",
+          "createdAt": "2025-08-28T05:11:52Z",
+          "updatedAt": "2025-08-28T05:11:52Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo868PlWN",
@@ -6505,6 +6647,275 @@
               "updatedAt": "2025-08-28T00:20:16Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868dwlX",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-08-27T22:24:02Z",
+          "updatedAt": "2025-08-28T02:06:42Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Do we want to clarify why 67 was chosen as the value? People would wonder why, especially because it is not a round number.",
+              "createdAt": "2025-08-27T22:24:02Z",
+              "updatedAt": "2025-08-28T02:06:42Z"
+            },
+            {
+              "originalPosition": 120,
+              "body": "It was a bit hard for me to understand the sentence. Maybe:\r\n```suggestion\r\nTo reduce the risk of synchronization across multiple senders,\r\nwhich may cause network elements to miss updates,\r\nsenders can add a small random delay.\r\n```",
+              "createdAt": "2025-08-27T22:32:09Z",
+              "updatedAt": "2025-08-28T03:09:55Z"
+            },
+            {
+              "originalPosition": 116,
+              "body": "```suggestion\r\nevery 20 seconds is likely sufficient to ensure that throughput advice is not lost.\r\n```\r\nConsidering that we talk about adding a \"delay\", I'm a bit concerned that an impatient reader might assume that sending once per `30 + random() * 10` seconds is fine; which in fact fails to send at least two packets within a 67-second window.",
+              "createdAt": "2025-08-27T22:34:02Z",
+              "updatedAt": "2025-08-28T02:06:42Z"
+            },
+            {
+              "originalPosition": 167,
+              "body": "```suggestion\r\n* If the signaled rate limit is the same as the current rate limit,\r\n```\r\nMaybe it is better to stick to the terms that we have defined (i.e., \"rate limit\"). The argument applies also to similar terms used below.",
+              "createdAt": "2025-08-28T01:49:54Z",
+              "updatedAt": "2025-08-28T02:06:42Z"
+            },
+            {
+              "originalPosition": 189,
+              "body": "I'm not sure if this advice is correct. Consider the following scenario:\r\n\r\n1. [t=0] NE indicates 1Mbps\r\n2. [t=0] endpoints start sending at 1Mbps, which is expected to continue for 50 seconds\r\n3. [t=20] NE indicates 100Kbps\r\n\r\nMy understanding is that the draft currently permits endpoints behave like step 2.\r\n\r\nBut if I am reading the PR correctly, it states that from t=20 to t=67, only 837.5KB (100/8*67) of data is expected to be sent by the endpoints (because the new rate limit is applied immediately, and the usage state is reset). This is insufficient, as the endpoints would continue for another 30 seconds (until t=50) to send at 1Mbps, consuming 3750KB in that period.\r\n\r\nI think we need to:\r\n* define grace period (e.g., 10 seconds) given to endpoints before they react to reduction of rate limits,\r\n* define how network elements can reduce rate limits (obviously, drastic reduction of rate limits contribute to the problem), or\r\n* require network elements to remember old rate limit and usage for 67 seconds and use that.",
+              "createdAt": "2025-08-28T02:06:34Z",
+              "updatedAt": "2025-08-28T02:10:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868hLsW",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T02:14:37Z",
+          "updatedAt": "2025-08-28T02:14:38Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "PS. As a high order point, I wonder the proposed algorithm is incorrect in sense that it retains old limit iff the rate limit is increased.\r\n\r\nIMO, the correct approach _for network elements_ is to retain old limits when the rate limit is reduced, but apply the new rate limits immediately when they are increased.\r\n\r\nThis is in contrast to how _endpoints_ should behave; i.e., is retain old limits when the rate limit is increased, but apply the new limits ASAP when they are decreased.",
+              "createdAt": "2025-08-28T02:14:38Z",
+              "updatedAt": "2025-08-28T02:14:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868haSW",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "As mentioned in individual comments, I understand that saying \"no more than X Mbps in the next 67 seconds\" allows the client to \"send a burst of (67*X/8)Mb and then wait 67 seconds\", which logical consequences if the advice is reduced, etc. That does not seem right.\r\n\r\nMaybe we should say that the maximum pacing rate should be no more that Y times the advice, and discuss whether Y should be 1, 2, 8, 67 or something more.",
+          "createdAt": "2025-08-28T02:45:54Z",
+          "updatedAt": "2025-08-28T03:01:48Z",
+          "comments": [
+            {
+              "originalPosition": 116,
+              "body": "\"every 20-30 seconds\" means 20 + random(0,10) seconds, which would be just fine. Not having a random component means a much higher risk of synchronization, all clients sending SCONE packets at the same time and overwhelming the network element. Please keep the current text.",
+              "createdAt": "2025-08-28T02:45:54Z",
+              "updatedAt": "2025-08-28T03:01:48Z"
+            },
+            {
+              "originalPosition": 189,
+              "body": "I think that @kazuho has a point. We appear to have derived the logical conclusion of \"averaging over 67 seconds\" to imply that it is fine for the client to send the equivalent of 67 seconds worth of data in a single burst, then wait 67 seconds and send the next burst. That's a horrific advice. I think we should clarify it.",
+              "createdAt": "2025-08-28T02:52:07Z",
+              "updatedAt": "2025-08-28T03:01:48Z"
+            },
+            {
+              "originalPosition": 206,
+              "body": "I am really not sure about that, see previous comment about sending 67 seconds of data in a burst. With that advice, the client could send a 67 burst each time the throughput advice is reduced. That does not seem right",
+              "createdAt": "2025-08-28T02:55:46Z",
+              "updatedAt": "2025-08-28T03:01:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868hyhr",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T03:16:14Z",
+          "updatedAt": "2025-08-28T03:16:14Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "It retains the old rate if the new rate is the same or higher (not \"iff\").\r\n\r\nHow could you retain the old limit if the new one reduced?\r\n\r\nLet's say that you start at 1Mbps and send at that rate for an extended time.  At the point the number drops to 200Kbps, you have just spent the last however long sending at a higher rate.  Let's assume that the send rate is approximately constant.  In that case, because the rate dropped to 1/5th of the previous, if any period you measure includes the period of period/5 seconds prior to the change in advice, you cannot send anything at all 4/5ths of a monitoring period.\r\n\r\nI think that I'm going to need you to more clearly explain exactly how you imagine endpoints and network elements behave here, because I'm clearly not understanding your point.  I don't know how to implement:\r\n\r\n> IMO, the correct approach for network elements is to retain old limits when the rate limit is reduced, but apply the new rate limits immediately when they are increased.",
+              "createdAt": "2025-08-28T03:16:14Z",
+              "updatedAt": "2025-08-28T03:16:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868h9LK",
+          "commit": {
+            "abbreviatedOid": "8fbe0dd"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T03:35:52Z",
+          "updatedAt": "2025-08-28T03:35:52Z",
+          "comments": [
+            {
+              "originalPosition": 116,
+              "body": "I see, thank you for the clarification.\r\n\r\nTo me it seems that \"add\" in \"senders can _add_ a small random delay\" was the source of my confusion. Could we change that to \"include\"? See https://github.com/ietf-wg-scone/scone/pull/61/files#r2306078248.",
+              "createdAt": "2025-08-28T03:35:52Z",
+              "updatedAt": "2025-08-28T03:38:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868h-Rl",
+          "commit": {
+            "abbreviatedOid": "6567e33"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T03:37:56Z",
+          "updatedAt": "2025-08-28T03:37:56Z",
+          "comments": [
+            {
+              "originalPosition": 131,
+              "body": "```suggestion\r\nsenders can include a small random delay.\r\n```",
+              "createdAt": "2025-08-28T03:37:56Z",
+              "updatedAt": "2025-08-28T03:37:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868iVHB",
+          "commit": {
+            "abbreviatedOid": "d2314c5"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T04:30:43Z",
+          "updatedAt": "2025-08-28T04:30:43Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "> I think that I'm going to need you to more clearly explain exactly how you imagine endpoints and network elements behave here, because I'm clearly not understanding your point.\r\n\r\nLet's reuse the previous example.\r\n\r\n1. [t=0] NE indicates 1Mbps\r\n2. [t=0] endpoints start sending at 1Mbps, which is expected to continue for 50 seconds\r\n3. [t=20] NE indicates 100Kbps\r\n\r\nConsider this endpoint a real-time video application. By receiving a bit rate advice via a SCONE packet at t=0, it is assuming that it can send at 1Mbps. The application updates its send rate only once every 50 seconds, because 50 is smaller than 67.\r\n\r\nAs the application updates its send rate every 50 seconds, it fails to adopt to the bit rate reduction at t=20. The logic being proposed in this pull request would call out excess usage at t=26.7; i.e., 6.7 seconds after the 100Kbps signal is sent.\r\n\r\nNote that the grace period in this example is 6.7 seconds, because the rate limit was reduced to a 1/10th of the original. As the ratio of reduction is sharper (it could theoretically be as large as 100K/199.5G), the \"grace period\" becomes smaller.\r\n\r\nOne might argue that the fix that we can apply is to require real-time video applications adjust to the new bit rate more promptly than 6.7 seconds, and disregard network elements from reducing their rate limits to less than a 1/10th within 67 seconds.\r\n\r\nBut what if the application is a chunk-based video player (e.g., HLS)? If each chunk is 10 seconds or longer, they need more than 6.7 seconds to adopt. IIUC, we allow network elements set their SCONE rate limits equal to what is indicated by congestion signals.\r\n\r\nAnd separately, we should also think about the effects of SCONE packets getting lost.\r\n\r\nThese points leads me to to argue that the best solution here is to change the misuse detection logic inside network elements.\r\n\r\n> I don't know how to implement:\r\n> \r\n>> IMO, the correct approach for network elements is to retain old limits when the rate limit is reduced, but apply the new rate limits immediately when they are increased.\r\n\r\nOne possible approach is to require network elements to retain the following two objects:\r\n1. A sliding window that can used to determine total traffic within the last 67 seconds.\r\n2. A three- or four-entry FIFO queue that remembers the most recent rate limits being sent. As rate limits are updated no more than every 20-30 seconds, three- or four-entry queue is sufficient to remember all the rate limits being sent within 67 seconds.\r\n\r\nNetwork elements never reset the sliding window (1). They simply check the conformance by seeing if total traffic within the last 67 seconds is no greater the _maximum_ rate limit retained in the FIFO queue (2) multiplied by 67.",
+              "createdAt": "2025-08-28T04:30:43Z",
+              "updatedAt": "2025-08-28T04:30:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868iikr",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T05:06:22Z",
+          "updatedAt": "2025-08-28T05:06:23Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "> As the application updates its send rate every 50 seconds, it fails to adopt to the bit rate reduction at t=20. The logic being proposed in this pull request would call out excess usage at t=26.7; i.e., 6.7 seconds after the 100Kbps signal is sent.\r\n\r\nThe requirement here is that the application update immediately when it receives an updated signal, because it is a reduction in the advice.  Obviously, there would need to be some grace period, but it would be in the order of round trips, not some portion of the monitoring period.  And yes, some allowance for packet loss, which might mean that signals are delayed by another 20s or more if the application is only sending SCONE packets every 20-30s as we recommend.  That argues for a much longer grace period for such changes, for sure.\r\n\r\nEither way, anything sent prior to the signal being sent (and received) would not be counted, but anything afterwards could.\r\n\r\nI don't know how you go to 1/10th of the period as a grace period.  Obviously, an application that is chugging along at 1Mbps will have committed to that send rate to some degree, so this sort of step change to 1/10th of the available capacity will have an effect on the application experience in some way (if it's video, a hitch seems likely).\r\n\r\nHow fast the application can react is then the question.  In one option, nothing happens for 30s, because the video cannot be switched to a lower bitrate until the 50s lapses.  That seems unlikely.  More likely, the application can restart on the basis of the new rate.  If the video is in 50s segments (unlikely) it can grab the current segment and scrub past the 20s that have already been played and still likely be within the bounds established by the new rate limit.\r\n\r\n> Network elements never reset the sliding window (1). They simply check the conformance by seeing if total traffic within the last 67 seconds is no greater the maximum rate limit retained in the FIFO queue (2) multiplied by 67.\r\n\r\nYes, you could have more monitoring, but the effect of that would only be to ensure that reductions have retroactive effect.  And any retroactive effect associated with a reduction in the advice will involve some period when the future rate goes to zero (or negative) for a non-trivial period.  I can't see any situation where that is desirable (if the network wants a customer to stop, this is not the right mechanism).\r\n\r\nConsider your example.  In 20 seconds at 1Mbps, you can use 2.5MB.  67 seconds at 100Kbps is a mere 838KB.  Your more complicated monitoring would allow the 1Mbps to continue for another 47 seconds.  It's an option for sure, but if the network is seeking to reduce the amount that endpoints use, that means tolerating usage at the higher rate for up to 97 seconds or more, to account for SCONE packet loss.\r\n\r\nIt's certainly possible to say that *network elements* need to monitor based on the *maximum* rate over the last 67 plus seconds and endpoints seek to stay within the *minimum* rate observed.  Is that what you are suggesting?",
+              "createdAt": "2025-08-28T05:06:22Z",
+              "updatedAt": "2025-08-28T05:06:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868it4T",
+          "commit": {
+            "abbreviatedOid": "743cebf"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK. I am not happy with the handling of bursting, but it is fine to have that discussion in a separate issue. ",
+          "createdAt": "2025-08-28T05:27:09Z",
+          "updatedAt": "2025-08-28T05:27:09Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868i7i2",
+          "commit": {
+            "abbreviatedOid": "743cebf"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T05:58:18Z",
+          "updatedAt": "2025-08-28T05:58:18Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "> I don't know how you go to 1/10th of the period as a grace period.\r\n\r\nIn the case of the example, the rate limit is reduced from 1Mbps to 100Kbps at t=20. When the rate limit is the latter, network elements would report excess usage when the amount of data being sent from t=20 reaches 838KB (i.e., 100K/8*67). If the application continues sending data at 1Mbps, due to either not being to react promptly, or due to the SCONE packet dropped, it would consume 838KB in 6.7 seconds.\r\n\r\n> How fast the application can react is then the question.\r\n\r\nExactly.\r\n\r\nUnder the current state of the PR, the grace period is `67 / (old_rate_limit / new_rate_limit)` seconds, even if we ignore the impact of packet losses.\r\n\r\nThe grace period becomes dangerously short if we are to allow rate reduction to something like a 1/10th, because then the grace period would be like 6.7 seconds. I'm not certain if HLS could react in such a short period.\r\n\r\n> It's certainly possible to say that network elements need to monitor based on the _maximum_ rate over the last 67 plus seconds and endpoints seek to stay within the _minimum_ rate observed. Is that what you are suggesting?\r\n\r\nYes to the _maximum_. But I do not think we need to consider the \"minimum\" part, because a) the logic we are defining here is about detecting overuse, and b) SCONE packets carrying the minimal signal might get lost.\r\n\r\nMy high order point is that the logic used by network elements for testing conformance should reflect what applications _can_ do, taking into considerations the time required to adapt and the impact of packet loss; otherwise we would have may false positives.",
+              "createdAt": "2025-08-28T05:58:18Z",
+              "updatedAt": "2025-08-28T05:59:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868mEw3",
+          "commit": {
+            "abbreviatedOid": "a351078"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-08-28T09:44:04Z",
+          "updatedAt": "2025-08-28T09:44:04Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "> My high order point is that the logic used by network elements for testing conformance should reflect what applications can do, taking into considerations the time required to adapt and the impact of packet loss; otherwise we would have may false positives.\r\n\r\nOK, this seems like something that we can follow up on.  Right now, there is advice on allowing a grace period for applications that is vague, but probably it will be too short.  Let's get that issue on file and work out what we can say that is more concrete.",
+              "createdAt": "2025-08-28T09:44:04Z",
+              "updatedAt": "2025-08-28T09:44:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo868wYqx",
+          "commit": {
+            "abbreviatedOid": "dceda38"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-28T23:11:27Z",
+          "updatedAt": "2025-08-28T23:11:35Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "I now see #65 being opened as a follow up. Along with that, I think this PR is the correct step forward.",
+              "createdAt": "2025-08-28T23:11:27Z",
+              "updatedAt": "2025-08-28T23:11:35Z"
+            }
+          ]
         }
       ]
     },
@@ -6513,25 +6924,35 @@
       "id": "PR_kwDON1dwo86lgGGO",
       "title": "Forbid SCONE packet insertion",
       "url": "https://github.com/ietf-wg-scone/scone/pull/62",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As discussed at the meeting, we should discourage insertion of SCONE packets by network elements.  (We are reserving the right to allow insert or forbid it more strongly in future by taking this path.)",
       "createdAt": "2025-08-26T23:10:00Z",
-      "updatedAt": "2025-08-27T20:07:00Z",
+      "updatedAt": "2025-08-28T09:53:27Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "min-rate",
       "baseRefOid": "91a837738bd9561dfdb1d7c28eb0fa5068581732",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "forbid-insertion",
-      "headRefOid": "587cec671815668353065c2c7522ba375b3e9b0d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "c69569aa28bfa4421e211da6ac3e6108fc8e7ec1",
+      "closedAt": "2025-08-28T09:53:27Z",
+      "mergedAt": "2025-08-28T09:53:27Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "dceda38bd1dc03157495365e2af8091b29b6cb99"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Merging this into #61 now as we have enough approvals.",
+          "createdAt": "2025-08-28T09:53:22Z",
+          "updatedAt": "2025-08-28T09:53:22Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo868PlnC",
@@ -6571,6 +6992,26 @@
           "createdAt": "2025-08-27T17:54:13Z",
           "updatedAt": "2025-08-27T20:07:00Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo868kelY",
+          "commit": {
+            "abbreviatedOid": "587cec6"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-08-28T07:55:47Z",
+          "updatedAt": "2025-08-28T07:56:35Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nA network element MUST NOT alter datagrams to add SCONE packets\r\nor synthesize datagrams that contain SCONE packets.\r\n```",
+              "createdAt": "2025-08-28T07:55:47Z",
+              "updatedAt": "2025-08-28T07:56:36Z"
+            }
+          ]
         }
       ]
     },
@@ -6650,6 +7091,53 @@
           "createdAt": "2025-08-27T18:00:22Z",
           "updatedAt": "2025-08-27T18:00:22Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 67,
+      "id": "PR_kwDON1dwo86l8U4n",
+      "title": "Revise asymmetry note",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/67",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Using a suggestion from @alvestrand, with tweaks.",
+      "createdAt": "2025-08-29T08:17:56Z",
+      "updatedAt": "2025-08-29T14:09:46Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "independent-each-direction",
+      "headRefOid": "88247a95f11876ec1d8943dec11d1c2076a994dd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo8684VS8",
+          "commit": {
+            "abbreviatedOid": "88247a9"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK, with a nit.",
+          "createdAt": "2025-08-29T14:09:15Z",
+          "updatedAt": "2025-08-29T14:09:46Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "\"will different\" should be \"will differ\" or \"will be different\".",
+              "createdAt": "2025-08-29T14:09:15Z",
+              "updatedAt": "2025-08-29T14:09:46Z"
+            }
+          ]
         }
       ]
     }
