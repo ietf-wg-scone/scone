@@ -131,7 +131,7 @@ version, process the QUIC packet, and then record the indicated rate.
 Throughput advice in each direction --
 the client-to-server direction and the server-to-client direction --
 are independent.
-It is expected that these rates will different for multiple reasons,
+It is expected that these rates will differ for multiple reasons,
 which include asymmetry of link capacity and path diversity.
 Applications may choose to enable SCONE signals in either or both directions
 as they see fit.
