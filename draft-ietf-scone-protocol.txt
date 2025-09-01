@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 27 February 2026                           Private Octopus Inc.
+Expires: 5 March 2026                               Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          26 August 2025
+                                                        1 September 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 February 2026.
+   This Internet-Draft will expire on 5 March 2026.
 
 Copyright Notice
 
@@ -176,10 +176,12 @@ Table of Contents
    indicated version, process the QUIC packet, and then record the
    indicated rate.
 
-   Indicated rate limits apply only in a single direction.  Separate
-   indications can be sent for the client-to-server direction and
-   server-to-client direction.  The indicated rates do not need to be
-   the same.
+   Throughput advice in each direction -- the client-to-server direction
+   and the server-to-client direction -- are independent.  It is
+   expected that these rates will differ for multiple reasons, which
+   include asymmetry of link capacity and path diversity.  Applications
+   may choose to enable SCONE signals in either or both directions as
+   they see fit.
 
    Indicated rate limits only apply to the path on which they are
    received.  A connection that migrates or uses multipath [QUIC-MP]
