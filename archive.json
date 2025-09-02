@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-08-31T01:42:55.462669+00:00",
+  "timestamp": "2025-09-02T01:39:45.406518+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -7099,24 +7099,26 @@
       "id": "PR_kwDON1dwo86l8U4n",
       "title": "Revise asymmetry note",
       "url": "https://github.com/ietf-wg-scone/scone/pull/67",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Using a suggestion from @alvestrand, with tweaks.",
       "createdAt": "2025-08-29T08:17:56Z",
-      "updatedAt": "2025-08-29T14:09:46Z",
+      "updatedAt": "2025-09-01T02:19:37Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "independent-each-direction",
-      "headRefOid": "88247a95f11876ec1d8943dec11d1c2076a994dd",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "248c6367d7f4293bc3e938fccd8f1c16684de7e7",
+      "closedAt": "2025-09-01T02:19:37Z",
+      "mergedAt": "2025-09-01T02:19:36Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "5435e12546dd34c19be041e844599b4685dcee04"
+      },
       "comments": [],
       "reviews": [
         {
@@ -7136,6 +7138,26 @@
               "body": "\"will different\" should be \"will differ\" or \"will be different\".",
               "createdAt": "2025-08-29T14:09:15Z",
               "updatedAt": "2025-08-29T14:09:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo869ECUt",
+          "commit": {
+            "abbreviatedOid": "88247a9"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-01T02:19:20Z",
+          "updatedAt": "2025-09-01T02:19:20Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\nIt is expected that these rates will differ for multiple reasons,\r\n```",
+              "createdAt": "2025-09-01T02:19:20Z",
+              "updatedAt": "2025-09-01T02:19:20Z"
             }
           ]
         }
