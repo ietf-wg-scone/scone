@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-02T01:39:45.406518+00:00",
+  "timestamp": "2025-09-07T01:40:53.844616+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -6479,7 +6479,7 @@
       "labels": [],
       "body": "This is a big set of changes, discussed in #46 and #37, which started to get a little messy.  This includes:\r\n\r\n1. Defining a monitoring period is 67 seconds.  Network elements can monitor usage for adherence to the advice they give over this period or longer.  Endpoints can consider this to be the upper bound on the window they spread their usage over.\r\n2. Describing a sample process for monitoring adherence.  As an example only.\r\n3. Allowing network elements to miss updates, but recommending that they update at least twice each monitoring period; or, more specifically, every 20-30s.\r\n4. Recommending that endpoints follow the lowest throughput advice they have received in the last 67s.\r\n5. Allowing endpoints to discard state when the advice reduces.\r\n6. Advising endpoints on how often to include SCONE packets and why (to avoid missing advice and to reduce latency when advice changes).\r\n\r\nThis is what we discussed during the meeting.  The direction we agreed to broadly was to give this a spin and try to improve it.  There are some small tweaks we discussed that can be pursued separately, but this batch was pretty substantial already.",
       "createdAt": "2025-08-26T23:01:05Z",
-      "updatedAt": "2025-08-28T23:11:35Z",
+      "updatedAt": "2025-09-05T07:37:44Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
@@ -6914,6 +6914,26 @@
               "body": "I now see #65 being opened as a follow up. Along with that, I think this PR is the correct step forward.",
               "createdAt": "2025-08-28T23:11:27Z",
               "updatedAt": "2025-08-28T23:11:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-Cfc_",
+          "commit": {
+            "abbreviatedOid": "dceda38"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-05T07:37:44Z",
+          "updatedAt": "2025-09-05T07:37:44Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Yes, I think that needs some explanation.",
+              "createdAt": "2025-09-05T07:37:44Z",
+              "updatedAt": "2025-09-05T07:37:44Z"
             }
           ]
         }
