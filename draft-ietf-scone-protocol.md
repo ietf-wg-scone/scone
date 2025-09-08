@@ -354,7 +354,14 @@ and the corresponding bitrate for each.
 The time over which throughput advice applies is defined to be
 a period of 67 seconds.
 
-This value aims to strike a balance between extremes.
+Protocol participants can use a different period,
+depending on their role.
+Senders can limit their send rate over any time period
+up to 67 seconds.
+Network elements can monitor and apply limits to send rates
+using time period of at least 67 seconds.
+
+The choice of 67 seconds aims is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
@@ -365,16 +372,12 @@ if they have exceeded limits.
 
 The choice of 67 seconds, as a prime number,
 also ensures that problems in tuning applications
-are not synchronized with other periodic effects.
+are not synchronized with other periodic effects
+that might be measured in whole seconds.
+This includes segment length or key frame intervals in video applications,
+but also includes timers for middleboxes; see {{Section 4.3 of ?RFC4787}}.
 Any repeating phenomenon at this interval is therefore
 unlikely to be due to other periodic effects.
-
-Protocol participants can use a different period,
-depending on their role.
-Senders can limit their send rate over any time period
-up to 67 seconds.
-Network elements can monitor and apply limits to send rates
-using time period of at least 67 seconds.
 
 A sample algorithm for ensuring adherance to throughput advice
 is included in {{sliding-window}}.
