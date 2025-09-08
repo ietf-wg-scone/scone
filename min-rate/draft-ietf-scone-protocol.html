@@ -15,22 +15,22 @@
 can give endpoints their perspective on what the maximum achievable
 throughput might be for QUIC flows. 
     " name="description">
-<meta content="xml2rfc 3.30.0" name="generator">
+<meta content="xml2rfc 3.30.1" name="generator">
 <meta content="locomotive" name="keyword">
 <meta content="pastry" name="keyword">
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.0
+  xml2rfc 3.30.1
     Python 3.12.11
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.3.8
+    platformdirs 4.4.0
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.4
+    requests 2.32.5
     setuptools 80.9.0
     wcwidth 0.2.13
 -->
@@ -1051,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">August 2025</td>
+<td class="right">September 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 1 March 2026</td>
+<td class="center">Expires 12 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-08-28" class="published">28 August 2025</time>
+<time datetime="2025-09-08" class="published">8 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-03-01">1 March 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-12">12 March 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1722,14 +1722,27 @@ and the corresponding bitrate for each.<a href="#section-5.1-6" class="pilcrow">
         </h3>
 <p id="section-5.2-1">The time over which throughput advice applies is defined to be
 a period of 67 seconds.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">Protocol participants can use a different period,
+<p id="section-5.2-2">This value aims to strike a balance between extremes.
+Longer periods allow applications more flexibility
+in terms of how to allocate bandwidth over time.
+Shorter periods allow networks to administer policies more tightly.
+Also, when circumstances change,
+applications are better able recover
+without exceeding limits for a significant time
+if they have exceeded limits.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The choice of 67 seconds, as a prime number,
+also ensures that problems in tuning applications
+are not synchronized with other periodic effects.
+Any repeating phenomenon at this interval is therefore
+unlikely to be due to other periodic effects.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">Protocol participants can use a different period,
 depending on their role.
 Senders can limit their send rate over any time period
 up to 67 seconds.
 Network elements can monitor and apply limits to send rates
-using time period of at least 67 seconds.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">A sample algorithm for ensuring adherance to throughput advice
-is included in <a href="#sliding-window" class="auto internal xref">Appendix A</a>.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+using time period of at least 67 seconds.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+<p id="section-5.2-5">A sample algorithm for ensuring adherance to throughput advice
+is included in <a href="#sliding-window" class="auto internal xref">Appendix A</a>.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="endpoint-processing-of-scone-packets">
