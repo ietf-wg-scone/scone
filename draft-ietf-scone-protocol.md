@@ -376,7 +376,7 @@ are not synchronized with other periodic effects
 that might be measured in whole seconds.
 This includes segment length or key frame intervals in video applications,
 but also includes timers for middleboxes; see {{Section 4.3 of ?RFC4787}}.
-Any repeating phenomenon at this interval is therefore
+Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
 A sample algorithm for ensuring adherance to throughput advice
