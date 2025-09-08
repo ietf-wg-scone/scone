@@ -361,7 +361,7 @@ up to 67 seconds.
 Network elements can monitor and apply limits to send rates
 using time period of at least 67 seconds.
 
-The choice of 67 seconds aims is a compromise between competing interests.
+The choice of 67 seconds is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
