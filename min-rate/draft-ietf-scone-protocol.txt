@@ -444,12 +444,12 @@ Table of Contents
    67 seconds.  Network elements can monitor and apply limits to send
    rates using time period of at least 67 seconds.
 
-   The choice of 67 seconds aims is a compromise between competing
-   interests.  Longer periods allow applications more flexibility in
-   terms of how to allocate bandwidth over time.  Shorter periods allow
-   networks to administer policies more tightly.  Also, when
-   circumstances change, applications are better able recover without
-   exceeding limits for a significant time if they have exceeded limits.
+   The choice of 67 seconds is a compromise between competing interests.
+   Longer periods allow applications more flexibility in terms of how to
+   allocate bandwidth over time.  Shorter periods allow networks to
+   administer policies more tightly.  Also, when circumstances change,
+   applications are better able recover without exceeding limits for a
+   significant time if they have exceeded limits.
 
    The choice of 67 seconds, as a prime number, also ensures that
    problems in tuning applications are not synchronized with other
