@@ -1722,25 +1722,28 @@ and the corresponding bitrate for each.<a href="#section-5.1-6" class="pilcrow">
         </h3>
 <p id="section-5.2-1">The time over which throughput advice applies is defined to be
 a period of 67 seconds.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">This value aims to strike a balance between extremes.
+<p id="section-5.2-2">Protocol participants can use a different period,
+depending on their role.
+Senders can limit their send rate over any time period
+up to 67 seconds.
+Network elements can monitor and apply limits to send rates
+using time period of at least 67 seconds.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The choice of 67 seconds aims is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
 Also, when circumstances change,
 applications are better able recover
 without exceeding limits for a significant time
-if they have exceeded limits.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The choice of 67 seconds, as a prime number,
+if they have exceeded limits.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">The choice of 67 seconds, as a prime number,
 also ensures that problems in tuning applications
-are not synchronized with other periodic effects.
+are not synchronized with other periodic effects
+that might be measured in whole seconds.
+This includes segment length or key frame intervals in video applications,
+but also includes timers for middleboxes; see <span><a href="https://rfc-editor.org/rfc/rfc4787#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC4787" class="cite xref">RFC4787</a>]</span>.
 Any repeating phenomenon at this interval is therefore
-unlikely to be due to other periodic effects.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
-<p id="section-5.2-4">Protocol participants can use a different period,
-depending on their role.
-Senders can limit their send rate over any time period
-up to 67 seconds.
-Network elements can monitor and apply limits to send rates
-using time period of at least 67 seconds.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
+unlikely to be due to other periodic effects.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 <p id="section-5.2-5">A sample algorithm for ensuring adherance to throughput advice
 is included in <a href="#sliding-window" class="auto internal xref">Appendix A</a>.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
@@ -2027,7 +2030,8 @@ when advice is reduced (see <a href="#algorithm" class="auto internal xref">Sect
 This avoids cases where an application that has planned usage
 might otherwise be completely unable to send due to a lower limits.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
 <p id="section-7.2-7">A network element that reduces its throughput advice
-might also need to add a small delay to allow applications time
+might also need delay monitoring or enforcement
+to allow applications time
 to receive and act on the updated advice.<a href="#section-7.2-7" class="pilcrow">¶</a></p>
 <p id="section-7.2-8">A network element <span class="bcp14">MUST NOT</span> alter datagrams to add SCONE packets
 or synthesize datagrams that contain SCONE packets.
@@ -2606,6 +2610,10 @@ Transport Parameters" registry maintained at
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
 <span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-16</span>, <time datetime="2025-08-21" class="refDate">21 August 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4787">[RFC4787]</dt>
+        <dd>
+<span class="refAuthor">Audet, F., Ed.</span> and <span class="refAuthor">C. Jennings</span>, <span class="refTitle">"Network Address Translation (NAT) Behavioral Requirements for Unicast UDP"</span>, <span class="seriesInfo">BCP 127</span>, <span class="seriesInfo">RFC 4787</span>, <span class="seriesInfo">DOI 10.17487/RFC4787</span>, <time datetime="2007-01" class="refDate">January 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4787">https://www.rfc-editor.org/rfc/rfc4787</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9330">[RFC9330]</dt>
       <dd>
