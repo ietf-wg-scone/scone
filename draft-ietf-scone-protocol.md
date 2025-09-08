@@ -660,7 +660,8 @@ This avoids cases where an application that has planned usage
 might otherwise be completely unable to send due to a lower limits.
 
 A network element that reduces its throughput advice
-might also need to add a small delay to allow applications time
+might also need delay monitoring or enforcement
+to allow applications time
 to receive and act on the updated advice.
 
 A network element MUST NOT alter datagrams to add SCONE packets
