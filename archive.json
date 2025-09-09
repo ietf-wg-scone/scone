@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-07T01:40:53.844616+00:00",
+  "timestamp": "2025-09-09T01:37:36.252475+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -6479,13 +6479,13 @@
       "labels": [],
       "body": "This is a big set of changes, discussed in #46 and #37, which started to get a little messy.  This includes:\r\n\r\n1. Defining a monitoring period is 67 seconds.  Network elements can monitor usage for adherence to the advice they give over this period or longer.  Endpoints can consider this to be the upper bound on the window they spread their usage over.\r\n2. Describing a sample process for monitoring adherence.  As an example only.\r\n3. Allowing network elements to miss updates, but recommending that they update at least twice each monitoring period; or, more specifically, every 20-30s.\r\n4. Recommending that endpoints follow the lowest throughput advice they have received in the last 67s.\r\n5. Allowing endpoints to discard state when the advice reduces.\r\n6. Advising endpoints on how often to include SCONE packets and why (to avoid missing advice and to reduce latency when advice changes).\r\n\r\nThis is what we discussed during the meeting.  The direction we agreed to broadly was to give this a spin and try to improve it.  There are some small tweaks we discussed that can be pursued separately, but this batch was pretty substantial already.",
       "createdAt": "2025-08-26T23:01:05Z",
-      "updatedAt": "2025-09-05T07:37:44Z",
+      "updatedAt": "2025-09-08T23:52:47Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
-      "headRefOid": "dceda38bd1dc03157495365e2af8091b29b6cb99",
+      "headRefOid": "596bf48708235699368c1ad85d4e31fce3c1cd68",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -6518,6 +6518,13 @@
           "body": "> At the very moment when the network element wants applications to slowdown, it gives them more credits!\r\n\r\nI was not happy with this either, until I reminded myself that this is a policy signal, not a congestion control signal.  If the network has the capacity, then the choice to change its policy might have a temporary effect on load (not a huge one in the grand scheme of things, to be clear, even if there are bursty senders).  But congestion controllers should protect the infrastructure.\r\n\r\nWe already talk about the interaction between this and congestion control and make it very clear that a congestion controller remains an essential part of the protocol.  https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-8.3",
           "createdAt": "2025-08-28T05:11:52Z",
           "updatedAt": "2025-08-28T05:11:52Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've attempted to resolve outstanding issues here, modulo the ongoing discussion in #65, which remains an open issue for some people.  We'll continue that discussion there.",
+          "createdAt": "2025-09-08T01:20:15Z",
+          "updatedAt": "2025-09-08T01:20:15Z"
         }
       ],
       "reviews": [
@@ -6934,6 +6941,226 @@
               "body": "Yes, I think that needs some explanation.",
               "createdAt": "2025-09-05T07:37:44Z",
               "updatedAt": "2025-09-05T07:37:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-a4e8",
+          "commit": {
+            "abbreviatedOid": "8fbe0dd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T01:17:37Z",
+          "updatedAt": "2025-09-08T01:17:37Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "I've added an explanation.  @kazuho @zaheduzzaman, please take a look.",
+              "createdAt": "2025-09-08T01:17:37Z",
+              "updatedAt": "2025-09-08T01:17:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-a4yb",
+          "commit": {
+            "abbreviatedOid": "8fbe0dd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T01:18:47Z",
+          "updatedAt": "2025-09-08T01:18:47Z",
+          "comments": [
+            {
+              "originalPosition": 116,
+              "body": "Thanks.  I've updated the advice to be more direct.",
+              "createdAt": "2025-09-08T01:18:47Z",
+              "updatedAt": "2025-09-08T01:18:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-a-cO",
+          "commit": {
+            "abbreviatedOid": "d54ccd1"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T01:44:48Z",
+          "updatedAt": "2025-09-08T01:44:48Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "I find the \"prime number\" part not entirely convincing. It would matter if the application used delays in seconds, but many applications use milliseconds or microseconds. 67 is a prime number of seconds, but 67,000 is not a prime number of milliseconds.\r\n\r\nI think we have a solid argument that the working group consensus was \"1 to 2 minutes\", and maybe we should mention that. Then in theory any number between 60 and 120 would have been fine. Video applications often use in interval of 5, 20 or 30 seconds between I-frames (citation needed). and having an exact multiple of 5, 20 or 30 would increase the risk of synchronization effects. Picking a prime number like 67 reduces the risk of such synchronizations.",
+              "createdAt": "2025-09-08T01:44:48Z",
+              "updatedAt": "2025-09-08T01:44:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-bVsZ",
+          "commit": {
+            "abbreviatedOid": "d54ccd1"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T03:10:58Z",
+          "updatedAt": "2025-09-08T03:10:59Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "I don't like saying \"we did this because that was the consensus outcome\".  I prefer to use the reasons we used to decide.\r\n\r\nYour point about seconds vs. milliseconds is well-taken.  I'll include the video segment length/key frame interval as an example.",
+              "createdAt": "2025-09-08T03:10:59Z",
+              "updatedAt": "2025-09-08T03:10:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-bg6F",
+          "commit": {
+            "abbreviatedOid": "482565c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T03:53:59Z",
+          "updatedAt": "2025-09-08T03:53:59Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Are you sure about aims in that sentence?",
+              "createdAt": "2025-09-08T03:53:59Z",
+              "updatedAt": "2025-09-08T03:53:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-bhAQ",
+          "commit": {
+            "abbreviatedOid": "482565c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T03:54:22Z",
+          "updatedAt": "2025-09-08T03:54:22Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "The new text is improved, thanks.",
+              "createdAt": "2025-09-08T03:54:22Z",
+              "updatedAt": "2025-09-08T03:54:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-bjvu",
+          "commit": {
+            "abbreviatedOid": "482565c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T04:05:28Z",
+          "updatedAt": "2025-09-08T04:05:28Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "The sentence in the middle is much improved, but I don't fancy much the undefined \"this\" in the last sentence. Matter of taste, but I would write \"at a 67 seconds interval\".\r\n\r\nAnd just to be facetious, why not 61, or 71, or 73?",
+              "createdAt": "2025-09-08T04:05:28Z",
+              "updatedAt": "2025-09-08T04:05:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-btBK",
+          "commit": {
+            "abbreviatedOid": "482565c"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T04:34:17Z",
+          "updatedAt": "2025-09-08T04:34:17Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "There's no real reason for it to be 67 over any of those.  Also, 68 probably wouldn't be so bad either.",
+              "createdAt": "2025-09-08T04:34:17Z",
+              "updatedAt": "2025-09-08T04:34:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-btMd",
+          "commit": {
+            "abbreviatedOid": "482565c"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T04:34:55Z",
+          "updatedAt": "2025-09-08T04:34:56Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": "```suggestion\r\nThe choice of 67 seconds is a compromise between competing interests.\r\n```",
+              "createdAt": "2025-09-08T04:34:55Z",
+              "updatedAt": "2025-09-08T04:34:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-btb-",
+          "commit": {
+            "abbreviatedOid": "618481c"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-08T04:35:48Z",
+          "updatedAt": "2025-09-08T04:35:48Z",
+          "comments": [
+            {
+              "originalPosition": 65,
+              "body": "```suggestion\r\nAny repeating phenomenon at a 67 second interval is therefore\r\n```",
+              "createdAt": "2025-09-08T04:35:48Z",
+              "updatedAt": "2025-09-08T04:35:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo86-pVR9",
+          "commit": {
+            "abbreviatedOid": "596bf48"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-08T23:52:43Z",
+          "updatedAt": "2025-09-08T23:52:47Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "Thank you for the addition. Looks perfect to me.",
+              "createdAt": "2025-09-08T23:52:43Z",
+              "updatedAt": "2025-09-08T23:52:47Z"
             }
           ]
         }
