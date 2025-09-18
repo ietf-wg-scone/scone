@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 12 March 2026                              Private Octopus Inc.
+Expires: 22 March 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        8 September 2025
+                                                       18 September 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 March 2026.
+   This Internet-Draft will expire on 22 March 2026.
 
 Copyright Notice
 
@@ -451,13 +451,13 @@ Table of Contents
    applications are better able recover without exceeding limits for a
    significant time if they have exceeded limits.
 
-   The choice of 67 seconds, as a prime number, also ensures that
-   problems in tuning applications are not synchronized with other
-   periodic effects that might be measured in whole seconds.  This
-   includes segment length or key frame intervals in video applications,
-   but also includes timers for middleboxes; see Section 4.3 of
-   [RFC4787].  Any repeating phenomenon at a 67 second interval is
-   therefore unlikely to be due to other periodic effects.
+   The choice of 67 seconds, as a prime number, also helps avoid
+   synchronization with other periodic effects that are commonly
+   measured in whole seconds.  This includes segment length or key frame
+   intervals in video applications, but also includes timers for
+   middleboxes; see Section 4.3 of [RFC4787].  Any repeating phenomenon
+   at a 67 second interval is therefore unlikely to be due to other
+   periodic effects.
 
    A sample algorithm for ensuring adherance to throughput advice is
    included in Appendix A.
