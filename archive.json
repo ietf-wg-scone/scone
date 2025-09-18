@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-09T01:37:36.252475+00:00",
+  "timestamp": "2025-09-18T01:26:17.193493+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1897,9 +1897,24 @@
       "labels": [],
       "body": "@kazuho observed in #61:\n\n> My high order point is that the logic used by network elements for testing conformance should reflect what applications can do, taking into considerations the time required to adapt and the impact of packet loss; otherwise we would have may false positives.\n\nRight now, #61 has advice on allowing a grace period for applications that is vague, but probably it will be too short.  It only really considers the time that a signal might take to propagate to applications.  In practice, a lot of applications will need some time to adjust downward.  A network element that signals a lower rate cannot reasonably start enforcing that rate until applications have time to receive the signal **and react**.  While some applications will be able to adjust quickly (real-time applications are particularly good at this), none can react immediately without disruption and some might take a little while.\n\nStreaming video applications are generally pretty good at adjusting and advice will help a lot.  However, they can't flip states instantaneously without disruption.  We probably want to allow enough time for a smoother reaction than having the video stall out until a lower quality stream can be found, buffered, and started.  That might take more than a few seconds.  Especially when you consider that quality ladder changes need I-frames, which are not always immediately available.\n\nWe don't need to be too precise in the advice, we just need to signal that while the network might be inclined to engage a policer/shaper during a change in rate, network elements should reassess once applications have had a little time to settle their usage out.  We might even suggest that the network apply monitoring based on the *maximum* rate active in the last period, where the endpoints sending follows the *minimum* rate received over the same period.  That would be the most generous interpretation and would allow the most time (67 seconds, perhaps) for endpoints to follow the advice.",
       "createdAt": "2025-08-28T09:52:12Z",
-      "updatedAt": "2025-08-28T09:56:10Z",
+      "updatedAt": "2025-09-17T15:31:55Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": ">  We might even suggest that the network apply monitoring based on the maximum rate active in the last period, where the endpoints sending follows the minimum rate received over the same period. That would be the most generous interpretation and would allow the most time (67 seconds, perhaps) for endpoints to follow the advice.\n\nThis is probably good advice, it will make policy changes a little sluggish, but that's preferred over false positives imo. \nWith this recommendation in place we should also be able to remove the requirement on network elements to drop throughput state when lowering the rate limit. ",
+          "createdAt": "2025-09-17T14:59:49Z",
+          "updatedAt": "2025-09-17T14:59:49Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson \n> We might even suggest that the network apply monitoring based on the maximum rate active in the last period, where the endpoints sending follows the minimum rate received over the same period.\n\nJust to clarify, #61 suggests sending SCONE no less frequently than one per 30 seconds. Considering the impact of single packet loss, endpoints would be required to adapt to new bitrates within 37 seconds (67 - 30 = 37).\n\nAn example is SCONE signals sent at t=0 and t=30, but the one in t=0 getting lost. Endpoints receive the first signal at t=30, and needs to adapt it by t=67.",
+          "createdAt": "2025-09-17T15:31:34Z",
+          "updatedAt": "2025-09-17T15:31:55Z"
+        }
+      ]
     },
     {
       "number": 66,
@@ -4652,7 +4667,7 @@
       "labels": [],
       "body": "This depends on an answer to #43 being as I suggested there. I won't make the pull request dependent on that though.\r\n\r\nCloses #10.",
       "createdAt": "2025-07-22T12:58:35Z",
-      "updatedAt": "2025-08-27T11:33:03Z",
+      "updatedAt": "2025-09-17T14:52:08Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "c27812a9318f7ca3c30d2dcd751cec645ee6b059",
@@ -4939,6 +4954,19 @@
           "body": "",
           "createdAt": "2025-08-27T03:33:26Z",
           "updatedAt": "2025-08-27T03:33:26Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87A0Iju",
+          "commit": {
+            "abbreviatedOid": "950b3de"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-09-17T14:52:08Z",
+          "updatedAt": "2025-09-17T14:52:08Z",
           "comments": []
         }
       ]
@@ -6479,7 +6507,7 @@
       "labels": [],
       "body": "This is a big set of changes, discussed in #46 and #37, which started to get a little messy.  This includes:\r\n\r\n1. Defining a monitoring period is 67 seconds.  Network elements can monitor usage for adherence to the advice they give over this period or longer.  Endpoints can consider this to be the upper bound on the window they spread their usage over.\r\n2. Describing a sample process for monitoring adherence.  As an example only.\r\n3. Allowing network elements to miss updates, but recommending that they update at least twice each monitoring period; or, more specifically, every 20-30s.\r\n4. Recommending that endpoints follow the lowest throughput advice they have received in the last 67s.\r\n5. Allowing endpoints to discard state when the advice reduces.\r\n6. Advising endpoints on how often to include SCONE packets and why (to avoid missing advice and to reduce latency when advice changes).\r\n\r\nThis is what we discussed during the meeting.  The direction we agreed to broadly was to give this a spin and try to improve it.  There are some small tweaks we discussed that can be pursued separately, but this batch was pretty substantial already.",
       "createdAt": "2025-08-26T23:01:05Z",
-      "updatedAt": "2025-09-08T23:52:47Z",
+      "updatedAt": "2025-09-17T16:55:27Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
@@ -6525,6 +6553,20 @@
           "body": "I've attempted to resolve outstanding issues here, modulo the ongoing discussion in #65, which remains an open issue for some people.  We'll continue that discussion there.",
           "createdAt": "2025-09-08T01:20:15Z",
           "updatedAt": "2025-09-08T01:20:15Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I've heard a concern that some network elements do not want to update the packets every monitoring period if they have previously sent a rate, and it hasn't changed. This PR plus the Unknown code point in #63 doesn't quite allow for that.\r\n\r\nIt would be good to understand more about these concerns. Updating a few SCONE packets per monitoring period has close to zero cost. Is it that these elements do not want to keep per-flow state?",
+          "createdAt": "2025-09-17T14:49:06Z",
+          "updatedAt": "2025-09-17T14:49:06Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "At the interim it was agreed to merge this PR as is, and move the discussion on having to update SCONE packets each window to a separate issue. ",
+          "createdAt": "2025-09-17T16:55:27Z",
+          "updatedAt": "2025-09-17T16:55:27Z"
         }
       ],
       "reviews": [
@@ -7161,6 +7203,106 @@
               "body": "Thank you for the addition. Looks perfect to me.",
               "createdAt": "2025-09-08T23:52:43Z",
               "updatedAt": "2025-09-08T23:52:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87AzRhT",
+          "commit": {
+            "abbreviatedOid": "596bf48"
+          },
+          "author": "afrind",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "I've heard a concern that some network elements do not want to update the packets every monitoring period if they have previously sent a rate, and it hasn't changed.  This PR plus the Unknown code point in #63 doesn't quite allow for that.",
+          "createdAt": "2025-09-17T14:08:54Z",
+          "updatedAt": "2025-09-17T14:41:28Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "Does \"assumed to apply ... until the advice is updated or the flow ends\" conflict with \"The time over which throughput advice applies is defined to be a period of 67 seconds.\"",
+              "createdAt": "2025-09-17T14:08:54Z",
+              "updatedAt": "2025-09-17T14:41:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87A1ju3",
+          "commit": {
+            "abbreviatedOid": "596bf48"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-17T16:21:44Z",
+          "updatedAt": "2025-09-17T16:21:44Z",
+          "comments": [
+            {
+              "originalPosition": 89,
+              "body": "Is it worth adding: \"(potentially from different network elements)\"",
+              "createdAt": "2025-09-17T16:21:44Z",
+              "updatedAt": "2025-09-17T16:21:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87A1kEk",
+          "commit": {
+            "abbreviatedOid": "596bf48"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-17T16:22:09Z",
+          "updatedAt": "2025-09-17T16:22:10Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "Does it \"ensure\" this (guarantee)? I wonder if it mitigates potential problems....",
+              "createdAt": "2025-09-17T16:22:09Z",
+              "updatedAt": "2025-09-17T16:22:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87A1y98",
+          "commit": {
+            "abbreviatedOid": "596bf48"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-17T16:40:11Z",
+          "updatedAt": "2025-09-17T16:40:11Z",
+          "comments": [
+            {
+              "originalPosition": 60,
+              "body": "That might be a bit too strong language, yes. ",
+              "createdAt": "2025-09-17T16:40:11Z",
+              "updatedAt": "2025-09-17T16:40:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87A1z4d",
+          "commit": {
+            "abbreviatedOid": "596bf48"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-17T16:41:03Z",
+          "updatedAt": "2025-09-17T16:41:03Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "```suggestion\r\nThe choice of 67 seconds, as a prime number,\r\nalso helps avoid synchronization with other periodic\r\neffects that are commonly measured in whole seconds.\r\n```",
+              "createdAt": "2025-09-17T16:41:03Z",
+              "updatedAt": "2025-09-17T16:41:04Z"
             }
           ]
         }
