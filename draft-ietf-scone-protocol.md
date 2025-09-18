@@ -371,9 +371,8 @@ without exceeding limits for a significant time
 if they have exceeded limits.
 
 The choice of 67 seconds, as a prime number,
-also ensures that problems in tuning applications
-are not synchronized with other periodic effects
-that might be measured in whole seconds.
+also helps avoid synchronization with other periodic
+effects that are commonly measured in whole seconds.
 This includes segment length or key frame intervals in video applications,
 but also includes timers for middleboxes; see {{Section 4.3 of ?RFC4787}}.
 Any repeating phenomenon at a 67 second interval is therefore
