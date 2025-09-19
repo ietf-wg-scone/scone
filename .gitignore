@@ -13,6 +13,7 @@
 /.refcache
 /.venv/
 /.vscode/
+/__pycache__/
 /lib
 /node_modules/
 /versioned/
@@ -21,4 +22,5 @@ archive.json
 draft-ietf-scone-protocol.xml
 package-lock.json
 report.xml
+ta.py.excerpt
 !requirements.txt
