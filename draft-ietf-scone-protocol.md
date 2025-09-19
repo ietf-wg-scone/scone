@@ -217,9 +217,11 @@ when a network element detects a flow using more bandwidth than advertised via
 SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.
 
-The signaled advice can be assumed to apply
-to the flow of packets on the same UDP address tuple
-until the advice is updated or the flow ends.
+The signaled advice applies to the flow of packets
+on the same UDP address tuple for the duration of
+the current monitoring period, unless it is updated
+earlier or the flow ends; see {{time}} for details on
+the monitoring period.
 Rate limiting policies often apply on the level of a device or subscription, but endpoints
 cannot assume that this is the case.  A separate signal can be sent for each flow.
 
