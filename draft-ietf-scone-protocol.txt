@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 5 March 2026                               Private Octopus Inc.
+Expires: 23 March 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        1 September 2025
+                                                       19 September 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 March 2026.
+   This Internet-Draft will expire on 23 March 2026.
 
 Copyright Notice
 
@@ -86,17 +86,21 @@ Table of Contents
    4.  Conventions and Definitions
    5.  SCONE Packet
      5.1.  Rate Signals
-     5.2.  Endpoint Processing of SCONE Packets
+     5.2.  Monitoring Period
+     5.3.  Endpoint Processing of SCONE Packets
+     5.4.  Following Throughput Advice
    6.  Negotiating SCONE
      6.1.  Indicating Support on New Flows
      6.2.  Limitations of Indication
      6.3.  Indications for Migrated Flows
    7.  Deployment
      7.1.  Applying Throughput Advice Signals
+     7.2.  Monitoring Flows
+     7.3.  Flows That Exceed Throughput Advice
    8.  Version Interaction
      8.1.  Providing Opportunities to Apply Throughput Advice Signals
      8.2.  Feedback To Sender About Signals
-     8.3.  Interactions with congestion control
+     8.3.  Interactions with Congestion Control
    9.  Security Considerations
      9.1.  Flooding intermediaries with fake packets
    10. Privacy Considerations
@@ -108,6 +112,7 @@ Table of Contents
    12. References
      12.1.  Normative References
      12.2.  Informative References
+   Appendix A.  Sliding Window for Rate Limit Monitoring
    Acknowledgments
    Authors' Addresses
 
@@ -277,15 +282,16 @@ Table of Contents
    than advertised via SCONE, it might switch to applying its policies
    for non-SCONE flows, using congestion control signals.
 
-   The time and scope over which throughput advice applies is not
-   specified.  Network conditions and rate-limit policies can change in
-   ways that make previously signaled advice obsolete, and there are no
-   guarantees that updated advice will be sent at such events.  The
-   signaled advice can be assumed to apply to the flow of packets on the
-   same UDP address tuple for the duration of that flow.  For rate
-   limiting networks, rate limiting policies often apply on the level of
-   a device or subscription, but endpoints cannot assume that this is
-   the case.  A separate signal can be sent for each flow.
+   The signaled advice applies to the flow of packets on the same UDP
+   address tuple for the duration of the current monitoring period,
+   unless it is updated earlier or the flow ends; see Section 5.2 for
+   details on the monitoring period.  Rate limiting policies often apply
+   on the level of a device or subscription, but endpoints cannot assume
+   that this is the case.  A separate signal can be sent for each flow.
+
+   Network conditions and rate-limit policies can change in ways that
+   make previously signaled advice obsolete.  There are no guarantees
+   that updated advice will be sent at such events.
 
 3.6.  Following Advice
 
@@ -431,7 +437,35 @@ Table of Contents
                             SCONE signals and
                            corresponding rates
 
-5.2.  Endpoint Processing of SCONE Packets
+5.2.  Monitoring Period
+
+   The time over which throughput advice applies is defined to be a
+   period of 67 seconds.
+
+   Protocol participants can use a different period, depending on their
+   role.  Senders can limit their send rate over any time period up to
+   67 seconds.  Network elements can monitor and apply limits to send
+   rates using time period of at least 67 seconds.
+
+   The choice of 67 seconds is a compromise between competing interests.
+   Longer periods allow applications more flexibility in terms of how to
+   allocate bandwidth over time.  Shorter periods allow networks to
+   administer policies more tightly.  Also, when circumstances change,
+   applications are better able recover without exceeding limits for a
+   significant time if they have exceeded limits.
+
+   The choice of 67 seconds, as a prime number, also helps avoid
+   synchronization with other periodic effects that are commonly
+   measured in whole seconds.  This includes segment length or key frame
+   intervals in video applications, but also includes timers for
+   middleboxes; see Section 4.3 of [RFC4787].  Any repeating phenomenon
+   at a 67 second interval is therefore unlikely to be due to other
+   periodic effects.
+
+   A sample algorithm for ensuring adherance to throughput advice is
+   included in Appendix A.
+
+5.3.  Endpoint Processing of SCONE Packets
 
    Processing a SCONE packet involves reading the value from the Rate
    Signal field.  However, this value MUST NOT be used unless another
@@ -453,6 +487,48 @@ Table of Contents
    If a connection uses multiple DSCP markings [RFC2474], the throughput
    advice that is received on datagrams with one marking might not apply
    to datagrams that have different markings.
+
+5.4.  Following Throughput Advice
+
+   Endpoints that receive throughput advice can advise their peer of the
+   limit so that the peer might limit the amount of data it sends over
+   any monitoring period (Section 5.2).  Alternatively, the endpoint
+   might change its own behavior to effect a similar outcome indirectly,
+   which might use flow control or changes to request patterns.
+
+   An endpoint that receives throughput advice might receive multiple
+   different rate limits.  If advice is applied by applications,
+   applications MUST apply the lowest throughput advice received during
+   any monitoring period; see Section 5.2.
+
+   After a monitoring period (Section 5.2) without receiving throughput
+   advice, any previous advice expires.  Endpoints can remove any
+   constraints placed on throughput based on receiving throughput
+   advice.  This does not mean that there are no limits, either in
+   policy or due to network conditions, only that these limits are now
+   unknown.  Other constraints on usage will still apply, which
+   necessarily includes congestion control and might include other,
+   application-specific constraints.
+
+   Applications MAY discard throughput usage state when they receive
+   throughput advice that indicates a reduced rate.  Otherwise, data
+   that was sent at a higher rate might force the available rate to zero
+   for the remainder of the monitoring period; see also Section 7.2.
+
+   The relatively long duration of the monitoring period means that this
+   is preferable to disabling sending completely.  The cost is that loss
+   of information about recent send rate might result in temporarily
+   exceeding the rates indicated by throughput advice.  In comparison,
+   applications retain throughput usage state when throughput advice
+   increases.
+
+   This approach ensures that network elements are able to reduce the
+   frequency with which they send updated signals to as low as once per
+   monitoring period.  However, applying signals at a low frequency
+   risks throughput advice being reset if no SCONE packet is available
+   for applying signals (Section 7.1), or the rewritten packets are
+   lost.  Sending the signal multiple times increases the likelihood
+   that the signal is received.
 
 6.  Negotiating SCONE
 
@@ -557,6 +633,98 @@ Table of Contents
    Once the throughput advice signal is updated, the network element
    updates the UDP checksum for the datagram.
 
+   A network element needs to ensure that it sends updated rate signals
+   with no more than a monitoring period (Section 5.2) between each
+   update.  Because this depends on the availability of SCONE packets
+   and packet loss can cause signals to be missed, network elements
+   might need to update more often.
+
+   Senders that send a SCONE packet or network elements that update
+   SCONE packets every 20–30 seconds is likely sufficient to ensure that
+   throughput advice is not lost.  To reduce the risk of synchronization
+   across multiple senders, which may cause network elements to miss
+   updates, senders can include a small random delay.
+
+7.2.  Monitoring Flows
+
+   Network elements can monitor flows to determine which flows are from
+   applications that respect throughput advice.  This section outlines
+   an exemplary algorithm for network elements.
+
+   This monitoring algorithm is guidance only.  Network elements are
+   advised that monitoring any more strictly than the following likely
+   invalidates their advice.  Network elements could choose not to
+   monitor in this way or use a looser monitoring approach.  For
+   instance, monitoring over a longer time window than the monitoring
+   period (67s) or using a higher rate than is signaled is possible.
+
+   To operate this algorithm, the minimal state a network element
+   maintains is: * the current rate limit, * any state necessary to
+   monitor throughput (that is, throughput usage state, such as the
+   state in Appendix A), * a timer used for rate increases, and * the
+   time at which that rate limit was last updated,
+
+   When advice is set or updated, the network element waits until it
+   receives the next SCONE packet on affected flows.  It then updates
+   the throughput advice in that packet (Section 7.1) and updates its
+   monitoring state as follows:
+
+   *  If the signaled rate limit is the same as the current rate limit,
+      set the last update time to the current time.
+
+   *  If the signaled rate is higher than the current value, then:
+
+      -  If the time since the last SCONE packet was updated is greater
+         than the monitoring period, the current rate limit is increased
+         to the received value and the last update time is set to the
+         current time.
+
+      -  Otherwise, the throughput advice is deferred.  The
+         implementation sets the rate increase timer to one monitoring
+         period relative to the time that the last SCONE packet was
+         updated.  When the timer lapses, change the rate monitoring to
+         the higher rate.
+
+   *  If the signaled rate is lower than the current value, set the
+      current rate limit to match the advice, cancel any rate increase
+      timer, discard all rate monitoring state, and set the last update
+      time to the current time.
+
+   A network element that reduces the throughput advice it provides MUST
+   also discard any state it maintains about the use of the network
+   under previous, higher rates.  This is necessary to allow senders to
+   discard state when advice is reduced (see Section 5.4).  This avoids
+   cases where an application that has planned usage might otherwise be
+   completely unable to send due to a lower limits.
+
+   A network element that reduces its throughput advice might also need
+   delay monitoring or enforcement to allow applications time to receive
+   and act on the updated advice.
+
+   A network element MUST NOT alter datagrams to add SCONE packets or
+   synthesize datagrams that contain SCONE packets.  The latter will not
+   be accepted and the former, even if they do not exceed the path MTU
+   as a result, can be detected by applications and could be ignored.
+   This document does not define a mechanism to support detection, but
+   one might be added in future.
+
+7.3.  Flows That Exceed Throughput Advice
+
+   Network elements that provide throughput advice can monitor flows --
+   or sets of flows that are subject to the same throughput limit -- for
+   adherance to that advice.
+
+   In the event that a flow exceeds these limits, a network element
+   could immediately start enforcing adherence to the advice as though
+   it were a hard limit.  However, this risks creating a situation where
+   communication ceases entirely for a significant period of time; that
+   is, up to the period defined in Section 5.2.
+
+   A better approach is to exclude any data transmitted before sending
+   reduced throughput advice from any monitoring that uses the reduced
+   rate.  This ensures that the enforcement of limits is minimally
+   disruptive.
+
 8.  Version Interaction
 
    The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
@@ -582,8 +750,46 @@ Table of Contents
    processing another packet from the same datagram SHOULD ignore any
    throughput advice signal.  Such a datagram might be entirely spoofed.
 
+   Once negotiated, applications that seek to receive throughput advice
+   on a flow MUST send a SCONE packet at least twice each monitoring
+   period; see Section 5.2.
+
+   Sending SCONE packets more often might be necessary to:
+
+   Avoid missing advice:  If SCONE packets are not sent, updated, and
+      received for an entire monitoring period, an application might
+      incorrectly assume that no advice is being provided.
+
+   Reduce latency:  The time between SCONE packets determines the
+      maximum delay between changes in throughput advice and when that
+      advice can be received and acted upon.
+
+   A sender can track the receipt of the coalesced QUIC packet and send
+   another SCONE packet when loss is detected.  However, it is likely
+   simpler to send SCONE packets more often.
+
+   Sending a SCONE packet every 20–30 seconds is likely sufficient to
+   ensure that throughput advice is not lost, though endpoints might
+   send a packet every few seconds to improve responsiveness.  This
+   period could be determined by how quickly an application is able to
+   respond to a change in throughput advice.
+
+   For example, a streaming application that fetches video segments that
+   are 5 seconds in length might send SCONE packets on a similar
+   cadence.  A real-time conferencing application might send more often.
+   In either case, the length of the monitoring period (Section 5.2)
+   limits how fast any application can react.
+
+   Though sending SCONE packets more than once each round trip time
+   might help reduce exposure to packet loss, it is better to spread
+   updates over time rather than to send multiple SCONE packets in less
+   frequent bursts.
+
+   The main cost associated with sending SCONE packets is the reduction
+   in available space in datagrams for application data.
+
    A network element that wishes to signal an updated rate limit waits
-   for the next SCONE packet in the desired direction.
+   for the next SCONE packet in the desired direction; see Section 7.1.
 
 8.2.  Feedback To Sender About Signals
 
@@ -614,7 +820,7 @@ Table of Contents
    cannot be reliably detected.  This could result in a sender falsely
    believing that no network element applied a throughput advice signal.
 
-8.3.  Interactions with congestion control
+8.3.  Interactions with Congestion Control
 
    SCONE and congestion control both provide the application with
    estimates of a path capacity.  They are complementary.  Congestion
@@ -905,11 +1111,105 @@ Table of Contents
               21 August 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-quic-multipath-16>.
 
+   [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
+              Translation (NAT) Behavioral Requirements for Unicast
+              UDP", BCP 127, RFC 4787, DOI 10.17487/RFC4787, January
+              2007, <https://www.rfc-editor.org/rfc/rfc4787>.
+
    [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.
               White, "Low Latency, Low Loss, and Scalable Throughput
               (L4S) Internet Service: Architecture", RFC 9330,
               DOI 10.17487/RFC9330, January 2023,
               <https://www.rfc-editor.org/rfc/rfc9330>.
+
+Appendix A.  Sliding Window for Rate Limit Monitoring
+
+   One way to account for usage is to divide time into multiple smaller
+   spans.  For instance, 67 consecutive one second intervals or 134 half
+   second intervals.
+
+   The amount of data transmitted in each interval is recorded in a
+   circular buffer, as well as the total amount over 67 seconds.  As
+   time passes and new intervals are added, the overall total is reduced
+   by the amount attributed to the oldest interval.  The oldest interval
+   is reset to zero and becomes the newest interval.
+
+   Sample code for this algorithm is included in Figure 2.
+
+   class ThroughputAdvice:
+     def __init__(self, now, window, interval):
+       """Construct throughput advice, given a starting time `now`,
+          a duration over which to enforce `window`, and
+          an `interval` size that the window is evenly divided into."""
+
+       self.interval = interval
+       self.count = floor(window / interval)
+       assert self.count == ceil(window / interval)
+
+       self.total = 0
+       self.state = [0] * self.count
+       self.advice = float('Infinity')
+       self.last_advice = t - window
+
+       self.index = self.index_of(now)
+       self.next_update = self.next_time(now)
+
+     def index_of(self, t):
+       return floor(t / self.interval) % self.count
+
+     def next_time(self, t):
+       return (floor(t / self.interval) + 1) * self.interval
+
+     def update_time(self, t):
+       if t < self.next_update:
+         return
+       assert t + self.interval > self.next_update,\
+         "time has gone backwards"
+
+       new_index = self.index_of(t)
+       if t >= self.next_update + (self.interval * self.count):
+         self.total = 0
+         self.state = [0] * nbuckets
+       else:
+         while True:
+           self.index = (self.index + 1) % self.count
+           self.total = self.total - self.state[self.index]
+           self.state[self.index] = 0
+           if self.index == new_index:
+             break
+
+       assert sum(self.state) == self.total
+       self.index = new_index
+       self.next_update = self.next_time(t)
+
+     def set_advice(self, t, advice):
+       """Update the throughput advice based on a received signal."""
+
+       if advice < self.advice:
+         self.state = [0] * self.count
+         self.total = 0
+       elif self.advice_updated + self.interval * self.count > t:
+         # Ignore increases too soon after an update.
+         # This could be smarter about increases, but this is safe.
+         return
+       self.advice = advice
+       self.advice_updated = t
+
+     def data_sent(self, t, amount):
+       """Record that at time `t`, data of length `amount` was sent."""
+
+       self.update_time(t)
+       self.state[self.index] = self.state[self.index] + amount
+       self.total = self.total + amount
+
+     def is_within_advice(self, t, amount):
+       """Test whether at time `t`, data of length `amount`
+          is within the provided throughput advice."""
+
+       self.update_time(t)
+       return self.total + amount <= self.advice
+
+               Figure 2: Sample code for managing rate limit
 
 Acknowledgments
 
