@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-18T01:26:17.193493+00:00",
+  "timestamp": "2025-09-21T01:43:08.528879+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -927,15 +927,15 @@
       "id": "I_kwDON1dwo86xr5d8",
       "title": "Time window for suggested bitrate",
       "url": "https://github.com/ietf-wg-scone/scone/issues/20",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "rjt-ietf",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "This issue is mostly in regard to  slide 11 of https://datatracker.ietf.org/meeting/122/materials/slides-122-scone-trone-questions-01, which was discussed at IETF 122.\n\nThe current draft doesn't mention this perspective so I want to open up the discussion.\n\nIn general, I think that a fixed window length specified by SCONE is preferable as it simplifies works for network elements. But meanwhile, we need to find a window that works for all users of SCONE.\n\nDifferent video applications choose to buffer different lengths of videos during playbacks. For example, App A may buffer 10s while App B buffers 20s. A 10-second window will work for app A but not work for app B. A 20-second window will work for both.\n\nA flow that complies with a short window will also comply with a longer one.\n\nThis means we should probably specify a longer window to accommodate different applications, but not too long that exceeds the average duration of a video connection. ",
       "createdAt": "2025-04-08T22:27:05Z",
-      "updatedAt": "2025-07-21T16:20:43Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T07:19:54Z",
+      "closedAt": "2025-09-19T07:19:54Z",
       "comments": [
         {
           "author": "kazuho",
@@ -1042,15 +1042,15 @@
       "id": "I_kwDON1dwo86yoU-z",
       "title": "Network inserted TRONE packets",
       "url": "https://github.com/ietf-wg-scone/scone/issues/21",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "ihlar",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The topic of whether network elements should be able to generate TRONE packets and insert them into expanded datagrams was discussed at IETF 122. Also discussed in #6.\nIdeally this should not be needed, given that there is proper guidance on when to send TRONE packets and making sure that updating the rate limit field of the TRONE packets is sufficiently cheap. The risk of expanding datagrams in the network is that it can result in path MTU issues with lost packets as a consequence. \n\nThere are a few paths we can take on this topic:\n\n1. Say nothing about it.\n2. Mention the possibility and give guidance on potential MTU issues that can arise. \n3. Explicitly forbid network inserted TRONE packets and design protocol mechanisms to enforce it.",
       "createdAt": "2025-04-15T15:59:14Z",
-      "updatedAt": "2025-08-27T17:57:40Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T07:19:55Z",
+      "closedAt": "2025-09-19T07:19:54Z",
       "comments": [
         {
           "author": "ianswett",
@@ -1108,15 +1108,15 @@
       "id": "I_kwDON1dwo86y0OE3",
       "title": "How frequently should endpoints send TRONE packets?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/24",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjoras",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This has been discussed extensively both privately, at IETF 122, and in the latest interim. We should give guidance to endpoints on how often and under what circumstances they should send TRONE packets to give an opportunity to generate new advice.",
       "createdAt": "2025-04-16T15:38:18Z",
-      "updatedAt": "2025-06-10T15:25:56Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T07:19:55Z",
+      "closedAt": "2025-09-19T07:19:55Z",
       "comments": [
         {
           "author": "kazuho",
@@ -1571,15 +1571,15 @@
       "id": "I_kwDON1dwo87B3nf3",
       "title": "Don't require an update to every packet",
       "url": "https://github.com/ietf-wg-scone/scone/issues/43",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "One equipment vendor requested that we not require network elements to update every packet.  This seems reasonable to me.\n\nA proposed option here is that endpoints retain the lowest throughput advice received over the XX second window that we have for enforcement.  There is no sense in changing any faster than that, because it is possible that senders will have already consumed the available bandwidth at the start of any given window.\n\nThis increases the load on any endpoint because it means that you have to retain the time at which advice was last refreshed at a given level.  You might also have to retain advice at higher levels (though this is not mandatory, it would allow you to take advantage of an increase in the advice more quickly).  That seems pretty modest as far as I'm concerned.",
       "createdAt": "2025-07-22T12:54:50Z",
-      "updatedAt": "2025-07-23T16:04:22Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T07:19:55Z",
+      "closedAt": "2025-09-19T07:19:55Z",
       "comments": [
         {
           "author": "kazuho",
@@ -1640,15 +1640,15 @@
       "id": "I_kwDON1dwo87EjfiH",
       "title": "Dynamic update of rate-signal field by network element - Needs clarity in draft to specify the server, client and n/w element requirements",
       "url": "https://github.com/ietf-wg-scone/scone/issues/55",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "anooptomar29",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Some related aspects are covered in https://github.com/ietf-wg-scone/scone/issues/24, https://github.com/ietf-wg-scone/scone/issues/43 and https://github.com/ietf-wg-scone/scone/issues/6. However draft still lacks clarity to specify the role of server, client and n/w element to support Dynamic update of rate-signal field by network element. \n\nOne of the CSPs/equipment provider is looking for more clarity in the draft doc to cover following aspects;\n\nA. What is the periodicity of server sending SCONE packet coalesced with QUIC packet ?\n\nThis clarity will help in analyzing how fast new bit-rates can be configured in apps whenever there is a need to change the bit-rate for a flow due to any trigger in CSP n/w \n\n================================================================\nB. If the Server is sending SCONE packets with very high frequency/periodicity and if network element (PGW/UPF) does want to update the rate-signal field with for each and every SCONE packet (if there is no change in previously sent bit-rate for the subscriber) to avoid CPU usage.   How this can supported by server and client is not clearly specified in the draft. \n\nReason for asking clarification B;  In below section sec 7.1  it is stated that ***A network element might receive a packet that already includes a rate signal*** !! Does it mean that client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets ? \n \nPer IETF Sec 7.1:\n \n  A network element then conditionally replaces the Version field and\n   the Rate Signal field with values of its choosing.\n \n   ****A network element might receive a packet that already includes a rate\n   signal**.**  The network element replaces the rate signal if it wishes to\n   signal a lower rate limit; otherwise, the original values are\n   retained, preserving the signal from the network element with the\n   lower policy\n \n ===========================================================\nFor e.g. can we specify following in the draft to bring clarity to B. \n\n\n- By default, Server to set rate-signal field to a value which is not valid for the client. However client is expected to inform server about the bit-rate it has received from n/w element and server is required to send the updated bit-rate in subsequent scone packets \n- Client to use whatever rate-signal value present in last received SCONE packet and stop using the value received in the past. \n\nOR,  if above is not the case  ( i.e if client is not required to update the server about the bit-rate and server is not required to set the rate-signal field to this updated value) can we specify following ; \n\n - Server to set rate-signal field to a value in every scone packet which is not valid for the client \n- And client to ignore the rate-signal field if rate-signal is set to this invalid value.(For e.g. 63) and continue to use previously received valid rate-signal value. \n\nWith this clarity in draft,  n/w element providers would get the clarity that \n1. If they don't update subsequent scone packets during the life time of the flow,  application continues to use bit-rate that was sent by n/w element initially. \n\n\n  ",
       "createdAt": "2025-08-06T18:23:43Z",
-      "updatedAt": "2025-08-28T20:53:51Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T07:19:55Z",
+      "closedAt": "2025-09-19T07:19:55Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -1779,15 +1779,15 @@
       "id": "I_kwDON1dwo87FqdEL",
       "title": "Support for Batch Transmission of Rate-Signal Packets to Prevent Loss (No ACK Mechanism in SCONE)",
       "url": "https://github.com/ietf-wg-scone/scone/issues/58",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "sachinvasanthakumar",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "\t\n > The pull requests answer Question A.\n> \n> The network element needs to ensure that they send at least once every enforcement period (67s in the PR presently).  Because they do not control opportunities, they should try to update a small number of packets over that period.  I would go with every 20-30s based on that, but there is flexibility.\n> \n\n\nRaising this issue to get more clarification based on the issue being discussed in [#55.](https://github.com/ietf-wg-scone/scone/issues/55)\n\nCurrently, is it considered sufficient to send only two packets within the 67-second window that carry updated rate-signal values? Or, given the absence of an ACK mechanism in SCONE, should multiple packets containing the rate-signal be transmitted as a batch within this window? The intent is to reduce the risk of losing critical rate-signal information due to potential packet loss.\n\nFor reference, QUIC provides an ACK mechanism to help with loss detection and retransmission. However, if a packet containing both QUIC and SCONE information is lost, will the server automatically retry sending the SCONE data, or could the rate-signal be lost entirely?\n\nI would like to propose that, to enhance reliability, rate-signal values should be sent in batches rather than relying on single or minimal packet transmissions. This approach would help ensure delivery even in the absence of explicit loss detection or retransmission for SCONE.\n\nIn Summary:\n\n1. Is sending two packets within the 67-second window sufficient for reliable rate-signal delivery?\n2. Would batching multiple packets with the rate-signal improve robustness against packet loss in the absence of a SCONE ACK mechanism?\n3. What is the current behavior if a QUIC+SCONE packet is lost\u2014will the SCONE portion be retransmitted by the server?",
       "createdAt": "2025-08-12T23:08:51Z",
-      "updatedAt": "2025-08-28T04:41:04Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-19T07:19:56Z",
+      "closedAt": "2025-09-19T07:19:56Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -6500,24 +6500,26 @@
       "id": "PR_kwDON1dwo86lgCit",
       "title": "Monitoring and time changes",
       "url": "https://github.com/ietf-wg-scone/scone/pull/61",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This is a big set of changes, discussed in #46 and #37, which started to get a little messy.  This includes:\r\n\r\n1. Defining a monitoring period is 67 seconds.  Network elements can monitor usage for adherence to the advice they give over this period or longer.  Endpoints can consider this to be the upper bound on the window they spread their usage over.\r\n2. Describing a sample process for monitoring adherence.  As an example only.\r\n3. Allowing network elements to miss updates, but recommending that they update at least twice each monitoring period; or, more specifically, every 20-30s.\r\n4. Recommending that endpoints follow the lowest throughput advice they have received in the last 67s.\r\n5. Allowing endpoints to discard state when the advice reduces.\r\n6. Advising endpoints on how often to include SCONE packets and why (to avoid missing advice and to reduce latency when advice changes).\r\n\r\nThis is what we discussed during the meeting.  The direction we agreed to broadly was to give this a spin and try to improve it.  There are some small tweaks we discussed that can be pursued separately, but this batch was pretty substantial already.",
       "createdAt": "2025-08-26T23:01:05Z",
-      "updatedAt": "2025-09-17T16:55:27Z",
+      "updatedAt": "2025-09-19T07:19:54Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0abbfbae7418d090d82dfa9f950c65c55fb8734c",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "min-rate",
-      "headRefOid": "596bf48708235699368c1ad85d4e31fce3c1cd68",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "39346555b8f9c412c86f48a6f26b66ecda789877",
+      "closedAt": "2025-09-19T07:19:53Z",
+      "mergedAt": "2025-09-19T07:19:53Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "9c90d118de79408424d7979982934231e88ea2cc"
+      },
       "comments": [
         {
           "author": "martinthomson",
@@ -6567,6 +6569,20 @@
           "body": "At the interim it was agreed to merge this PR as is, and move the discussion on having to update SCONE packets each window to a separate issue. ",
           "createdAt": "2025-09-17T16:55:27Z",
           "updatedAt": "2025-09-17T16:55:27Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "> At the interim it was agreed to merge this PR as is, and move the discussion on having to update SCONE packets each window to a separate issue.\r\n\r\nIs that issue #43 , or are you intending to open a new one?",
+          "createdAt": "2025-09-18T09:40:33Z",
+          "updatedAt": "2025-09-18T09:40:33Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Is that issue #43 , or are you intending to open a new one?\r\n\r\nIt would be a new issue in this case. ",
+          "createdAt": "2025-09-18T12:24:26Z",
+          "updatedAt": "2025-09-18T12:24:26Z"
         }
       ],
       "reviews": [
@@ -7303,6 +7319,46 @@
               "body": "```suggestion\r\nThe choice of 67 seconds, as a prime number,\r\nalso helps avoid synchronization with other periodic\r\neffects that are commonly measured in whole seconds.\r\n```",
               "createdAt": "2025-09-17T16:41:03Z",
               "updatedAt": "2025-09-17T16:41:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87BE3I6",
+          "commit": {
+            "abbreviatedOid": "7ab9656"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-18T12:14:10Z",
+          "updatedAt": "2025-09-18T12:14:10Z",
+          "comments": [
+            {
+              "originalPosition": 13,
+              "body": "```suggestion\r\nThe signaled advice applies to the flow of packets\r\non the same UDP address tuple for the duration of\r\nthe current monitoring period, unless it is updated\r\nearlier or the flow ends; see {{time}} for details on\r\nthe monitoring period.\r\n```",
+              "createdAt": "2025-09-18T12:14:10Z",
+              "updatedAt": "2025-09-19T07:13:43Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87BLlxk",
+          "commit": {
+            "abbreviatedOid": "7ab9656"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-18T17:08:21Z",
+          "updatedAt": "2025-09-18T17:08:21Z",
+          "comments": [
+            {
+              "originalPosition": 89,
+              "body": "I think \"might\" suffices to show the uncertainty there. Also, endpoints have no way to discern which network element sent the advice, so cannot know whether it comes \"from different elements\". We might discuss that in a separate issue, but better not in this PR.",
+              "createdAt": "2025-09-18T17:08:21Z",
+              "updatedAt": "2025-09-18T17:08:22Z"
             }
           ]
         }
