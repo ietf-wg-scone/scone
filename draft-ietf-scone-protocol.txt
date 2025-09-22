@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 23 March 2026                              Private Octopus Inc.
+Expires: 26 March 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       19 September 2025
+                                                       22 September 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2026.
+   This Internet-Draft will expire on 26 March 2026.
 
 Copyright Notice
 
@@ -103,6 +103,7 @@ Table of Contents
      8.3.  Interactions with Congestion Control
    9.  Security Considerations
      9.1.  Flooding intermediaries with fake packets
+     9.2.  Damage to Other Protocols
    10. Privacy Considerations
      10.1.  Passive Attacks
      10.2.  Active Attacks
@@ -912,6 +913,28 @@ Table of Contents
    might pick connection identifiers of arbitrary length.  Network
    elements can mitigate these attacks with implementations that fully
    conform to the specification of Section 5.
+
+9.2.  Damage to Other Protocols
+
+   Network elements that update SCONE packet fields might do that for
+   datagrams exchanged in other protocols.  This could result in damage
+   to those protocols.
+
+   The most serious damage occurs when every datagram is modified,
+   because that could mean that the protocol is effectively unable to
+   operate end-to-end.
+
+   To that end, network elements MUST only update the content of
+   datagrams on a given address tuple a few times each monitoring
+   period.  Network elements MAY update more often immediately after a
+   change in their throughput advice, to reduce the reaction time from
+   senders.
+
+   In addition, some heuristics might be used to detect SCONE-compatible
+   QUIC flows.  This includes identification of a QUIC handshake on the
+   flow, the presence of indications (Section 6.1), or other heuristics.
+   If these heuristics indicate a non-QUIC flow, the safest option is
+   for network elements to disable updating of datagrams.
 
 10.  Privacy Considerations
 
