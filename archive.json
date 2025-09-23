@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-21T01:43:08.528879+00:00",
+  "timestamp": "2025-09-23T01:27:15.461733+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -662,15 +662,15 @@
       "id": "I_kwDON1dwo86vE3Wm",
       "title": "Could network elements mangle innocent packets?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This is already discussed in the [TRAIN issue 32](https://github.com/martinthomson/train-protocol/issues/32). A Trone intermediary can mistake packets of some other applications for Trone packets. If it reqrite 6 bits, that will cause the packet to be eithre dropped or misinterpreted.\n\nAs explained by @ihlar during the IETF meeting in Bangkok, we need to distinguish:\n\n1. random collision: the end to end application issues some random first bytes that happen to mimic Trone. It will happen at low frequency.\n2. systematic collision: the end to end collision had negotiated some header that happens to Mimic Trone. All packets with that header will be mangled.\n\nThe proposed solution is for intermediaries to keep flow state and stop marking if too many packets of a flow match Trone. We need to develop that.\n",
       "createdAt": "2025-03-21T05:11:54Z",
-      "updatedAt": "2025-04-08T09:29:06Z",
-      "closedAt": null,
+      "updatedAt": "2025-09-22T07:17:22Z",
+      "closedAt": "2025-09-22T07:17:22Z",
       "comments": [
         {
           "author": "ihlar",
@@ -4660,24 +4660,26 @@
       "id": "PR_kwDON1dwo86gET0A",
       "title": "Fix the innocent protocol mangling",
       "url": "https://github.com/ietf-wg-scone/scone/pull/44",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This depends on an answer to #43 being as I suggested there. I won't make the pull request dependent on that though.\r\n\r\nCloses #10.",
       "createdAt": "2025-07-22T12:58:35Z",
-      "updatedAt": "2025-09-17T14:52:08Z",
+      "updatedAt": "2025-09-22T07:17:21Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "c27812a9318f7ca3c30d2dcd751cec645ee6b059",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "following-limits",
       "headRefOid": "950b3dedeec6aa90c8df242f433b16afb29e3e52",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-09-22T07:17:21Z",
+      "mergedAt": "2025-09-22T07:17:21Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "da486c421c385d2b71c674edcf284908796b5f83"
+      },
       "comments": [
         {
           "author": "martinthomson",
