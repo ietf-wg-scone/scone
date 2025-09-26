@@ -319,10 +319,10 @@ bit of the Version field.
 
 When sent by a QUIC endpoint, the Rate Signal MUST be set to 127.  Receiving a
 value of 127 indicates that throughput advice is unknown or unchanged, either
-because network elements on the path are not providing advice or they do not
-support SCONE.  126 explicitly indicates there is no advised limit. All other
-values (0 through 125) represent the ceiling of rates advised by the network
-element(s) on the path.
+because network elements on the path are not providing new or updated advice or
+they do not support SCONE.  126 explicitly indicates there is no advised
+limit. All other values (0 through 125) represent the ceiling of rates advised
+by the network element(s) on the path.
 
 The rate limits follow a logarithmic scale defined as:
 
