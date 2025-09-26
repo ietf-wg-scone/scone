@@ -317,18 +317,19 @@ A Rate Signal is a 7-bit unsigned integer (0-127). The high six bits are the
 Rate Signal High Bits, and the least significant bit is the most significant
 bit of the Version field.
 
-When sent by a QUIC endpoint, the Rate Signal is set to 127.  Receiving a value
-of 127 indicates that throughput advice is unknown, either because network
-elements on the path are not providing advice or they do not support SCONE. All
-other values (0 through 126) represent the ceiling of rates advised by the
-network element(s) on the path.
+When sent by a QUIC endpoint, the Rate Signal MUST be set to 127.  Receiving a
+value of 127 indicates that throughput advice is unknown or unchanged, either
+because network elements on the path are not providing advice or they do not
+support SCONE.  126 explicitly indicates there is no advised limit. All other
+values (0 through 125) represent the ceiling of rates advised by the network
+element(s) on the path.
 
 The rate limits follow a logarithmic scale defined as:
 
 * Base rate (b_min) = 100 Kbps
 * Bitrate at value n = b_min * 10^(n/20)
 
-where n is an integer between 0 and 126 represented by the Rate Signal.
+where n is an integer between 0 and 125 represented by the Rate Signal.
 
 {{ex-rates}} lists some of the potential values for signals
 and the corresponding bitrate for each.
@@ -351,8 +352,8 @@ and the corresponding bitrate for each.
 | 11.2 Gbps   | 101         |
 | 100 Gbps    | 120         |
 | 112 Gbps    | 121         |
-| 199.5 Gbps  | 126         |
-| Unknown     | 127         |
+| Not Limited | 126         |
+| No New Advice | 127       |
 {: #ex-rates title="Examples of SCONE signals and corresponding rates"}
 
 
@@ -405,7 +406,7 @@ packet MAY be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
 packets, as specified in {{packet}}.
 
-A SCONE packet is discarded if the rate signal is unknown (127).
+A SCONE packet is discarded if the rate signal is No New Advice (127).
 
 A SCONE packet MUST be discarded if the Destination Connection ID does not match
 one recognized by the receiving endpoint.
@@ -430,9 +431,7 @@ If advice is applied by applications,
 applications MUST apply the lowest throughput advice
 received during any monitoring period; see {{time}}.
 
-After a monitoring period ({{time}})
-without receiving throughput advice,
-any previous advice expires.
+Advice remains in place until new advice (0-126) is received.
 Endpoints can remove any constraints
 placed on throughput based on receiving throughput advice.
 This does not mean that there are no limits,
