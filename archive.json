@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-25T01:36:46.771688+00:00",
+  "timestamp": "2025-09-28T01:43:59.653396+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1974,6 +1974,74 @@
           "updatedAt": "2025-08-29T08:13:57Z"
         }
       ]
+    },
+    {
+      "number": 68,
+      "id": "I_kwDON1dwo87Nv3LT",
+      "title": "instant bitrate adaptation",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/68",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "One of the goals of SCONE is, if not the primary goal, is to improve user experience of video applications.\n\nFor optimal user experience, it'd be helpful to video applications if the \"correct\" achievable bitrate is provided the moment the connection is established.\n\nHowever, in #61, we added the following statement.\n> To that end, network elements MUST only update the content of datagrams on a given address tuple a few times each monitoring period. Network elements MAY update more often immediately after a change in their throughput advice, to reduce the reaction time from senders.\n\nIt means that the endpoints might not receive the correct bitrate advice until tens of seconds after the connection is established.\n\nAre we fine with that?\n\nIf not, I think we should do something along the lines of:\n* a) recommend network elements to update the first few SCONE packets on each flow, and/or\n* b) allow network elements always update SCONE packets on a flow that is known to use QUIC (e.g., UDP port 443 which is a well-known port).",
+      "createdAt": "2025-09-25T04:47:42Z",
+      "updatedAt": "2025-09-25T10:48:49Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Encouraging the use of SCONE immediately after a handshake is a good idea.  Even recommending that several packets are sent to give network elements a chance to get the signal through early is good.  Congestion controllers generally don't let you start sending at high rates immediately, so it is probably OK if it isn't completely instant.\n\nWant to propose a change, perhaps to [Section 8.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-8.1)?",
+          "createdAt": "2025-09-25T05:00:18Z",
+          "updatedAt": "2025-09-25T05:00:18Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks, I think we are mostly on the same page. I\u2019ll create a PR.\n\n> Congestion controllers generally don't let you start sending at high rates immediately, so it is probably OK if it isn't completely instant.\n\nI\u2019m not so sure about this part. Slow start operates on the scale of RTTs, whereas SCONE works over a much longer time frame. Therefore, if a video player believes the bitrate suggested by SCONE is correct, it would have the incentive to fetch the first chunk at that bitrate, hoping that the congestion window will ramp up quickly enough.\n\nTo support such an implementation, SCONE attached to Handshake and 0.5-RTT packets SHOULD be modified by the network elements.",
+          "createdAt": "2025-09-25T06:06:39Z",
+          "updatedAt": "2025-09-25T06:06:39Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Oh yes, I agree.  We can do SCONE as soon as we know that the other side supports it.  So 0.5RTT from the server and 1RTT from the client.  Only some packet loss patterns would delay that further.  That's almost certainly fast enough.\n\nWe can definitely recommend sending on the first packets after noticing it is available AND recommending either a few extra SCONE packets during that period OR paying attention to loss and retransmitting.",
+          "createdAt": "2025-09-25T07:28:08Z",
+          "updatedAt": "2025-09-25T07:28:08Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "\n> I\u2019m not so sure about this part. Slow start operates on the scale of RTTs, whereas SCONE works over a much longer time frame. Therefore, if a video player believes the bitrate suggested by SCONE is correct, it would have the incentive to fetch the first chunk at that bitrate, hoping that the congestion window will ramp up quickly enough.\n> \n> To support such an implementation, SCONE attached to Handshake and 0.5-RTT packets SHOULD be modified by the network elements.\n\nassuming that the video player is the one choosing the segments, the SCONE info should be attached to the packets preceding the video player's choice of segment - ie the handshake packets for the connection. Those will likely be in the CC initial congestion window, so won't be affected by CC.\n\nIf SCONE info is only attached to actual video segments, the player's guesstimate on the choice of the first segment won't have SCONE information.\n\nOf course, if the actual bottleneck doesn't support SCONE, the first segment will be congestion-controlled, so a higher SCONE signal may actually be misleading - but getting SCONE info early seems like it could never be actively harmful.\n",
+          "createdAt": "2025-09-25T07:42:57Z",
+          "updatedAt": "2025-09-25T07:44:48Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> If SCONE info is only attached to actual video segments, the player's guesstimate on the choice of the first segment won't have SCONE information.\n\nIn any of those applications, the reaction time means that advice received for one segment will likely only be actionable for the next segment anyway.  It would be rare for an application to be able to act so quickly.",
+          "createdAt": "2025-09-25T10:48:49Z",
+          "updatedAt": "2025-09-25T10:48:49Z"
+        }
+      ]
+    },
+    {
+      "number": 69,
+      "id": "I_kwDON1dwo87ODBl3",
+      "title": "Definition of \"Network Elements\" is missing.",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/69",
+      "state": "OPEN",
+      "author": "zaheduzzaman",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Current text uses the term \"network element\" but it does not define or describe the network elements. It appears that there are certain expectations from a network element -\n\n- It sits in the access network.\n- It has visibility to UDP 4-Tuple flow sand it maintains some sort of states about the rate the individual flows are using.\n- It has rate limiting policies or have access to it.\n- It can detect SCONE packets in those UDP 4-tuple flows and put rate advices in those packets.\n\nThis all I am infering from the text of this draft, but, I am not sure if everyone would endup infering the same.\n\nWhat I infer makes the \"network element\" a bit unique, that not any router or any device can operate the SCONE protocol. Hence, the document should clearly define this \"network element\".\n\nThis would also help other discussions regarding manageability and applicablity discussions over different access networks as it would help to understand what are those access network there we can have such network elements.  ",
+      "createdAt": "2025-09-26T10:26:38Z",
+      "updatedAt": "2025-09-26T10:26:38Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
