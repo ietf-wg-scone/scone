@@ -594,6 +594,10 @@ Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
 
+At the start of a flow, network elements are encouraged to update the rate
+signal of the first few SCONE packets it observes so that endpoints can obtain
+throughput advice early.
+
 Senders that send a SCONE packet
 or network elements that update SCONE packets
 every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
