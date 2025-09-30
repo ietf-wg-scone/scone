@@ -306,7 +306,7 @@ any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
 ({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty.
 
-SCONE packets SHOULD be included as the first packet in a datagram.  This is
+SCONE packets MUST be included as the first packet in a datagram.  This is
 necessary in many cases for QUIC versions 1 and 2 because packets with a short
 header cannot precede any other packets.
 
@@ -712,21 +712,18 @@ different ranges of bitrates. This design allows for:
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
 
-Endpoints that wish to offer network elements the option to add throughout advice
+Endpoints that wish to offer network elements the option to add throughput advice
 signals can send SCONE packets at any time.  This is a decision that a sender
-makes when constructing datagrams. It is recommended that endpoints promptly
-send an initial SCONE packet once the peer confirms its willingness to receive
-them.
+makes when constructing datagrams.
 
-Endpoints MUST send any SCONE packet they send as the first packet in a
-datagram, coalesced with additional packets. An endpoint that receives and
-discards a SCONE packet without also successfully processing another packet
-from the same datagram SHOULD ignore any throughput advice signal. Such a datagram
-might be entirely spoofed.
+Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
+SHOULD include SCONE packets in the first few UDP datagrams that it sends. Doing
+so increases the likelihood of eliciting early throughput advice from network
+elements, allowing applications to apply that advice from the early stages of the
+data transfer.
 
-Once negotiated,
-applications that seek to receive throughput advice on a flow
-MUST send a SCONE packet at least twice each monitoring period; see {{time}}.
+After that, endpoints that seek to receive throughput advice on a flow MUST send
+a SCONE packet at least twice each monitoring period; see {{time}}.
 
 Sending SCONE packets more often might be necessary to:
 
