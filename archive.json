@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-28T01:43:59.653396+00:00",
+  "timestamp": "2025-09-30T01:27:42.801252+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -7696,6 +7696,59 @@
               "body": "```suggestion\r\nIt is expected that these rates will differ for multiple reasons,\r\n```",
               "createdAt": "2025-09-01T02:19:20Z",
               "updatedAt": "2025-09-01T02:19:20Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 70,
+      "id": "PR_kwDON1dwo86rJNE_",
+      "title": "RFC: Distinguish \"No Limit\" from \"No (new) Advice\"",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/70",
+      "state": "OPEN",
+      "author": "afrind",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "This is an example of what changes might be needed to make advice \"sticky\" or \"set it and forget it\".",
+      "createdAt": "2025-09-29T16:36:52Z",
+      "updatedAt": "2025-09-29T18:26:16Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
+      "headRepository": "afrind/scone",
+      "headRefName": "sticky-advice",
+      "headRefOid": "5ebe0c114fd2669c4242c510190bcd67fe94bf4e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87DkggE",
+          "commit": {
+            "abbreviatedOid": "5ebe0c1"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "We SHOULD be very careful to not provide the wrong advice when multiple elements are on the same path.",
+          "createdAt": "2025-09-29T18:16:45Z",
+          "updatedAt": "2025-09-29T18:26:16Z",
+          "comments": [
+            {
+              "originalPosition": 54,
+              "body": "Not really. If we want to be smart, we need to distinguish between receiving a SCONE packet with \"No new Advice\" and receiving explicit advice. I would write:\r\n\r\nAfter a monitoring period ({{time}}) without receiving throughput advice, or\r\nonly receiving SCONE packets marked as \"No New Advice\",\r\nany previous advice expires.\r\nEndpoints can remove any constraints...\r\n",
+              "createdAt": "2025-09-29T18:16:45Z",
+              "updatedAt": "2025-09-29T18:26:16Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "Not sure about this MUST. I understand that the right thing happens if clients follow that advice, but how exactly is that enforced? Network elements MUST absolutely be ready to receive SCONE packets that were somehow marked by another Network Element on the same path. I would be concerned if implementers of network elements treated incoming SCONE packets with a Rate Signal different from 127 as an error.\r\nI think that we should write \"SHOULD\" instead. As in: \r\n\r\nWhen sent by a QUIC endpoint, the Rate Signal SHOULD be set to 127. Other values MAY be used, for example for testing purposes, but setting the value to 127 ensure proper\r\nprocessing by the advice-receiving endpoint.",
+              "createdAt": "2025-09-29T18:25:19Z",
+              "updatedAt": "2025-09-29T18:26:16Z"
             }
           ]
         }
