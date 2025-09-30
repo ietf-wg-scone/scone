@@ -622,11 +622,12 @@ is possible.
 
 To operate this algorithm,
 the minimal state a network element maintains is:
+
 * the current rate limit,
 * any state necessary to monitor throughput
   (that is, throughput usage state, such as the state in {{sliding-window}}),
 * a timer used for rate increases, and
-* the time at which that rate limit was last updated,
+* the time at which that rate limit was last updated.
 
 When advice is set or updated,
 the network element waits until
