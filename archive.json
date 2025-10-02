@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-30T01:27:42.801252+00:00",
+  "timestamp": "2025-10-02T01:26:35.617552+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -7753,6 +7753,58 @@
           ]
         }
       ]
+    },
+    {
+      "number": 71,
+      "id": "PR_kwDON1dwo86rOGGl",
+      "title": "instant bitrate adaptation",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/71",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As discussed in #68, it would be helpful to the applications if the bitrate advice is available right after the handshake.\r\n\r\nTo achieve that, this pull request encourages endpoints to send a small number of SCONE packets ASAP and network elements to update them.\r\n\r\nFor the advice to endpoints, I've removed redundant text that existed elsewhere (namely section 5 and 5.3), adopting MUST from the sentence removed.\r\n\r\nFor the advice to network elements, I avoided use of RFC2119 verbs, following the previous paragraph.\r\n\r\nCloses #68.",
+      "createdAt": "2025-09-30T01:48:53Z",
+      "updatedAt": "2025-09-30T01:48:54Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
+      "headRepository": "kazuho/i-d-trone",
+      "headRefName": "kazuho/instant-rate-adaptation",
+      "headRefOid": "1d6703d351cf20787f1653f1fd333c37adec6c36",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 72,
+      "id": "PR_kwDON1dwo86rPJq_",
+      "title": "[editorial] add empty line and end with a period to itemize the list",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/72",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Attempts to fix a glitch in the rendered document, where the bullet points are not itemized as a list.",
+      "createdAt": "2025-09-30T04:39:27Z",
+      "updatedAt": "2025-09-30T04:41:20Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
+      "headRepository": "kazuho/i-d-trone",
+      "headRefName": "kazuho/fix-itemization",
+      "headRefOid": "31174b729c099cf316590399316a41400241dc36",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
