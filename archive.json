@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-02T01:26:35.617552+00:00",
+  "timestamp": "2025-10-05T01:43:11.085836+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -7766,7 +7766,7 @@
       "labels": [],
       "body": "As discussed in #68, it would be helpful to the applications if the bitrate advice is available right after the handshake.\r\n\r\nTo achieve that, this pull request encourages endpoints to send a small number of SCONE packets ASAP and network elements to update them.\r\n\r\nFor the advice to endpoints, I've removed redundant text that existed elsewhere (namely section 5 and 5.3), adopting MUST from the sentence removed.\r\n\r\nFor the advice to network elements, I avoided use of RFC2119 verbs, following the previous paragraph.\r\n\r\nCloses #68.",
       "createdAt": "2025-09-30T01:48:53Z",
-      "updatedAt": "2025-09-30T01:48:54Z",
+      "updatedAt": "2025-10-02T17:48:36Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
@@ -7778,33 +7778,70 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87EcP20",
+          "commit": {
+            "abbreviatedOid": "1d6703d"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Maybe the SHOULD/MUST change can be taken to a new thread given the potential \"...unless\".  Though I generally agree with the change, it might be wise not to make the simpler change, so separating it will allow the important change to proceed.",
+          "createdAt": "2025-10-02T17:47:43Z",
+          "updatedAt": "2025-10-02T17:48:36Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "There is a potential \"...unless\" here, which is why (I think) this is only SHOULD.  That is, if we define something else like SCONE, a strict \"MUST\" will potentially create a conflict.",
+              "createdAt": "2025-10-02T17:47:44Z",
+              "updatedAt": "2025-10-02T17:48:36Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 72,
       "id": "PR_kwDON1dwo86rPJq_",
       "title": "[editorial] add empty line and end with a period to itemize the list",
       "url": "https://github.com/ietf-wg-scone/scone/pull/72",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Attempts to fix a glitch in the rendered document, where the bullet points are not itemized as a list.",
       "createdAt": "2025-09-30T04:39:27Z",
-      "updatedAt": "2025-09-30T04:41:20Z",
+      "updatedAt": "2025-10-02T17:49:15Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
       "headRepository": "kazuho/i-d-trone",
       "headRefName": "kazuho/fix-itemization",
       "headRefOid": "31174b729c099cf316590399316a41400241dc36",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-02T17:49:15Z",
+      "mergedAt": "2025-10-02T17:49:14Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "d35ad6f060af54c8b33f79a267e018632a496364"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87EcQwF",
+          "commit": {
+            "abbreviatedOid": "31174b7"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-02T17:49:07Z",
+          "updatedAt": "2025-10-02T17:49:07Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
