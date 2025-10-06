@@ -721,7 +721,7 @@ signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams.
 
 When sending SCONE packets, enpoints MUST include the SCONE packet as the first
-packet in a datagram.
+packet in a datagram, coalesced with additional packets.
 
 Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
 SHOULD include SCONE packets in the first few UDP datagrams that it sends. Doing
