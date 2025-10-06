@@ -306,7 +306,7 @@ any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
 ({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty.
 
-SCONE packets MUST be included as the first packet in a datagram.  This is
+SCONE packets SHOULD be included as the first packet in a datagram.  This is
 necessary in many cases for QUIC versions 1 and 2 because packets with a short
 header cannot precede any other packets.
 
@@ -719,6 +719,9 @@ different ranges of bitrates. This design allows for:
 Endpoints that wish to offer network elements the option to add throughput advice
 signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams.
+
+When sending SCONE packets, enpoints MUST include the SCONE packet as the first
+packet in a datagram.
 
 Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
 SHOULD include SCONE packets in the first few UDP datagrams that it sends. Doing
