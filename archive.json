@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-05T01:43:11.085836+00:00",
+  "timestamp": "2025-10-07T01:27:22.288556+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2042,6 +2042,44 @@
       "updatedAt": "2025-09-26T10:26:38Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 73,
+      "id": "I_kwDON1dwo87PxKO7",
+      "title": "SCONE packet (SHOULD or MUST) be the first packet within a datagram",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/73",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "At the moment, there are two provisions that suggest almost the same thing, but with different requirement levels.\n\n* SCONE packets SHOULD be included as the first packet in a datagram ([section 5](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5-9))\n* Endpoints MUST send any SCONE packet they send as the first packet in a datagram, coalesced with additional packets. ([section 8.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-8.1-2))\n\nI think @martinthomson makes [a reasonable argument](https://github.com/ietf-wg-scone/scone/pull/71#pullrequestreview-3295739316) for these two being different, but if so, it might make sense to improve the text to avoid confusion.",
+      "createdAt": "2025-10-06T05:48:43Z",
+      "updatedAt": "2025-10-06T21:56:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Please correct me if I am wrong, but FWIW, it is my understanding is that at the moment nothing prevents receivers from processing SCONE packets at the middle of the datagram. In fact, they might be expected to process them.\n\nThis is because:\n* As stated above, section 5 uses a SHOULD, which implies that SCONE packets may be included at the middle.\n* [Section 5.3](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#name-endpoint-processing-of-scon) does not have such a requirement, even though it talks about discarding SCONE packets carrying incorrect Connection IDs.",
+          "createdAt": "2025-10-06T06:28:20Z",
+          "updatedAt": "2025-10-06T06:28:20Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "This is essentially the problem: we can specify a strong preference to be the first packet, noting that putting a SCONE packet after another packet in the datagram is likely to cause network elements to miss the packet and so not update it.  However, in establishing this pattern, where packets from different versions and with different purposes can be coalesced into a datagram, we cannot necessarily guarantee that there isn't some future reason to have a different packet ahead of SCONE packets.  This should maybe be a MUST ... unless another protocol specifies otherwise.\n\nOr maybe I'm overthinking it and we can say MUST always and let the other protocol update this document if it comes to that.  After all, a SCONE-like protocol can always include packets inserted into datagrams *other* than the ones with SCONE packets.",
+          "createdAt": "2025-10-06T09:12:35Z",
+          "updatedAt": "2025-10-06T09:12:35Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Or maybe I'm overthinking it and we can say MUST always and let the other protocol update this document if it comes to that.\n\nI think the key difference here is that such an update can be made only by the IETF.\n\nMaybe the question here is if we think it is a good idea to allow other entities to develop / deploy a protocol that prepends something in front of SCONE.",
+          "createdAt": "2025-10-06T21:56:27Z",
+          "updatedAt": "2025-10-06T21:56:27Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -7766,18 +7804,26 @@
       "labels": [],
       "body": "As discussed in #68, it would be helpful to the applications if the bitrate advice is available right after the handshake.\r\n\r\nTo achieve that, this pull request encourages endpoints to send a small number of SCONE packets ASAP and network elements to update them.\r\n\r\nFor the advice to endpoints, I've removed redundant text that existed elsewhere (namely section 5 and 5.3), adopting MUST from the sentence removed.\r\n\r\nFor the advice to network elements, I avoided use of RFC2119 verbs, following the previous paragraph.\r\n\r\nCloses #68.",
       "createdAt": "2025-09-30T01:48:53Z",
-      "updatedAt": "2025-10-02T17:48:36Z",
+      "updatedAt": "2025-10-06T05:50:39Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
       "headRepository": "kazuho/i-d-trone",
       "headRefName": "kazuho/instant-rate-adaptation",
-      "headRefOid": "1d6703d351cf20787f1653f1fd333c37adec6c36",
+      "headRefOid": "27ea3b09380c2f78b15c23729c71f4e94d95cd2e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson\r\n> it might be wise not to make the simpler change, so separating it will allow the important change to proceed\r\n\r\nThat makes sense. Thank you for the review.\r\n\r\nI have:\r\n* reverted the change so that we retain both the SHOULD and MUST, and\r\n* have opened #73 to discuss what we should do with them.",
+          "createdAt": "2025-10-06T05:50:39Z",
+          "updatedAt": "2025-10-06T05:50:39Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87EcP20",
