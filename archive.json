@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-07T01:27:22.288556+00:00",
+  "timestamp": "2025-10-09T01:36:07.351053+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2055,7 +2055,7 @@
       "labels": [],
       "body": "At the moment, there are two provisions that suggest almost the same thing, but with different requirement levels.\n\n* SCONE packets SHOULD be included as the first packet in a datagram ([section 5](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5-9))\n* Endpoints MUST send any SCONE packet they send as the first packet in a datagram, coalesced with additional packets. ([section 8.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-8.1-2))\n\nI think @martinthomson makes [a reasonable argument](https://github.com/ietf-wg-scone/scone/pull/71#pullrequestreview-3295739316) for these two being different, but if so, it might make sense to improve the text to avoid confusion.",
       "createdAt": "2025-10-06T05:48:43Z",
-      "updatedAt": "2025-10-06T21:56:27Z",
+      "updatedAt": "2025-10-07T18:25:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -2078,6 +2078,13 @@
           "body": "> Or maybe I'm overthinking it and we can say MUST always and let the other protocol update this document if it comes to that.\n\nI think the key difference here is that such an update can be made only by the IETF.\n\nMaybe the question here is if we think it is a good idea to allow other entities to develop / deploy a protocol that prepends something in front of SCONE.",
           "createdAt": "2025-10-06T21:56:27Z",
           "updatedAt": "2025-10-06T21:56:27Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I am concerned with potential attacks if we allowing processing of SCONE not in the first position. Shenanigans that happen if an attacker (or an endpoint) can insert false advice in a SCONE packets that most network elements ignore but the other endpoint processes. I would much rather keep it simple, and keep the \"MUST be first\" rule.\n\nAnd yes, future changes would require an IETF action. That's fine.",
+          "createdAt": "2025-10-07T18:25:30Z",
+          "updatedAt": "2025-10-07T18:25:30Z"
         }
       ]
     }
@@ -7804,7 +7811,7 @@
       "labels": [],
       "body": "As discussed in #68, it would be helpful to the applications if the bitrate advice is available right after the handshake.\r\n\r\nTo achieve that, this pull request encourages endpoints to send a small number of SCONE packets ASAP and network elements to update them.\r\n\r\nFor the advice to endpoints, I've removed redundant text that existed elsewhere (namely section 5 and 5.3), adopting MUST from the sentence removed.\r\n\r\nFor the advice to network elements, I avoided use of RFC2119 verbs, following the previous paragraph.\r\n\r\nCloses #68.",
       "createdAt": "2025-09-30T01:48:53Z",
-      "updatedAt": "2025-10-06T05:50:39Z",
+      "updatedAt": "2025-10-07T18:19:46Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
@@ -7844,6 +7851,19 @@
               "updatedAt": "2025-10-02T17:48:36Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87FX4xI",
+          "commit": {
+            "abbreviatedOid": "27ea3b0"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I like the current text. Basically:\r\n\r\n1- When sending SCONE packets, endpoints MUST send them as the first coalesced packet in the UDP payload.\r\n\r\n2- Endpoints SHOULD send SCONE packets often enough -- unless they want to send them more often than that for some reason. Or less often. Basically their choice, because it is a trade off between overhead of SCONE and risks of not getting rate advice soon enough.",
+          "createdAt": "2025-10-07T18:19:46Z",
+          "updatedAt": "2025-10-07T18:19:46Z",
+          "comments": []
         }
       ]
     },
