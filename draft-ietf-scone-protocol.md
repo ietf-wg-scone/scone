@@ -306,9 +306,11 @@ any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
 ({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty.
 
-SCONE packets SHOULD be included as the first packet in a datagram.  This is
-necessary in many cases for QUIC versions 1 and 2 because packets with a short
-header cannot precede any other packets.
+SCONE packets MUST be included as the first packet in a datagram.
+This is primarily to simplify the process of updating throughput advice
+in network elements.
+This is also necessary in many cases for QUIC versions 1 and 2
+because packets with a short header cannot precede any other packets.
 
 
 ## Rate Signals {#rate-signal}
