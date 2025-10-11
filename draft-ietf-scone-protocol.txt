@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 5 April 2026                               Private Octopus Inc.
+Expires: 14 April 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          2 October 2025
+                                                         11 October 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 April 2026.
+   This Internet-Draft will expire on 14 April 2026.
 
 Copyright Notice
 
@@ -366,9 +366,11 @@ Table of Contents
    case for packets with a short header (Section 5.2 of [INVARIANTS]),
    the Source Connection ID field is empty.
 
-   SCONE packets SHOULD be included as the first packet in a datagram.
-   This is necessary in many cases for QUIC versions 1 and 2 because
-   packets with a short header cannot precede any other packets.
+   SCONE packets MUST be included as the first packet in a datagram.
+   This is primarily to simplify the process of updating throughput
+   advice in network elements.  This is also necessary in many cases for
+   QUIC versions 1 and 2 because packets with a short header cannot
+   precede any other packets.
 
 5.1.  Rate Signals
 
