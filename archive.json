@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-09T01:36:07.351053+00:00",
+  "timestamp": "2025-10-12T01:39:32.609992+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2048,15 +2048,15 @@
       "id": "I_kwDON1dwo87PxKO7",
       "title": "SCONE packet (SHOULD or MUST) be the first packet within a datagram",
       "url": "https://github.com/ietf-wg-scone/scone/issues/73",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "At the moment, there are two provisions that suggest almost the same thing, but with different requirement levels.\n\n* SCONE packets SHOULD be included as the first packet in a datagram ([section 5](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5-9))\n* Endpoints MUST send any SCONE packet they send as the first packet in a datagram, coalesced with additional packets. ([section 8.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-8.1-2))\n\nI think @martinthomson makes [a reasonable argument](https://github.com/ietf-wg-scone/scone/pull/71#pullrequestreview-3295739316) for these two being different, but if so, it might make sense to improve the text to avoid confusion.",
       "createdAt": "2025-10-06T05:48:43Z",
-      "updatedAt": "2025-10-07T18:25:30Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-11T08:23:44Z",
+      "closedAt": "2025-10-11T08:23:44Z",
       "comments": [
         {
           "author": "kazuho",
@@ -2085,6 +2085,20 @@
           "body": "I am concerned with potential attacks if we allowing processing of SCONE not in the first position. Shenanigans that happen if an attacker (or an endpoint) can insert false advice in a SCONE packets that most network elements ignore but the other endpoint processes. I would much rather keep it simple, and keep the \"MUST be first\" rule.\n\nAnd yes, future changes would require an IETF action. That's fine.",
           "createdAt": "2025-10-07T18:25:30Z",
           "updatedAt": "2025-10-07T18:25:30Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I would much rather keep it simple, and keep the \"MUST be first\" rule.\n\nMy preference is the same.\n\nThe problem with \"SCONE MUST be the first unless specified\" or \"SHOULD\" is the added complexity on the receiver side. We'd be required to specify and implement the handling SCONE packets in the middle of a datagram. And even if we did specify, we might see it become ossified, as we cannot really grease it.",
+          "createdAt": "2025-10-10T07:31:02Z",
+          "updatedAt": "2025-10-10T07:31:02Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Let's go with \"MUST be first\", no qualifications.  That does mean that it takes the IETF to override this, but there are several ways around that.  Most notably, a different protocol that also needs to go first can go first on different datagrams to the ones that SCONE is added to.",
+          "createdAt": "2025-10-10T15:29:46Z",
+          "updatedAt": "2025-10-10T15:29:46Z"
         }
       ]
     }
@@ -7758,7 +7772,7 @@
       "labels": [],
       "body": "This is an example of what changes might be needed to make advice \"sticky\" or \"set it and forget it\".",
       "createdAt": "2025-09-29T16:36:52Z",
-      "updatedAt": "2025-09-29T18:26:16Z",
+      "updatedAt": "2025-10-11T08:37:32Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
@@ -7794,6 +7808,38 @@
               "body": "Not sure about this MUST. I understand that the right thing happens if clients follow that advice, but how exactly is that enforced? Network elements MUST absolutely be ready to receive SCONE packets that were somehow marked by another Network Element on the same path. I would be concerned if implementers of network elements treated incoming SCONE packets with a Rate Signal different from 127 as an error.\r\nI think that we should write \"SHOULD\" instead. As in: \r\n\r\nWhen sent by a QUIC endpoint, the Rate Signal SHOULD be set to 127. Other values MAY be used, for example for testing purposes, but setting the value to 127 ensure proper\r\nprocessing by the advice-receiving endpoint.",
               "createdAt": "2025-09-29T18:25:19Z",
               "updatedAt": "2025-09-29T18:26:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87GS4mp",
+          "commit": {
+            "abbreviatedOid": "5ebe0c1"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "A number of things, on top of what @huitema mentioned.  I would be opposed to this design.",
+          "createdAt": "2025-10-11T08:27:40Z",
+          "updatedAt": "2025-10-11T08:37:32Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "I don't think that this is a good idea at all.  It's also orthogonal to the other change.  Of course, that seems to be the main motivation for this change.  And I think that it's a bad one.\r\n\r\nPath instability or multiple active SCONE network elements will lead to receiving different signals.  The synthesis of those signals in this way will lead to bad outcomes.",
+              "createdAt": "2025-10-11T08:27:40Z",
+              "updatedAt": "2025-10-11T08:37:32Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "That's a separable question.  I don't think that we need to make any change here, but the use of SHOULD implies discretion in ways that might not be helpful.",
+              "createdAt": "2025-10-11T08:29:07Z",
+              "updatedAt": "2025-10-11T08:37:32Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "This doesn't really establish a case for this new codepoint.\r\n\r\nConcretely, what change in behaviour is implied here?  Specifically, what would the recipient of this signal do differently from the recipient that receives \"no signal\"?\r\n\r\nWhen SCONE is not supported on a path, you use your congestion controller or other rate estimation logic to determine send rates.  Not Limited and No Advice are effectively the same.\r\n\r\nThe suggestion that you retain rate advice indefinitely (below) might mean that you have to include this option. But that is the only reason you might eat the extra codepoint.  However, I don't think that's reasonable, as noted below.",
+              "createdAt": "2025-10-11T08:31:30Z",
+              "updatedAt": "2025-10-11T08:37:32Z"
             }
           ]
         }
@@ -7905,6 +7951,82 @@
           "body": "",
           "createdAt": "2025-10-02T17:49:07Z",
           "updatedAt": "2025-10-02T17:49:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 74,
+      "id": "PR_kwDON1dwo86tIswD",
+      "title": "SCONE always goes first",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/74",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #73.",
+      "createdAt": "2025-10-10T16:51:14Z",
+      "updatedAt": "2025-10-11T15:42:27Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "d35ad6f060af54c8b33f79a267e018632a496364",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "first-always",
+      "headRefOid": "f79cbe6a37e4337e0a7c3719120db732d6fca8f8",
+      "closedAt": "2025-10-11T08:23:43Z",
+      "mergedAt": "2025-10-11T08:23:43Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "c9bf485c862ac019d9fe020d4e2237c83dceb71c"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "A little bit of repetition won't hurt.  They are consistent.",
+          "createdAt": "2025-10-11T07:16:42Z",
+          "updatedAt": "2025-10-11T07:16:42Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87GQvuR",
+          "commit": {
+            "abbreviatedOid": "f79cbe6"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-10T23:38:43Z",
+          "updatedAt": "2025-10-10T23:38:43Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87GQwrn",
+          "commit": {
+            "abbreviatedOid": "f79cbe6"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you for the PR.\n\nShould we remove the now redundant \"MUST send as the first packet\" clause in Section 8.1.?",
+          "createdAt": "2025-10-10T23:41:48Z",
+          "updatedAt": "2025-10-10T23:41:48Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87GU2Bq",
+          "commit": {
+            "abbreviatedOid": "f79cbe6"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Yes!",
+          "createdAt": "2025-10-11T15:42:27Z",
+          "updatedAt": "2025-10-11T15:42:27Z",
           "comments": []
         }
       ]
