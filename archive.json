@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-12T01:39:32.609992+00:00",
+  "timestamp": "2025-10-14T01:36:16.522500+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -7772,7 +7772,7 @@
       "labels": [],
       "body": "This is an example of what changes might be needed to make advice \"sticky\" or \"set it and forget it\".",
       "createdAt": "2025-09-29T16:36:52Z",
-      "updatedAt": "2025-10-11T08:37:32Z",
+      "updatedAt": "2025-10-13T09:29:18Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
@@ -7783,7 +7783,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "Requesting that the lifetime of SCONE advice is ~infinite is a rather dramatic change, and runs counter to the \"soft state\" principle of how the interaction between the Internet and its end nodes should be built. \r\nIf you really want to ask for this change, put up a separate request for it.\r\n\r\nThe theory that current UPF nodes may be so underprovisioned that they can't handle a per-flow operation every 67 second, while the same node can handle policing of every packet on the same flows, seems to me lacking in documentation.",
+          "createdAt": "2025-10-13T06:22:32Z",
+          "updatedAt": "2025-10-13T06:22:32Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87DkggE",
@@ -7840,6 +7848,66 @@
               "body": "This doesn't really establish a case for this new codepoint.\r\n\r\nConcretely, what change in behaviour is implied here?  Specifically, what would the recipient of this signal do differently from the recipient that receives \"no signal\"?\r\n\r\nWhen SCONE is not supported on a path, you use your congestion controller or other rate estimation logic to determine send rates.  Not Limited and No Advice are effectively the same.\r\n\r\nThe suggestion that you retain rate advice indefinitely (below) might mean that you have to include this option. But that is the only reason you might eat the extra codepoint.  However, I don't think that's reasonable, as noted below.",
               "createdAt": "2025-10-11T08:31:30Z",
               "updatedAt": "2025-10-11T08:37:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87Geadn",
+          "commit": {
+            "abbreviatedOid": "5ebe0c1"
+          },
+          "author": "irfan-ali-ia",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-13T02:56:28Z",
+          "updatedAt": "2025-10-13T02:56:28Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "In a cellular network, the single node that typically enforces per-flow policy is UPF/PGW (user plane function (5G) or packet gateway (4G), see also the applicability draft). UPF/PGW handles very large number of flows and it is important to conserve CPU by not making too many on-line changes to packet. \r\n\r\nTo conserve CPU on network node, network node should add the rate signal in SCONE header at \r\na. the start of flows and \r\nb. mid-flow whenever policy regarding the flow changes (which is very infrequently and over period of days/months). \r\n\r\nRequiring UPF/PGW to be providing same advice every 67 seconds will add CPU load on UPF/PGW which are performing lots of other tasks, such as charging, policing, tunneling, etc. ",
+              "createdAt": "2025-10-13T02:56:28Z",
+              "updatedAt": "2025-10-13T02:56:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87GehP-",
+          "commit": {
+            "abbreviatedOid": "91007c8"
+          },
+          "author": "irfan-ali-ia",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-13T03:25:37Z",
+          "updatedAt": "2025-10-13T03:25:37Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "in cellular networks (see comment below on line 434/435), we would not want to have network node having to be providing the same advice every 67s, when rate changes occur very infrequently. With that we see 127 = \"No (new) Advice\" being closer in spirit to what is happening than 127 = \"unknown\". For us, it is not that critical what 127 is called (end node behavior is the same for 127), except that it should be possible for advice to last longer than 67 seconds. With this, then 126 = \"no limit\" enables the network node to signal when rate-limit policy is removed.",
+              "createdAt": "2025-10-13T03:25:37Z",
+              "updatedAt": "2025-10-13T03:25:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87GhguH",
+          "commit": {
+            "abbreviatedOid": "5ebe0c1"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-13T09:29:18Z",
+          "updatedAt": "2025-10-13T09:29:18Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "> In a cellular network, the single node that typically enforces per-flow policy is UPF/PGW (user plane function (5G) or packet gateway (4G), see also the applicability draft). UPF/PGW handles very large number of flows and it is important to conserve CPU by not making too many on-line changes to packet.\r\n\r\nI agree that it's important to be cautious with resource use on nodes such as the UPF. That's one of the motivations for the current design of the protocol. It is very simple: the few fields of interest are accessible at fixed offsets.\r\n\r\n> To conserve CPU on network node, network node should add the rate signal in SCONE header at\r\n> a. the start of flows and\r\n> b. mid-flow whenever policy regarding the flow changes (which is very infrequently and over period of days/months).\r\n\r\nMid-flow policy changes could be more frequent than that, depending on use case and deployment. \r\n\r\n> Requiring UPF/PGW to be providing same advice every 67 seconds will add CPU load on UPF/PGW which are performing lots of other tasks, such as charging, policing, tunneling, etc.\r\n\r\nThe UPF/PGW is already flow aware by design, which means that it parses IP 5-tuples from each packet. The additional work required to parse a SCONE packet and potentially update a rate signal is small. The tasks you mention require per-packet work (counting bytes, encapsulation, decapsulation, etc..), whereas SCONE requires processing of a few packets per minute per flow. \r\n",
+              "createdAt": "2025-10-13T09:29:18Z",
+              "updatedAt": "2025-10-13T09:29:18Z"
             }
           ]
         }
