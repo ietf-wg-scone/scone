@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 14 April 2026                              Private Octopus Inc.
+Expires: 18 April 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         11 October 2025
+                                                         15 October 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 April 2026.
+   This Internet-Draft will expire on 18 April 2026.
 
 Copyright Notice
 
@@ -645,6 +645,10 @@ Table of Contents
    and packet loss can cause signals to be missed, network elements
    might need to update more often.
 
+   At the start of a flow, network elements are encouraged to update the
+   rate signal of the first few SCONE packets it observes so that
+   endpoints can obtain throughput advice early.
+
    Senders that send a SCONE packet or network elements that update
    SCONE packets every 20–30 seconds is likely sufficient to ensure that
    throughput advice is not lost.  To reduce the risk of synchronization
@@ -751,20 +755,22 @@ Table of Contents
 8.1.  Providing Opportunities to Apply Throughput Advice Signals
 
    Endpoints that wish to offer network elements the option to add
-   throughout advice signals can send SCONE packets at any time.  This
-   is a decision that a sender makes when constructing datagrams.  It is
-   recommended that endpoints promptly send an initial SCONE packet once
-   the peer confirms its willingness to receive them.
+   throughput advice signals can send SCONE packets at any time.  This
+   is a decision that a sender makes when constructing datagrams.
 
-   Endpoints MUST send any SCONE packet they send as the first packet in
-   a datagram, coalesced with additional packets.  An endpoint that
-   receives and discards a SCONE packet without also successfully
-   processing another packet from the same datagram SHOULD ignore any
-   throughput advice signal.  Such a datagram might be entirely spoofed.
+   When sending SCONE packets, enpoints MUST include the SCONE packet as
+   the first packet in a datagram, coalesced with additional packets.
 
-   Once negotiated, applications that seek to receive throughput advice
-   on a flow MUST send a SCONE packet at least twice each monitoring
-   period; see Section 5.2.
+   Upon confirmation that the peer is willing to receive SCONE packets,
+   an endpoint SHOULD include SCONE packets in the first few UDP
+   datagrams that it sends.  Doing so increases the likelihood of
+   eliciting early throughput advice from network elements, allowing
+   applications to apply that advice from the early stages of the data
+   transfer.
+
+   After that, endpoints that seek to receive throughput advice on a
+   flow MUST send a SCONE packet at least twice each monitoring period;
+   see Section 5.2.
 
    Sending SCONE packets more often might be necessary to:
 

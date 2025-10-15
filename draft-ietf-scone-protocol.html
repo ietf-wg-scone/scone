@@ -1055,7 +1055,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 14 April 2026</td>
+<td class="center">Expires 18 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-11" class="published">11 October 2025</time>
+<time datetime="2025-10-15" class="published">15 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-14">14 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-18">18 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1142,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 18 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1957,12 +1957,15 @@ with no more than a monitoring period (<a href="#time" class="auto internal xref
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
-<p id="section-7.1-8">Senders that send a SCONE packet
+<p id="section-7.1-8">At the start of a flow, network elements are encouraged to update the rate
+signal of the first few SCONE packets it observes so that endpoints can obtain
+throughput advice early.<a href="#section-7.1-8" class="pilcrow">¶</a></p>
+<p id="section-7.1-9">Senders that send a SCONE packet
 or network elements that update SCONE packets
 every 20–30 seconds is likely sufficient to ensure that throughput advice is not lost.
 To reduce the risk of synchronization across multiple senders,
 which may cause network elements to miss updates,
-senders can include a small random delay.<a href="#section-7.1-8" class="pilcrow">¶</a></p>
+senders can include a small random delay.<a href="#section-7.1-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="monitoring">
@@ -2103,60 +2106,59 @@ different ranges of bitrates. This design allows for:<a href="#section-8-1" clas
         <h3 id="name-providing-opportunities-to-">
 <a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-providing-opportunities-to-" class="section-name selfRef">Providing Opportunities to Apply Throughput Advice Signals</a>
         </h3>
-<p id="section-8.1-1">Endpoints that wish to offer network elements the option to add throughout advice
+<p id="section-8.1-1">Endpoints that wish to offer network elements the option to add throughput advice
 signals can send SCONE packets at any time.  This is a decision that a sender
-makes when constructing datagrams. It is recommended that endpoints promptly
-send an initial SCONE packet once the peer confirms its willingness to receive
-them.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">Endpoints <span class="bcp14">MUST</span> send any SCONE packet they send as the first packet in a
-datagram, coalesced with additional packets. An endpoint that receives and
-discards a SCONE packet without also successfully processing another packet
-from the same datagram <span class="bcp14">SHOULD</span> ignore any throughput advice signal. Such a datagram
-might be entirely spoofed.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.1-3">Once negotiated,
-applications that seek to receive throughput advice on a flow
-<span class="bcp14">MUST</span> send a SCONE packet at least twice each monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.1-4">Sending SCONE packets more often might be necessary to:<a href="#section-8.1-4" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-8.1-5">
-          <dt id="section-8.1-5.1">Avoid missing advice:</dt>
-          <dd style="margin-left: 1.5em" id="section-8.1-5.2">
-            <p id="section-8.1-5.2.1">If SCONE packets are not sent, updated, and received
+makes when constructing datagrams.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">When sending SCONE packets, enpoints <span class="bcp14">MUST</span> include the SCONE packet as the first
+packet in a datagram, coalesced with additional packets.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.1-3">Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
+<span class="bcp14">SHOULD</span> include SCONE packets in the first few UDP datagrams that it sends. Doing
+so increases the likelihood of eliciting early throughput advice from network
+elements, allowing applications to apply that advice from the early stages of the
+data transfer.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.1-4">After that, endpoints that seek to receive throughput advice on a flow <span class="bcp14">MUST</span> send
+a SCONE packet at least twice each monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.1-5">Sending SCONE packets more often might be necessary to:<a href="#section-8.1-5" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-8.1-6">
+          <dt id="section-8.1-6.1">Avoid missing advice:</dt>
+          <dd style="margin-left: 1.5em" id="section-8.1-6.2">
+            <p id="section-8.1-6.2.1">If SCONE packets are not sent, updated, and received
 for an entire monitoring period,
-an application might incorrectly assume that no advice is being provided.<a href="#section-8.1-5.2.1" class="pilcrow">¶</a></p>
+an application might incorrectly assume that no advice is being provided.<a href="#section-8.1-6.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-8.1-5.3">Reduce latency:</dt>
-          <dd style="margin-left: 1.5em" id="section-8.1-5.4">
-            <p id="section-8.1-5.4.1">The time between SCONE packets determines the maximum delay
+<dt id="section-8.1-6.3">Reduce latency:</dt>
+          <dd style="margin-left: 1.5em" id="section-8.1-6.4">
+            <p id="section-8.1-6.4.1">The time between SCONE packets determines the maximum delay
 between changes in throughput advice
-and when that advice can be received and acted upon.<a href="#section-8.1-5.4.1" class="pilcrow">¶</a></p>
+and when that advice can be received and acted upon.<a href="#section-8.1-6.4.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-8.1-6">A sender can track the receipt of the coalesced QUIC packet
+<p id="section-8.1-7">A sender can track the receipt of the coalesced QUIC packet
 and send another SCONE packet when loss is detected.
-However, it is likely simpler to send SCONE packets more often.<a href="#section-8.1-6" class="pilcrow">¶</a></p>
-<p id="section-8.1-7">Sending a SCONE packet every 20–30 seconds
+However, it is likely simpler to send SCONE packets more often.<a href="#section-8.1-7" class="pilcrow">¶</a></p>
+<p id="section-8.1-8">Sending a SCONE packet every 20–30 seconds
 is likely sufficient to ensure that throughput advice is not lost,
 though endpoints might send a packet every few seconds
 to improve responsiveness.
 This period could be determined by how quickly an application
-is able to respond to a change in throughput advice.<a href="#section-8.1-7" class="pilcrow">¶</a></p>
-<p id="section-8.1-8">For example, a streaming application
+is able to respond to a change in throughput advice.<a href="#section-8.1-8" class="pilcrow">¶</a></p>
+<p id="section-8.1-9">For example, a streaming application
 that fetches video segments that are 5 seconds in length
 might send SCONE packets on a similar cadence.
 A real-time conferencing application might send more often.
 In either case, the length of the monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>)
-limits how fast any application can react.<a href="#section-8.1-8" class="pilcrow">¶</a></p>
-<p id="section-8.1-9">Though sending SCONE packets more than once each round trip time
+limits how fast any application can react.<a href="#section-8.1-9" class="pilcrow">¶</a></p>
+<p id="section-8.1-10">Though sending SCONE packets more than once each round trip time
 might help reduce exposure to packet loss,
 it is better to spread updates over time
-rather than to send multiple SCONE packets in less frequent bursts.<a href="#section-8.1-9" class="pilcrow">¶</a></p>
-<p id="section-8.1-10">The main cost associated with sending SCONE packets
+rather than to send multiple SCONE packets in less frequent bursts.<a href="#section-8.1-10" class="pilcrow">¶</a></p>
+<p id="section-8.1-11">The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
-for application data.<a href="#section-8.1-10" class="pilcrow">¶</a></p>
-<p id="section-8.1-11">A network element that wishes to signal an updated rate limit waits for the
-next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
+for application data.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
+<p id="section-8.1-12">A network element that wishes to signal an updated rate limit waits for the
+next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback">
