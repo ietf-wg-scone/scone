@@ -596,6 +596,10 @@ Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
 
+At the start of a flow, network elements are encouraged to update the rate
+signal of the first few SCONE packets it observes so that endpoints can obtain
+throughput advice early.
+
 Senders that send a SCONE packet
 or network elements that update SCONE packets
 every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
@@ -715,21 +719,21 @@ different ranges of bitrates. This design allows for:
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
 
-Endpoints that wish to offer network elements the option to add throughout advice
+Endpoints that wish to offer network elements the option to add throughput advice
 signals can send SCONE packets at any time.  This is a decision that a sender
-makes when constructing datagrams. It is recommended that endpoints promptly
-send an initial SCONE packet once the peer confirms its willingness to receive
-them.
+makes when constructing datagrams.
 
-Endpoints MUST send any SCONE packet they send as the first packet in a
-datagram, coalesced with additional packets. An endpoint that receives and
-discards a SCONE packet without also successfully processing another packet
-from the same datagram SHOULD ignore any throughput advice signal. Such a datagram
-might be entirely spoofed.
+When sending SCONE packets, enpoints MUST include the SCONE packet as the first
+packet in a datagram, coalesced with additional packets.
 
-Once negotiated,
-applications that seek to receive throughput advice on a flow
-MUST send a SCONE packet at least twice each monitoring period; see {{time}}.
+Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
+SHOULD include SCONE packets in the first few UDP datagrams that it sends. Doing
+so increases the likelihood of eliciting early throughput advice from network
+elements, allowing applications to apply that advice from the early stages of the
+data transfer.
+
+After that, endpoints that seek to receive throughput advice on a flow MUST send
+a SCONE packet at least twice each monitoring period; see {{time}}.
 
 Sending SCONE packets more often might be necessary to:
 
