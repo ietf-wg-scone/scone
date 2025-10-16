@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-14T01:36:16.522500+00:00",
+  "timestamp": "2025-10-16T01:38:28.472934+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1980,15 +1980,15 @@
       "id": "I_kwDON1dwo87Nv3LT",
       "title": "instant bitrate adaptation",
       "url": "https://github.com/ietf-wg-scone/scone/issues/68",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "One of the goals of SCONE is, if not the primary goal, is to improve user experience of video applications.\n\nFor optimal user experience, it'd be helpful to video applications if the \"correct\" achievable bitrate is provided the moment the connection is established.\n\nHowever, in #61, we added the following statement.\n> To that end, network elements MUST only update the content of datagrams on a given address tuple a few times each monitoring period. Network elements MAY update more often immediately after a change in their throughput advice, to reduce the reaction time from senders.\n\nIt means that the endpoints might not receive the correct bitrate advice until tens of seconds after the connection is established.\n\nAre we fine with that?\n\nIf not, I think we should do something along the lines of:\n* a) recommend network elements to update the first few SCONE packets on each flow, and/or\n* b) allow network elements always update SCONE packets on a flow that is known to use QUIC (e.g., UDP port 443 which is a well-known port).",
       "createdAt": "2025-09-25T04:47:42Z",
-      "updatedAt": "2025-09-25T10:48:49Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-15T21:57:06Z",
+      "closedAt": "2025-10-15T21:57:06Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2024,6 +2024,13 @@
           "body": "> If SCONE info is only attached to actual video segments, the player's guesstimate on the choice of the first segment won't have SCONE information.\n\nIn any of those applications, the reaction time means that advice received for one segment will likely only be actionable for the next segment anyway.  It would be rare for an application to be able to act so quickly.",
           "createdAt": "2025-09-25T10:48:49Z",
           "updatedAt": "2025-09-25T10:48:49Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": ">> If SCONE info is only attached to actual video segments, the player's guesstimate on the choice of the first segment won't have SCONE information.\n> \n> In any of those applications, the reaction time means that advice received for one segment will likely only be actionable for the next segment anyway. It would be rare for an application to be able to act so quickly.\n\nMaybe it depends on the deployment?\n\nIIUC, HLS clients fetch the media list first, then fetches the segments being listed. If the media list and the segments are located on the same server, attaching SCONE to packets no later than carrying the media list can help clients choose the appropriate bitrate from the very first segment.\n\nBut regardless, I think we agree with the direction of the PR.",
+          "createdAt": "2025-10-15T01:50:11Z",
+          "updatedAt": "2025-10-15T01:50:11Z"
         }
       ]
     },
@@ -2039,9 +2046,17 @@
       "labels": [],
       "body": "Current text uses the term \"network element\" but it does not define or describe the network elements. It appears that there are certain expectations from a network element -\n\n- It sits in the access network.\n- It has visibility to UDP 4-Tuple flow sand it maintains some sort of states about the rate the individual flows are using.\n- It has rate limiting policies or have access to it.\n- It can detect SCONE packets in those UDP 4-tuple flows and put rate advices in those packets.\n\nThis all I am infering from the text of this draft, but, I am not sure if everyone would endup infering the same.\n\nWhat I infer makes the \"network element\" a bit unique, that not any router or any device can operate the SCONE protocol. Hence, the document should clearly define this \"network element\".\n\nThis would also help other discussions regarding manageability and applicablity discussions over different access networks as it would help to understand what are those access network there we can have such network elements.  ",
       "createdAt": "2025-09-26T10:26:38Z",
-      "updatedAt": "2025-09-26T10:26:38Z",
+      "updatedAt": "2025-10-15T22:28:34Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "From the 15 October interim: this is a good point, and \"I'm not sure everyone would end up inferring the same\": I know that if I were asked to define \"network element\" as a terminology entry for a descriptive minimal architecture, I'd have a somewhat different definition.\n\nWe'll probably generate more vigorous discussion on this topic with a concrete PR (cf #70); could I ask you @zaheduzzaman  to phrase this in terms of a PR?",
+          "createdAt": "2025-10-15T22:28:34Z",
+          "updatedAt": "2025-10-15T22:28:34Z"
+        }
+      ]
     },
     {
       "number": 73,
@@ -2101,6 +2116,22 @@
           "updatedAt": "2025-10-10T15:29:46Z"
         }
       ]
+    },
+    {
+      "number": 75,
+      "id": "I_kwDON1dwo87RyyvR",
+      "title": "Is sending advice every 67 seconds too computationally expensive for network elements?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/75",
+      "state": "OPEN",
+      "author": "afrind",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "This discussion arose from #70 during the 10/15 interim.\n\nSome network elements are already deployed with relatively fixed capacity.  SCONE's current requirement is that in order to maintain a limited flow, the NE needs to mark packets every monitoring period.  @ihlar made some back of the envelope [computations](https://github.com/ietf-wg-scone/scone/pull/70#discussion_r2433930965) that make it seem like it's ok.  This is a placeholder issue we can revisit once we can measure the impact in production(like) requirements.",
+      "createdAt": "2025-10-15T22:23:11Z",
+      "updatedAt": "2025-10-15T22:23:11Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -7772,7 +7803,7 @@
       "labels": [],
       "body": "This is an example of what changes might be needed to make advice \"sticky\" or \"set it and forget it\".",
       "createdAt": "2025-09-29T16:36:52Z",
-      "updatedAt": "2025-10-13T09:29:18Z",
+      "updatedAt": "2025-10-15T21:00:06Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
@@ -7910,6 +7941,46 @@
               "updatedAt": "2025-10-13T09:29:18Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87HMJfI",
+          "commit": {
+            "abbreviatedOid": "5ebe0c1"
+          },
+          "author": "irfan-ali-ia",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T18:58:21Z",
+          "updatedAt": "2025-10-15T18:58:21Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "in main use-case that we are investigation with service providers for SCONE for video-flow rate-limiting/rate-advice, is based on subscription and these subscriptions do not change often as I previously stated. Will be interested in understanding other use-case that you have in mind where rate advice changes on minutes basis (and which is ont congestion related). \r\nWhile we do not have data on impacts on minutes based update of SCONE header (and we are in internal design discussion) UPF is doing lots of activities and there are several flows that will require the SCONE treatment. Hence, the more we can streamline the better.",
+              "createdAt": "2025-10-15T18:58:21Z",
+              "updatedAt": "2025-10-15T18:58:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87HNsWT",
+          "commit": {
+            "abbreviatedOid": "5ebe0c1"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-15T21:00:06Z",
+          "updatedAt": "2025-10-15T21:00:06Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "Subscription policies drive this work, I agree. But these policies do not need to be completely static, for instance, they might depend on network or subscriber state. A simple example would be handovers between RAT types. Other examples could involve policies associated with geographical areas (e.g., TACs), either through static configuration or estimates of network load.\r\n\r\nI agree that it\u2019s good to have a streamlined protocol, and in my opinion, the current design is already very efficient.\r\nLet\u2019s take an example of a network element enforcing a 5 Mb/s rate, assuming the endpoint precisely follows that rate.\r\nThat\u2019s roughly 41.9 MB per 67-second window. With a maximum packet size of 1,400 bytes, that corresponds to at least 29,910 packets. A network element that sends two signals per window needs to update around 0.007 % of the packets in a window. Considering how little work is required per update*, I would argue that the cost is effectively negligible.\r\n\r\n*Read a single 64-bit value from the UDP payload into a register, perform a few bit operations, and apply an incremental checksum update.",
+              "createdAt": "2025-10-15T21:00:06Z",
+              "updatedAt": "2025-10-15T21:00:06Z"
+            }
+          ]
         }
       ]
     },
@@ -7918,24 +7989,26 @@
       "id": "PR_kwDON1dwo86rOGGl",
       "title": "instant bitrate adaptation",
       "url": "https://github.com/ietf-wg-scone/scone/pull/71",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As discussed in #68, it would be helpful to the applications if the bitrate advice is available right after the handshake.\r\n\r\nTo achieve that, this pull request encourages endpoints to send a small number of SCONE packets ASAP and network elements to update them.\r\n\r\nFor the advice to endpoints, I've removed redundant text that existed elsewhere (namely section 5 and 5.3), adopting MUST from the sentence removed.\r\n\r\nFor the advice to network elements, I avoided use of RFC2119 verbs, following the previous paragraph.\r\n\r\nCloses #68.",
       "createdAt": "2025-09-30T01:48:53Z",
-      "updatedAt": "2025-10-07T18:19:46Z",
+      "updatedAt": "2025-10-15T21:57:05Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
       "headRepository": "kazuho/i-d-trone",
       "headRefName": "kazuho/instant-rate-adaptation",
       "headRefOid": "27ea3b09380c2f78b15c23729c71f4e94d95cd2e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-15T21:57:05Z",
+      "mergedAt": "2025-10-15T21:57:05Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd"
+      },
       "comments": [
         {
           "author": "kazuho",
@@ -7977,6 +8050,19 @@
           "body": "I like the current text. Basically:\r\n\r\n1- When sending SCONE packets, endpoints MUST send them as the first coalesced packet in the UDP payload.\r\n\r\n2- Endpoints SHOULD send SCONE packets often enough -- unless they want to send them more often than that for some reason. Or less often. Basically their choice, because it is a trade off between overhead of SCONE and risks of not getting rate advice soon enough.",
           "createdAt": "2025-10-07T18:19:46Z",
           "updatedAt": "2025-10-07T18:19:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87HDd8h",
+          "commit": {
+            "abbreviatedOid": "27ea3b0"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-15T10:15:33Z",
+          "updatedAt": "2025-10-15T10:15:33Z",
           "comments": []
         }
       ]
