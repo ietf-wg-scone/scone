@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T01:38:28.472934+00:00",
+  "timestamp": "2025-10-19T01:47:49.981023+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2046,7 +2046,7 @@
       "labels": [],
       "body": "Current text uses the term \"network element\" but it does not define or describe the network elements. It appears that there are certain expectations from a network element -\n\n- It sits in the access network.\n- It has visibility to UDP 4-Tuple flow sand it maintains some sort of states about the rate the individual flows are using.\n- It has rate limiting policies or have access to it.\n- It can detect SCONE packets in those UDP 4-tuple flows and put rate advices in those packets.\n\nThis all I am infering from the text of this draft, but, I am not sure if everyone would endup infering the same.\n\nWhat I infer makes the \"network element\" a bit unique, that not any router or any device can operate the SCONE protocol. Hence, the document should clearly define this \"network element\".\n\nThis would also help other discussions regarding manageability and applicablity discussions over different access networks as it would help to understand what are those access network there we can have such network elements.  ",
       "createdAt": "2025-09-26T10:26:38Z",
-      "updatedAt": "2025-10-15T22:28:34Z",
+      "updatedAt": "2025-10-16T11:27:00Z",
       "closedAt": null,
       "comments": [
         {
@@ -2055,6 +2055,41 @@
           "body": "From the 15 October interim: this is a good point, and \"I'm not sure everyone would end up inferring the same\": I know that if I were asked to define \"network element\" as a terminology entry for a descriptive minimal architecture, I'd have a somewhat different definition.\n\nWe'll probably generate more vigorous discussion on this topic with a concrete PR (cf #70); could I ask you @zaheduzzaman  to phrase this in terms of a PR?",
           "createdAt": "2025-10-15T22:28:34Z",
           "updatedAt": "2025-10-15T22:28:34Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "I read \"network element\" as a device that passes IP packets. A network element may or may not participate in the SCONE protocol - I don\u0344't see any expectation that all network elements would participate in SCONE.\n\nSo I'd make the first bullet the definition of \"network element\" and make the 3 next bullets form a definition of requirements on elements that can participate in SCONE (\"network element with SCONE\"?)",
+          "createdAt": "2025-10-16T06:21:05Z",
+          "updatedAt": "2025-10-16T06:21:05Z"
+        },
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "+1 to @alvestrand -- I think what we want to define is a \"SCONE network element\", which I've always assumed to be a device that...\n\n1. can modify passing UDP packets to write throughput advice where requested (this is a necessary consequence of the protocol's design)...\n2. has knowledge of the limitations that can/will be applied to those packets exceeding the advertised throughput by an unspecified margin (this is a necessary consequence of the protocol's deployment, cf. \"credible threat of network violence\").\n\nWhile the economics of access network, the bandwidth/aggregation requirements implicit to point 1, and the policy environment implicit to point 2 will tend to drive deployment of SCONE network elements there, IMO \"sits in an access network\" is not a necessary part of the \"SCONE network element\" definition.",
+          "createdAt": "2025-10-16T09:23:42Z",
+          "updatedAt": "2025-10-16T09:23:42Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "I think the text would benefit from a careful review of the use of \"Network Element\" (which is generic, aka router, etc) and a \"SCONE Network Element\". In doing that, please also look to  Section 7: where,  I think it would be clearer if the text explained this in terms of a SCONE-capable network element, rather than potentially introducing confusion around other network elements that do not have SCONE configured.",
+          "createdAt": "2025-10-16T09:47:03Z",
+          "updatedAt": "2025-10-16T09:47:03Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "In a similar observation, the text /not supported by network elements on the path/\nseems to me to be not quite correct. One or more network elements *COULD* support this, but not have a configured throughput advice (or could potentially have missed the opportunity to provide throughput advice - e.g., under over-load or a transient change in forwarding behaviour/path). Can we explain a tiny bit more?",
+          "createdAt": "2025-10-16T09:54:44Z",
+          "updatedAt": "2025-10-16T09:54:44Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "Ok, I will try to create a PR.\r\n\r\n// Zahed\r\nOn Thu, Oct 16, 2025 at 00:28 Brian Trammell ***@***.***>\r\nwrote:\r\n\r\n> *britram* left a comment (ietf-wg-scone/scone#69)\r\n> <https://github.com/ietf-wg-scone/scone/issues/69#issuecomment-3408529173>\r\n>\r\n> From the 15 October interim: this is a good point, and \"I'm not sure\r\n> everyone would end up inferring the same\": I know that if I were asked to\r\n> define \"network element\" as a terminology entry for a descriptive minimal\r\n> architecture, I'd have a somewhat different definition.\r\n>\r\n> We'll probably generate more vigorous discussion on this topic with a\r\n> concrete PR (cf #70 <https://github.com/ietf-wg-scone/scone/pull/70>);\r\n> could I ask you @zaheduzzaman <https://github.com/zaheduzzaman> to phrase\r\n> this in terms of a PR?\r\n>\r\n> \u2014\r\n> Reply to this email directly, view it on GitHub\r\n> <https://github.com/ietf-wg-scone/scone/issues/69#issuecomment-3408529173>,\r\n> or unsubscribe\r\n> <https://github.com/notifications/unsubscribe-auth/ABMTKZEJSISLAZMS7M6QX2L3X3DCPAVCNFSM6AAAAACHSMCNK2VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZTIMBYGUZDSMJXGM>\r\n> .\r\n> You are receiving this because you were mentioned.Message ID:\r\n> ***@***.***>\r\n>\r\n",
+          "createdAt": "2025-10-16T11:27:00Z",
+          "updatedAt": "2025-10-16T11:27:00Z"
         }
       ]
     },
@@ -2129,7 +2164,71 @@
       "labels": [],
       "body": "This discussion arose from #70 during the 10/15 interim.\n\nSome network elements are already deployed with relatively fixed capacity.  SCONE's current requirement is that in order to maintain a limited flow, the NE needs to mark packets every monitoring period.  @ihlar made some back of the envelope [computations](https://github.com/ietf-wg-scone/scone/pull/70#discussion_r2433930965) that make it seem like it's ok.  This is a placeholder issue we can revisit once we can measure the impact in production(like) requirements.",
       "createdAt": "2025-10-15T22:23:11Z",
-      "updatedAt": "2025-10-15T22:23:11Z",
+      "updatedAt": "2025-10-17T15:31:56Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As @ihlar noted in that issue, this is pretty cheap.\n\nI did a rough implementation of the core function in rust, which you can see [here on the compiler explorer](https://rust.godbolt.org/z/rh385f49v).  In that approach, every packet you pass will cost 14 instructions (which should all be low latency).  Updating costs 6 more.  To put it in perspective, in software, the additional check adds 28ns on a very low-end CPU, the update will like cause a pipeline stall, but those are still only a few tens of nanoseconds.",
+          "createdAt": "2025-10-17T15:31:56Z",
+          "updatedAt": "2025-10-17T15:31:56Z"
+        }
+      ]
+    },
+    {
+      "number": 76,
+      "id": "I_kwDON1dwo87R4D_c",
+      "title": "Please consider adding one more sentence to Section 7.",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/76",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I agree, but it seems like this doesn't quite explain what I hoped.\n/This could result in a sender falsely  believing that no network element applied a throughput advice signal./\n-An extra sentence would be helpful to say that such a sender proceeds in the usual way, as if it had not sent a SCONE packet.",
+      "createdAt": "2025-10-16T09:49:07Z",
+      "updatedAt": "2025-10-16T09:53:01Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "Similarly,  I think I may understand the text: /that are not suited to congestion control feedback/, but I feel there is potential to misinterpret this clause, can the I-D please explain more... to avoid implying that CC is unsuitable, but perhaps that this is not the same information.",
+          "createdAt": "2025-10-16T09:53:01Z",
+          "updatedAt": "2025-10-16T09:53:01Z"
+        }
+      ]
+    },
+    {
+      "number": 77,
+      "id": "I_kwDON1dwo87R4FrJ",
+      "title": "Can we clarify \"Access Networks\" as an example?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/77",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Access network are mentioned in various places, e.g., in the text: /Network elements in access networks/, I'd personally see access networks as a good example, but that they are not the only place where SCONE could be done.",
+      "createdAt": "2025-10-16T09:51:12Z",
+      "updatedAt": "2025-10-16T09:51:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 78,
+      "id": "I_kwDON1dwo87R4L-Y",
+      "title": "Rate limit v. advice :-)",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/78",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I think both the current protocol spec and the candidate for the applicability I-D, assert that the scope is a network that has a policy that \"limits\" suggesting this is intentional, rather than experienced. To me, at least as an individual, this is important. There are cases where I expect the rate is actually applied as a policy, but  also I see places where the rate might be a result of other system/propagation constraints. In both cases, the rate becomes limited, and is still experienced. I suggest we could be more careful about how we present this in both drafts. Please see examples below:\n\n/Many access networks apply rate limits to constrain the data rate of attached devices./\n\n/Having the network indicate what its rate limiting policy is, in a\n   way that is accessible to endpoints, allows applications to use this\n   information when adapting their send rate./\n- I'd agree, but we could also articulate a case where there is knowledge of the upper rate and simply communicate this advice to the endpoints.\n\nI think this could use better words:\n/throughput that is different from the signaled rate limit/\n- The signalled throughput advice? or rate signal?\n/element that indicates a rate limit/\n- The signalled throughput advice? or rate signal?\n\nShouldn't 3.2 also provide an example of sharing, where capacity aka rate becomes shared with other flows?  and with cross-traffic?\n\n/prove that the throughput that is  indicated/\n- The *signalled throughput advice*?\n\n/data flowing in the same scope/\n- what is the word scope here?\n\n/network element detects a flow using more bandwidth/\n- Is that capacity? (or just for consistency here it could be perhaps even mention throughput?)\n\n5.1 Is a rate signal the same as a throughput guidance, please just explain.\n\n/indicating no rate limit is in place/\n- I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice? \n",
+      "createdAt": "2025-10-16T09:59:33Z",
+      "updatedAt": "2025-10-16T09:59:33Z",
       "closedAt": null,
       "comments": []
     }
