@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 23 March 2026                              Private Octopus Inc.
+Expires: 23 April 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       19 September 2025
+                                                         20 October 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 March 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -103,6 +103,7 @@ Table of Contents
      8.3.  Interactions with Congestion Control
    9.  Security Considerations
      9.1.  Flooding intermediaries with fake packets
+     9.2.  Damage to Other Protocols
    10. Privacy Considerations
      10.1.  Passive Attacks
      10.2.  Active Attacks
@@ -181,10 +182,12 @@ Table of Contents
    indicated version, process the QUIC packet, and then record the
    indicated rate.
 
-   Indicated rate limits apply only in a single direction.  Separate
-   indications can be sent for the client-to-server direction and
-   server-to-client direction.  The indicated rates do not need to be
-   the same.
+   Throughput advice in each direction -- the client-to-server direction
+   and the server-to-client direction -- are independent.  It is
+   expected that these rates will differ for multiple reasons, which
+   include asymmetry of link capacity and path diversity.  Applications
+   may choose to enable SCONE signals in either or both directions as
+   they see fit.
 
    Indicated rate limits only apply to the path on which they are
    received.  A connection that migrates or uses multipath [QUIC-MP]
@@ -363,9 +366,11 @@ Table of Contents
    case for packets with a short header (Section 5.2 of [INVARIANTS]),
    the Source Connection ID field is empty.
 
-   SCONE packets SHOULD be included as the first packet in a datagram.
-   This is necessary in many cases for QUIC versions 1 and 2 because
-   packets with a short header cannot precede any other packets.
+   SCONE packets MUST be included as the first packet in a datagram.
+   This is primarily to simplify the process of updating throughput
+   advice in network elements.  This is also necessary in many cases for
+   QUIC versions 1 and 2 because packets with a short header cannot
+   precede any other packets.
 
 5.1.  Rate Signals
 
@@ -373,11 +378,12 @@ Table of Contents
    are the Rate Signal High Bits, and the least significant bit is the
    most significant bit of the Version field.
 
-   When sent by a QUIC endpoint, the Rate Signal is set to 127, to
-   indicate that no rate limit is in place or that the SCONE protocol is
-   not supported by network elements on the path.  All other values (0
-   through 126) represent the ceiling of rates advised by the network
-   element(s) on the path.
+   When sent by a QUIC endpoint, the Rate Signal is set to 127.
+   Receiving a value of 127 indicates that throughput advice is unknown,
+   either because network elements on the path are not providing advice
+   or they do not support SCONE.  All other values (0 through 126)
+   represent the ceiling of rates advised by the network element(s) on
+   the path.
 
    The rate limits follow a logarithmic scale defined as:
 
@@ -428,7 +434,7 @@ Table of Contents
                        +------------+-------------+
                        | 199.5 Gbps | 126         |
                        +------------+-------------+
-                       | No limit   | 127         |
+                       | Unknown    | 127         |
                        +------------+-------------+
 
                            Table 1: Examples of
@@ -478,6 +484,8 @@ Table of Contents
    discarded, along with any packets that come after it in the same
    datagram, if the Source Connection ID is not consistent with those
    coalesced packets, as specified in Section 5.
+
+   A SCONE packet is discarded if the rate signal is unknown (127).
 
    A SCONE packet MUST be discarded if the Destination Connection ID
    does not match one recognized by the receiving endpoint.
@@ -605,8 +613,9 @@ Table of Contents
    has a QUIC long header and one of the SCONE protocol versions
    (0x6f7dc0fd or 0xef7dc0fd).
 
-   A network element then conditionally replaces the Version field and
-   the Rate Signal field with values of its choosing.
+   A network element then conditionally replaces the most significant
+   bit of the Version field and the Rate Signal High Bits field with
+   values of its choosing.
 
    A network element might receive a packet that already includes a rate
    signal.  The network element replaces the rate signal if it wishes to
@@ -615,22 +624,17 @@ Table of Contents
    lower policy.
 
    The following pseudocode indicates how a network element might detect
-   a SCONE packet and replace an existing rate signal, given throughput
-   advice (target_throughput).
+   a SCONE packet and replace the existing rate signal (packet_signal)
+   with a new rate signal (target_signal) that encodes the throughput
+   advice of this network element.
 
    is_long = packet[0] & 0x80 == 0x80
    packet_version = ntohl(packet[1..5])
-   if is_long and (packet_version == SCONE1_VERSION or
-                   packet_version == SCONE2_VERSION):
-     packet_throughput = \
-       signal_to_throughput(packet[0] & 0x3f, packet_version)
-
-     if target_throughput < packet_throughput:
-       target_signal, target_version = \
-         throughput_to_signal(target_throughput)
-       packet[0] = packet[0] & 0xc0 | target_signal
-       if target_version != packet_version:
-         packet[1..5] = htonl(target_version)
+   if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
+     packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
+     if target_signal < packet_signal:
+       packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)
+       packet[1] = (packet[1] & 0x7f) | (target_signal << 7)
 
    Once the throughput advice signal is updated, the network element
    updates the UDP checksum for the datagram.
@@ -640,6 +644,10 @@ Table of Contents
    update.  Because this depends on the availability of SCONE packets
    and packet loss can cause signals to be missed, network elements
    might need to update more often.
+
+   At the start of a flow, network elements are encouraged to update the
+   rate signal of the first few SCONE packets it observes so that
+   endpoints can obtain throughput advice early.
 
    Senders that send a SCONE packet or network elements that update
    SCONE packets every 20–30 seconds is likely sufficient to ensure that
@@ -661,10 +669,16 @@ Table of Contents
    period (67s) or using a higher rate than is signaled is possible.
 
    To operate this algorithm, the minimal state a network element
-   maintains is: * the current rate limit, * any state necessary to
-   monitor throughput (that is, throughput usage state, such as the
-   state in Appendix A), * a timer used for rate increases, and * the
-   time at which that rate limit was last updated,
+   maintains is:
+
+   *  the current rate limit,
+
+   *  any state necessary to monitor throughput (that is, throughput
+      usage state, such as the state in Appendix A),
+
+   *  a timer used for rate increases, and
+
+   *  the time at which that rate limit was last updated.
 
    When advice is set or updated, the network element waits until it
    receives the next SCONE packet on affected flows.  It then updates
@@ -741,20 +755,22 @@ Table of Contents
 8.1.  Providing Opportunities to Apply Throughput Advice Signals
 
    Endpoints that wish to offer network elements the option to add
-   throughout advice signals can send SCONE packets at any time.  This
-   is a decision that a sender makes when constructing datagrams.  It is
-   recommended that endpoints promptly send an initial SCONE packet once
-   the peer confirms its willingness to receive them.
+   throughput advice signals can send SCONE packets at any time.  This
+   is a decision that a sender makes when constructing datagrams.
 
-   Endpoints MUST send any SCONE packet they send as the first packet in
-   a datagram, coalesced with additional packets.  An endpoint that
-   receives and discards a SCONE packet without also successfully
-   processing another packet from the same datagram SHOULD ignore any
-   throughput advice signal.  Such a datagram might be entirely spoofed.
+   When sending SCONE packets, enpoints MUST include the SCONE packet as
+   the first packet in a datagram, coalesced with additional packets.
 
-   Once negotiated, applications that seek to receive throughput advice
-   on a flow MUST send a SCONE packet at least twice each monitoring
-   period; see Section 5.2.
+   Upon confirmation that the peer is willing to receive SCONE packets,
+   an endpoint SHOULD include SCONE packets in the first few UDP
+   datagrams that it sends.  Doing so increases the likelihood of
+   eliciting early throughput advice from network elements, allowing
+   applications to apply that advice from the early stages of the data
+   transfer.
+
+   After that, endpoints that seek to receive throughput advice on a
+   flow MUST send a SCONE packet at least twice each monitoring period;
+   see Section 5.2.
 
    Sending SCONE packets more often might be necessary to:
 
@@ -914,6 +930,28 @@ Table of Contents
    might pick connection identifiers of arbitrary length.  Network
    elements can mitigate these attacks with implementations that fully
    conform to the specification of Section 5.
+
+9.2.  Damage to Other Protocols
+
+   Network elements that update SCONE packet fields might do that for
+   datagrams exchanged in other protocols.  This could result in damage
+   to those protocols.
+
+   The most serious damage occurs when every datagram is modified,
+   because that could mean that the protocol is effectively unable to
+   operate end-to-end.
+
+   To that end, network elements MUST only update the content of
+   datagrams on a given address tuple a few times each monitoring
+   period.  Network elements MAY update more often immediately after a
+   change in their throughput advice, to reduce the reaction time from
+   senders.
+
+   In addition, some heuristics might be used to detect SCONE-compatible
+   QUIC flows.  This includes identification of a QUIC handshake on the
+   flow, the presence of indications (Section 6.1), or other heuristics.
+   If these heuristics indicate a non-QUIC flow, the safest option is
+   for network elements to disable updating of datagrams.
 
 10.  Privacy Considerations
 
@@ -1108,10 +1146,11 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc8216>.
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
-              C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-16,
-              21 August 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-16>.
+              C., and M. Kühlewind, "Managing multiple paths for a QUIC
+              connection", Work in Progress, Internet-Draft, draft-ietf-
+              quic-multipath-17, 20 October 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              multipath-17>.
 
    [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
               Translation (NAT) Behavioral Requirements for Unicast
