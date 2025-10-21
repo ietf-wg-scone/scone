@@ -723,7 +723,7 @@ Endpoints that wish to offer network elements the option to add throughput advic
 signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams.
 
-When sending SCONE packets, enpoints MUST include the SCONE packet as the first
+When sending SCONE packets, endpoints MUST include the SCONE packet as the first
 packet in a datagram, coalesced with additional packets.
 
 Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
@@ -1013,7 +1013,7 @@ signals when they are aware of the use of a VPN or proxy.
 
 # IANA Considerations {#iana}
 
-This document registers a new QUIC version ({{iana-version}}) and a QUIC
+This document registers new QUIC versions ({{iana-version}}) and a QUIC
 transport parameter ({{iana-tp}}).
 
 
