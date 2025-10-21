@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-19T01:47:49.981023+00:00",
+  "timestamp": "2025-10-21T01:40:01.463549+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2228,9 +2228,17 @@
       "labels": [],
       "body": "I think both the current protocol spec and the candidate for the applicability I-D, assert that the scope is a network that has a policy that \"limits\" suggesting this is intentional, rather than experienced. To me, at least as an individual, this is important. There are cases where I expect the rate is actually applied as a policy, but  also I see places where the rate might be a result of other system/propagation constraints. In both cases, the rate becomes limited, and is still experienced. I suggest we could be more careful about how we present this in both drafts. Please see examples below:\n\n/Many access networks apply rate limits to constrain the data rate of attached devices./\n\n/Having the network indicate what its rate limiting policy is, in a\n   way that is accessible to endpoints, allows applications to use this\n   information when adapting their send rate./\n- I'd agree, but we could also articulate a case where there is knowledge of the upper rate and simply communicate this advice to the endpoints.\n\nI think this could use better words:\n/throughput that is different from the signaled rate limit/\n- The signalled throughput advice? or rate signal?\n/element that indicates a rate limit/\n- The signalled throughput advice? or rate signal?\n\nShouldn't 3.2 also provide an example of sharing, where capacity aka rate becomes shared with other flows?  and with cross-traffic?\n\n/prove that the throughput that is  indicated/\n- The *signalled throughput advice*?\n\n/data flowing in the same scope/\n- what is the word scope here?\n\n/network element detects a flow using more bandwidth/\n- Is that capacity? (or just for consistency here it could be perhaps even mention throughput?)\n\n5.1 Is a rate signal the same as a throughput guidance, please just explain.\n\n/indicating no rate limit is in place/\n- I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice? \n",
       "createdAt": "2025-10-16T09:59:33Z",
-      "updatedAt": "2025-10-16T09:59:33Z",
+      "updatedAt": "2025-10-20T15:46:06Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "wesley-eddy",
+          "authorAssociation": "NONE",
+          "body": "> /indicating no rate limit is in place/\n> \n> * I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice?\n\nI agree; this should be more like \"indicating that no specific advice is provided\", or something like that.",
+          "createdAt": "2025-10-20T15:46:06Z",
+          "updatedAt": "2025-10-20T15:46:06Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -8283,6 +8291,110 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 79,
+      "id": "PR_kwDON1dwo86uvOWo",
+      "title": "Fix typo",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/79",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-21T00:49:25Z",
+      "updatedAt": "2025-10-21T00:49:25Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "typo",
+      "headRefOid": "759815961a3123b007d209284fee36b1f55302a8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 80,
+      "id": "PR_kwDON1dwo86uvScp",
+      "title": "Cleanup fake packets section",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/80",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This just trims some text and fixes grammar.",
+      "createdAt": "2025-10-21T01:01:49Z",
+      "updatedAt": "2025-10-21T01:01:50Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "cleanup-fake",
+      "headRefOid": "15e627d016bc440556d9b12a01a481d9a149dc4e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 81,
+      "id": "PR_kwDON1dwo86uvXXW",
+      "title": "Reword to emphasize \"advice\"",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/81",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This takes the suggestions @gorryfair made and does a little extra rewording of surrounding text to make it clearer that this is just advice.\r\n\r\nCloses #78.",
+      "createdAt": "2025-10-21T01:17:21Z",
+      "updatedAt": "2025-10-21T01:17:21Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "limit-advice",
+      "headRefOid": "6e979de28bc93f987a924d0dba3c476cb168cca4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 82,
+      "id": "PR_kwDON1dwo86uvboO",
+      "title": "Attempt to make status of advice clearer",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/82",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #76.",
+      "createdAt": "2025-10-21T01:32:17Z",
+      "updatedAt": "2025-10-21T01:32:18Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "issue76",
+      "headRefOid": "44b735696c4fae7d7795f8af41c8a7eb040ac2c1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
