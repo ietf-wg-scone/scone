@@ -860,29 +860,27 @@ Similarly, if there is a strong need to ensure that a rate limit is respected,
 network elements cannot assume that the signaled limit will be respected by
 endpoints.
 
-## Flooding intermediaries with fake packets
+## Fake SCONE Packets
 
-Attackers that can inject packets may compose arbitrary "SCONE-like" packets
+Attackers that can inject packets could compose arbitrary "SCONE-like" packets
 by selecting a pair of IP addresses and ports, an arbitrary rate signal, a
 valid SCONE version number, an arbitrary "destination
-connection ID", and an arbitrary "source connection ID". The SCONE packet
-will carry these information. A coalesced "1RTT" packet will start with
+connection ID", and an arbitrary "source connection ID".
+A coalesced "1RTT" packet will start with
 a plausible first octet, and continue with the selected destination connection
 ID followed by a sufficiently long series of random bytes, mimicking the
 content of an encrypted packets.
 
-The injected packets will travel towards the destination.
-The final destination will reject such packets because the destination ID
-is invalid or because decryption fail, but network elements cannot do these checks,
-and will have to process the packets. All the network elements between the injection
-point and the destination will have to process these packets.
+Endpoints will reject such packets because they do not contain valid QUIC packets,
+but network elements cannot detect this.
+All the network elements between the injection point and the destination
+will have to process these packets.
 
 Attackers could send a high volume of these "fake" SCONE packets in
 a denial of service (DOS) attempt against network elements. The attack will
 force the intermediaries to process the fake packets. If network elements
-are keeping state for ongoing SCONE flows, the attack can cause the
-excessive allocation of memory resource. The mitigation there
-will be the same as mitigation of other distributed DOS attacks: limit
+are keeping state for ongoing SCONE flows, this might exhaust memory resources.
+The mitigation is the same as for other distributed DOS attacks: limit
 the rate of SCONE packets that a network element is willing to process;
 possibly, implement logic to distinguish valid SCONE packets from
 fake packets; or, use generic protection against Distributed DOS attacks.
@@ -890,7 +888,7 @@ fake packets; or, use generic protection against Distributed DOS attacks.
 Attackers could also try to craft the fake SCONE packets in ways that trigger
 a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
-with implementations that fully conform to the specification of {{packet}}.
+with implementations that fully conforms to the specification of {{packet}}.
 
 ## Damage to Other Protocols
 
