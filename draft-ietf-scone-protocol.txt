@@ -758,8 +758,8 @@ Table of Contents
    throughput advice signals can send SCONE packets at any time.  This
    is a decision that a sender makes when constructing datagrams.
 
-   When sending SCONE packets, enpoints MUST include the SCONE packet as
-   the first packet in a datagram, coalesced with additional packets.
+   When sending SCONE packets, endpoints MUST include the SCONE packet
+   as the first packet in a datagram, coalesced with additional packets.
 
    Upon confirmation that the peer is willing to receive SCONE packets,
    an endpoint SHOULD include SCONE packets in the first few UDP
@@ -1049,7 +1049,7 @@ Table of Contents
 
 11.  IANA Considerations
 
-   This document registers a new QUIC version (Section 11.1) and a QUIC
+   This document registers new QUIC versions (Section 11.1) and a QUIC
    transport parameter (Section 11.2).
 
 11.1.  SCONE Versions
