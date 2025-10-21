@@ -869,7 +869,7 @@ connection ID", and an arbitrary "source connection ID".
 A coalesced "1RTT" packet will start with
 a plausible first octet, and continue with the selected destination connection
 ID followed by a sufficiently long series of random bytes, mimicking the
-content of an encrypted packets.
+content of an encrypted packet.
 
 Endpoints will reject such packets because they do not contain valid QUIC packets,
 but network elements cannot detect this.
