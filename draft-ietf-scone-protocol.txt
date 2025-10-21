@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 18 April 2026                              Private Octopus Inc.
+Expires: 24 April 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         15 October 2025
+                                                         21 October 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 April 2026.
+   This Internet-Draft will expire on 24 April 2026.
 
 Copyright Notice
 
@@ -102,7 +102,7 @@ Table of Contents
      8.2.  Feedback To Sender About Signals
      8.3.  Interactions with Congestion Control
    9.  Security Considerations
-     9.1.  Flooding intermediaries with fake packets
+     9.1.  Fake SCONE Packets
      9.2.  Damage to Other Protocols
    10. Privacy Considerations
      10.1.  Passive Attacks
@@ -896,40 +896,37 @@ Table of Contents
    respected, network elements cannot assume that the signaled limit
    will be respected by endpoints.
 
-9.1.  Flooding intermediaries with fake packets
+9.1.  Fake SCONE Packets
 
-   Attackers that can inject packets may compose arbitrary "SCONE-like"
-   packets by selecting a pair of IP addresses and ports, an arbitrary
-   rate signal, a valid SCONE version number, an arbitrary "destination
-   connection ID", and an arbitrary "source connection ID".  The SCONE
-   packet will carry these information.  A coalesced "1RTT" packet will
-   start with a plausible first octet, and continue with the selected
-   destination connection ID followed by a sufficiently long series of
-   random bytes, mimicking the content of an encrypted packets.
+   Attackers that can inject packets could compose arbitrary "SCONE-
+   like" packets by selecting a pair of IP addresses and ports, an
+   arbitrary rate signal, a valid SCONE version number, an arbitrary
+   "destination connection ID", and an arbitrary "source connection ID".
+   A coalesced "1RTT" packet will start with a plausible first octet,
+   and continue with the selected destination connection ID followed by
+   a sufficiently long series of random bytes, mimicking the content of
+   an encrypted packet.
 
-   The injected packets will travel towards the destination.  The final
-   destination will reject such packets because the destination ID is
-   invalid or because decryption fail, but network elements cannot do
-   these checks, and will have to process the packets.  All the network
-   elements between the injection point and the destination will have to
-   process these packets.
+   Endpoints will reject such packets because they do not contain valid
+   QUIC packets, but network elements cannot detect this.  All the
+   network elements between the injection point and the destination will
+   have to process these packets.
 
    Attackers could send a high volume of these "fake" SCONE packets in a
    denial of service (DOS) attempt against network elements.  The attack
    will force the intermediaries to process the fake packets.  If
-   network elements are keeping state for ongoing SCONE flows, the
-   attack can cause the excessive allocation of memory resource.  The
-   mitigation there will be the same as mitigation of other distributed
-   DOS attacks: limit the rate of SCONE packets that a network element
-   is willing to process; possibly, implement logic to distinguish valid
-   SCONE packets from fake packets; or, use generic protection against
-   Distributed DOS attacks.
+   network elements are keeping state for ongoing SCONE flows, this
+   might exhaust memory resources.  The mitigation is the same as for
+   other distributed DOS attacks: limit the rate of SCONE packets that a
+   network element is willing to process; possibly, implement logic to
+   distinguish valid SCONE packets from fake packets; or, use generic
+   protection against Distributed DOS attacks.
 
    Attackers could also try to craft the fake SCONE packets in ways that
    trigger a processing error at network elements.  For example, they
    might pick connection identifiers of arbitrary length.  Network
    elements can mitigate these attacks with implementations that fully
-   conform to the specification of Section 5.
+   conforms to the specification of Section 5.
 
 9.2.  Damage to Other Protocols
 
@@ -1146,10 +1143,11 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc8216>.
 
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
-              C., and M. Kühlewind, "Multipath Extension for QUIC", Work
-              in Progress, Internet-Draft, draft-ietf-quic-multipath-16,
-              21 August 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-quic-multipath-16>.
+              C., and M. Kühlewind, "Managing multiple paths for a QUIC
+              connection", Work in Progress, Internet-Draft, draft-ietf-
+              quic-multipath-17, 20 October 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              multipath-17>.
 
    [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
               Translation (NAT) Behavioral Requirements for Unicast

@@ -15,23 +15,22 @@
 can give endpoints their perspective on what the maximum achievable
 throughput might be for QUIC flows. 
     " name="description">
-<meta content="xml2rfc 3.30.2" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="locomotive" name="keyword">
 <meta content="pastry" name="keyword">
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.30.2
-    Python 3.12.11
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.1
-    platformdirs 4.4.0
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.5
-    setuptools 80.9.0
     wcwidth 0.2.14
 -->
 <link href="draft-ietf-scone-protocol.xml" rel="alternate" type="application/rfc+xml">
@@ -1055,7 +1054,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 18 April 2026</td>
+<td class="center">Expires 24 April 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-10-15" class="published">15 October 2025</time>
+<time datetime="2025-10-21" class="published">21 October 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-04-18">18 April 2026</time></dd>
+<dd class="expires"><time datetime="2026-04-24">24 April 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1141,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 18 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 April 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1266,7 +1265,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-flooding-intermediaries-wit" class="internal xref">Flooding intermediaries with fake packets</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-fake-scone-packets" class="internal xref">Fake SCONE Packets</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
                 <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-damage-to-other-protocols" class="internal xref">Damage to Other Protocols</a></p>
@@ -2246,37 +2245,35 @@ data.<a href="#section-9-4" class="pilcrow">¶</a></p>
 <p id="section-9-5">Similarly, if there is a strong need to ensure that a rate limit is respected,
 network elements cannot assume that the signaled limit will be respected by
 endpoints.<a href="#section-9-5" class="pilcrow">¶</a></p>
-<div id="flooding-intermediaries-with-fake-packets">
+<div id="fake-scone-packets">
 <section id="section-9.1">
-        <h3 id="name-flooding-intermediaries-wit">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-flooding-intermediaries-wit" class="section-name selfRef">Flooding intermediaries with fake packets</a>
+        <h3 id="name-fake-scone-packets">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-fake-scone-packets" class="section-name selfRef">Fake SCONE Packets</a>
         </h3>
-<p id="section-9.1-1">Attackers that can inject packets may compose arbitrary "SCONE-like" packets
+<p id="section-9.1-1">Attackers that can inject packets could compose arbitrary "SCONE-like" packets
 by selecting a pair of IP addresses and ports, an arbitrary rate signal, a
 valid SCONE version number, an arbitrary "destination
-connection ID", and an arbitrary "source connection ID". The SCONE packet
-will carry these information. A coalesced "1RTT" packet will start with
+connection ID", and an arbitrary "source connection ID".
+A coalesced "1RTT" packet will start with
 a plausible first octet, and continue with the selected destination connection
 ID followed by a sufficiently long series of random bytes, mimicking the
-content of an encrypted packets.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
-<p id="section-9.1-2">The injected packets will travel towards the destination.
-The final destination will reject such packets because the destination ID
-is invalid or because decryption fail, but network elements cannot do these checks,
-and will have to process the packets. All the network elements between the injection
-point and the destination will have to process these packets.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+content of an encrypted packet.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">Endpoints will reject such packets because they do not contain valid QUIC packets,
+but network elements cannot detect this.
+All the network elements between the injection point and the destination
+will have to process these packets.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.1-3">Attackers could send a high volume of these "fake" SCONE packets in
 a denial of service (DOS) attempt against network elements. The attack will
 force the intermediaries to process the fake packets. If network elements
-are keeping state for ongoing SCONE flows, the attack can cause the
-excessive allocation of memory resource. The mitigation there
-will be the same as mitigation of other distributed DOS attacks: limit
+are keeping state for ongoing SCONE flows, this might exhaust memory resources.
+The mitigation is the same as for other distributed DOS attacks: limit
 the rate of SCONE packets that a network element is willing to process;
 possibly, implement logic to distinguish valid SCONE packets from
 fake packets; or, use generic protection against Distributed DOS attacks.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.1-4">Attackers could also try to craft the fake SCONE packets in ways that trigger
 a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
-with implementations that fully conform to the specification of <a href="#packet" class="auto internal xref">Section 5</a>.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
+with implementations that fully conforms to the specification of <a href="#packet" class="auto internal xref">Section 5</a>.<a href="#section-9.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="damage-to-other-protocols">
@@ -2655,7 +2652,7 @@ Transport Parameters" registry maintained at
 <dd class="break"></dd>
 <dt id="QUIC-MP">[QUIC-MP]</dt>
         <dd>
-<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Multipath Extension for QUIC"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-16</span>, <time datetime="2025-08-21" class="refDate">21 August 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-16</a>&gt;</span>. </dd>
+<span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Managing multiple paths for a QUIC connection"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-17</span>, <time datetime="2025-10-20" class="refDate">20 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-17">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-17</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4787">[RFC4787]</dt>
         <dd>
