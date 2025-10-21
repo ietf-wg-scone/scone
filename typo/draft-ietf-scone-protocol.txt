@@ -1052,7 +1052,7 @@ Table of Contents
 
 11.  IANA Considerations
 
-   This document registers a new QUIC version (Section 11.1) and a QUIC
+   This document registers new QUIC versions (Section 11.1) and a QUIC
    transport parameter (Section 11.2).
 
 11.1.  SCONE Versions
