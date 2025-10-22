@@ -77,11 +77,14 @@ adapting their send rate.
 
 Network elements are not limited to communicating information
 about rate limiting policies.
-Network elements in access networks could provide information
-to endpoints that can help account for changes in network capacity
-that are not suited to congestion control feedback. This might include
-reduced capacity due to overuse, equipment faults, or other transient issues;
-conversely, networks might choose to signal increased availability of capacity.
+Network elements in access networks could provide advice
+to endpoints that can help guide application use of network capacity,
+separate from any signals that are intended to influence congestion response.
+Advice might also indicate temporarily increases in available capacity,
+or temporarily reduced capacity
+due to persistent overuse, equipment faults, or other transient issues.
+This applies to increases or reductions that are expected to last
+at least one minute.
 
 The Standard Communication with Network Elements (SCONE) protocol is
 negotiated by QUIC endpoints.  This protocol provides a means for network
@@ -804,6 +807,7 @@ processed.
 SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
 network element applied a throughput advice signal.
+Senders will therefore proceed as though there was no advice.
 
 ## Interactions with Congestion Control
 
