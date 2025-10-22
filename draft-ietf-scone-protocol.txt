@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 24 April 2026                              Private Octopus Inc.
+Expires: 25 April 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         21 October 2025
+                                                         22 October 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2026.
+   This Internet-Draft will expire on 25 April 2026.
 
 Copyright Notice
 
@@ -132,11 +132,13 @@ Table of Contents
 
    Network elements are not limited to communicating information about
    rate limiting policies.  Network elements in access networks could
-   provide information to endpoints that can help account for changes in
-   network capacity that are not suited to congestion control feedback.
-   This might include reduced capacity due to overuse, equipment faults,
-   or other transient issues; conversely, networks might choose to
-   signal increased availability of capacity.
+   provide advice to endpoints that can help guide application use of
+   network capacity, separate from any signals that are intended to
+   influence congestion response.  Advice might also indicate
+   temporarily increases in available capacity, or temporarily reduced
+   capacity due to persistent overuse, equipment faults, or other
+   transient issues.  This applies to increases or reductions that are
+   expected to last at least one minute.
 
    The Standard Communication with Network Elements (SCONE) protocol is
    negotiated by QUIC endpoints.  This protocol provides a means for
@@ -837,6 +839,7 @@ Table of Contents
    SCONE packets could be stripped from datagrams in the network, which
    cannot be reliably detected.  This could result in a sender falsely
    believing that no network element applied a throughput advice signal.
+   Senders will therefore proceed as though there was no advice.
 
 8.3.  Interactions with Congestion Control
 
