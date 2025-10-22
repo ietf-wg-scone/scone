@@ -80,8 +80,11 @@ about rate limiting policies.
 Network elements in access networks could provide advice
 to endpoints that can help guide application use of network capacity,
 separate from any signals that are intended to influence congestion response.
-This might include reduced capacity due to overuse, equipment faults, or other transient issues;
-conversely, networks might choose to signal increased availability of capacity.
+Advice might also indicate temporarily increases in available capacity,
+or temporarily reduced capacity
+due to persistent overuse, equipment faults, or other transient issues.
+This applies to increases or reductions that are expected to last
+at least one minute.
 
 The Standard Communication with Network Elements (SCONE) protocol is
 negotiated by QUIC endpoints.  This protocol provides a means for network
