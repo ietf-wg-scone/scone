@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-21T01:40:01.463549+00:00",
+  "timestamp": "2025-10-23T01:39:04.972604+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2181,15 +2181,15 @@
       "id": "I_kwDON1dwo87R4D_c",
       "title": "Please consider adding one more sentence to Section 7.",
       "url": "https://github.com/ietf-wg-scone/scone/issues/76",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I agree, but it seems like this doesn't quite explain what I hoped.\n/This could result in a sender falsely  believing that no network element applied a throughput advice signal./\n-An extra sentence would be helpful to say that such a sender proceeds in the usual way, as if it had not sent a SCONE packet.",
       "createdAt": "2025-10-16T09:49:07Z",
-      "updatedAt": "2025-10-16T09:53:01Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-22T23:55:35Z",
+      "closedAt": "2025-10-22T23:55:35Z",
       "comments": [
         {
           "author": "gorryfair",
@@ -8297,52 +8297,124 @@
       "id": "PR_kwDON1dwo86uvOWo",
       "title": "Fix typo",
       "url": "https://github.com/ietf-wg-scone/scone/pull/79",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-10-21T00:49:25Z",
-      "updatedAt": "2025-10-21T00:49:25Z",
+      "updatedAt": "2025-10-21T10:29:57Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "typo",
-      "headRefOid": "759815961a3123b007d209284fee36b1f55302a8",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "1542fdecac7a46dd3073926f44fdfe3d254b8864",
+      "closedAt": "2025-10-21T10:29:57Z",
+      "mergedAt": "2025-10-21T10:29:57Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "24b6297c04bf31651fde5fab8bab0f2cf8776f62"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87INElz",
+          "commit": {
+            "abbreviatedOid": "1542fde"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-21T06:10:56Z",
+          "updatedAt": "2025-10-21T06:10:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87IPB4F",
+          "commit": {
+            "abbreviatedOid": "1542fde"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-21T08:26:23Z",
+          "updatedAt": "2025-10-21T08:26:23Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 80,
       "id": "PR_kwDON1dwo86uvScp",
       "title": "Cleanup fake packets section",
       "url": "https://github.com/ietf-wg-scone/scone/pull/80",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This just trims some text and fixes grammar.",
       "createdAt": "2025-10-21T01:01:49Z",
-      "updatedAt": "2025-10-21T01:01:50Z",
+      "updatedAt": "2025-10-21T07:13:28Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "cleanup-fake",
-      "headRefOid": "15e627d016bc440556d9b12a01a481d9a149dc4e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "89b43ea5af700fc80595147cfe3fcd676761be5c",
+      "closedAt": "2025-10-21T07:13:28Z",
+      "mergedAt": "2025-10-21T07:13:28Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "85ee6439ef8e0b770d2b15c2c64d896362b187b5"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87INGVV",
+          "commit": {
+            "abbreviatedOid": "15e627d"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes, this is better than my initial text. I noted a leftover typo.",
+          "createdAt": "2025-10-21T06:14:25Z",
+          "updatedAt": "2025-10-21T06:19:14Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Another of my typos, I guess. Should be \"the content of an encrypted packet.\"",
+              "createdAt": "2025-10-21T06:14:25Z",
+              "updatedAt": "2025-10-21T06:19:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87IN0QF",
+          "commit": {
+            "abbreviatedOid": "15e627d"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-21T07:13:14Z",
+          "updatedAt": "2025-10-21T07:13:15Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "```suggestion\r\ncontent of an encrypted packet.\r\n```",
+              "createdAt": "2025-10-21T07:13:14Z",
+              "updatedAt": "2025-10-21T07:13:15Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 81,
@@ -8356,7 +8428,7 @@
       "labels": [],
       "body": "This takes the suggestions @gorryfair made and does a little extra rewording of surrounding text to make it clearer that this is just advice.\r\n\r\nCloses #78.",
       "createdAt": "2025-10-21T01:17:21Z",
-      "updatedAt": "2025-10-21T01:17:21Z",
+      "updatedAt": "2025-10-21T06:29:12Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
@@ -8368,33 +8440,204 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87INOyt",
+          "commit": {
+            "abbreviatedOid": "6e979de"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I have mixed feelings there. First, the proposed text is indeed an improvement, easier to read and using terminology consistent with the other parts of the draft. That good. But then, we have one paragraph stating that the signal from the network is not guaranteeing that the advised data rate will be available, and after that we have another paragraph stating that applications can make a best effort to use less than the advised rate but fail. Which leaves us wondering what SCONE is good for, exactly.\r\n\r\nIn your example of an application switching from real time to batch, should it continue to ask for a SCONE advice that it will not heed? Are there other possible mitigations to such issues? I suppose that these are questions for another issue and another PR.\r\n\r\nApproving on the basis that the text says what we already meant and is clearer, which can only help.",
+          "createdAt": "2025-10-21T06:29:12Z",
+          "updatedAt": "2025-10-21T06:29:12Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 82,
       "id": "PR_kwDON1dwo86uvboO",
       "title": "Attempt to make status of advice clearer",
       "url": "https://github.com/ietf-wg-scone/scone/pull/82",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #76.",
       "createdAt": "2025-10-21T01:32:17Z",
-      "updatedAt": "2025-10-21T01:32:18Z",
+      "updatedAt": "2025-10-22T23:55:34Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "issue76",
-      "headRefOid": "44b735696c4fae7d7795f8af41c8a7eb040ac2c1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "fbe7431013fba6bfcc1dbc322d795319842b0765",
+      "closedAt": "2025-10-22T23:55:34Z",
+      "mergedAt": "2025-10-22T23:55:34Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "f8885d5e3eded3d53b5d4b569e0585d4381e13c1"
+      },
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> If we are to change that, we may want to be a little more directive about time scales.\r\n\r\n+1. Not that I have a suggestion now, but the original issue (#33) that introduced the paragraph in focus was about providing long-term fairness between different types of applications, which CC cannot provide.",
+          "createdAt": "2025-10-21T08:32:57Z",
+          "updatedAt": "2025-10-21T08:32:57Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87INU_-",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "If we are to change that, we may want to be a little more directive about time scales. For minutes, SCONE is good. For seconds, not so much? I know that the admin often cannot tell how exactly long a \"transient event\" will last, but they should have an idea of the mean time to repair.",
+          "createdAt": "2025-10-21T06:38:59Z",
+          "updatedAt": "2025-10-21T06:38:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87IQbyS",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-21T09:48:05Z",
+          "updatedAt": "2025-10-21T09:48:06Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Reflecting the intent of #33, maybe something along the lines of:\n\n```suggestion\nThis might include advice to promote equal-share bandwidth between intermittent and\npersistent flows over minute-scale horizons; advice reflecting temporarily reduced\ncapacity (e.g., overuse, equipment faults); or conversely, increased available capacity.\n```",
+              "createdAt": "2025-10-21T09:48:06Z",
+              "updatedAt": "2025-10-21T09:48:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87IfMKt",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-22T03:53:19Z",
+          "updatedAt": "2025-10-22T03:53:19Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I don't think that \"equal-share bandwidth\" is a goal.  Also, in terms of wording, \"minute-scale\" is not clear (\"minute\" might be taken to mean \"very small\", for example).\r\n\r\nThat leaves us with the same two things.\r\n\r\n```suggestion\r\nAdvice might also indicate temporarily reduced capacity\r\n(due to overuse, equipment faults, or other transient issues)\r\nor temporary increases in available capacity.\r\nThis applies to throughput advice that is relevant over time scales\r\nof at least one minute.\r\n```\r\n",
+              "createdAt": "2025-10-22T03:53:19Z",
+              "updatedAt": "2025-10-22T03:55:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87IfbOc",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-22T04:37:27Z",
+          "updatedAt": "2025-10-22T04:37:27Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "> I don't think that \"equal-share bandwidth\" is a goal.\r\n\r\nNeither are others. Rate limiting due to overuse, et. al., are merely examples that could be handled by SCONE (or suites to be handled by SCONE) due to them being less volatile compared to congestion signals that operate in the order of round trips.",
+              "createdAt": "2025-10-22T04:37:27Z",
+              "updatedAt": "2025-10-22T04:37:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87If1ZX",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-22T05:43:21Z",
+          "updatedAt": "2025-10-22T05:43:21Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "I like Martin's suggestion. I would says \"persistent overuse\" instead of mere \"overuse\". I like that we have sentence stating the time scale. Can we remove the parentheses and make the sentence easier to read out loud? Maybe:\r\n\r\nAdvice might also indicate temporarily increases in available capacity,\r\nor  temporarily reduced capacity\r\ndue to persistent overuse, equipment faults, or other transient issues.\r\nThis applies to increases or reductions that are expected to last\r\nat least one minute.\r\n\r\n(Sorry, I still have not figured out how to use the \"suggestion\" feature on Firefox in Windows.)",
+              "createdAt": "2025-10-22T05:43:21Z",
+              "updatedAt": "2025-10-22T05:43:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87If5oF",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-22T05:53:48Z",
+          "updatedAt": "2025-10-22T05:53:48Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\r\nAdvice might also indicate temporarily increases in available capacity,\r\nor temporarily reduced capacity\r\ndue to persistent overuse, equipment faults, or other transient issues.\r\nThis applies to increases or reductions that are expected to last\r\nat least one minute.\r\n```",
+              "createdAt": "2025-10-22T05:53:48Z",
+              "updatedAt": "2025-10-22T05:53:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87If55u",
+          "commit": {
+            "abbreviatedOid": "44b7356"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-22T05:54:28Z",
+          "updatedAt": "2025-10-22T05:54:28Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "BTW, it's ctrl+g or this button: \r\n<img width=\"40\" height=\"40\" alt=\"image\" src=\"https://github.com/user-attachments/assets/96c2e98f-9cc9-4665-b53e-cdd4e1bafd5a\" />\r\n",
+              "createdAt": "2025-10-22T05:54:28Z",
+              "updatedAt": "2025-10-22T05:54:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87IpbMo",
+          "commit": {
+            "abbreviatedOid": "fbe7431"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-22T15:14:53Z",
+          "updatedAt": "2025-10-22T15:14:53Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
