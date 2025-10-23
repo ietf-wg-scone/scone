@@ -934,7 +934,7 @@ privacy protection, such as a VPN.
 Any network element that can observe the content of that packet can read the
 rate limit that was applied.  Any signal is visible on the path, from the point
 at which it is applied to the point at which it is consumed at an endpoint.
-On path network elements can also alter the SCONE signal to try trigger specific
+On-path network elements can also alter the SCONE signal to try trigger specific
 reactions and gain further knowledge.
 
 In the general case of a client connected to a server through the
