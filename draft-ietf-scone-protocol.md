@@ -56,7 +56,7 @@ informative:
 
 --- abstract
 
-This document describes a protocol where on-path network elements
+This document describes a protocol where on-path SCONE network elements
 can give endpoints their perspective on what the maximum achievable
 throughput might be for QUIC flows.
 
@@ -75,16 +75,15 @@ Having the network indicate what its rate limiting policy is, in a way that is
 accessible to endpoints, allows applications to use this information when
 adapting their send rate.
 
-Network elements are not limited to communicating information
-about rate limiting policies.
-Network elements in access networks could provide advice
-to endpoints that can help guide application use of network capacity,
-separate from any signals that are intended to influence congestion response.
+In access networks, the network elements -those networking entities along the 
+path of appication traffic flows that have access to the IP packets- 
+could provide advice to endpoints that can help guide application use of 
+network capacity, separate from any signals that are intended to influence 
+congestion response.
 Advice might also indicate temporarily increases in available capacity,
 or temporarily reduced capacity
 due to persistent overuse, equipment faults, or other transient issues.
-This applies to increases or reductions that are expected to last
-at least one minute.
+Such changes are expected to persit for at least one minute.
 
 The Standard Communication with Network Elements (SCONE) protocol is
 negotiated by QUIC endpoints.  This protocol provides a means for network
@@ -110,21 +109,23 @@ QUIC endpoints can negotiate the use of SCONE by including a transport parameter
 ({{tp}}) in the QUIC handshake.  Endpoints then occasionally coalesce a SCONE
 packet with ordinary QUIC packets that they send.
 
-Network elements that have rate limiting policies can detect flows that include
-SCONE packets.  The network element can indicate a maximum sustained throughput
-by modifying the SCONE packet as it transits the network element.
+SCONE-capable network elements, referred to as SCONE Network elements, are 
+devices that can access the UDP 4-tuple of a flow and are aware of network 
+rate-limiting policies. These elements are able to detect flows containing 
+SCONE packets and can signal a maximum sustained throughput by modifying 
+the SCONE packet as it passes through the network.
 
 ~~~ aasvg
-+--------+    +---------+     +----------+
-|  QUIC  |    | Network |     |   QUIC   |
-| Sender |    | Element |     | Receiver |
-+---+----+    +----+----+     +----+-----+
-    |              |               |
-    +--- SCONE --->|   SCONE+rate  |
-    |    +QUIC     +---- +QUIC --->|
-    |              |               |  Validate QUIC packet
-    |              |               |  and record rate
-    |              |               |
++--------+    +---------------+     +----------+
+|  QUIC  |    | SCONE Network |     |   QUIC   |
+| Sender |    |    Element    |     | Receiver |
++---+----+    +-------+-------+     +----+-----+
+    |                 |                  |
+    +---- SCONE ----> |    SCONE+rate    |
+    |     +QUIC       +----- +QUIC ----->|
+    |                 |                  |  Validate QUIC packet
+    |                 |                  |  and record rate
+    |                 |                  |
 ~~~
 
 QUIC endpoints that receive modified SCONE packets observe the indicated
@@ -149,8 +150,8 @@ cannot assume that rate limit indications from one path apply to new paths.
 This protocol only works for flows that use the SCONE packet ({{packet}}).
 
 The protocol requires that packets are modified as they transit a
-network element, which provides endpoints strong evidence that the network
-element has the power to apply rate limiting; though see {{security}} for
+SCONE network element, which provides endpoints strong evidence that the network
+has the power to apply rate limiting; though see {{security}} for
 potential limitations on this.
 
 The throughput advice signal that this protocol carries is independent of congestion
@@ -167,7 +168,7 @@ signaled rate limit.
 
 Endpoints cannot assume that a signaled rate limit is achievable if congestion
 signals indicate otherwise.  Congestion could be experienced at a different
-point on the network path than the network element that indicates a rate limit.
+point on the network path than the SCONE Network element that indicates a rate limit.
 Therefore, endpoints need to respect the send rate constraints that are set by a
 congestion controller.
 
@@ -194,7 +195,7 @@ to be split between multiple active flows.
 
 The same UDP address tuple might be used for multiple QUIC connections.  A
 single signal might be lost or only reach a single application endpoint.
-Network elements that signal about a flow might choose to send additional
+SCONE Network elements that signal about a flow might choose to send additional
 signals, using connection IDs to indicate when new connections could be
 involved.
 
@@ -221,7 +222,7 @@ selecting appropriate chunks based on bitrate signals, but later switch to a
 bulk download for which bitrate adaptation is not applicable. Composite flows
 from multiple applications, such as tunneled flows, might only have a subset of
 the involved applications that are capable of handling SCONE signals. Therefore,
-when a network element detects a flow using more bandwidth than advertised via
+when a SCONE network element detects a flow using more bandwidth than advertised via
 SCONE, it might switch to applying its policies for non-SCONE flows, using
 congestion control signals.
 
@@ -311,7 +312,7 @@ Source Connection ID field, which is the case for packets with a short header
 
 SCONE packets MUST be included as the first packet in a datagram.
 This is primarily to simplify the process of updating throughput advice
-in network elements.
+in SCONE network elements.
 This is also necessary in many cases for QUIC versions 1 and 2
 because packets with a short header cannot precede any other packets.
 
@@ -323,10 +324,10 @@ Rate Signal High Bits, and the least significant bit is the most significant
 bit of the Version field.
 
 When sent by a QUIC endpoint, the Rate Signal is set to 127.  Receiving a value
-of 127 indicates that throughput advice is unknown, either because network
+of 127 indicates that throughput advice is unknown, either because SCONE network
 elements on the path are not providing advice or they do not support SCONE. All
 other values (0 through 126) represent the ceiling of rates advised by the
-network element(s) on the path.
+SCONE network element(s) on the path.
 
 The rate limits follow a logarithmic scale defined as:
 
@@ -371,7 +372,7 @@ Protocol participants can use a different period,
 depending on their role.
 Senders can limit their send rate over any time period
 up to 67 seconds.
-Network elements can monitor and apply limits to send rates
+Network (uaually done in the SCONE Network elements) can monitor and apply limits to send rates
 using time period of at least 67 seconds.
 
 The choice of 67 seconds is a compromise between competing interests.
@@ -461,7 +462,7 @@ In comparison,
 applications retain throughput usage state
 when throughput advice increases.
 
-This approach ensures that network elements
+This approach ensures that SCONE network elements
 are able to reduce the frequency with which they send updated signals
 to as low as once per monitoring period.
 However, applying signals at a low frequency
@@ -531,7 +532,7 @@ This means that the indication alone is not sufficient to indicate
 that a flow is QUIC with the potential for SCONE support.
 
 Despite these limitations,
-having an indication might allow network elements to change their starting posture
+having an indication might allow SCONE network elements to change their starting posture
 with respect to their enforcement of their rate limit policies.
 
 
@@ -543,9 +544,10 @@ In QUIC version 1 and 2,
 the two byte indicator cannot be used.
 
 Sending a SCONE packet for the first few packets on a new path
-gives network elements on that path the ability
+gives SCONE network elements on that path the ability
 to recognize the flow as being able to receive throughput advice
-and also gives the network element an opportunity to provide that throughput advice.
+and also gives the SCONE network element an opportunity to provide 
+that throughput advice.
 
 To enable this indication,
 even if an endpoint would not otherwise send SCONE packets,
@@ -558,26 +560,26 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 # Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
-{{packet}}.  Network elements then apply or replace the Rate Signal field
+{{packet}}.  SCONE Network elements then apply or replace the Rate Signal field
 ({{apply}}) according to their policies.
 
 
 ## Applying Throughput Advice Signals {#apply}
 
-A network element detects a SCONE packet by observing that a packet has a QUIC
+A SCONE Network element detects a SCONE packet by observing that a packet has a QUIC
 long header and one of the SCONE protocol versions (0x6f7dc0fd or 0xef7dc0fd).
 
-A network element then conditionally replaces the most significant bit of the
+A SCONE network element then conditionally replaces the most significant bit of the
 Version field and the Rate Signal High Bits field with values of its choosing.
 
-A network element might receive a packet that already includes a rate signal.
-The network element replaces the rate signal if it wishes to signal a lower
+A SCONE network element might receive a packet that already includes a rate signal.
+The SCONE network element replaces the rate signal if it wishes to signal a lower
 rate limit; otherwise, the original values are retained, preserving the signal
-from the network element with the lower policy.
+from the SCONE network element with the lower policy.
 
-The following pseudocode indicates how a network element might detect a SCONE
+The following pseudocode indicates how a SCONE network element might detect a SCONE
 packet and replace the existing rate signal (`packet_signal`) with a new rate
-signal (`target_signal`) that encodes the throughput advice of this network
+signal (`target_signal`) that encodes the throughput advice of this SCONE network
 element.
 
 ~~~ pseudocode
@@ -591,38 +593,38 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
 ~~~
 
 Once the throughput advice signal is updated,
-the network element updates the UDP checksum for the datagram.
+the SCONE Network element updates the UDP checksum for the datagram.
 
-A network element needs to ensure that it sends updated rate signals
+A SCONE Network element needs to ensure that it sends updated rate signals
 with no more than a monitoring period ({{time}}) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
-network elements might need to update more often.
+SCONE Network elements might need to update more often.
 
-At the start of a flow, network elements are encouraged to update the rate
+At the start of a flow, SCONE Network elements are encouraged to update the rate
 signal of the first few SCONE packets it observes so that endpoints can obtain
 throughput advice early.
 
 Senders that send a SCONE packet
-or network elements that update SCONE packets
+or SCONE Network elements that update SCONE packets
 every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
 To reduce the risk of synchronization across multiple senders,
-which may cause network elements to miss updates,
+which may cause SCONE Network elements to miss updates,
 senders can include a small random delay.
 
 
 ## Monitoring Flows {#monitoring}
 
-Network elements can monitor flows
+SCONE Network elements can monitor flows
 to determine which flows are from applications
 that respect throughput advice.
 This section outlines an exemplary algorithm
-for network elements.
+for SCONE Network elements.
 
 This monitoring algorithm is guidance only.
-Network elements are advised that monitoring
+SCONE Network elements are advised that monitoring
 any more strictly than the following likely invalidates their advice.
-Network elements could choose not to monitor in this way
+SCONE Network elements could choose not to monitor in this way
 or use a looser monitoring approach.
 For instance, monitoring over a longer time window
 than the monitoring period (67s)
@@ -630,7 +632,7 @@ or using a higher rate than is signaled
 is possible.
 
 To operate this algorithm,
-the minimal state a network element maintains is:
+the minimal state a SCONE Network element maintains is:
 
 * the current rate limit,
 * any state necessary to monitor throughput
@@ -639,7 +641,7 @@ the minimal state a network element maintains is:
 * the time at which that rate limit was last updated.
 
 When advice is set or updated,
-the network element waits until
+the SCONE Network element waits until
 it receives the next SCONE packet on affected flows.
 It then updates the throughput advice in that packet ({{apply}})
 and updates its monitoring state as follows:
@@ -668,7 +670,7 @@ and updates its monitoring state as follows:
   discard all rate monitoring state,
   and set the last update time to the current time.
 
-A network element that reduces the throughput advice it provides
+A SCONE Network element that reduces the throughput advice it provides
 MUST also discard any state it maintains
 about the use of the network under previous, higher rates.
 This is necessary to allow senders to discard state
@@ -676,12 +678,12 @@ when advice is reduced (see {{algorithm}}).
 This avoids cases where an application that has planned usage
 might otherwise be completely unable to send due to a lower limits.
 
-A network element that reduces its throughput advice
+A SCONE Network element that reduces its throughput advice
 might also need delay monitoring or enforcement
 to allow applications time
 to receive and act on the updated advice.
 
-A network element MUST NOT alter datagrams to add SCONE packets
+A SCONE Network element MUST NOT alter datagrams to add SCONE packets
 or synthesize datagrams that contain SCONE packets.
 The latter will not be accepted and the former,
 even if they do not exceed the path MTU as a result,
@@ -692,13 +694,13 @@ but one might be added in future.
 
 ## Flows That Exceed Throughput Advice {#policing}
 
-Network elements that provide throughput advice
+SCONE Network elements that provide throughput advice
 can monitor flows --
 or sets of flows that are subject to the same throughput limit --
 for adherance to that advice.
 
 In the event that a flow exceeds these limits,
-a network element could immediately start
+a SCONE Network element could immediately start
 enforcing adherence to the advice as though it were a hard limit.
 However, this risks creating a situation where communication ceases entirely
 for a significant period of time;
@@ -717,12 +719,12 @@ different ranges of bitrates. This design allows for:
 
 *  Support for both very low bitrates (down to 100 Kbps) and very high bitrates
    (up to 199.5 Gbps)
-*  Graceful handling of network elements that might only recognize one version.
+*  Graceful handling of SCONE Network elements that might only recognize one version.
 
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
 
-Endpoints that wish to offer network elements the option to add throughput advice
+Endpoints that wish to offer SCONE Network elements the option to add throughput advice
 signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams.
 
@@ -731,7 +733,7 @@ packet in a datagram, coalesced with additional packets.
 
 Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
 SHOULD include SCONE packets in the first few UDP datagrams that it sends. Doing
-so increases the likelihood of eliciting early throughput advice from network
+so increases the likelihood of eliciting early throughput advice from SCONE Network
 elements, allowing applications to apply that advice from the early stages of the
 data transfer.
 
@@ -777,14 +779,14 @@ The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
 for application data.
 
-A network element that wishes to signal an updated rate limit waits for the
+A SCONE Network element that wishes to signal an updated rate limit waits for the
 next SCONE packet in the desired direction; see {{apply}}.
 
 
 ## Feedback To Sender About Signals {#feedback}
 
 Information about throughout advice is intended for the sending application.  Any
-signal from network elements can be propagated to the receiving application
+signal from SCONE Network elements can be propagated to the receiving application
 using an implementation-defined mechanism.
 
 This document does not define a means for indicating what was received.
@@ -806,7 +808,7 @@ processed.
 
 SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
-network element applied a throughput advice signal.
+SCONE Network element applied a throughput advice signal.
 Senders will therefore proceed as though there was no advice.
 
 ## Interactions with Congestion Control
@@ -831,7 +833,7 @@ channel.
 
 # Security Considerations {#security}
 
-The modification of packets provides endpoints proof that a network element is
+The modification of packets provides endpoints proof that a SCONE Network element is
 in a position to drop datagrams and could apply a rate limit policy.
 {{extra-packets}} states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
@@ -849,9 +851,9 @@ the peer, with the result being that the endpoint receives a false
 or misleading rate limit.
 
 The recipient of a throughput advice signal therefore cannot guarantee that
-the signal was generated by an on-path network element. However,
+the signal was generated by an on-path SCONE Network element. However,
 the capabilities required of an off-path attacker are substantially
-similar to those of on path elements.
+similar to those of on path network elements.
 
 The actual value of the throughput advice signal is not authenticated.  Any signal
 might be incorrectly set in order to encourage endpoints to behave in ways that
@@ -861,7 +863,7 @@ real-time information about the rate at which the network path is delivering
 data.
 
 Similarly, if there is a strong need to ensure that a rate limit is respected,
-network elements cannot assume that the signaled limit will be respected by
+SCONE Network elements cannot assume that the signaled limit will be respected by
 endpoints.
 
 ## Fake SCONE Packets
@@ -876,27 +878,27 @@ ID followed by a sufficiently long series of random bytes, mimicking the
 content of an encrypted packet.
 
 Endpoints will reject such packets because they do not contain valid QUIC packets,
-but network elements cannot detect this.
-All the network elements between the injection point and the destination
+but SCONE Network elements cannot detect this.
+All the SCONE Network elements between the injection point and the destination
 will have to process these packets.
 
 Attackers could send a high volume of these "fake" SCONE packets in
-a denial of service (DOS) attempt against network elements. The attack will
-force the intermediaries to process the fake packets. If network elements
+a denial of service (DOS) attempt against SCONE Network elements. The attack will
+force the intermediaries to process the fake packets. If SCONE Network elements
 are keeping state for ongoing SCONE flows, this might exhaust memory resources.
 The mitigation is the same as for other distributed DOS attacks: limit
-the rate of SCONE packets that a network element is willing to process;
+the rate of SCONE packets that a SCONE Network element is willing to process;
 possibly, implement logic to distinguish valid SCONE packets from
 fake packets; or, use generic protection against Distributed DOS attacks.
 
 Attackers could also try to craft the fake SCONE packets in ways that trigger
-a processing error at network elements. For example, they might pick connection
-identifiers of arbitrary length. Network elements can mitigate these attacks
+a processing error at SCONE Network elements. For example, they might pick connection
+identifiers of arbitrary length. SCONE Network elements can mitigate these attacks
 with implementations that fully conforms to the specification of {{packet}}.
 
 ## Damage to Other Protocols
 
-Network elements that update SCONE packet fields might do that for datagrams
+SCONE Network elements that update SCONE packet fields might do that for datagrams
 exchanged in other protocols.
 This could result in damage to those protocols.
 
@@ -904,10 +906,10 @@ The most serious damage occurs when every datagram is modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
-To that end, network elements MUST only update the content of datagrams
+To that end, SCONE Network elements MUST only update the content of datagrams
 on a given address tuple
 a few times each monitoring period.
-Network elements MAY update more often
+SCONE Network elements MAY update more often
 immediately after a change in their throughput advice,
 to reduce the reaction time from senders.
 
@@ -918,7 +920,7 @@ the presence of indications ({{indication}}),
 or other heuristics.
 If these heuristics indicate a non-QUIC flow,
 the safest option is
-for network elements to disable updating of datagrams.
+for SCONE Network elements to disable updating of datagrams.
 
 
 # Privacy Considerations {#privacy}
@@ -932,7 +934,7 @@ privacy protection, such as a VPN.
 Any network element that can observe the content of that packet can read the
 rate limit that was applied.  Any signal is visible on the path, from the point
 at which it is applied to the point at which it is consumed at an endpoint.
-On path elements can also alter the SCONE signal to try trigger specific
+On path network elements can also alter the SCONE signal to try trigger specific
 reactions and gain further knowledge.
 
 In the general case of a client connected to a server through the
