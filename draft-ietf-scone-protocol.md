@@ -76,7 +76,7 @@ accessible to endpoints, allows applications to use this information when
 adapting their send rate.
 
 In access networks, the network elements -those networking entities along the 
-path of appication traffic flows that have access to the IP packets- 
+path of application traffic flows that have access to the IP packets- 
 could provide advice to endpoints that can help guide application use of 
 network capacity, separate from any signals that are intended to influence 
 congestion response.
