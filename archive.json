@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-23T01:39:04.972604+00:00",
+  "timestamp": "2025-10-26T01:44:38.186398+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2237,6 +2237,30 @@
           "body": "> /indicating no rate limit is in place/\n> \n> * I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice?\n\nI agree; this should be more like \"indicating that no specific advice is provided\", or something like that.",
           "createdAt": "2025-10-20T15:46:06Z",
           "updatedAt": "2025-10-20T15:46:06Z"
+        }
+      ]
+    },
+    {
+      "number": 84,
+      "id": "I_kwDON1dwo87TS3pl",
+      "title": "\"maximum achievable throughput\" or \"maximum sustained throughput\" ?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/84",
+      "state": "OPEN",
+      "author": "zaheduzzaman",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I noticed that the draft now uses both \u201cmaximum achievable throughput\u201d and \u201cmaximum sustained throughput\u201d interchangeably, however, they are two different concepts. \n\nFrom my understanding, what the SCONE network elements can provide is the maximum achievable throughput, They can\u2019t guarantee what is sustained for a particular 4-tuple (for instance when a number of flows share the same max).\n\nUnless we define what \"sustrained\" means, using both terms are confusing. I suggest we use \u201cmaximum achievable throughput\u201d.\n",
+      "createdAt": "2025-10-23T14:24:43Z",
+      "updatedAt": "2025-10-23T22:36:38Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Want to write up a PR to squash those few instances of \"sustained\" you found?",
+          "createdAt": "2025-10-23T22:36:38Z",
+          "updatedAt": "2025-10-23T22:36:38Z"
         }
       ]
     }
@@ -8636,6 +8660,113 @@
           "createdAt": "2025-10-22T15:14:53Z",
           "updatedAt": "2025-10-22T15:14:53Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 83,
+      "id": "PR_kwDON1dwo86vRpSs",
+      "title": "SCONE network element description",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/83",
+      "state": "OPEN",
+      "author": "zaheduzzaman",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Tried to capture the comments and discussions in the simplest way possible.\r\n\r\nIncludes :\r\n\r\n- simplistic defition of a Network element\r\n- coined the term \"SCONE Network element\" which is a special network element capable of handling SCONE protocol.\r\n- s/network element/SCONE Network element, throughout the document.\r\n- changes figure to depict SCONE Network element.",
+      "createdAt": "2025-10-23T14:08:51Z",
+      "updatedAt": "2025-10-24T11:02:24Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "f8885d5e3eded3d53b5d4b569e0585d4381e13c1",
+      "headRepository": "zaheduzzaman/scone",
+      "headRefName": "patch-1",
+      "headRefOid": "0f524c71b060a261a763835f343385425fb8663f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87I4QQg",
+          "commit": {
+            "abbreviatedOid": "afb5923"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-23T14:14:35Z",
+          "updatedAt": "2025-10-23T14:14:36Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "I didn't included the enforcement and monitoring here as those can be done separately in the network in other functions than at the network element that modifies the SCONE packet to send througtput advice. However, the current text in the document assumes this is done in the same network elements (especially in https://github.com/ietf-wg-scone/scone/blob/main/draft-ietf-scone-protocol.md#monitoring-flows-monitoring).\r\n\r\nIf we agree to the proposed description of the SCONE Network element, we would need to adjust this in the other section where monitoring and enforcement is described.",
+              "createdAt": "2025-10-23T14:14:35Z",
+              "updatedAt": "2025-10-23T14:14:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87JDbtP",
+          "commit": {
+            "abbreviatedOid": "afb5923"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks for doing this, but I think you went a little too far.",
+          "createdAt": "2025-10-23T22:35:34Z",
+          "updatedAt": "2025-10-23T22:35:48Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "So this is good.  I would stop here.\n\nNone of the rest of this change is necessary.  We don't need to create new nomenclature that distinguishes a SCONE-capable network element from a non-SCONE-capable network element.  They are all potentially SCONE-capable; some just choose to exercise that capability.",
+              "createdAt": "2025-10-23T22:35:34Z",
+              "updatedAt": "2025-10-23T22:35:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87JJy4_",
+          "commit": {
+            "abbreviatedOid": "afb5923"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-24T06:55:14Z",
+          "updatedAt": "2025-10-24T06:55:14Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "```suggestion\npath of application traffic flows that have access to the IP packets- \n```\n\nI'm not sure if we need to say \"application\", but at least we can fix the typo.",
+              "createdAt": "2025-10-24T06:55:14Z",
+              "updatedAt": "2025-10-24T06:55:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87JNkR6",
+          "commit": {
+            "abbreviatedOid": "afb5923"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-24T11:02:23Z",
+          "updatedAt": "2025-10-24T11:02:24Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "That's one way of solving it.\r\n\r\nHowever, when I looked at the comments received in the filed issue and other related coversations, I got the impression that we want to separate the SCONE Network elements from other network elements. Hence, tried to describe it.",
+              "createdAt": "2025-10-24T11:02:24Z",
+              "updatedAt": "2025-10-24T11:02:24Z"
+            }
+          ]
         }
       ]
     }
