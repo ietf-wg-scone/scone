@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-26T01:44:38.186398+00:00",
+  "timestamp": "2025-10-28T01:38:57.605162+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2252,7 +2252,7 @@
       "labels": [],
       "body": "I noticed that the draft now uses both \u201cmaximum achievable throughput\u201d and \u201cmaximum sustained throughput\u201d interchangeably, however, they are two different concepts. \n\nFrom my understanding, what the SCONE network elements can provide is the maximum achievable throughput, They can\u2019t guarantee what is sustained for a particular 4-tuple (for instance when a number of flows share the same max).\n\nUnless we define what \"sustrained\" means, using both terms are confusing. I suggest we use \u201cmaximum achievable throughput\u201d.\n",
       "createdAt": "2025-10-23T14:24:43Z",
-      "updatedAt": "2025-10-23T22:36:38Z",
+      "updatedAt": "2025-10-27T14:53:12Z",
       "closedAt": null,
       "comments": [
         {
@@ -2261,6 +2261,34 @@
           "body": "Want to write up a PR to squash those few instances of \"sustained\" you found?",
           "createdAt": "2025-10-23T22:36:38Z",
           "updatedAt": "2025-10-23T22:36:38Z"
+        },
+        {
+          "author": "Kevsy",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think you would need a specific definition of \"achievable\" (e.g. \"that which can be achieved in the current network context\").  Without that, it's possible to state that maximum achievable throughput = maximum throughput =  bandwidth\n\n(Arguably these could be boiled down to \"bandwidth\" as the maximum throughput the network can achieve, and \"throughput\" for what is currently being delivered. If there is uncertainty about the latter, e.g. as a prediction for the duration of a flow, then the network element could report it as \"estimated throughput\")\n",
+          "createdAt": "2025-10-27T09:30:17Z",
+          "updatedAt": "2025-10-27T09:30:17Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I\u2019m not sure \u201cmax achievable throughput\u201d is better than \u201cmaximum sustained throughput.\u201d The former can be read as limiting bursts, whereas SCONE actually signals the maximum average rate over a defined interval. \u201cSustained\u201d captures that nuance.\n\nActually, my preference is to use \u201crate limit\u201d consistently across the document.\n\nFWIW, [Section 1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-1-4) already states that the protocol _provides a means for network elements to signal **the maximum available sustained throughput, or rate limits**, for flows of UDP datagrams that transit that network element to a QUIC endpoint_ - which is exactly on point.",
+          "createdAt": "2025-10-27T09:49:43Z",
+          "updatedAt": "2025-10-27T09:49:43Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I\u2019m not sure \u201cmax achievable throughput\u201d is better than \u201cmaximum sustained throughput.\u201d The former can be read as limiting bursts, whereas SCONE actually signals the maximum average rate over a defined interval. \u201cSustained\u201d captures that nuance.\n\n+1 to @kazuho. It's a nuance difference, but an important one. \nFrom a network operator perspective, one of the key benefits of SCONE is its ability to enable large bursts while managing the long-term average.",
+          "createdAt": "2025-10-27T13:49:59Z",
+          "updatedAt": "2025-10-27T13:49:59Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "1. We need to use one of the terms to express what we want to express, so yes lets use one defined term consistantly accros the document.\n2. \"maximum sustained throughput\" is fine with me as long as we define \"sustained\" part, which should mean a averaged throughput over a longer period of time.  ",
+          "createdAt": "2025-10-27T14:53:12Z",
+          "updatedAt": "2025-10-27T14:53:12Z"
         }
       ]
     }
