@@ -161,13 +161,13 @@ strictly advisory.
 
 Throughput advice signals are not a substitute for congestion feedback.  Congestion
 signals, such as acknowledgments, provide information on loss, delay, or ECN
-markings {{?ECN=RFC3168}} that indicate the real-time condition of a network
-path.  Congestion signals might indicate a throughput that is different from the
-signaled rate limit.
+markings {{?ECN=RFC3168}} that indicate the real-time condition of a network path.
+Congestion signals might indicate a throughput limit
+that is different from the signaled throughput advice.
 
 Endpoints cannot assume that a signaled rate limit is achievable if congestion
 signals indicate otherwise.  Congestion could be experienced at a different
-point on the network path than the network element that indicates a rate limit.
+point on the network path than the network element that signals throughput advice.
 Therefore, endpoints need to respect the send rate constraints that are set by a
 congestion controller.
 
@@ -177,13 +177,17 @@ Modifying a packet does not prove that the throughput that is indicated would be
 achievable.  A signal that is sent for a specific flow is likely enforced at a
 different scope.  The extent of that scope is not carried in the signal.
 
-For instance, limits might apply at a network subscription level, such
-that multiple flows receive the same signal.
+For instance, policy limits might apply at a network subscription level,
+such that multiple flows receive the same signal,
+but usage all contributes to a shared policy limit.
 
-Endpoints can therefore be more confident in the throughput signal as an
-indication of the maximum achievable throughput than as any indication of
-expected throughput.  That throughput will only be achievable when there is no
-significant data flowing in the same scope.  In the presence of other flows,
+Endpoints can therefore be more confident in the throughput signal
+as an indication of the maximum achievable throughput
+than as any indication of expected throughput.
+The advised throughput will only be achievable
+when the application is the only user of throughput
+within the scope that the advice applies to.
+In the presence of other flows,
 congestion limits are likely to determine actual throughput.
 
 This makes the application of signals most usefully applied to a downlink flow
@@ -211,19 +215,19 @@ signaling occurs as this is specific to the application in use.
 
 ## Advisory Signal
 
-A signal does not prove that a higher rate would not be successful.  Endpoints
-that receive this signal therefore need to treat the information as advisory.
+Receiving throughput advice does not guarantee that a higher throughput is not achievable.
+Endpoints that receive this signal therefore need to treat the information as advisory.
 
-The fact that an endpoint requests bitrate signals does not necessarily mean
+The fact that an endpoint requests throughput advice does not necessarily mean
 that it will adhere to them; in some cases, the endpoint cannot. For
 example, a flow may initially be used to serve video chunks, with the client
-selecting appropriate chunks based on bitrate signals, but later switch to a
-bulk download for which bitrate adaptation is not applicable. Composite flows
+selecting appropriate chunks based on received advice, but later switch to a
+bulk download for which bitrate adaptation that cannot be similarly controlled. Composite flows
 from multiple applications, such as tunneled flows, might only have a subset of
 the involved applications that are capable of handling SCONE signals. Therefore,
-when a network element detects a flow using more bandwidth than advertised via
-SCONE, it might switch to applying its policies for non-SCONE flows, using
-congestion control signals.
+when a network element detects that throughput exceeds the advertised throughput advice,
+it might switch to applying its policies for non-SCONE flows,
+using congestion control signals.
 
 The signaled advice applies to the flow of packets
 on the same UDP address tuple for the duration of
