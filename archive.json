@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-28T01:38:57.605162+00:00",
+  "timestamp": "2025-10-30T01:44:50.282880+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2221,15 +2221,15 @@
       "id": "I_kwDON1dwo87R4L-Y",
       "title": "Rate limit v. advice :-)",
       "url": "https://github.com/ietf-wg-scone/scone/issues/78",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I think both the current protocol spec and the candidate for the applicability I-D, assert that the scope is a network that has a policy that \"limits\" suggesting this is intentional, rather than experienced. To me, at least as an individual, this is important. There are cases where I expect the rate is actually applied as a policy, but  also I see places where the rate might be a result of other system/propagation constraints. In both cases, the rate becomes limited, and is still experienced. I suggest we could be more careful about how we present this in both drafts. Please see examples below:\n\n/Many access networks apply rate limits to constrain the data rate of attached devices./\n\n/Having the network indicate what its rate limiting policy is, in a\n   way that is accessible to endpoints, allows applications to use this\n   information when adapting their send rate./\n- I'd agree, but we could also articulate a case where there is knowledge of the upper rate and simply communicate this advice to the endpoints.\n\nI think this could use better words:\n/throughput that is different from the signaled rate limit/\n- The signalled throughput advice? or rate signal?\n/element that indicates a rate limit/\n- The signalled throughput advice? or rate signal?\n\nShouldn't 3.2 also provide an example of sharing, where capacity aka rate becomes shared with other flows?  and with cross-traffic?\n\n/prove that the throughput that is  indicated/\n- The *signalled throughput advice*?\n\n/data flowing in the same scope/\n- what is the word scope here?\n\n/network element detects a flow using more bandwidth/\n- Is that capacity? (or just for consistency here it could be perhaps even mention throughput?)\n\n5.1 Is a rate signal the same as a throughput guidance, please just explain.\n\n/indicating no rate limit is in place/\n- I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice? \n",
       "createdAt": "2025-10-16T09:59:33Z",
-      "updatedAt": "2025-10-20T15:46:06Z",
-      "closedAt": null,
+      "updatedAt": "2025-10-29T00:38:34Z",
+      "closedAt": "2025-10-29T00:38:34Z",
       "comments": [
         {
           "author": "wesley-eddy",
@@ -2237,6 +2237,13 @@
           "body": "> /indicating no rate limit is in place/\n> \n> * I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice?\n\nI agree; this should be more like \"indicating that no specific advice is provided\", or something like that.",
           "createdAt": "2025-10-20T15:46:06Z",
           "updatedAt": "2025-10-20T15:46:06Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > /indicating no rate limit is in place/\n> > \n> > * I am not sure that actually does indicate this. Of course, there is some sort of a rate limit somewhere along the path, but I think this text means there is no advertised throughput advice?\n> \n> I agree; this should be more like \"indicating that no specific advice is provided\", or something like that.\n\nSection 5.1 of the current version of the draft states:\n\"Receiving a value of 127 indicates that throughput advice is unknown, either because network elements on the path are not providing advice or they do not support SCONE.\"\n\nI believe this should address this particular concern. ",
+          "createdAt": "2025-10-28T15:23:48Z",
+          "updatedAt": "2025-10-28T15:23:48Z"
         }
       ]
     },
@@ -2252,7 +2259,7 @@
       "labels": [],
       "body": "I noticed that the draft now uses both \u201cmaximum achievable throughput\u201d and \u201cmaximum sustained throughput\u201d interchangeably, however, they are two different concepts. \n\nFrom my understanding, what the SCONE network elements can provide is the maximum achievable throughput, They can\u2019t guarantee what is sustained for a particular 4-tuple (for instance when a number of flows share the same max).\n\nUnless we define what \"sustrained\" means, using both terms are confusing. I suggest we use \u201cmaximum achievable throughput\u201d.\n",
       "createdAt": "2025-10-23T14:24:43Z",
-      "updatedAt": "2025-10-27T14:53:12Z",
+      "updatedAt": "2025-10-29T01:36:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -2289,6 +2296,27 @@
           "body": "1. We need to use one of the terms to express what we want to express, so yes lets use one defined term consistantly accros the document.\n2. \"maximum sustained throughput\" is fine with me as long as we define \"sustained\" part, which should mean a averaged throughput over a longer period of time.  ",
           "createdAt": "2025-10-27T14:53:12Z",
           "updatedAt": "2025-10-27T14:53:12Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It seems like we are already consistent, mostly, as it relates to \"rate limit\".  Though this is defined in terms of the average over a period of time.  There's a strong definition already, so I don't agree that this needs much more care.  Happy to look at pull requests that refine it.",
+          "createdAt": "2025-10-28T04:33:54Z",
+          "updatedAt": "2025-10-28T04:33:54Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "> I\u2019m not sure \u201cmax achievable throughput\u201d is better than \u201cmaximum sustained throughput.\u201d The former can be read as limiting bursts, whereas SCONE actually signals the maximum average rate over a defined interval. \u201cSustained\u201d captures that nuance.\n\nTo my understanding, the \"max sustrained throughput\" is something that can be maintained over certain period of time. Here, there is some sort of gurantee to provide that throughput over a period of time, for scone we don't know that configured period. However, we have 67s of monitoring period.\n\nThe \"max available throughput\" is something the network or system can currently offer for data transmission given the current condition and there is no gurantee that the condition won't change.\n\nYou see the interpretations are different. Hence, I would suggest that we pick one term and define it.\n\n> \n> Actually, my preference is to use \u201crate limit\u201d consistently across the document.\n> \n\nJust \"rate limit\"?\n\n> FWIW, [Section 1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-1-4) already states that the protocol _provides a means for network elements to signal **the maximum available sustained throughput, or rate limits**, for flows of UDP datagrams that transit that network element to a QUIC endpoint_ - which is exactly on point.\n\nHere we used both \"sustained\" and \"available\" and later in the document we picked each of the individualy. This is even more confusing.  \n\n",
+          "createdAt": "2025-10-28T11:02:11Z",
+          "updatedAt": "2025-10-28T11:02:11Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> To my understanding, the \"max sustrained throughput\" is something that can be maintained over certain period of time. Here, there is some sort of gurantee to provide that throughput over a period of time, for scone we don't know that configured period. However, we have 67s of monitoring period.\n\nI think the most detailed definition at the moment is the one we have in [Section 5.4](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.4-2): i.e., _an endpoint that receives throughput advice might receive multiple different rate limits. If advice is applied by applications, applications MUST apply the lowest throughput advice received during any monitoring period._\n\nReading the quoted paragraph, I realize that we also use the term \"throughput advice\" as well.\n\nRegarding the signal that SCONE provides, I'm starting to wonder if \"throughput advice\" is a term better than \"rate limit.\" The problem with \"rate limit\" is that, in the document, we talk about things like \"rate limits\" or \"rate limit policy\" to refer to CC-based throttling techniques not necessary tied to SCONE.",
+          "createdAt": "2025-10-28T22:48:50Z",
+          "updatedAt": "2025-10-29T01:36:28Z"
         }
       ]
     }
@@ -7955,21 +7983,21 @@
       "id": "PR_kwDON1dwo86rJNE_",
       "title": "RFC: Distinguish \"No Limit\" from \"No (new) Advice\"",
       "url": "https://github.com/ietf-wg-scone/scone/pull/70",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "afrind",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "This is an example of what changes might be needed to make advice \"sticky\" or \"set it and forget it\".",
       "createdAt": "2025-09-29T16:36:52Z",
-      "updatedAt": "2025-10-15T21:00:06Z",
+      "updatedAt": "2025-10-28T16:05:59Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "b46edba15e5020dd6af66ade5eecbc92dd6bf200",
       "headRepository": "afrind/scone",
       "headRefName": "sticky-advice",
       "headRefOid": "5ebe0c114fd2669c4242c510190bcd67fe94bf4e",
-      "closedAt": null,
+      "closedAt": "2025-10-28T16:05:59Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -7980,6 +8008,13 @@
           "body": "Requesting that the lifetime of SCONE advice is ~infinite is a rather dramatic change, and runs counter to the \"soft state\" principle of how the interaction between the Internet and its end nodes should be built. \r\nIf you really want to ask for this change, put up a separate request for it.\r\n\r\nThe theory that current UPF nodes may be so underprovisioned that they can't handle a per-flow operation every 67 second, while the same node can handle policing of every packet on the same flows, seems to me lacking in documentation.",
           "createdAt": "2025-10-13T06:22:32Z",
           "updatedAt": "2025-10-13T06:22:32Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Given that we have issue #75, I would suggest that we close this PR and create a new one if deemed necessary later on. ",
+          "createdAt": "2025-10-28T15:10:16Z",
+          "updatedAt": "2025-10-28T15:10:16Z"
         }
       ],
       "reviews": [
@@ -8473,25 +8508,42 @@
       "id": "PR_kwDON1dwo86uvXXW",
       "title": "Reword to emphasize \"advice\"",
       "url": "https://github.com/ietf-wg-scone/scone/pull/81",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This takes the suggestions @gorryfair made and does a little extra rewording of surrounding text to make it clearer that this is just advice.\r\n\r\nCloses #78.",
       "createdAt": "2025-10-21T01:17:21Z",
-      "updatedAt": "2025-10-21T06:29:12Z",
+      "updatedAt": "2025-10-29T00:40:02Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "680b13c8615d3c5d2975d7dd84862a2e86a02ddd",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "limit-advice",
       "headRefOid": "6e979de28bc93f987a924d0dba3c476cb168cca4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2025-10-29T00:38:33Z",
+      "mergedAt": "2025-10-29T00:38:33Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "608659db0c1780202cf450f1098e68de024d85d3"
+      },
+      "comments": [
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I have mixed feelings there. First, the proposed text is indeed an improvement, easier to read and using terminology consistent with the other parts of the draft. That good. But then, we have one paragraph stating that the signal from the network is not guaranteeing that the advised data rate will be available, and after that we have another paragraph stating that applications can make a best effort to use less than the advised rate but fail. Which leaves us wondering what SCONE is good for, exactly.\r\n\r\nThis are indeed (necessary) limitations of this protocol. Treating advice as guarantees for anything is dangerous unless you have a trusted relation / SLA between a sender and receiver of information. Something that's completely out of scope for this document. \r\n\r\n> I suppose that these are questions for another issue and another PR.\r\n\r\nMakes sense to discuss this in a separate issue. ",
+          "createdAt": "2025-10-28T14:53:51Z",
+          "updatedAt": "2025-10-28T14:53:51Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@huitema, I contemplated opening an issue for the apparent conflict.  I didn't in the end, mostly because I see this as an essential tension in the design.\r\n\r\nI just wanted to flag this in case you wanted to open that issue.",
+          "createdAt": "2025-10-29T00:40:02Z",
+          "updatedAt": "2025-10-29T00:40:02Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87INOyt",
@@ -8504,6 +8556,19 @@
           "body": "I have mixed feelings there. First, the proposed text is indeed an improvement, easier to read and using terminology consistent with the other parts of the draft. That good. But then, we have one paragraph stating that the signal from the network is not guaranteeing that the advised data rate will be available, and after that we have another paragraph stating that applications can make a best effort to use less than the advised rate but fail. Which leaves us wondering what SCONE is good for, exactly.\r\n\r\nIn your example of an application switching from real time to batch, should it continue to ask for a SCONE advice that it will not heed? Are there other possible mitigations to such issues? I suppose that these are questions for another issue and another PR.\r\n\r\nApproving on the basis that the text says what we already meant and is clearer, which can only help.",
           "createdAt": "2025-10-21T06:29:12Z",
           "updatedAt": "2025-10-21T06:29:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87KA2qb",
+          "commit": {
+            "abbreviatedOid": "6e979de"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-28T14:54:06Z",
+          "updatedAt": "2025-10-28T14:54:06Z",
           "comments": []
         }
       ]
