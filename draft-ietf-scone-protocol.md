@@ -130,18 +130,14 @@ by modifying the SCONE packet as it transits the network element.
 QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.
 
-
-Throughput advice in each direction --
-the client-to-server direction and the server-to-client direction --
-are independent.
-It is expected that these rates will differ for multiple reasons,
-which include asymmetry of link capacity and path diversity.
-Applications may choose to enable SCONE signals in either or both directions
-as they see fit.
-
-Indicated rate limits only apply to the path on which they are received.  A
-connection that migrates or uses multipath {{?QUIC-MP=I-D.ietf-quic-multipath}}
+Indicated rate limits only apply to the direction and path for which they are
+received.  A connection that migrates or uses multipath
+{{?QUIC-MP=I-D.ietf-quic-multipath}}
 cannot assume that rate limit indications from one path apply to new paths.
+Advice for the client-to-server direction and the server-to-client direction of
+each path are independent, and are expected to be different, for reasons including
+asymmetric link capacity and path diversity. Applications may choose to utilize
+SCONE in either or both direction(s) of each path as they see fit.
 
 
 # Applicability
