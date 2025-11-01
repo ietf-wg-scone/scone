@@ -131,7 +131,7 @@ QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.
 
 Indicated rate limits only apply to the direction and path for which they are
-received.  A connection that migrates or uses multipath 
+received.  A connection that migrates or uses multipath
 {{?QUIC-MP=I-D.ietf-quic-multipath}}
 cannot assume that rate limit indications from one path apply to new paths.
 Advice for the client-to-server direction and the server-to-client direction of
