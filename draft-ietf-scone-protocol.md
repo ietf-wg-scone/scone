@@ -65,7 +65,8 @@ throughput might be for QUIC flows.
 
 # Introduction
 
-Many access networks apply rate limits to constrain the data rate of attached
+Many networks have known, concrete rate limits, or apply these limits
+by policy to constrain the data rate of attached
 devices. This is often done without any indication to the applications
 running on devices.  The result can be that application performance is degraded,
 as the manner in which rate limits are enforced can be incompatible with the
@@ -76,8 +77,8 @@ accessible to endpoints, allows applications to use this information when
 adapting their send rate.
 
 Network elements are not limited to communicating information
-about rate limiting policies.
-Network elements in access networks could provide advice
+about rate limiting policies. For example, network elements in
+access networks could provide advice
 to endpoints that can help guide application use of network capacity,
 separate from any signals that are intended to influence congestion response.
 Advice might also indicate temporarily increases in available capacity,
@@ -190,7 +191,7 @@ within the scope that the advice applies to.
 In the presence of other flows,
 congestion limits are likely to determine actual throughput.
 
-This makes the application of signals most usefully applied to a downlink flow
+This implies that signals can particularly usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
 to be split between multiple active flows.
 
