@@ -141,7 +141,10 @@ as they see fit.
 
 Indicated rate limits only apply to the path on which they are received.  A
 connection that migrates or uses multipath {{?QUIC-MP=I-D.ietf-quic-multipath}}
-cannot assume that rate limit indications from one path apply to new paths.
+cannot assume that rate limit indications from one path apply to new paths. 
+Rates on the client-to-server direction and the server-to-client direction of
+each path are independent, expected to be different, and applications may 
+choose to utilize SCONE in either or both directions as they see fit.
 
 
 # Applicability
