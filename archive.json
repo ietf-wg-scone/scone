@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-30T01:44:50.282880+00:00",
+  "timestamp": "2025-11-02T01:46:58.982990+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -617,7 +617,7 @@
       "labels": [],
       "body": "There is a bit of ambiguity in the specification of \"who uses TRONE\". The original Scone WG appears to have focused on adaptive bit rate video. If we strictly kept that focus, we have a privacy issue. Third parties could observe the presence of Trone headers, and infer that the end to end QUIC connection is engaged in video streaming.\n\nTo reduce the privacy issue, we could adopt a combined strategy, and ask more applications to support Trone, thus weakening the correlation between Trone and video.\n\nWe could also envisage greasing, with applications sending datagrams composed of a Trone packet, followed by a short header and random content. If the peer is not Trone capable, such greasing packets will be discarded because they do done decrypt correctly. But the third parties cannot check the encryption, so they will not be able to distinguish such packets from \"real\" Trone -- i.e., successful greasing.",
       "createdAt": "2025-03-21T05:04:11Z",
-      "updatedAt": "2025-08-06T02:12:38Z",
+      "updatedAt": "2025-11-01T14:30:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -654,6 +654,13 @@
           "body": "You can send a Scone packet to a peer. You just must expect it to be lost. So sending a Scone packet concatenated with a fake 1RTT packet is completely fine. The peer will just drop it.",
           "createdAt": "2025-08-06T02:12:23Z",
           "updatedAt": "2025-08-06T02:12:38Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Someone here at the hackathon suggested that we should consider SCONE itself to be a form of greasing for the version field.\n\nThe question that remains is whether we need to grease the client indication.  In discussing that, I realized that neqo already greases the indication, given that it pads packets in a similar fashion.  The new indication will mean a new form of padding, which might trigger a few more incompatibility bugs, but nothing to be concerned with, just something to monitor.",
+          "createdAt": "2025-11-01T14:30:07Z",
+          "updatedAt": "2025-11-01T14:30:07Z"
         }
       ]
     },
@@ -813,15 +820,15 @@
       "id": "I_kwDON1dwo86wCKw4",
       "title": "Clarify rounding behavior for bitrate-to-signal value conversion",
       "url": "https://github.com/ietf-wg-scone/scone/issues/17",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjoras",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "See discussion on #12 \n\nThe draft needs clear guidance on rounding when converting between bitrates and signal values.\n\n- Should implementers round up or down when converting from bitrates to signal values?\n- What are the practical implications of each choice? (rounding down ensures staying under capacity limits; rounding up maximizes bandwidth utilization when rate adaptation algorithms rarely use full capacity)\n- Recommend specific approach with rationale, noting the logarithmic scale means adjacent steps differ by at most ~11%\n- Include example calculations demonstrating the recommended approach\n\n\n\n",
       "createdAt": "2025-03-27T15:07:00Z",
-      "updatedAt": "2025-07-23T16:10:15Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-01T14:30:24Z",
+      "closedAt": "2025-11-01T14:30:24Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -1330,7 +1337,7 @@
       "id": "I_kwDON1dwo862PkrX",
       "title": "Scope is restricted to 'rate limiting' networks only",
       "url": "https://github.com/ietf-wg-scone/scone/issues/32",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "Kevsy",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -1339,8 +1346,8 @@
       ],
       "body": "draft-00 does not include the use of SCONE by networks that do not apply rate limit policies. For example, a cellular network that provides throughput advice based on its view of network congestion and channel conditions.  I've drafted PR which adds that as a use of SCONE, and hence changes 'rate limit signal' to throughput advice' throughout:  #31",
       "createdAt": "2025-05-12T16:38:30Z",
-      "updatedAt": "2025-07-23T16:08:22Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-01T14:30:36Z",
+      "closedAt": "2025-11-01T14:30:36Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -1852,7 +1859,7 @@
       "labels": [],
       "body": "If we say that rates apply over relatively long time frames, then we are also implicitly saying that rates can spike up well above that rate.  Arbitrarily high, even.  For instance, if we say that the average throughput needs to be X over 67 seconds (#61), then that might be the same as saying 67X over one second, followed by silence for 66 seconds.  Nothing says that can't be half a second, or one millisecond, if that is physically possible.\n\nI have heard a few things with respect to this:\n\n1. This sort of spikiness might be desirable for some cases, such as downloading software updates over a mobile network.  There, the radio link can often support very high transmission rates, but seeks to serve many terminals (or UEs) so that high rate cannot be allocated to a single network user over a longer period.  Having data delivered in spikes allows the device to return its radio off and save energy.  It also simplifies delivery in the network, which can open a dedicated channel for a short time, rather than have to switch between multiple terminals.  This argues FOR allowing spikes in send rates as high as the network can tolerate.\n2. Spikes in send rate might cause buffers to overflow, which might degrade performance or cause spikes in latency.  For both the affected flow and potentially other network users.  This is true, but only to the extent that the congestion controller permits that to happen.  And we are not chartered to change how congestion control operates.  We require that the congestion controller remain an independent limit on sending.  It is the congestion controller's task to ensure that endpoints don't damage the network, so as long as they continue to do that job, throughput advice can't damage the network.  This seems fine.\n3. Spikes in sending rate might not be achievable for congestion controllers because it depends on very fast increases in send rate and long pauses.  As a reminder: We are not seeking to change the constraints that congestion controllers might place on send rates, nor are we looking to override any aspect of their operation.  This doesn't argue for anything to my mind, because we are not chartered to change how congestion controllers work.\n4. It might be hard to reason about how to manage bandwidth if you can spend all your data budget in a short time then have no ability to get more when someone changes their mind.  This doesn't argue for anything in particular in my mind, other than to highlight that this is a sharp tool that might cut you if you operate it incorrectly.  That's true of most protocols.\n\n@huitema @kazuho, is there another factor here that I'm missing?",
       "createdAt": "2025-08-28T04:47:35Z",
-      "updatedAt": "2025-08-28T07:41:43Z",
+      "updatedAt": "2025-11-01T14:54:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -1882,6 +1889,13 @@
           "body": "Agree that we should specify as little as possible here.  \n\n> 1. Leave the nominal monitoring algorithm as is;\n> 2. Explain that we do have a very sharp edge there;\n> 3. Explain that networks have other tools to police bursts if they don't like them, such as deploying some form of active queue management, which will cause the data senders to receive congestion control signals.\n\nThis should be sufficient imo. \n\n",
           "createdAt": "2025-08-28T07:41:43Z",
           "updatedAt": "2025-08-28T07:41:43Z"
+        },
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "reviewing, ISTM that the core point of discussion here has essentially moved to #65. Propose to close this issue in favor of #65.",
+          "createdAt": "2025-11-01T14:54:32Z",
+          "updatedAt": "2025-11-01T14:54:32Z"
         }
       ]
     },
@@ -1949,7 +1963,7 @@
       "labels": [],
       "body": "In current draft \"overview\" section it is stated that \n\n**\"Indicated rate limits apply only in a single direction. Separate indications can be sent for the client-to-server direction and server-to-client direction. The indicated rates do not need to be the same**.\"\n\nAs per my understanding no information element within SCONE Packet carry \"direction\" information to let client know whether rate limit is for client-to-server ( UL) direction and server-to-client  (DL) direction. \n\nWe should update \"overview'' section  and remove \"client-to-server\" direction.  CSP networks typically use rate-limiters to limit bit rate in DL direction ie. \"server-to-client direction\" for on-demand streaming video application. \n",
       "createdAt": "2025-08-28T23:02:34Z",
-      "updatedAt": "2025-08-29T08:13:57Z",
+      "updatedAt": "2025-11-01T15:54:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -1972,6 +1986,13 @@
           "body": "Oh, I like that Harald, thanks for the contribution.  I'll open a pull request.",
           "createdAt": "2025-08-29T08:13:57Z",
           "updatedAt": "2025-08-29T08:13:57Z"
+        },
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "this was mostly already addressed, but #86 cleans up the language further imo",
+          "createdAt": "2025-11-01T15:54:54Z",
+          "updatedAt": "2025-11-01T15:54:54Z"
         }
       ]
     },
@@ -2319,6 +2340,22 @@
           "updatedAt": "2025-10-29T01:36:28Z"
         }
       ]
+    },
+    {
+      "number": 85,
+      "id": "I_kwDON1dwo87U3zAk",
+      "title": "Do we have implicit server side indication for SCONE support?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/85",
+      "state": "OPEN",
+      "author": "zaheduzzaman",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In SCONE protocol, we allow throughput advice for both client-to-server and server-to-client directions. The SCONE packet receiption at the client and the server is negotiated via the defined transport parameter. \n\nHowever, the current draft only details client-side indication of SCONE support to network elements. Should this client-side indication implicitly lead network elements to expect SCONE packets from both the client-to-server and server-to-client directions for a given flow? I am not sure about this implicit expectation is intended: Hence, further clarification in Section 6  of the SCONE protocol draft would be beneficial to explicitly address how network elements should interpret SCONE support indications.\n",
+      "createdAt": "2025-10-30T15:45:22Z",
+      "updatedAt": "2025-10-30T15:45:22Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -8768,7 +8805,7 @@
       "labels": [],
       "body": "Tried to capture the comments and discussions in the simplest way possible.\r\n\r\nIncludes :\r\n\r\n- simplistic defition of a Network element\r\n- coined the term \"SCONE Network element\" which is a special network element capable of handling SCONE protocol.\r\n- s/network element/SCONE Network element, throughout the document.\r\n- changes figure to depict SCONE Network element.",
       "createdAt": "2025-10-23T14:08:51Z",
-      "updatedAt": "2025-10-24T11:02:24Z",
+      "updatedAt": "2025-11-01T16:26:48Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "f8885d5e3eded3d53b5d4b569e0585d4381e13c1",
@@ -8858,6 +8895,132 @@
               "body": "That's one way of solving it.\r\n\r\nHowever, when I looked at the comments received in the filed issue and other related coversations, I got the impression that we want to separate the SCONE Network elements from other network elements. Hence, tried to describe it.",
               "createdAt": "2025-10-24T11:02:24Z",
               "updatedAt": "2025-10-24T11:02:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87LG7Di",
+          "commit": {
+            "abbreviatedOid": "0f524c7"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-01T16:26:48Z",
+          "updatedAt": "2025-11-01T16:26:48Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\nThis document describes a protocol where on-path network elements\n```",
+              "createdAt": "2025-11-01T16:26:48Z",
+              "updatedAt": "2025-11-01T16:26:48Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 86,
+      "id": "PR_kwDON1dwo86w_ndA",
+      "title": "Clarify path/direction applicability of received advice",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/86",
+      "state": "OPEN",
+      "author": "britram",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #66.",
+      "createdAt": "2025-11-01T15:37:46Z",
+      "updatedAt": "2025-11-01T18:11:26Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "608659db0c1780202cf450f1098e68de024d85d3",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "britram-66-directionality",
+      "headRefOid": "e567e9735040c8b3f5eeb08f91879327e0f2cce5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87LG7Iu",
+          "commit": {
+            "abbreviatedOid": "e567e97"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-01T16:27:48Z",
+          "updatedAt": "2025-11-01T16:27:48Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87LHC5O",
+          "commit": {
+            "abbreviatedOid": "e567e97"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-01T18:11:26Z",
+          "updatedAt": "2025-11-01T18:11:26Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 87,
+      "id": "PR_kwDON1dwo86w_qeI",
+      "title": "Clarify that SCONE isn't access network only.",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/87",
+      "state": "OPEN",
+      "author": "britram",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Minimalist attempt to address #77",
+      "createdAt": "2025-11-01T15:59:19Z",
+      "updatedAt": "2025-11-01T16:32:18Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "608659db0c1780202cf450f1098e68de024d85d3",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "britram-77",
+      "headRefOid": "e81ef56d9e767d6ae5eb150a484f6385d7cb3650",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87LG7SA",
+          "commit": {
+            "abbreviatedOid": "e81ef56"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-01T16:29:47Z",
+          "updatedAt": "2025-11-01T16:32:18Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\nThis implies that signals can most usefully be applied to a downlink flow\n```",
+              "createdAt": "2025-11-01T16:29:47Z",
+              "updatedAt": "2025-11-01T16:32:19Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "Do you want to tweak the devices statement also?\n\n\n```suggestion\nby policy to constrain data rates. This is often done without any indication to the applications\n```\n\n\n```suggestion\nby policy to constrain data rates.\nThis is often done without any indication to applications.\nThe result can be that application performance is degraded,\n```",
+              "createdAt": "2025-11-01T16:32:13Z",
+              "updatedAt": "2025-11-01T16:32:19Z"
             }
           ]
         }
