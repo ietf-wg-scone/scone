@@ -534,6 +534,9 @@ Despite these limitations,
 having an indication might allow network elements to change their starting posture
 with respect to their enforcement of their rate limit policies.
 
+There is no equivalent indication for servers;
+a server can send a SCONE packet to a client that supports SCONE.
+
 
 ## Indications for Migrated Flows
 
