@@ -520,7 +520,7 @@ until it receives a response -- of any kind -- from the server.
 This indication does not mean that SCONE signals will be respected,
 only that the client is able to negotiate SCONE.
 A server might not support SCONE
-or might choose not to send SCONE packets.
+and either endpoint might choose not to send SCONE packets.
 Finally, applications might be unable to apply throughput advice
 or choose to ignore it.
 
