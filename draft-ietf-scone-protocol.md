@@ -141,7 +141,7 @@ as they see fit.
 
 Indicated throughput advice only apply to the path on which they are received.  A
 connection that migrates or uses multipath {{?QUIC-MP=I-D.ietf-quic-multipath}}
-cannot assume that throughput adviec indications from one path apply to new paths.
+cannot assume that throughput advice indications from one path apply to new paths.
 
 
 # Applicability
