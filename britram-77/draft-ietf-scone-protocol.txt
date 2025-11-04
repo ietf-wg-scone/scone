@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 5 May 2026                                 Private Octopus Inc.
+Expires: 8 May 2026                                 Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         1 November 2025
+                                                         4 November 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 May 2026.
+   This Internet-Draft will expire on 8 May 2026.
 
 Copyright Notice
 
@@ -120,12 +120,11 @@ Table of Contents
 1.  Introduction
 
    Many networks have known, concrete rate limits, or apply these limits
-   by policy to constrain the data rate of attached devices.  This is
-   often done without any indication to the applications running on
-   devices.  The result can be that application performance is degraded,
-   as the manner in which rate limits are enforced can be incompatible
-   with the rate estimation or congestion control algorithms used at
-   endpoints.
+   by policy to constrain data rates.  This is often done without any
+   indication to applications.  The result can be that application
+   performance is degraded, as the manner in which rate limits are
+   enforced can be incompatible with the rate estimation or congestion
+   control algorithms used at endpoints.
 
    Having the network indicate what its rate limiting policy is, in a
    way that is accessible to endpoints, allows applications to use this
@@ -246,10 +245,9 @@ Table of Contents
    other flows, congestion limits are likely to determine actual
    throughput.
 
-   This implies that signals can particularly usefully be applied to a
-   downlink flow in access networks, close to an endpoint.  In that
-   case, capacity is less likely to be split between multiple active
-   flows.
+   This implies that signals can most usefully be applied to a downlink
+   flow in access networks, close to an endpoint.  In that case,
+   capacity is less likely to be split between multiple active flows.
 
 3.3.  Per-Flow Signal
 
