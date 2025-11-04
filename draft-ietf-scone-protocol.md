@@ -66,9 +66,9 @@ throughput might be for QUIC flows.
 # Introduction
 
 Many networks have known, concrete rate limits, or apply these limits
-by policy to constrain the data rate of attached
-devices. This is often done without any indication to the applications
-running on devices.  The result can be that application performance is degraded,
+by policy to constrain data rates.
+This is often done without any indication to applications.
+The result can be that application performance is degraded,
 as the manner in which rate limits are enforced can be incompatible with the
 rate estimation or congestion control algorithms used at endpoints.
 
@@ -191,7 +191,7 @@ within the scope that the advice applies to.
 In the presence of other flows,
 congestion limits are likely to determine actual throughput.
 
-This implies that signals can particularly usefully be applied to a downlink flow
+This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
 to be split between multiple active flows.
 
