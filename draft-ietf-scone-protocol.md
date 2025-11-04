@@ -130,10 +130,10 @@ by modifying the SCONE packet as it transits the network element.
 QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.
 
-Indicated rate limits only apply to the direction and path for which they are
+Throughput advice only apply to the direction and path for which they are
 received.  A connection that migrates or uses multipath
 {{?QUIC-MP=I-D.ietf-quic-multipath}}
-cannot assume that rate limit indications from one path apply to new paths.
+cannot assume that throughput advice from one path apply to new paths.
 Advice for the client-to-server direction and the server-to-client direction of
 each path are independent, and are expected to be different, for reasons including
 asymmetric link capacity and path diversity. Applications may choose to utilize
@@ -146,7 +146,7 @@ This protocol only works for flows that use the SCONE packet ({{packet}}).
 
 The protocol requires that packets are modified as they transit a
 network element, which provides endpoints strong evidence that the network
-element has the power to apply rate limiting; though see {{security}} for
+element has the power to apply a rate limiting policy; though see {{security}} for
 potential limitations on this.
 
 The throughput advice signal that this protocol carries is independent of congestion
@@ -161,7 +161,7 @@ markings {{?ECN=RFC3168}} that indicate the real-time condition of a network pat
 Congestion signals might indicate a throughput limit
 that is different from the signaled throughput advice.
 
-Endpoints cannot assume that a signaled rate limit is achievable if congestion
+Endpoints cannot assume that the rate indicated in throughput advice is achievable if congestion
 signals indicate otherwise.  Congestion could be experienced at a different
 point on the network path than the network element that signals throughput advice.
 Therefore, endpoints need to respect the send rate constraints that are set by a
@@ -328,7 +328,7 @@ elements on the path are not providing advice or they do not support SCONE. All
 other values (0 through 126) represent the ceiling of rates advised by the
 network element(s) on the path.
 
-The rate limits follow a logarithmic scale defined as:
+Throughput advice follows a logarithmic scale defined as:
 
 * Base rate (b_min) = 100 Kbps
 * Bitrate at value n = b_min * 10^(n/20)
@@ -430,7 +430,7 @@ to effect a similar outcome indirectly,
 which might use flow control or changes to request patterns.
 
 An endpoint that receives throughput advice
-might receive multiple different rate limits.
+might receive multiple different values.
 If advice is applied by applications,
 applications MUST apply the lowest throughput advice
 received during any monitoring period; see {{time}}.
@@ -572,7 +572,7 @@ Version field and the Rate Signal High Bits field with values of its choosing.
 
 A network element might receive a packet that already includes a rate signal.
 The network element replaces the rate signal if it wishes to signal a lower
-rate limit; otherwise, the original values are retained, preserving the signal
+value for throughput advice; otherwise, the original values are retained, preserving the signal
 from the network element with the lower policy.
 
 The following pseudocode indicates how a network element might detect a SCONE
@@ -632,11 +632,11 @@ is possible.
 To operate this algorithm,
 the minimal state a network element maintains is:
 
-* the current rate limit,
+* the current throughput advice,
 * any state necessary to monitor throughput
   (that is, throughput usage state, such as the state in {{sliding-window}}),
 * a timer used for rate increases, and
-* the time at which that rate limit was last updated.
+* the time at which that throughput advice was last updated.
 
 When advice is set or updated,
 the network element waits until
@@ -644,7 +644,8 @@ it receives the next SCONE packet on affected flows.
 It then updates the throughput advice in that packet ({{apply}})
 and updates its monitoring state as follows:
 
-* If the signaled rate limit is the same as the current rate limit,
+* If the signaled throughput advice
+  is the same as the current throughput advice,
   set the last update time to the current time.
 
 * If the signaled rate is higher than the current value,
@@ -652,7 +653,7 @@ and updates its monitoring state as follows:
 
   * If the time since the last SCONE packet was updated
     is greater than the monitoring period,
-    the current rate limit is increased to the received value
+    the current throughput advice is increased to the received value
     and the last update time is set to the current time.
 
   * Otherwise, the throughput advice is deferred.
@@ -662,8 +663,8 @@ and updates its monitoring state as follows:
     When the timer lapses,
     change the rate monitoring to the higher rate.
 
-* If the signaled rate is lower than the current value,
-  set the current rate limit to match the advice,
+* If the signaled throughput advice is lower than the current value,
+  set the current throughput advice to match the signaled value,
   cancel any rate increase timer,
   discard all rate monitoring state,
   and set the last update time to the current time.
@@ -777,7 +778,7 @@ The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
 for application data.
 
-A network element that wishes to signal an updated rate limit waits for the
+A network element that wishes to signal updated throughput advice waits for the
 next SCONE packet in the desired direction; see {{apply}}.
 
 
@@ -860,8 +861,8 @@ are incorrect.  The congestion controller employed by a sender provides
 real-time information about the rate at which the network path is delivering
 data.
 
-Similarly, if there is a strong need to ensure that a rate limit is respected,
-network elements cannot assume that the signaled limit will be respected by
+Similarly, if there is a strong need to ensure that throughput advice is respected,
+network elements cannot assume that the signaled advice will be respected by
 endpoints.
 
 ## Fake SCONE Packets
@@ -930,7 +931,7 @@ operate or leaks of endpoint identity when using additional
 privacy protection, such as a VPN.
 
 Any network element that can observe the content of that packet can read the
-rate limit that was applied.  Any signal is visible on the path, from the point
+throughput advice that was applied.  Any signal is visible on the path, from the point
 at which it is applied to the point at which it is consumed at an endpoint.
 On path elements can also alter the SCONE signal to try trigger specific
 reactions and gain further knowledge.
@@ -939,7 +940,7 @@ In the general case of a client connected to a server through the
 Internet, we believe that SCONE does not provide much advantage to attackers.
 The identities of the clients and servers are already visible through their
 IP addresses. Traffic analysis tools already provide more information than
-the data rate limits set by SCONE.
+the throughput advice set by SCONE.
 
 There are two avenues of attack that require more analysis:
 
@@ -1100,7 +1101,7 @@ Notes:
 
 --- back
 
-# Sliding Window for Rate Limit Monitoring {#sliding-window}
+# Sliding Window for Rate Monitoring {#sliding-window}
 
 One way to account for usage
 is to divide time into multiple smaller spans.
@@ -1119,7 +1120,7 @@ Sample code for this algorithm is included in {{x-ta}}.
 ~~~ pseudocode
 {::include ta.py.excerpt}
 ~~~
-{: #x-ta title="Sample code for managing rate limit"}
+{: #x-ta title="Sample code for managing throughput advice"}
 
 # Acknowledgments
 {:numbered="false"}
