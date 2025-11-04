@@ -119,9 +119,9 @@ Table of Contents
 
 1.  Introduction
 
-   Many access networks apply rate limits to constrain the data rate of
-   attached devices.  This is often done without any indication to the
-   applications running on devices.  The result can be that application
+   Many networks have known, concrete rate limits, or apply these limits
+   by policy to constrain data rates.  This is often done without any
+   indication to applications.  The result can be that application
    performance is degraded, as the manner in which rate limits are
    enforced can be incompatible with the rate estimation or congestion
    control algorithms used at endpoints.
@@ -131,14 +131,14 @@ Table of Contents
    information when adapting their send rate.
 
    Network elements are not limited to communicating information about
-   rate limiting policies.  Network elements in access networks could
-   provide advice to endpoints that can help guide application use of
-   network capacity, separate from any signals that are intended to
-   influence congestion response.  Advice might also indicate
-   temporarily increases in available capacity, or temporarily reduced
-   capacity due to persistent overuse, equipment faults, or other
-   transient issues.  This applies to increases or reductions that are
-   expected to last at least one minute.
+   rate limiting policies.  For example, network elements in access
+   networks could provide advice to endpoints that can help guide
+   application use of network capacity, separate from any signals that
+   are intended to influence congestion response.  Advice might also
+   indicate temporarily increases in available capacity, or temporarily
+   reduced capacity due to persistent overuse, equipment faults, or
+   other transient issues.  This applies to increases or reductions that
+   are expected to last at least one minute.
 
    The Standard Communication with Network Elements (SCONE) protocol is
    negotiated by QUIC endpoints.  This protocol provides a means for
@@ -242,10 +242,9 @@ Table of Contents
    other flows, congestion limits are likely to determine actual
    throughput.
 
-   This makes the application of signals most usefully applied to a
-   downlink flow in access networks, close to an endpoint.  In that
-   case, capacity is less likely to be split between multiple active
-   flows.
+   This implies that signals can most usefully be applied to a downlink
+   flow in access networks, close to an endpoint.  In that case,
+   capacity is less likely to be split between multiple active flows.
 
 3.3.  Per-Flow Signal
 
