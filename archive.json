@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-02T01:46:58.982990+00:00",
+  "timestamp": "2025-11-04T01:42:25.804671+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1956,15 +1956,15 @@
       "id": "I_kwDON1dwo87IkGyH",
       "title": "Rate Signal  in scone packet does not carry direction ( DL /UL) information",
       "url": "https://github.com/ietf-wg-scone/scone/issues/66",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "anooptomar29",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "In current draft \"overview\" section it is stated that \n\n**\"Indicated rate limits apply only in a single direction. Separate indications can be sent for the client-to-server direction and server-to-client direction. The indicated rates do not need to be the same**.\"\n\nAs per my understanding no information element within SCONE Packet carry \"direction\" information to let client know whether rate limit is for client-to-server ( UL) direction and server-to-client  (DL) direction. \n\nWe should update \"overview'' section  and remove \"client-to-server\" direction.  CSP networks typically use rate-limiters to limit bit rate in DL direction ie. \"server-to-client direction\" for on-demand streaming video application. \n",
       "createdAt": "2025-08-28T23:02:34Z",
-      "updatedAt": "2025-11-01T15:54:54Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-02T16:11:55Z",
+      "closedAt": "2025-11-02T16:11:55Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2185,7 +2185,7 @@
       "labels": [],
       "body": "This discussion arose from #70 during the 10/15 interim.\n\nSome network elements are already deployed with relatively fixed capacity.  SCONE's current requirement is that in order to maintain a limited flow, the NE needs to mark packets every monitoring period.  @ihlar made some back of the envelope [computations](https://github.com/ietf-wg-scone/scone/pull/70#discussion_r2433930965) that make it seem like it's ok.  This is a placeholder issue we can revisit once we can measure the impact in production(like) requirements.",
       "createdAt": "2025-10-15T22:23:11Z",
-      "updatedAt": "2025-10-17T15:31:56Z",
+      "updatedAt": "2025-11-03T17:01:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -2194,6 +2194,27 @@
           "body": "As @ihlar noted in that issue, this is pretty cheap.\n\nI did a rough implementation of the core function in rust, which you can see [here on the compiler explorer](https://rust.godbolt.org/z/rh385f49v).  In that approach, every packet you pass will cost 14 instructions (which should all be low latency).  Updating costs 6 more.  To put it in perspective, in software, the additional check adds 28ns on a very low-end CPU, the update will like cause a pipeline stall, but those are still only a few tens of nanoseconds.",
           "createdAt": "2025-10-17T15:31:56Z",
           "updatedAt": "2025-10-17T15:31:56Z"
+        },
+        {
+          "author": "irfan-ali-ia",
+          "authorAssociation": "NONE",
+          "body": "With SCONE packet it is efficient to identify the field where the the rate signal is stored. However, modifying the value does have bigger compute implications (eg. also computed checksum over the entire UPD datagram), specially for gateways to cellular networks (UPF) which are processing millions of flows and performing other function on these flows. It all comes down to capacity/CPU. So for systems where the rate guidance does not change often, if the server provides an indication that it had received rate guidance (either rate or some function of the rate relayed by the client), and that it is keeping soft-state of  the guidance (which could be for much longer than 67 seconds, eg. server knows that the particular cellular network does not change guidance often), the UPF can modify rate either (a) when it gets a signal that the server's soft-state has expired, or (b) when rate guidance needs to be updated, eg due to policy change. This would also mean that we do not have to make assumptions of 67s soft-state, which though a nice prime number, may not be applicable to the system in question.",
+          "createdAt": "2025-11-03T02:04:45Z",
+          "updatedAt": "2025-11-03T02:04:45Z"
+        },
+        {
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "body": "Incrementally updating the UDP checksum is described in https://datatracker.ietf.org/doc/html/rfc1624.\n\nIn trying to estimate the cost of updating the rate guidance for one million flows every 67 seconds, if I assume 10 instructions, in cache, on a CPU with 1 GHz instruction rate, the update of one million flows can be computed in 1/100 of a second, if my back-of-the-envelope calculation is accurate, leaving 66.99 seconds of the CPU available for other purposes.\n\nI may be off by a significant factor and still fail to understand what the problem is.\n",
+          "createdAt": "2025-11-03T02:39:11Z",
+          "updatedAt": "2025-11-03T02:39:11Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> However, modifying the value does have bigger compute implications (eg. also computed checksum over the entire UPD datagram),\n\nAs @alvestrand mentions, you do an incremental checksum update. \nA rate update changes at most two octets of the UDP payload. So an incremental update based on a single 16 bit word is sufficient. ",
+          "createdAt": "2025-11-03T17:01:28Z",
+          "updatedAt": "2025-11-03T17:01:28Z"
         }
       ]
     },
@@ -2346,16 +2367,45 @@
       "id": "I_kwDON1dwo87U3zAk",
       "title": "Do we have implicit server side indication for SCONE support?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/85",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "zaheduzzaman",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "In SCONE protocol, we allow throughput advice for both client-to-server and server-to-client directions. The SCONE packet receiption at the client and the server is negotiated via the defined transport parameter. \n\nHowever, the current draft only details client-side indication of SCONE support to network elements. Should this client-side indication implicitly lead network elements to expect SCONE packets from both the client-to-server and server-to-client directions for a given flow? I am not sure about this implicit expectation is intended: Hence, further clarification in Section 6  of the SCONE protocol draft would be beneficial to explicitly address how network elements should interpret SCONE support indications.\n",
       "createdAt": "2025-10-30T15:45:22Z",
-      "updatedAt": "2025-10-30T15:45:22Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-11-03T17:27:23Z",
+      "closedAt": "2025-11-03T17:27:23Z",
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The expectations are set out in [Section 6.2 of the draft](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-6.2):\n\n> This indication does not mean that SCONE signals will be respected, only that the client is able to negotiate SCONE. A server might not support SCONE or might choose not to send SCONE packets. \n\nThat probably could be:\n\n> This indication does not mean that SCONE signals will be respected, only that the client is able to negotiate SCONE. A server might not support SCONE and either endpoint might choose not to send SCONE packets.\n\n",
+          "createdAt": "2025-11-02T16:50:14Z",
+          "updatedAt": "2025-11-02T16:50:14Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "> The expectations are set out in [Section 6.2 of the draft](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-6.2):\n> \n> > This indication does not mean that SCONE signals will be respected, only that the client is able to negotiate SCONE. A server might not support SCONE or might choose not to send SCONE packets.\n> \n> That probably could be:\n> \n> > This indication does not mean that SCONE signals will be respected, only that the client is able to negotiate SCONE. A server might not support SCONE and either endpoint might choose not to send SCONE packets.\n\nThis is much better, that would mean the network element may not see any SCONE packet even if the indication is there. But still it has to assume that there could be SCONE packets from client-to-server and server-to-client direction, is that correct assumption?\n\n",
+          "createdAt": "2025-11-02T17:03:32Z",
+          "updatedAt": "2025-11-02T17:03:32Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That's an assumption that's always true.  The indication means that there could be SCONE packets in either direction.",
+          "createdAt": "2025-11-02T17:37:17Z",
+          "updatedAt": "2025-11-02T17:37:17Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I posted a comment on Martin's PR. Many servers will send QUIC Initial packets before parsing the client's transport parameters. I wonder whether these packets will trigger the same kind of classification that worried our network management colleagues.",
+          "createdAt": "2025-11-03T14:28:46Z",
+          "updatedAt": "2025-11-03T14:28:46Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -8925,24 +8975,26 @@
       "id": "PR_kwDON1dwo86w_ndA",
       "title": "Clarify path/direction applicability of received advice",
       "url": "https://github.com/ietf-wg-scone/scone/pull/86",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "britram",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #66.",
       "createdAt": "2025-11-01T15:37:46Z",
-      "updatedAt": "2025-11-01T18:11:26Z",
+      "updatedAt": "2025-11-02T16:11:54Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "608659db0c1780202cf450f1098e68de024d85d3",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "britram-66-directionality",
       "headRefOid": "e567e9735040c8b3f5eeb08f91879327e0f2cce5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-11-02T16:11:54Z",
+      "mergedAt": "2025-11-02T16:11:54Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "5b61db840bc0df268c59ca01b7a83435444738df"
+      },
       "comments": [],
       "reviews": [
         {
@@ -9021,6 +9073,277 @@
               "body": "Do you want to tweak the devices statement also?\n\n\n```suggestion\nby policy to constrain data rates. This is often done without any indication to the applications\n```\n\n\n```suggestion\nby policy to constrain data rates.\nThis is often done without any indication to applications.\nThe result can be that application performance is degraded,\n```",
               "createdAt": "2025-11-01T16:32:13Z",
               "updatedAt": "2025-11-01T16:32:19Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 88,
+      "id": "PR_kwDON1dwo86xES-3",
+      "title": "Switch terminology",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/88",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As we've discussed on #84, we used \"rate limit\" too often.  Fix that.",
+      "createdAt": "2025-11-02T16:11:43Z",
+      "updatedAt": "2025-11-03T17:58:31Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "5b61db840bc0df268c59ca01b7a83435444738df",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "rate-limit",
+      "headRefOid": "8b9eef6e488fe4e7e4da39a0a1e46673ae554308",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "I think Rate Signal could remain same as it is a particular  part of the SCONE packet format. \r\n\r\nHowever, I think we should replace \"maximum sustained throughput\" and \"maximum available sustrained throughput\" with \"maximum availble throughput\". The \"maximum available throughput\" is now written in the abstract.",
+          "createdAt": "2025-11-02T16:53:42Z",
+          "updatedAt": "2025-11-02T16:53:42Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@zaheduzzaman, happy to take other pull requests to clarify those aspects as well.  This is the most important of the changes to my mind.",
+          "createdAt": "2025-11-03T17:23:50Z",
+          "updatedAt": "2025-11-03T17:23:50Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87LLycG",
+          "commit": {
+            "abbreviatedOid": "6531ebc"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thank you for doing this!\n\nDo we want to rename \"Rate Signal\" to \"Throughput Signal\" (or advice) too?",
+          "createdAt": "2025-11-02T16:44:49Z",
+          "updatedAt": "2025-11-02T16:44:49Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87LU3Of",
+          "commit": {
+            "abbreviatedOid": "6531ebc"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes, standardizing on \"throughput advice\" does clarify and improve the draft.",
+          "createdAt": "2025-11-03T14:16:30Z",
+          "updatedAt": "2025-11-03T14:16:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87LXUZT",
+          "commit": {
+            "abbreviatedOid": "6531ebc"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-03T16:30:34Z",
+          "updatedAt": "2025-11-03T16:48:33Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\ncannot assume that throughput advice indications from one path apply to new paths.\n```",
+              "createdAt": "2025-11-03T16:30:34Z",
+              "updatedAt": "2025-11-03T16:48:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87LYvAg",
+          "commit": {
+            "abbreviatedOid": "8b9eef6"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "> I think Rate Signal could remain same as it is a particular part of the SCONE packet format.\n\nI\u2019d actually argue we should rename the field precisely because it\u2019s in the wire format. People who skim the packet layout will infer semantics from labels.\n\nThat said, this isn\u2019t a blocker \u2014 this PR looks good to me and can be merged. We can handle the field naming in a follow-up.",
+          "createdAt": "2025-11-03T17:58:31Z",
+          "updatedAt": "2025-11-03T17:58:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 89,
+      "id": "PR_kwDON1dwo86xEV9D",
+      "title": "Servers don't need indications",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/89",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #85.",
+      "createdAt": "2025-11-02T16:31:05Z",
+      "updatedAt": "2025-11-03T17:59:53Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "5b61db840bc0df268c59ca01b7a83435444738df",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "no-server-indication",
+      "headRefOid": "72c2b02ce18e0f03829f4261994a77f07eaa2b81",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Just to be clear, I'm not committed to this change. I would prefer to drop it than have the more verbose version.\r\n\r\n+1 to drop.",
+          "createdAt": "2025-11-03T17:59:53Z",
+          "updatedAt": "2025-11-03T17:59:53Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87LVAz5",
+          "commit": {
+            "abbreviatedOid": "72c2b02"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-03T14:25:44Z",
+          "updatedAt": "2025-11-03T14:25:45Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "That a bit too laconic. How about:\r\n\r\n```suggestion\r\nThere is no equivalent indication for servers. Servers learn whether the client supports SCONE after receiving the client's Transport Parameters, and from that point on can send SCONE packets that imply support of SCONE by the flow.\r\n```\r\n\r\nBut wait. Servers will often send Initial packets before they have parsed the QUIC TP from the client. For example, many servers send Initial ACKs. Will these initial packets trigger network elements to perform some kind of early flow classification? Isn't that the same problem that caused the need for notifications on the client side?",
+              "createdAt": "2025-11-03T14:25:44Z",
+              "updatedAt": "2025-11-03T14:25:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87LXS7f",
+          "commit": {
+            "abbreviatedOid": "72c2b02"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-03T16:29:15Z",
+          "updatedAt": "2025-11-03T16:29:16Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": ">  Isn't that the same problem that caused the need for notifications on the client side?\r\n\r\nKind of. But in practice, the network elements that care about the client indication are the ones that classify based on SNI today. So the while it's important to see the client indication as soon as possible, the same doesn't really apply for packets in the reverse direction. ",
+              "createdAt": "2025-11-03T16:29:15Z",
+              "updatedAt": "2025-11-03T16:29:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87LYU62",
+          "commit": {
+            "abbreviatedOid": "72c2b02"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-03T17:26:33Z",
+          "updatedAt": "2025-11-03T17:26:34Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Yes, there are plenty of cases where the server won't be able to send SCONE.  Retry.  Initial packets that are sent before seeing transport parameters (those that only include ACK frames).  Version Negotiation.  In the general case, the SCONE packet will be the key.\r\n\r\nFWIW, my implementation sends the indication from the server, but we don't need to promise anything.\r\n\r\nJust to be clear, I'm not committed to this change.  I would prefer to drop it than have the more verbose version.",
+              "createdAt": "2025-11-03T17:26:33Z",
+              "updatedAt": "2025-11-03T17:26:34Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 90,
+      "id": "PR_kwDON1dwo86xEZOk",
+      "title": "Either endpoint might choose not to SCONE",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/90",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #85 even harder.",
+      "createdAt": "2025-11-02T16:51:22Z",
+      "updatedAt": "2025-11-03T17:27:22Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "5b61db840bc0df268c59ca01b7a83435444738df",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "either-might-not",
+      "headRefOid": "d58358b5e0532ec69fcc6f534b9a00cd208fda4e",
+      "closedAt": "2025-11-03T17:27:22Z",
+      "mergedAt": "2025-11-03T17:27:22Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "fddd577cea7cce78f736a51a545521a878112e4c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87LL1AO",
+          "commit": {
+            "abbreviatedOid": "a8d2437"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-02T17:07:59Z",
+          "updatedAt": "2025-11-02T17:07:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87LW-Q0",
+          "commit": {
+            "abbreviatedOid": "a8d2437"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-03T16:12:38Z",
+          "updatedAt": "2025-11-03T16:12:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87LXC_U",
+          "commit": {
+            "abbreviatedOid": "a8d2437"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK, minor suggestion.",
+          "createdAt": "2025-11-03T16:15:53Z",
+          "updatedAt": "2025-11-03T16:16:08Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nand either endpoint might choose not to send SCONE packets.\r\n```",
+              "createdAt": "2025-11-03T16:15:53Z",
+              "updatedAt": "2025-11-03T16:16:08Z"
             }
           ]
         }
