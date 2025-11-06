@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-04T01:42:25.804671+00:00",
+  "timestamp": "2025-11-06T01:43:11.642109+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -542,7 +542,7 @@
       "id": "I_kwDON1dwo86vExP6",
       "title": "Detail interaction with congestion control",
       "url": "https://github.com/ietf-wg-scone/scone/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -551,8 +551,8 @@
       "labels": [],
       "body": "This came on repeatedly during the Bangkok IETF session. Congestion control and Trone are complementary, but we need to explain how that complementing works.",
       "createdAt": "2025-03-21T04:53:23Z",
-      "updatedAt": "2025-07-09T11:32:09Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-04T22:52:06Z",
+      "closedAt": "2025-11-04T22:52:06Z",
       "comments": [
         {
           "author": "atiwariphd",
@@ -610,15 +610,15 @@
       "id": "I_kwDON1dwo86vE006",
       "title": "Consider a way to do greasing",
       "url": "https://github.com/ietf-wg-scone/scone/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "There is a bit of ambiguity in the specification of \"who uses TRONE\". The original Scone WG appears to have focused on adaptive bit rate video. If we strictly kept that focus, we have a privacy issue. Third parties could observe the presence of Trone headers, and infer that the end to end QUIC connection is engaged in video streaming.\n\nTo reduce the privacy issue, we could adopt a combined strategy, and ask more applications to support Trone, thus weakening the correlation between Trone and video.\n\nWe could also envisage greasing, with applications sending datagrams composed of a Trone packet, followed by a short header and random content. If the peer is not Trone capable, such greasing packets will be discarded because they do done decrypt correctly. But the third parties cannot check the encryption, so they will not be able to distinguish such packets from \"real\" Trone -- i.e., successful greasing.",
       "createdAt": "2025-03-21T05:04:11Z",
-      "updatedAt": "2025-11-01T14:30:07Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-04T22:51:59Z",
+      "closedAt": "2025-11-04T22:51:59Z",
       "comments": [
         {
           "author": "atiwariphd",
@@ -1414,7 +1414,7 @@
       "id": "I_kwDON1dwo866zI50",
       "title": "Include semantics definition of the \u201cthroughput advice\u201d  in the merged draft with clarifications on what it means and how it can be measured by CSPs and CAPs",
       "url": "https://github.com/ietf-wg-scone/scone/issues/34",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "DanDruta",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -1423,8 +1423,8 @@
       ],
       "body": "Current merged draft talks about rate limit signals and throughput advice but it falls short of defining what that is and more importantly how it gets computed so both CSPs and CAPs have a common understanding of the meaning as well as measure it.\nSuggest adding a section  to provide clarity. For reference the scone video session data rate  draft https://datatracker.ietf.org/doc/html/draft-druta-scone-video-session-data-rate-00",
       "createdAt": "2025-06-10T15:06:26Z",
-      "updatedAt": "2025-07-23T16:11:14Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-04T22:52:25Z",
+      "closedAt": "2025-11-04T22:52:25Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -1852,15 +1852,15 @@
       "id": "I_kwDON1dwo87IYKzC",
       "title": "Is bursty sending what we want?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/64",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "If we say that rates apply over relatively long time frames, then we are also implicitly saying that rates can spike up well above that rate.  Arbitrarily high, even.  For instance, if we say that the average throughput needs to be X over 67 seconds (#61), then that might be the same as saying 67X over one second, followed by silence for 66 seconds.  Nothing says that can't be half a second, or one millisecond, if that is physically possible.\n\nI have heard a few things with respect to this:\n\n1. This sort of spikiness might be desirable for some cases, such as downloading software updates over a mobile network.  There, the radio link can often support very high transmission rates, but seeks to serve many terminals (or UEs) so that high rate cannot be allocated to a single network user over a longer period.  Having data delivered in spikes allows the device to return its radio off and save energy.  It also simplifies delivery in the network, which can open a dedicated channel for a short time, rather than have to switch between multiple terminals.  This argues FOR allowing spikes in send rates as high as the network can tolerate.\n2. Spikes in send rate might cause buffers to overflow, which might degrade performance or cause spikes in latency.  For both the affected flow and potentially other network users.  This is true, but only to the extent that the congestion controller permits that to happen.  And we are not chartered to change how congestion control operates.  We require that the congestion controller remain an independent limit on sending.  It is the congestion controller's task to ensure that endpoints don't damage the network, so as long as they continue to do that job, throughput advice can't damage the network.  This seems fine.\n3. Spikes in sending rate might not be achievable for congestion controllers because it depends on very fast increases in send rate and long pauses.  As a reminder: We are not seeking to change the constraints that congestion controllers might place on send rates, nor are we looking to override any aspect of their operation.  This doesn't argue for anything to my mind, because we are not chartered to change how congestion controllers work.\n4. It might be hard to reason about how to manage bandwidth if you can spend all your data budget in a short time then have no ability to get more when someone changes their mind.  This doesn't argue for anything in particular in my mind, other than to highlight that this is a sharp tool that might cut you if you operate it incorrectly.  That's true of most protocols.\n\n@huitema @kazuho, is there another factor here that I'm missing?",
       "createdAt": "2025-08-28T04:47:35Z",
-      "updatedAt": "2025-11-01T14:54:33Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-04T22:52:43Z",
+      "closedAt": "2025-11-04T22:52:43Z",
       "comments": [
         {
           "author": "kazuho",
@@ -2185,7 +2185,7 @@
       "labels": [],
       "body": "This discussion arose from #70 during the 10/15 interim.\n\nSome network elements are already deployed with relatively fixed capacity.  SCONE's current requirement is that in order to maintain a limited flow, the NE needs to mark packets every monitoring period.  @ihlar made some back of the envelope [computations](https://github.com/ietf-wg-scone/scone/pull/70#discussion_r2433930965) that make it seem like it's ok.  This is a placeholder issue we can revisit once we can measure the impact in production(like) requirements.",
       "createdAt": "2025-10-15T22:23:11Z",
-      "updatedAt": "2025-11-03T17:01:28Z",
+      "updatedAt": "2025-11-04T14:20:15Z",
       "closedAt": null,
       "comments": [
         {
@@ -2215,6 +2215,13 @@
           "body": "> However, modifying the value does have bigger compute implications (eg. also computed checksum over the entire UPD datagram),\n\nAs @alvestrand mentions, you do an incremental checksum update. \nA rate update changes at most two octets of the UDP payload. So an incremental update based on a single 16 bit word is sufficient. ",
           "createdAt": "2025-11-03T17:01:28Z",
           "updatedAt": "2025-11-03T17:01:28Z"
+        },
+        {
+          "author": "irfan-ali-ia",
+          "authorAssociation": "NONE",
+          "body": "What you both are saying is that the cost of updating is not high. Agree with this. But there is a cost associated with doing frequent updates and if we can design the protocol to help reduce the update cost, without complexity would be great. As I said originally, 67 soft-state may not be applicable in all situations. So if we can allow the server to keep soft state for longer and signal the fact that the last provided soft-state is still valid would be good. Two possible ways: (1) one of the rate codes is dedicated to just signaling that soft-state is still valid, or (2) the client forwards the rate to the server and the server repeats this value in SCONE packets for as long as soft-state is maintained. For (1), I do see the issue of handling error scenario that network element updates the rate, but that SCONE packet(s) get dropped. So server is still using older recommendation whereas the network element assumes that the new rate has been accepted. (2) can be a bit better, but would work only in case the client signals the rate to the server (which may not always be the case, since client may signal something which is a function of the rate and not the rate itself).",
+          "createdAt": "2025-11-04T14:20:15Z",
+          "updatedAt": "2025-11-04T14:20:15Z"
         }
       ]
     },
@@ -2247,15 +2254,15 @@
       "id": "I_kwDON1dwo87R4FrJ",
       "title": "Can we clarify \"Access Networks\" as an example?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/77",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Access network are mentioned in various places, e.g., in the text: /Network elements in access networks/, I'd personally see access networks as a good example, but that they are not the only place where SCONE could be done.",
       "createdAt": "2025-10-16T09:51:12Z",
-      "updatedAt": "2025-10-16T09:51:12Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-04T23:10:10Z",
+      "closedAt": "2025-11-04T23:10:10Z",
       "comments": []
     },
     {
@@ -2406,6 +2413,22 @@
           "updatedAt": "2025-11-03T14:28:46Z"
         }
       ]
+    },
+    {
+      "number": 91,
+      "id": "I_kwDON1dwo87V4hRU",
+      "title": "Confusion stemming from the responsibility of the element",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/91",
+      "state": "OPEN",
+      "author": "mjoras",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For SCONE to work as a protocol a Network Element (or the \"SCONE Function\" as we might call it) minimally has to periodically modify SCONE packets. In the Deployment section we currently say:\n\n> Network elements can monitor flows to determine which flows are from applications that respect throughput advice. This section outlines an exemplary algorithm for network elements.\n\n> This monitoring algorithm is guidance only. Network elements are advised that monitoring any more strictly than the following likely invalidates their advice. Network elements could choose not to monitor in this way or use a looser monitoring approach. For instance, monitoring over a longer time window than the monitoring period (67s) or using a higher rate than is signaled is possible.\n\nThis does imply some degree of it being an \"optional\" responsibility, but we have gotten feedback from those going in \"cold\" to the document that the monitoring feels much more mandatory. Most of the subsequent discussion resolve around monitoring and not the actual protocol.\n\nI think we should consider structural changes to the document (e.g. moving example monitoring to an addendum, making the language more explicit about how it's not normative, moving to another document entirely) to address this.",
+      "createdAt": "2025-11-04T22:48:51Z",
+      "updatedAt": "2025-11-04T22:48:51Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -9030,24 +9053,26 @@
       "id": "PR_kwDON1dwo86w_qeI",
       "title": "Clarify that SCONE isn't access network only.",
       "url": "https://github.com/ietf-wg-scone/scone/pull/87",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "britram",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Minimalist attempt to address #77",
       "createdAt": "2025-11-01T15:59:19Z",
-      "updatedAt": "2025-11-01T16:32:18Z",
+      "updatedAt": "2025-11-04T23:10:09Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "608659db0c1780202cf450f1098e68de024d85d3",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "britram-77",
-      "headRefOid": "e81ef56d9e767d6ae5eb150a484f6385d7cb3650",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "17533a01a581b6fd37ac1906444410720c8500f9",
+      "closedAt": "2025-11-04T23:10:09Z",
+      "mergedAt": "2025-11-04T23:10:09Z",
+      "mergedBy": "britram",
+      "mergeCommit": {
+        "oid": "db144c5739aea5843ef4918d5b215a8b382c4602"
+      },
       "comments": [],
       "reviews": [
         {
@@ -9070,9 +9095,9 @@
             },
             {
               "originalPosition": 8,
-              "body": "Do you want to tweak the devices statement also?\n\n\n```suggestion\nby policy to constrain data rates. This is often done without any indication to the applications\n```\n\n\n```suggestion\nby policy to constrain data rates.\nThis is often done without any indication to applications.\nThe result can be that application performance is degraded,\n```",
+              "body": "Do you want to tweak the devices statement also?\r\n\r\n```suggestion\r\nby policy to constrain data rates.\r\nThis is often done without any indication to applications.\r\nThe result can be that application performance is degraded,\r\n```",
               "createdAt": "2025-11-01T16:32:13Z",
-              "updatedAt": "2025-11-01T16:32:19Z"
+              "updatedAt": "2025-11-02T16:12:34Z"
             }
           ]
         }
@@ -9083,24 +9108,26 @@
       "id": "PR_kwDON1dwo86xES-3",
       "title": "Switch terminology",
       "url": "https://github.com/ietf-wg-scone/scone/pull/88",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As we've discussed on #84, we used \"rate limit\" too often.  Fix that.",
       "createdAt": "2025-11-02T16:11:43Z",
-      "updatedAt": "2025-11-03T17:58:31Z",
+      "updatedAt": "2025-11-04T22:50:43Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "5b61db840bc0df268c59ca01b7a83435444738df",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "rate-limit",
       "headRefOid": "8b9eef6e488fe4e7e4da39a0a1e46673ae554308",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-11-04T22:50:42Z",
+      "mergedAt": "2025-11-04T22:50:42Z",
+      "mergedBy": "britram",
+      "mergeCommit": {
+        "oid": "746a14fa1cdef9b030f627fa1d8b7272c1ac91fa"
+      },
       "comments": [
         {
           "author": "zaheduzzaman",
@@ -9184,21 +9211,21 @@
       "id": "PR_kwDON1dwo86xEV9D",
       "title": "Servers don't need indications",
       "url": "https://github.com/ietf-wg-scone/scone/pull/89",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #85.",
       "createdAt": "2025-11-02T16:31:05Z",
-      "updatedAt": "2025-11-03T17:59:53Z",
+      "updatedAt": "2025-11-04T17:08:19Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "5b61db840bc0df268c59ca01b7a83435444738df",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "no-server-indication",
       "headRefOid": "72c2b02ce18e0f03829f4261994a77f07eaa2b81",
-      "closedAt": null,
+      "closedAt": "2025-11-04T17:08:18Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -9209,6 +9236,13 @@
           "body": "> Just to be clear, I'm not committed to this change. I would prefer to drop it than have the more verbose version.\r\n\r\n+1 to drop.",
           "createdAt": "2025-11-03T17:59:53Z",
           "updatedAt": "2025-11-03T17:59:53Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It seems like we're good here.",
+          "createdAt": "2025-11-04T17:08:18Z",
+          "updatedAt": "2025-11-04T17:08:18Z"
         }
       ],
       "reviews": [
