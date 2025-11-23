@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-06T01:43:11.642109+00:00",
+  "timestamp": "2025-11-23T01:55:55.848092+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2429,6 +2429,51 @@
       "updatedAt": "2025-11-04T22:48:51Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 92,
+      "id": "I_kwDON1dwo87ZeQ-P",
+      "title": "Are Scone support indications bidirectional?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/92",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The transport parameter is said to mean \"that it is willing to receive SCONE packets\".\n\nIn principle, therefore, an endpoint might not send the transport parameter, but still could send SCONE packets if the peer sent the transport parameter. Is this half-duplex situation intended, or is it that an endpoint MUST NOT send SCONE unless both sides have included the parameter?\n\nSimilarly, if half-duplex is OK, then a client could not send the parameter and still include the two-byte indicator if it is willing to send SCONE packets given permission from the server, but not receive them.\n\nI don't have any opinion about whether this is a valid use case. But the spec should be clear about what the correct behaviors are.",
+      "createdAt": "2025-11-20T18:43:18Z",
+      "updatedAt": "2025-11-21T08:00:11Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, the transport parameter is directional, whereas the signal is:\n\n> All new flows that are initiated by a client that supports SCONE MUST include bytes with values 0xc8 and 0x13 as the last two bytes of datagrams that commence a new flow if the protocol permits it. \n\nThat means that you might interpret that as any form of support for SCONE.  Sending or receiving SCONE packets or both, I suppose, are all options.\n\nAs far as it goes, the client sends the indication only when it doesn't know what the server will do.  So the only relevant question here is whether the client also includes its own transport parameter at the same time as the indication.\n\nWhy a client would \"support\" SCONE only to the extent that it sends SCONE packets, but not receive them, is something I struggle with.  So this almost seems like an academic question.\n\nWould you prefer if this is more directly correlated with the transport parameter?  It's not going to make it any more useful.",
+          "createdAt": "2025-11-21T03:44:54Z",
+          "updatedAt": "2025-11-21T03:44:54Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "I don't know why one would do that. I ask as an implementer with no opinion about the right answer, who just wants the draft to specify what cases I have to cover.\n\nIf scone is successful, I imagine it would be somewhat common to advertise the ability to receive scone packets even if there was no intent to ever send one.\n\nOf course, since scone packets are not authenticated you cannot have it be a protocol violation to receive one. But if an endpoint sends the parameter (and as a client, the indicator bytes), and the peer does not, does the endpoint report any incoming rates to the application or simply ignore them?",
+          "createdAt": "2025-11-21T06:04:49Z",
+          "updatedAt": "2025-11-21T06:04:49Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If the endpoint has indicated its willingness to receive Scone packet, and if it then receives such packets, it is absolutely expected to process them.\n\nIf an endpoint has not indicated its willingness to receive Scone packet it will probably respond to Scone packets by a Version Negotiation message. Or just drop them.",
+          "createdAt": "2025-11-21T07:13:33Z",
+          "updatedAt": "2025-11-21T07:13:33Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "NONE",
+          "body": "Christian, I take your answer to mean that it is fully half duplex. By sending the parameter, I have to process scone even if the peer does not send the parameter.\n\nIf so, let's make that clear.",
+          "createdAt": "2025-11-21T08:00:11Z",
+          "updatedAt": "2025-11-21T08:00:11Z"
+        }
+      ]
     }
   ],
   "pulls": [
