@@ -1054,7 +1054,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 8 May 2026</td>
+<td class="center">Expires 30 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-04" class="published">4 November 2025</time>
+<time datetime="2025-11-26" class="published">26 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-08">8 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-05-30">30 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1141,7 +1141,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 30 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1332,30 +1332,26 @@ rate estimation or congestion control algorithms used at endpoints.<a href="#sec
 <p id="section-1-2">Having the network indicate what its rate limiting policy is, in a way that is
 accessible to endpoints, allows applications to use this information when
 adapting their send rate.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">Network elements are not limited to communicating information
-about rate limiting policies. For example, network elements in
-access networks could provide advice
-to endpoints that can help guide application use of network capacity,
-separate from any signals that are intended to influence congestion response.
-Advice might also indicate temporarily increases in available capacity,
-or temporarily reduced capacity
-due to persistent overuse, equipment faults, or other transient issues.
-This applies to increases or reductions that are expected to last
-at least one minute.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">The Standard Communication with Network Elements (SCONE) protocol is
-negotiated by QUIC endpoints.  This protocol provides a means for network
-elements to signal the maximum available sustained throughput, or rate limits,
-for flows of UDP datagrams that transit that network element to a QUIC endpoint.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">Networks with rate limiting policies use SCONE to send throughput advice
+<p id="section-1-3">The Standard Communication with Network Elements (SCONE) protocol
+is negotiated by QUIC endpoints.
+SCONE provides a means for networks to signal the maximum available sustained throughput,
+or throughput advice,
+associated with the flows of UDP datagrams that QUIC exchanges.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Any network function that is able to update the content of UDP datagrams
+qualifies as a network element that can participate in SCONE
+and provide throughput advice to QUIC endpoints.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">Networks with rate limiting policies can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals -- such as ECN, delays and loss --
 operate on a time scale of a round trip time,
-throughput advice operates over a much longer period.
-This has benefits in some networks as endpoints can fully consume
-network capacity in bursts,
-rather than extending network interaction at lower rates.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">For endpoints, SCONE throughput advice makes network policies visible,
-which can reduce wasteful probing beyond those limits.<a href="#section-1-6" class="pilcrow">¶</a></p>
+throughput advice operates over a much longer period.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">This has benefits in some networks
+as endpoints can adapt network usage to better suit network conditions.
+For example, radio networks and battery-powered devices
+perform better with short, bursty exchanges,
+rather than constant transmission at a fixed rate.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-7">For endpoints, SCONE throughput advice makes network policies visible,
+which can reduce wasteful probing beyond those limits.<a href="#section-1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="overview">
@@ -1454,6 +1450,17 @@ signals indicate otherwise.  Congestion could be experienced at a different
 point on the network path than the network element that signals throughput advice.
 Therefore, endpoints need to respect the send rate constraints that are set by a
 congestion controller.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">Networks can use SCONE to communicate throughput advice
+for reasons other than rate limiting policies.
+For example, a network element in an access network
+could provide throughput advice to guide application use of network capacity,
+in any way that is separate from any signals
+that are intended to influence congestion response.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">Throughput advice can indicate temporary increases in available capacity,
+or temporarily reduced capacity
+due to persistent overuse, equipment faults, or other transient issues.
+This applies to increases or reductions
+that are expected to last at least one minute.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="unspecified-scope">

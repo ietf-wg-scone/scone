@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 8 May 2026                                 Private Octopus Inc.
+Expires: 30 May 2026                                Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         4 November 2025
+                                                        26 November 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 May 2026.
+   This Internet-Draft will expire on 30 May 2026.
 
 Copyright Notice
 
@@ -130,29 +130,26 @@ Table of Contents
    way that is accessible to endpoints, allows applications to use this
    information when adapting their send rate.
 
-   Network elements are not limited to communicating information about
-   rate limiting policies.  For example, network elements in access
-   networks could provide advice to endpoints that can help guide
-   application use of network capacity, separate from any signals that
-   are intended to influence congestion response.  Advice might also
-   indicate temporarily increases in available capacity, or temporarily
-   reduced capacity due to persistent overuse, equipment faults, or
-   other transient issues.  This applies to increases or reductions that
-   are expected to last at least one minute.
-
    The Standard Communication with Network Elements (SCONE) protocol is
-   negotiated by QUIC endpoints.  This protocol provides a means for
-   network elements to signal the maximum available sustained
-   throughput, or rate limits, for flows of UDP datagrams that transit
-   that network element to a QUIC endpoint.
+   negotiated by QUIC endpoints.  SCONE provides a means for networks to
+   signal the maximum available sustained throughput, or throughput
+   advice, associated with the flows of UDP datagrams that QUIC
+   exchanges.
 
-   Networks with rate limiting policies use SCONE to send throughput
+   Any network function that is able to update the content of UDP
+   datagrams qualifies as a network element that can participate in
+   SCONE and provide throughput advice to QUIC endpoints.
+
+   Networks with rate limiting policies can use SCONE to send throughput
    advice to cooperating endpoints to limit overall network usage.
    Where congestion control signals -- such as ECN, delays and loss --
    operate on a time scale of a round trip time, throughput advice
-   operates over a much longer period.  This has benefits in some
-   networks as endpoints can fully consume network capacity in bursts,
-   rather than extending network interaction at lower rates.
+   operates over a much longer period.
+
+   This has benefits in some networks as endpoints can adapt network
+   usage to better suit network conditions.  For example, radio networks
+   and battery-powered devices perform better with short, bursty
+   exchanges, rather than constant transmission at a fixed rate.
 
    For endpoints, SCONE throughput advice makes network policies
    visible, which can reduce wasteful probing beyond those limits.
@@ -222,6 +219,18 @@ Table of Contents
    the network element that signals throughput advice.  Therefore,
    endpoints need to respect the send rate constraints that are set by a
    congestion controller.
+
+   Networks can use SCONE to communicate throughput advice for reasons
+   other than rate limiting policies.  For example, a network element in
+   an access network could provide throughput advice to guide
+   application use of network capacity, in any way that is separate from
+   any signals that are intended to influence congestion response.
+
+   Throughput advice can indicate temporary increases in available
+   capacity, or temporarily reduced capacity due to persistent overuse,
+   equipment faults, or other transient issues.  This applies to
+   increases or reductions that are expected to last at least one
+   minute.
 
 3.2.  Unspecified Scope
 
