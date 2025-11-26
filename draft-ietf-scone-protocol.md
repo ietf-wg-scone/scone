@@ -76,30 +76,27 @@ Having the network indicate what its rate limiting policy is, in a way that is
 accessible to endpoints, allows applications to use this information when
 adapting their send rate.
 
-Network elements are not limited to communicating information
-about rate limiting policies. For example, network elements in
-access networks could provide advice
-to endpoints that can help guide application use of network capacity,
-separate from any signals that are intended to influence congestion response.
-Advice might also indicate temporarily increases in available capacity,
-or temporarily reduced capacity
-due to persistent overuse, equipment faults, or other transient issues.
-This applies to increases or reductions that are expected to last
-at least one minute.
+The Standard Communication with Network Elements (SCONE) protocol
+is negotiated by QUIC endpoints.
+SCONE provides a means for networks to signal the maximum available sustained throughput,
+or throughput advice,
+associated with the flows of UDP datagrams that QUIC exchanges.
 
-The Standard Communication with Network Elements (SCONE) protocol is
-negotiated by QUIC endpoints.  This protocol provides a means for network
-elements to signal the maximum available sustained throughput, or rate limits,
-for flows of UDP datagrams that transit that network element to a QUIC endpoint.
+Any network function that is able to update the content of UDP datagrams
+qualifies as a network element that can participate in SCONE
+and provide throughput advice to QUIC endpoints.
 
-Networks with rate limiting policies use SCONE to send throughput advice
+Networks with rate limiting policies can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals -- such as ECN, delays and loss --
 operate on a time scale of a round trip time,
 throughput advice operates over a much longer period.
-This has benefits in some networks as endpoints can fully consume
-network capacity in bursts,
-rather than extending network interaction at lower rates.
+
+This has benefits in some networks
+as endpoints can adapt network usage to better suit network conditions.
+For example, radio networks and battery-powered devices
+perform better with short, bursty exchanges,
+rather than constant transmission at a fixed rate.
 
 For endpoints, SCONE throughput advice makes network policies visible,
 which can reduce wasteful probing beyond those limits.
@@ -167,6 +164,20 @@ signals indicate otherwise.  Congestion could be experienced at a different
 point on the network path than the network element that signals throughput advice.
 Therefore, endpoints need to respect the send rate constraints that are set by a
 congestion controller.
+
+Networks are not limited to using SCONE to communicate information
+about rate limiting policies.
+For example, a network element in an access network
+could provide throughput advice to guide application use of network capacity,
+in any way that is separate from any signals
+that are intended to influence congestion response.
+
+Throughput advice indicate temporary increases in available capacity,
+or temporarily reduced capacity
+due to persistent overuse, equipment faults, or other transient issues.
+This applies to increases or reductions
+that are expected to last at least one minute.
+
 
 ## Unspecified Scope
 
