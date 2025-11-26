@@ -686,7 +686,7 @@ but re-enable or tighten enforcement if monitoring indicates
 that throughput advice is not being respected.
 
 Any monitoring and policy enforcement could be implemented
-in different network elements than the ones that update throughput advice.
+in different network elements than the ones that signal throughput advice.
 
 
 # Version Interaction {#version-interaction}
