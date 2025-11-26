@@ -612,51 +612,6 @@ To reduce the risk of synchronization across multiple senders,
 which may cause network elements to miss updates,
 senders can include a small random delay.
 
-
-## Monitoring Flows {#monitoring}
-
-Network elements can monitor flows
-to determine which flows are from applications
-that respect throughput advice.
-This section outlines an exemplary algorithm
-for network elements.
-
-This monitoring algorithm is guidance only.
-Network elements are advised that monitoring
-any more strictly than the following likely invalidates their advice.
-Network elements could choose not to monitor in this way
-or use a looser monitoring approach.
-For instance, monitoring over a longer time window
-than the monitoring period (67s)
-or using a higher rate than is signaled
-is possible.
-
-To operate this algorithm,
-the minimal state a network element maintains is:
-
-* the current throughput advice,
-* any state necessary to monitor throughput
-  (that is, throughput usage state, such as the state in {{sliding-window}}),
-* a timer used for rate increases, and
-* the time at which that throughput advice was last updated.
-
-When advice is set or updated,
-the network element waits until
-it receives the next SCONE packet on affected flows.
-It then updates the throughput advice in that packet ({{apply}}).
-
-A network element can then monitor affected flows
-to determine whether the throughput advice it provided
-was followed.
-
-A network element SHOULD base its monitoring
-on the maximum value it provided for throughput advice
-over at least the preceding monitoring period.
-Additional time might be allowed
-to account for the possibility that some SCONE packets might be lost.
-This allows applications time to receive advice
-and adapt their sending rate.
-
 A network element MUST NOT alter datagrams to add SCONE packets
 or synthesize datagrams that contain SCONE packets.
 The latter will not be accepted and the former,
@@ -666,24 +621,69 @@ This document does not define a mechanism to support detection,
 but one might be added in future.
 
 
+## Monitoring Flows {#monitoring}
+
+Sending throughput advice is optional for any network.
+A network that sends throughput advice might, also optionally,
+choose to monitor flows
+to determine whether applications are following advice.
+
+This section outlines a method
+that a network element could use
+to determine whether advice is being followed.
+Network deployments that choose to monitor
+are free to follow any monitoring regime that suits their needs.
+
+This monitoring algorithm is guidance only.
+However, monitoring any more strictly than the following
+could mean that an application
+might be incorrectly classified as not following advice.
+A looser monitoring approach,
+such as monitoring over a longer time window
+than the monitoring period (67s)
+or using a higher rate than is signaled,
+has no risk of incorrect classification.
+
+Network elements need to wait until advice is signaled.
+When advice is set or updated,
+monitoring cannot start until the network element
+receives the next SCONE packet
+and updates the throughput advice in that packet; see {{apply}}.
+
+A network element can then monitor affected flows
+to determine whether the throughput advice it provided
+was followed.
+
+A network element SHOULD base its monitoring
+on the maximum value it signaled for throughput advice
+over at least the preceding monitoring period.
+A longer period might be used
+to account for the possibility that SCONE packets are lost.
+This allows applications time to receive advice
+and adapt their sending rate.
+
+
 ## Flows That Exceed Throughput Advice {#policing}
 
-Network elements that provide throughput advice
-can monitor flows --
-or sets of flows that are subject to the same throughput limit --
-for adherance to that advice.
+A network could deploy policy enforcement that drops or delays packets
+to ensure that applications do not exceed throughput limits set in policy.
 
-In the event that a flow exceeds these limits,
-a network element could immediately start
-enforcing adherence to the advice as though it were a hard limit.
-However, this risks creating a situation where communication ceases entirely
-for a significant period of time;
-that is, up to the period defined in {{time}}.
+SCONE allows networks to provide advice to applications,
+so that stricter limits,
+which can be inefficient and lead to worse application performance,
+are not necessary in all cases.
 
-A better approach is to exclude any data transmitted
-before sending reduced throughput advice
-from any monitoring that uses the reduced rate.
-This ensures that the enforcement of limits is minimally disruptive.
+Some applications will not support SCONE.
+Other applications either will not
+or cannot
+follow throughput advice.
+
+Networks can monitor flows to determine if applications follow advice;
+see {{monitoring}}.
+A network could choose to either disable or loosen policy enforcement
+for flows where SCONE is active,
+but re-enable or tighten enforcement if monitoring indicates
+that throughput advice is not being respected.
 
 
 # Version Interaction {#version-interaction}
