@@ -717,7 +717,7 @@ Table of Contents
    advice is not being respected.
 
    Any monitoring and policy enforcement could be implemented in
-   different network elements than the ones that update throughput
+   different network elements than the ones that signal throughput
    advice.
 
 8.  Version Interaction
