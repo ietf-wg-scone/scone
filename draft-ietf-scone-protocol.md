@@ -451,8 +451,9 @@ and might include other, application-specific constraints.
 Applications MAY discard throughput usage state
 when they receive throughput advice that indicates a reduced rate.
 Otherwise, data that was sent at a higher rate
+prior to learning of the reduced advice
 might force the available rate to zero
-for the remainder of the monitoring period; see also {{monitoring}}.
+for up to an entire monitoring period; see also {{monitoring}}.
 
 The relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
@@ -556,7 +557,7 @@ This applies to both client and server endpoints,
 but only if the peer has sent the transport parameter; see {{tp}}.
 
 
-# Deployment
+# Network Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 {{packet}}.  Network elements then apply or replace the Rate Signal field
@@ -642,46 +643,19 @@ the minimal state a network element maintains is:
 When advice is set or updated,
 the network element waits until
 it receives the next SCONE packet on affected flows.
-It then updates the throughput advice in that packet ({{apply}})
-and updates its monitoring state as follows:
+It then updates the throughput advice in that packet ({{apply}}).
 
-* If the signaled throughput advice
-  is the same as the current throughput advice,
-  set the last update time to the current time.
+A network element can then monitor affected flows
+to determine whether the throughput advice it provided
+was followed.
 
-* If the signaled rate is higher than the current value,
-  then:
-
-  * If the time since the last SCONE packet was updated
-    is greater than the monitoring period,
-    the current throughput advice is increased to the received value
-    and the last update time is set to the current time.
-
-  * Otherwise, the throughput advice is deferred.
-    The implementation sets the rate increase timer
-    to one monitoring period
-    relative to the time that the last SCONE packet was updated.
-    When the timer lapses,
-    change the rate monitoring to the higher rate.
-
-* If the signaled throughput advice is lower than the current value,
-  set the current throughput advice to match the signaled value,
-  cancel any rate increase timer,
-  discard all rate monitoring state,
-  and set the last update time to the current time.
-
-A network element that reduces the throughput advice it provides
-MUST also discard any state it maintains
-about the use of the network under previous, higher rates.
-This is necessary to allow senders to discard state
-when advice is reduced (see {{algorithm}}).
-This avoids cases where an application that has planned usage
-might otherwise be completely unable to send due to a lower limits.
-
-A network element that reduces its throughput advice
-might also need delay monitoring or enforcement
-to allow applications time
-to receive and act on the updated advice.
+A network element SHOULD base its monitoring
+on the maximum value it provided for throughput advice
+over at least the preceding monitoring period.
+Additional time might be allowed
+to account for the possibility that some SCONE packets might be lost.
+This allows applications time to receive advice
+and adapt their sending rate.
 
 A network element MUST NOT alter datagrams to add SCONE packets
 or synthesize datagrams that contain SCONE packets.
