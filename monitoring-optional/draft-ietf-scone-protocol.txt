@@ -685,8 +685,8 @@ Table of Contents
 
    Network elements need to wait until advice is signaled.  When advice
    is set or updated, monitoring cannot start until the network element
-   receives the next SCONE packet and updates the throughput advice in
-   that packet; see Section 7.1.
+   receives a SCONE packet and updates the throughput advice in that
+   packet; see Section 7.1.
 
    A network element can then monitor affected flows to determine
    whether the throughput advice it provided was followed.
