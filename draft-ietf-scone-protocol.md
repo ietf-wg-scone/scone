@@ -647,7 +647,7 @@ has no risk of incorrect classification.
 Network elements need to wait until advice is signaled.
 When advice is set or updated,
 monitoring cannot start until the network element
-receives the next SCONE packet
+receives a SCONE packet
 and updates the throughput advice in that packet; see {{apply}}.
 
 A network element can then monitor affected flows
