@@ -165,8 +165,8 @@ point on the network path than the network element that signals throughput advic
 Therefore, endpoints need to respect the send rate constraints that are set by a
 congestion controller.
 
-Networks are not limited to using SCONE to communicate information
-about rate limiting policies.
+Networks can use SCONE to communicate throughput advice
+for reasons other than rate limiting policies.
 For example, a network element in an access network
 could provide throughput advice to guide application use of network capacity,
 in any way that is separate from any signals
