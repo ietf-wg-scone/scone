@@ -475,8 +475,13 @@ increases the likelihood that the signal is received.
 
 # Negotiating SCONE {#tp}
 
-A QUIC endpoint indicates that it is willing to receive SCONE packets by
+A QUIC endpoint indicates that it is able to receive SCONE packets by
 including the scone_supported transport parameter (0x219e).
+
+Each endpoint independently indicates willingness to receive SCONE packets.
+An endpoint that does not include the scone_supported transport parameter
+can send SCONE packets if their peer includes the transport parameter.
+
 The scone_supported transport parameter MUST be empty.
 Receiving a non-zero length scone_supported transport parameter MUST be treated
 as a connection error of type TRANSPORT_PARAMETER_ERROR;
