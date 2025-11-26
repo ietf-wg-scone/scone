@@ -716,6 +716,10 @@ Table of Contents
    enable or tighten enforcement if monitoring indicates that throughput
    advice is not being respected.
 
+   Any monitoring and policy enforcement could be implemented in
+   different network elements than the ones that update throughput
+   advice.
+
 8.  Version Interaction
 
    The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
