@@ -646,8 +646,8 @@ has no risk of incorrect classification.
 
 When advice is set or updated,
 monitoring cannot start until the network element
-receives a SCONE packet
-and updates the throughput advice in that packet; see {{apply}}.
+transmits a SCONE packet with
+throughput advice other than `Unknown` (127); see {{apply}}.
 
 A network element can then monitor affected flows
 to determine whether the throughput advice it provided
