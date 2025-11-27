@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-23T01:55:55.848092+00:00",
+  "timestamp": "2025-11-27T01:42:32.048702+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1911,7 +1911,7 @@
       "labels": [],
       "body": "@kazuho observed in #61:\n\n> My high order point is that the logic used by network elements for testing conformance should reflect what applications can do, taking into considerations the time required to adapt and the impact of packet loss; otherwise we would have may false positives.\n\nRight now, #61 has advice on allowing a grace period for applications that is vague, but probably it will be too short.  It only really considers the time that a signal might take to propagate to applications.  In practice, a lot of applications will need some time to adjust downward.  A network element that signals a lower rate cannot reasonably start enforcing that rate until applications have time to receive the signal **and react**.  While some applications will be able to adjust quickly (real-time applications are particularly good at this), none can react immediately without disruption and some might take a little while.\n\nStreaming video applications are generally pretty good at adjusting and advice will help a lot.  However, they can't flip states instantaneously without disruption.  We probably want to allow enough time for a smoother reaction than having the video stall out until a lower quality stream can be found, buffered, and started.  That might take more than a few seconds.  Especially when you consider that quality ladder changes need I-frames, which are not always immediately available.\n\nWe don't need to be too precise in the advice, we just need to signal that while the network might be inclined to engage a policer/shaper during a change in rate, network elements should reassess once applications have had a little time to settle their usage out.  We might even suggest that the network apply monitoring based on the *maximum* rate active in the last period, where the endpoints sending follows the *minimum* rate received over the same period.  That would be the most generous interpretation and would allow the most time (67 seconds, perhaps) for endpoints to follow the advice.",
       "createdAt": "2025-08-28T09:52:12Z",
-      "updatedAt": "2025-09-24T01:35:52Z",
+      "updatedAt": "2025-11-26T06:57:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -1948,6 +1948,13 @@
           "body": "@martinthomson \n> If an application wants to stay within this envelope, then it can use a rate limiter that is purely forward-looking. That is, one that largely ignores past - and even current - rate consumption. If the application receives advice to reduce rates, it applies that advice at the next opportunity and that is all. It does not consider what happened in the past - or even what is currently happening - in making that decision. So for video streaming, it would ask for the chunks that fit the new limit at the next opportunity, without really closely monitoring active use.\n\nThis is a good observation. This is how our main target application would behave.\n\nI also agree about the model. In essence, the formulas are:\n\n```\ntime_from_first_signal_to_enforce = max_SCONE_packet_interval * loss_factor + application_adapt_delay\ntime_from_decision_to_enforce = time_from_first_signal_to_enforce + max_SCONE_packet_interval\n```\n\nwhere:\n* `max_SCONE_packet_interval` is 30 or 33.5 seconds (depending on how you read the current text),\n* `loss_factor` is a number of SCONE packets to be sent before elements can assume that the signal was not lost (like 2),\n* `application_adapt_delay` is the time required for applications to adapt to the new limit (I agree it might be 2-5 seconds, though I think we might adopt something longer, because if the endpoints overshot, it would take longer than that to complete the transmission of a single chunk).\n\n`time_from_decision_to_enforce` would be one `max_SCONE_packet_interval` longer than `time_from_first_signal_to_enforce`, because network elements might need to wait as long as `max_SCONE_packet_interval` seconds for a SCONE packet after they decide to change the rate. Though network elements might remember the at which the last packet was sent and use that to reduce the window.\n\nRegarding if we should specify either of `time_from_first_signal_to_enforce`, `time_from_decision_to_enforce`, or both, I think it'd make sense to use `time_from_first_signal_to_enforce` because that is what the protocol deals with. We can have a paragraph that discusses how `time_from_first_signal_to_enforce` is converted to `time_from_decision_to_enforce`, but that sounds like an applicability question.",
           "createdAt": "2025-09-24T01:35:52Z",
           "updatedAt": "2025-09-24T01:35:52Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think that we're closer now based on the discussion we had in Montreal.  I think that the resolution to this is in #93, which is a tighter constraint on the semantic in some ways, but also a looser one.  In short, senders need to follow all active advice they have received, which amounts to \"follow the lowest rate\"; similarly, networks - if they choose to monitor - monitor based on all the active advice they have sent, allowing the most permissive.",
+          "createdAt": "2025-11-26T06:57:37Z",
+          "updatedAt": "2025-11-26T06:57:37Z"
         }
       ]
     },
@@ -2060,15 +2067,15 @@
       "id": "I_kwDON1dwo87ODBl3",
       "title": "Definition of \"Network Elements\" is missing.",
       "url": "https://github.com/ietf-wg-scone/scone/issues/69",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "zaheduzzaman",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Current text uses the term \"network element\" but it does not define or describe the network elements. It appears that there are certain expectations from a network element -\n\n- It sits in the access network.\n- It has visibility to UDP 4-Tuple flow sand it maintains some sort of states about the rate the individual flows are using.\n- It has rate limiting policies or have access to it.\n- It can detect SCONE packets in those UDP 4-tuple flows and put rate advices in those packets.\n\nThis all I am infering from the text of this draft, but, I am not sure if everyone would endup infering the same.\n\nWhat I infer makes the \"network element\" a bit unique, that not any router or any device can operate the SCONE protocol. Hence, the document should clearly define this \"network element\".\n\nThis would also help other discussions regarding manageability and applicablity discussions over different access networks as it would help to understand what are those access network there we can have such network elements.  ",
       "createdAt": "2025-09-26T10:26:38Z",
-      "updatedAt": "2025-10-16T11:27:00Z",
-      "closedAt": null,
+      "updatedAt": "2025-11-26T23:55:48Z",
+      "closedAt": "2025-11-26T23:55:48Z",
       "comments": [
         {
           "author": "britram",
@@ -2180,20 +2187,20 @@
       "url": "https://github.com/ietf-wg-scone/scone/issues/75",
       "state": "OPEN",
       "author": "afrind",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This discussion arose from #70 during the 10/15 interim.\n\nSome network elements are already deployed with relatively fixed capacity.  SCONE's current requirement is that in order to maintain a limited flow, the NE needs to mark packets every monitoring period.  @ihlar made some back of the envelope [computations](https://github.com/ietf-wg-scone/scone/pull/70#discussion_r2433930965) that make it seem like it's ok.  This is a placeholder issue we can revisit once we can measure the impact in production(like) requirements.",
       "createdAt": "2025-10-15T22:23:11Z",
-      "updatedAt": "2025-11-04T14:20:15Z",
+      "updatedAt": "2025-11-27T00:56:41Z",
       "closedAt": null,
       "comments": [
         {
           "author": "martinthomson",
           "authorAssociation": "CONTRIBUTOR",
-          "body": "As @ihlar noted in that issue, this is pretty cheap.\n\nI did a rough implementation of the core function in rust, which you can see [here on the compiler explorer](https://rust.godbolt.org/z/rh385f49v).  In that approach, every packet you pass will cost 14 instructions (which should all be low latency).  Updating costs 6 more.  To put it in perspective, in software, the additional check adds 28ns on a very low-end CPU, the update will like cause a pipeline stall, but those are still only a few tens of nanoseconds.",
+          "body": "As @ihlar noted in that issue, this is pretty cheap.\n\nI did a rough implementation of the core function in rust, which you can see [here on the compiler explorer](https://rust.godbolt.org/z/rh385f49v).  In that approach, every packet you pass will cost 14 instructions (which should all be low latency).  Updating costs 10 (was: 6) more.  To put it in perspective, in software, the additional check adds 28ns on a very low-end CPU, the update will like cause a pipeline stall, but those are still only a few tens of nanoseconds.\n\nUpdate: Updating the UDP checksum costs [4 instructions](https://rust.godbolt.org/z/hTsc859Es).",
           "createdAt": "2025-10-17T15:31:56Z",
-          "updatedAt": "2025-10-17T15:31:56Z"
+          "updatedAt": "2025-11-27T00:56:41Z"
         },
         {
           "author": "irfan-ali-ia",
@@ -8916,21 +8923,21 @@
       "id": "PR_kwDON1dwo86vRpSs",
       "title": "SCONE network element description",
       "url": "https://github.com/ietf-wg-scone/scone/pull/83",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "zaheduzzaman",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Tried to capture the comments and discussions in the simplest way possible.\r\n\r\nIncludes :\r\n\r\n- simplistic defition of a Network element\r\n- coined the term \"SCONE Network element\" which is a special network element capable of handling SCONE protocol.\r\n- s/network element/SCONE Network element, throughout the document.\r\n- changes figure to depict SCONE Network element.",
       "createdAt": "2025-10-23T14:08:51Z",
-      "updatedAt": "2025-11-01T16:26:48Z",
+      "updatedAt": "2025-11-26T23:55:48Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "f8885d5e3eded3d53b5d4b569e0585d4381e13c1",
       "headRepository": "zaheduzzaman/scone",
       "headRefName": "patch-1",
       "headRefOid": "0f524c71b060a261a763835f343385425fb8663f",
-      "closedAt": null,
+      "closedAt": "2025-11-26T23:55:48Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -9423,6 +9430,514 @@
               "body": "```suggestion\r\nand either endpoint might choose not to send SCONE packets.\r\n```",
               "createdAt": "2025-11-03T16:15:53Z",
               "updatedAt": "2025-11-03T16:16:08Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDON1dwo861kG6f",
+      "title": "What advice means",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/93",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For a sender, advice is cumulative.  They should follow any advice they have received in the last monitoring period.\r\n\r\nFor a network, the advice they send is something that might take time to respond to.  They should allow a monitoring period before they expect an application to be able to follow advice.\r\n\r\nThe text on following/monitoring advice is now shorter.\r\n\r\nI've also updated the sample code to track all active advice.  If multiple pieces of advice are received, this now tracks sending against all of them.  A sender/application follows the least permissive; a network allows the most permissive.\r\n\r\nThe effect of this is similar to what was in the previous sample code, but it's a little less vulnerable to weirdness.\r\n\r\nFor instance, if the advice increases, the old send rate is monitored until that advice expires.  Applications will therefore continue to follow that old advice, but switch to the new one once the old advice is more than 67s old.\r\n\r\nSimilarly, if the advice to an application reduces, the old rate is also monitored, but the new rate also applies.  Because the new rate is initialized with no memory of what has been sent, the new rate probably allows for more sending, but because the old advice remains active until it expires, you don't get a complete reset.\r\n\r\nThe cost is that the code tracks as many rates as there is different advice received over a monitoring period.\r\n\r\nI'm not sure that we really need the sample code here, but it was a useful exercise to go through in order to understand how this might work in practice.  Looking for input on whether it is useful to retain.",
+      "createdAt": "2025-11-26T05:30:56Z",
+      "updatedAt": "2025-11-26T21:04:03Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "db144c5739aea5843ef4918d5b215a8b382c4602",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "sender-min-ne-max",
+      "headRefOid": "da8e37b16e4a29cad2b88351d2ab6bddd2d9f0ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Happy to take the pseudocode out.  Anyone else think that works?",
+          "createdAt": "2025-11-26T21:04:03Z",
+          "updatedAt": "2025-11-26T21:04:03Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87RUI0P",
+          "commit": {
+            "abbreviatedOid": "da8e37b"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I like the shortened section.\r\n\r\nRegarding the pseudocode: I think the network element vendors that implement SCONE are going to do their own thing to some degree. My only worry is interoperability problems between applications that think they are following advice and elements that think they are not.  Can that be handled just through normative text and keep the document shorter and more digestible?",
+          "createdAt": "2025-11-26T16:12:55Z",
+          "updatedAt": "2025-11-26T16:12:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 94,
+      "id": "PR_kwDON1dwo861kMe3",
+      "title": "The transport parameter is unidirectional",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/94",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It doesn't make much sense to do this, but there might be implementations that can't use advice, but want to send it, so here we are. (This is probably true of servers, even though adding the transport parameter and packet processing is pretty trivial to do.)\r\n\r\nCloses #92.",
+      "createdAt": "2025-11-26T05:39:45Z",
+      "updatedAt": "2025-11-26T16:14:07Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "db144c5739aea5843ef4918d5b215a8b382c4602",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "tp-direction",
+      "headRefOid": "9f60459058845108dfd37f07f323d9cbd3a1a223",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87RUJ0r",
+          "commit": {
+            "abbreviatedOid": "9f60459"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-26T16:14:07Z",
+          "updatedAt": "2025-11-26T16:14:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 95,
+      "id": "PR_kwDON1dwo861kcSc",
+      "title": "Monitoring is a network policy choice",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/95",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This builds on top of #93.  It probably should be merged in with it.\r\n\r\nIt attempts to address #91 by significantly softening the language around monitoring.\r\n\r\n@mjoras does this help?\r\n\r\nCloses #91.",
+      "createdAt": "2025-11-26T06:03:47Z",
+      "updatedAt": "2025-11-27T01:15:23Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "sender-min-ne-max",
+      "baseRefOid": "da8e37b16e4a29cad2b88351d2ab6bddd2d9f0ee",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "monitoring-optional",
+      "headRefOid": "70ecfbdfbb37aad7ac2a02637657c20753c0e286",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I've also added a note that points out that updating SCONE packets, monitoring, and policy enforcement are separate functions that don't need to be co-located.  (I hope that was obvious, but it's now also explicit.)",
+          "createdAt": "2025-11-26T06:25:07Z",
+          "updatedAt": "2025-11-26T06:25:07Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87RKObn",
+          "commit": {
+            "abbreviatedOid": "d7b9c04"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Removing ambiguity is good.",
+          "createdAt": "2025-11-26T06:29:14Z",
+          "updatedAt": "2025-11-26T06:29:14Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87RTAqX",
+          "commit": {
+            "abbreviatedOid": "d7b9c04"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T15:09:05Z",
+          "updatedAt": "2025-11-26T15:37:23Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "This reads more like a section title, since the next sentence is describing the waiting too?",
+              "createdAt": "2025-11-26T15:09:05Z",
+              "updatedAt": "2025-11-26T15:37:23Z"
+            },
+            {
+              "originalPosition": 63,
+              "body": "```suggestion\r\nreceives a SCONE packet\r\n```",
+              "createdAt": "2025-11-26T15:09:54Z",
+              "updatedAt": "2025-11-26T15:37:23Z"
+            },
+            {
+              "originalPosition": 129,
+              "body": "```suggestion\r\nin different network elements than the ones that signal throughput advice.\r\n```",
+              "createdAt": "2025-11-26T15:36:43Z",
+              "updatedAt": "2025-11-26T15:37:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RYB7A",
+          "commit": {
+            "abbreviatedOid": "f8470c6"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T20:58:10Z",
+          "updatedAt": "2025-11-26T20:58:10Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "```suggestion\n```\nBetter?",
+              "createdAt": "2025-11-26T20:58:10Z",
+              "updatedAt": "2025-11-26T20:58:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RYyjU",
+          "commit": {
+            "abbreviatedOid": "f8470c6"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T22:25:04Z",
+          "updatedAt": "2025-11-26T22:29:26Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "Yes, I think so.",
+              "createdAt": "2025-11-26T22:25:04Z",
+              "updatedAt": "2025-11-26T22:29:26Z"
+            },
+            {
+              "originalPosition": 64,
+              "body": "If an element observes advice in a SCONE that is limited - either by the original sender or an upstream element - and does not update it, is it permitted to monitor?",
+              "createdAt": "2025-11-26T22:26:01Z",
+              "updatedAt": "2025-11-26T22:29:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZFr_",
+          "commit": {
+            "abbreviatedOid": "f8470c6"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T23:18:35Z",
+          "updatedAt": "2025-11-26T23:18:35Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "```suggestion\nthere is no point to starting monitoring until the network element\n```\n\n@afrind, better?",
+              "createdAt": "2025-11-26T23:18:35Z",
+              "updatedAt": "2025-11-26T23:18:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZI7N",
+          "commit": {
+            "abbreviatedOid": "7ccfae8"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T23:30:07Z",
+          "updatedAt": "2025-11-26T23:30:08Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "I think my point below hints at something that might need a broader fix -- if the original sending endpoint anticipates the network element limit (say, 1mbps), then the element does not _update_ the packet, it's not correct to say \"there's no point to monitoring\".  Instead, we might need to explain that an element can monitor once a SCONE packet with a limit has been sent?",
+              "createdAt": "2025-11-26T23:30:07Z",
+              "updatedAt": "2025-11-26T23:30:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZNz_",
+          "commit": {
+            "abbreviatedOid": "f8470c6"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T23:48:00Z",
+          "updatedAt": "2025-11-26T23:48:00Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "Not sure what to do with that feedback.  Want to suggest text instead?",
+              "createdAt": "2025-11-26T23:48:00Z",
+              "updatedAt": "2025-11-26T23:48:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZWkB",
+          "commit": {
+            "abbreviatedOid": "7ccfae8"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T00:19:47Z",
+          "updatedAt": "2025-11-27T00:21:31Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "```suggestion\r\ntransmits a SCONE packet with\r\nthroughput advice other than `Unknown` (127); see {{apply}}.\r\n```",
+              "createdAt": "2025-11-27T00:19:47Z",
+              "updatedAt": "2025-11-27T00:21:31Z"
+            },
+            {
+              "originalPosition": 62,
+              "body": "I gave it shot below.",
+              "createdAt": "2025-11-27T00:20:45Z",
+              "updatedAt": "2025-11-27T00:21:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZaK_",
+          "commit": {
+            "abbreviatedOid": "70ecfbd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T00:33:27Z",
+          "updatedAt": "2025-11-27T00:33:27Z",
+          "comments": [
+            {
+              "originalPosition": 62,
+              "body": "Thanks.",
+              "createdAt": "2025-11-27T00:33:27Z",
+              "updatedAt": "2025-11-27T00:33:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZ3od",
+          "commit": {
+            "abbreviatedOid": "70ecfbd"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T01:15:23Z",
+          "updatedAt": "2025-11-27T01:15:23Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "This paragraph sounds like monitoring devices might throttle flows that don't follow throughput advice from any network device, _including network devices on other hops_. Is that intentional?\n\nI get the intent to describe the algorithm based on what the signaled advice is (because that is what the applications would use in order to comply), however my concern is that if we are to consider such deployments, we might need to expand security considerations how an on-path attacker might abuse SCONE to attack monitoring devices deployed by in other hops.",
+              "createdAt": "2025-11-27T01:15:23Z",
+              "updatedAt": "2025-11-27T01:15:58Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 96,
+      "id": "PR_kwDON1dwo861knlN",
+      "title": "Update intro",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/96",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This attempts to shorten the intro by moving some of the text that has been added over time to the applicability section.\r\n\r\nIt also clarifies that \"network element\" is any function that is on-path.  I'll add the other thing we agreed to at the last meeting to another PR that touches the relevant text.\r\n\r\nCloses #83.\r\nCloses #69.",
+      "createdAt": "2025-11-26T06:21:48Z",
+      "updatedAt": "2025-11-26T23:55:47Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "db144c5739aea5843ef4918d5b215a8b382c4602",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "network-functions",
+      "headRefOid": "accaa8981fe55c1ca73440125a5151bd5c8a7993",
+      "closedAt": "2025-11-26T23:55:47Z",
+      "mergedAt": "2025-11-26T23:55:47Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "7d8747405657bb7e64e6b0fc873e6484e17d0d89"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87RKRgZ",
+          "commit": {
+            "abbreviatedOid": "e041e84"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good.",
+          "createdAt": "2025-11-26T06:32:07Z",
+          "updatedAt": "2025-11-26T06:32:07Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87RToF9",
+          "commit": {
+            "abbreviatedOid": "e041e84"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T15:42:28Z",
+          "updatedAt": "2025-11-26T15:44:03Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "I see this is just moved test, but...\r\n\r\nThis document is describing SCONE but this reads like placing limits on what you can do if you are not SCONE. Maybe just \"could provide throughput advice...through out-of-band mechanisms\".",
+              "createdAt": "2025-11-26T15:42:28Z",
+              "updatedAt": "2025-11-26T15:44:03Z"
+            },
+            {
+              "originalPosition": 57,
+              "body": "```suggestion\r\nThroughput advice can indicate temporary increases in available capacity,\r\n```\r\n?",
+              "createdAt": "2025-11-26T15:42:56Z",
+              "updatedAt": "2025-11-26T15:44:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RYEL8",
+          "commit": {
+            "abbreviatedOid": "9bedfd0"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T21:02:41Z",
+          "updatedAt": "2025-11-26T21:02:41Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "I'm not seeing that.  I'm seeing this as an application of SCONE.  It's just that the reasons might not be limits in policy.  This is continued in the next paragraph.",
+              "createdAt": "2025-11-26T21:02:41Z",
+              "updatedAt": "2025-11-26T21:02:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RY4Sn",
+          "commit": {
+            "abbreviatedOid": "9bedfd0"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T22:39:38Z",
+          "updatedAt": "2025-11-26T22:39:38Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "My read was: Networks are not limited _to using SCONE_ to communicate information about rate limiting policies -- they can communicate policies in other ways.\r\n\r\nBut you want to say: Networks are not limit to using SCONE _to communicate information about rate limiting policies_ -- you can use SCONE for other reasons.\r\n\r\nPerhaps: \"Networks can use SCONE to communicate throughput advice unrelated to rate limiting policies\" or something.",
+              "createdAt": "2025-11-26T22:39:38Z",
+              "updatedAt": "2025-11-26T22:39:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZGM3",
+          "commit": {
+            "abbreviatedOid": "9bedfd0"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T23:20:25Z",
+          "updatedAt": "2025-11-26T23:20:25Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "```suggestion\nNetworks can use SCONE to communicate throughput advice\nfor reasons other than rate limiting policies.\n```",
+              "createdAt": "2025-11-26T23:20:25Z",
+              "updatedAt": "2025-11-26T23:20:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZGez",
+          "commit": {
+            "abbreviatedOid": "accaa89"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T23:21:24Z",
+          "updatedAt": "2025-11-26T23:21:29Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "See above.  Better?",
+              "createdAt": "2025-11-26T23:21:24Z",
+              "updatedAt": "2025-11-26T23:21:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RZJJs",
+          "commit": {
+            "abbreviatedOid": "accaa89"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-26T23:30:53Z",
+          "updatedAt": "2025-11-26T23:30:53Z",
+          "comments": [
+            {
+              "originalPosition": 55,
+              "body": "Yes, thanks",
+              "createdAt": "2025-11-26T23:30:53Z",
+              "updatedAt": "2025-11-26T23:30:53Z"
             }
           ]
         }
