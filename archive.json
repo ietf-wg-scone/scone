@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-11-27T01:42:32.048702+00:00",
+  "timestamp": "2025-11-30T01:54:42.467294+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -9495,7 +9495,7 @@
       "labels": [],
       "body": "It doesn't make much sense to do this, but there might be implementations that can't use advice, but want to send it, so here we are. (This is probably true of servers, even though adding the transport parameter and packet processing is pretty trivial to do.)\r\n\r\nCloses #92.",
       "createdAt": "2025-11-26T05:39:45Z",
-      "updatedAt": "2025-11-26T16:14:07Z",
+      "updatedAt": "2025-11-28T06:14:53Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "db144c5739aea5843ef4918d5b215a8b382c4602",
@@ -9520,6 +9520,19 @@
           "createdAt": "2025-11-26T16:14:07Z",
           "updatedAt": "2025-11-26T16:14:07Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87Rqj9e",
+          "commit": {
+            "abbreviatedOid": "9f60459"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-11-28T06:14:53Z",
+          "updatedAt": "2025-11-28T06:14:53Z",
+          "comments": []
         }
       ]
     },
@@ -9535,7 +9548,7 @@
       "labels": [],
       "body": "This builds on top of #93.  It probably should be merged in with it.\r\n\r\nIt attempts to address #91 by significantly softening the language around monitoring.\r\n\r\n@mjoras does this help?\r\n\r\nCloses #91.",
       "createdAt": "2025-11-26T06:03:47Z",
-      "updatedAt": "2025-11-27T01:15:23Z",
+      "updatedAt": "2025-11-27T05:52:23Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "sender-min-ne-max",
       "baseRefOid": "da8e37b16e4a29cad2b88351d2ab6bddd2d9f0ee",
@@ -9770,6 +9783,86 @@
               "body": "This paragraph sounds like monitoring devices might throttle flows that don't follow throughput advice from any network device, _including network devices on other hops_. Is that intentional?\n\nI get the intent to describe the algorithm based on what the signaled advice is (because that is what the applications would use in order to comply), however my concern is that if we are to consider such deployments, we might need to expand security considerations how an on-path attacker might abuse SCONE to attack monitoring devices deployed by in other hops.",
               "createdAt": "2025-11-27T01:15:23Z",
               "updatedAt": "2025-11-27T01:15:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RaiM2",
+          "commit": {
+            "abbreviatedOid": "70ecfbd"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T03:00:04Z",
+          "updatedAt": "2025-11-27T03:00:04Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "We can't prevent a network element from monitoring the advice that is contained in packets it's sending, and we can't distinguish between \"passing through\" advice from upstream and \"it set the same rate I was going to set\", can we?",
+              "createdAt": "2025-11-27T03:00:04Z",
+              "updatedAt": "2025-11-27T03:00:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RbTbe",
+          "commit": {
+            "abbreviatedOid": "70ecfbd"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T05:26:46Z",
+          "updatedAt": "2025-11-27T05:26:46Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "A network operator would be interested in monitoring conformance to whatever policy it has. If SCONE packets with lower valued signals pass through, the network doesn't have to update them. But it might still initiate monitoring in accordance with its own policy (that would've resulted in higher valued signals) and not the specific value in the forwarded packet. \nI wouldn't be too worried about an attack on monitoring devices here.",
+              "createdAt": "2025-11-27T05:26:46Z",
+              "updatedAt": "2025-11-27T05:26:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RbXak",
+          "commit": {
+            "abbreviatedOid": "70ecfbd"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T05:36:24Z",
+          "updatedAt": "2025-11-27T05:36:25Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "> We can't prevent a network element from monitoring the advice that is contained in packets it's sending,\n\nThis is true.\n\n> we can't distinguish between \"passing through\" advice from upstream and \"it set the same rate I was going to set\", can we?\n\nFrom the on-wire signal alone, we can't distinguish those cases, agreed.\n\nHowever, that is exactly why I think the PR is problematic in its current state.\n\nThe phrase \"transmits a SCONE packet with \u301c\" can naturally be read as covering a SCONE signal that originated upstream and is merely being passed through unchanged. And in that case, the following proposed normative text:\n\n> \"A network element SHOULD base its monitoring on the maximum value it signaled for throughput advice over at least the preceding monitoring period.\"\n\ncan also be read as telling a monitoring/enforcement device to treat such pass-through / third-party advice as the basis of its monitoring, and by extension, policing / enforcement decisions.\n\nThat model does not match the current security model described in the draft, where devices that _act_ on SCONE advice (endpoints) only do so when the SCONE signal is attached to a valid QUIC packet, preventing an off-path attacker from inserting spurious advice. A network element that relies on pass-through / third-party advice cannot apply that \"accepts only SCONE signals attached to valid QUIC packets\" condition, so text that assumes or endorses that model should not be included in the I-D.\n\nTo conclude, I think the draft should talk about the advice that the _hop intends to apply locally,_ rather than whatever SCONE signal that happens to be present in transmitted packets.",
+              "createdAt": "2025-11-27T05:36:24Z",
+              "updatedAt": "2025-11-27T05:36:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87RbeoU",
+          "commit": {
+            "abbreviatedOid": "70ecfbd"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-11-27T05:52:23Z",
+          "updatedAt": "2025-11-27T05:52:23Z",
+          "comments": [
+            {
+              "originalPosition": 63,
+              "body": "Relying on packets that \"just happen to pass by\" is a security breach waiting to happen. The network element has no way to verify that the Scone packet that it sees is genuine. For all we know, an adversary may create a fake Scone packet, coalesced with a fake 1RTT packet. The network element sees that and start its monitoring clock, but the endpoint recognizes the packet as fake and does not heed it. Conflict ensues.",
+              "createdAt": "2025-11-27T05:52:23Z",
+              "updatedAt": "2025-11-27T05:52:24Z"
             }
           ]
         }
