@@ -1050,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">November 2025</td>
+<td class="right">December 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 30 May 2026</td>
+<td class="center">Expires 5 June 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-26" class="published">26 November 2025</time>
+<time datetime="2025-12-02" class="published">2 December 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-30">30 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-06-05">5 June 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1141,7 +1141,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1852,15 +1852,18 @@ increases the likelihood that the signal is received.<a href="#section-5.4-6" cl
       <h2 id="name-negotiating-scone">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-negotiating-scone" class="section-name selfRef">Negotiating SCONE</a>
       </h2>
-<p id="section-6-1">A QUIC endpoint indicates that it is willing to receive SCONE packets by
-including the scone_supported transport parameter (0x219e).
-The scone_supported transport parameter <span class="bcp14">MUST</span> be empty.
+<p id="section-6-1">A QUIC endpoint indicates that it is able to receive SCONE packets by
+including the scone_supported transport parameter (0x219e).<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Each endpoint independently indicates willingness to receive SCONE packets.
+An endpoint that does not include the scone_supported transport parameter
+can send SCONE packets if their peer includes the transport parameter.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The scone_supported transport parameter <span class="bcp14">MUST</span> be empty.
 Receiving a non-zero length scone_supported transport parameter <span class="bcp14">MUST</span> be treated
 as a connection error of type TRANSPORT_PARAMETER_ERROR;
-see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-20.1" class="relref">Section 20.1</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">This transport parameter is valid for QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2
+see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-20.1" class="relref">Section 20.1</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">This transport parameter is valid for QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2
 <span>[<a href="#QUICv2" class="cite xref">QUICv2</a>]</span> and any other version that recognizes the versions,
-transport parameters, and frame types registries established in Sections <a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">22.2</a>, <a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">22.3</a>, and <a href="https://rfc-editor.org/rfc/rfc9000#section-22.4" class="relref">22.4</a> of <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
+transport parameters, and frame types registries established in Sections <a href="https://rfc-editor.org/rfc/rfc9000#section-22.2" class="relref">22.2</a>, <a href="https://rfc-editor.org/rfc/rfc9000#section-22.3" class="relref">22.3</a>, and <a href="https://rfc-editor.org/rfc/rfc9000#section-22.4" class="relref">22.4</a> of <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-4" class="pilcrow">¶</a></p>
 <div id="indication">
 <section id="section-6.1">
         <h3 id="name-indicating-support-on-new-f">
