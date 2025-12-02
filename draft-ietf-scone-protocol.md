@@ -664,6 +664,9 @@ to account for the possibility that SCONE packets are lost.
 This allows applications time to receive advice
 and adapt their sending rate.
 
+Any monitoring and policy enforcement could be implemented
+in different network elements than the ones that signal throughput advice.
+
 
 ## Flows That Exceed Throughput Advice {#policing}
 
@@ -686,9 +689,6 @@ A network could choose to either disable or loosen policy enforcement
 for flows where SCONE is active,
 but re-enable or tighten enforcement if monitoring indicates
 that throughput advice is not being respected.
-
-Any monitoring and policy enforcement could be implemented
-in different network elements than the ones that signal throughput advice.
 
 
 # Version Interaction {#version-interaction}
