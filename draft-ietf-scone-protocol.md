@@ -644,18 +644,21 @@ than the monitoring period (67s)
 or using a higher rate than is signaled,
 has no risk of incorrect classification.
 
-When advice is set or updated,
-monitoring cannot start until the network element
-transmits a SCONE packet with
-throughput advice other than `Unknown` (127); see {{apply}}.
+When a network changes the value
+it intends to signal,
+applications need time to adjust their sending behavior.
+As a result, any monitoring needs to allow time
+for SCONE packets to be updated,
+for those packets to be received by endpoints,
+and for applications to adapt.
 
 A network element can then monitor affected flows
 to determine whether the throughput advice it provided
 was followed.
 
 A network element SHOULD base its monitoring
-on the maximum value it signaled for throughput advice
-over at least the preceding monitoring period.
+on the maximum value that was configured to apply
+during the preceding two monitoring periods.
 A longer period might be used
 to account for the possibility that SCONE packets are lost.
 This allows applications time to receive advice
