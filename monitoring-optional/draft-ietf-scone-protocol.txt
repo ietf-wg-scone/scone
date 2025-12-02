@@ -698,6 +698,10 @@ Table of Contents
    possibility that SCONE packets are lost.  This allows applications
    time to receive advice and adapt their sending rate.
 
+   Any monitoring and policy enforcement could be implemented in
+   different network elements than the ones that signal throughput
+   advice.
+
 7.3.  Flows That Exceed Throughput Advice
 
    A network could deploy policy enforcement that drops or delays
@@ -716,10 +720,6 @@ Table of Contents
    loosen policy enforcement for flows where SCONE is active, but re-
    enable or tighten enforcement if monitoring indicates that throughput
    advice is not being respected.
-
-   Any monitoring and policy enforcement could be implemented in
-   different network elements than the ones that signal throughput
-   advice.
 
 8.  Version Interaction
 
