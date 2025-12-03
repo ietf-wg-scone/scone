@@ -2012,7 +2012,11 @@ to account for the possibility that the updated SCONE packets are lost.
 This allows applications time to receive advice
 and adapt their sending rate.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
 <p id="section-7.2-7">Any monitoring and policy enforcement could be implemented
-in different network elements than the ones that signal throughput advice.<a href="#section-7.2-7" class="pilcrow">¶</a></p>
+in different network elements than the ones that signal throughput advice.
+However, network elements <span class="bcp14">MUST NOT</span> enforce throughput based on throughput advice
+found in SCONE packets received from other entities, because unlike endpoints,
+network elements do not have the capability to validate other QUIC packets
+contained in the same datagram; see <a href="#fake-packets" class="auto internal xref">Section 9.1</a>.<a href="#section-7.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="policing">
@@ -2202,7 +2206,7 @@ data.<a href="#section-9-4" class="pilcrow">¶</a></p>
 <p id="section-9-5">Similarly, if there is a strong need to ensure that throughput advice is respected,
 network elements cannot assume that the signaled advice will be respected by
 endpoints.<a href="#section-9-5" class="pilcrow">¶</a></p>
-<div id="fake-scone-packets">
+<div id="fake-packets">
 <section id="section-9.1">
         <h3 id="name-fake-scone-packets">
 <a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-fake-scone-packets" class="section-name selfRef">Fake SCONE Packets</a>

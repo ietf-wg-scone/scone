@@ -692,7 +692,11 @@ Table of Contents
 
    Any monitoring and policy enforcement could be implemented in
    different network elements than the ones that signal throughput
-   advice.
+   advice.  However, network elements MUST NOT enforce throughput based
+   on throughput advice found in SCONE packets received from other
+   entities, because unlike endpoints, network elements do not have the
+   capability to validate other QUIC packets contained in the same
+   datagram; see Section 9.1.
 
 7.3.  Flows That Exceed Throughput Advice
 
