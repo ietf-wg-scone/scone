@@ -392,9 +392,6 @@ but also includes timers for middleboxes; see {{Section 4.3 of ?RFC4787}}.
 Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
-A sample algorithm for ensuring adherance to throughput advice
-is included in {{sliding-window}}.
-
 
 ## Endpoint Processing of SCONE Packets
 
@@ -1081,27 +1078,6 @@ Notes:
 {:compact}
 
 --- back
-
-# Sliding Window for Rate Monitoring {#sliding-window}
-
-One way to account for usage
-is to divide time into multiple smaller spans.
-For instance, 67 consecutive one second intervals
-or 134 half second intervals.
-
-The amount of data transmitted in each interval is recorded
-in a circular buffer,
-as well as the total amount over 67 seconds.
-As time passes and new intervals are added,
-the overall total is reduced by the amount attributed to the oldest interval.
-The oldest interval is reset to zero and becomes the newest interval.
-
-Sample code for this algorithm is included in {{x-ta}}.
-
-~~~ pseudocode
-{::include ta.py.excerpt}
-~~~
-{: #x-ta title="Sample code for managing throughput advice"}
 
 # Acknowledgments
 {:numbered="false"}

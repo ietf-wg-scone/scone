@@ -1,8 +1,10 @@
 from math import floor, ceil
 from time import time
 
-#>>>
 class ThroughputAdvice:
+  """A sample implementation of rate constraints (sender side)
+     or rate monitoring (network side)."""
+
   def __init__(self, role, now, window, interval):
     """Construct throughput advice,
        given a role `role` ("sender" or "network"),
@@ -111,7 +113,6 @@ class ThroughputAdvice:
 
     self._advance_time(t)
     return self.expired(t) or self._is_ok(t, amount)
-#<<<
 
   def __repr__(self):
     r = f"""ThroughputAdvice {self.role} {self.advice}@{self.last_advice}
