@@ -445,13 +445,6 @@ Other constraints on usage will still apply,
 which necessarily includes congestion control
 and might include other, application-specific constraints.
 
-Applications MAY discard throughput usage state
-when they receive throughput advice that indicates a reduced rate.
-Otherwise, data that was sent at a higher rate
-prior to learning of the reduced advice
-might force the available rate to zero
-for up to an entire monitoring period; see also {{monitoring}}.
-
 The relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
 The cost is that loss of information about recent send rate
