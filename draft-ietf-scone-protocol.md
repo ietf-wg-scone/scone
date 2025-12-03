@@ -659,8 +659,9 @@ was followed.
 A network element SHOULD base its monitoring
 on the maximum value that was configured to apply
 during the preceding two monitoring periods.
-A longer period might be used
-to account for the possibility that SCONE packets are lost.
+If the network element cannot update the throughput advice in every SCONE packet
+(or can do so only infrequently), a longer period might be used
+to account for the possibility that the updated SCONE packets are lost.
 This allows applications time to receive advice
 and adapt their sending rate.
 
