@@ -1050,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">November 2025</td>
+<td class="right">December 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 30 May 2026</td>
+<td class="center">Expires 6 June 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-26" class="published">26 November 2025</time>
+<time datetime="2025-12-03" class="published">3 December 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-30">30 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-06-06">6 June 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1141,7 +1141,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1972,6 +1972,13 @@ every 20–30 seconds is likely sufficient to ensure that throughput advice is n
 To reduce the risk of synchronization across multiple senders,
 which may cause network elements to miss updates,
 senders can include a small random delay.<a href="#section-7.1-9" class="pilcrow">¶</a></p>
+<p id="section-7.1-10">A network element <span class="bcp14">MUST NOT</span> alter datagrams to add SCONE packets
+or synthesize datagrams that contain SCONE packets.
+The latter will not be accepted and the former,
+even if they do not exceed the path MTU as a result,
+can be detected by applications and could be ignored.
+This document does not define a mechanism to support detection,
+but one might be added in future.<a href="#section-7.1-10" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="monitoring">
@@ -1979,58 +1986,44 @@ senders can include a small random delay.<a href="#section-7.1-9" class="pilcrow
         <h3 id="name-monitoring-flows">
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-monitoring-flows" class="section-name selfRef">Monitoring Flows</a>
         </h3>
-<p id="section-7.2-1">Network elements can monitor flows
-to determine which flows are from applications
-that respect throughput advice.
-This section outlines an exemplary algorithm
-for network elements.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">This monitoring algorithm is guidance only.
-Network elements are advised that monitoring
-any more strictly than the following likely invalidates their advice.
-Network elements could choose not to monitor in this way
-or use a looser monitoring approach.
-For instance, monitoring over a longer time window
+<p id="section-7.2-1">Sending throughput advice is optional for any network.
+A network that sends throughput advice might, also optionally,
+choose to monitor flows
+to determine whether applications are following advice.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">This section outlines a method
+that a network element could use
+to determine whether advice is being followed.
+Network deployments that choose to monitor
+are free to follow any monitoring regime that suits their needs.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">This monitoring algorithm is guidance only.
+However, monitoring any more strictly than the following
+could mean that an application
+might be incorrectly classified as not following advice.
+A looser monitoring approach,
+such as monitoring over a longer time window
 than the monitoring period (67s)
-or using a higher rate than is signaled
-is possible.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2-3">To operate this algorithm,
-the minimal state a network element maintains is:<a href="#section-7.2-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-7.2-4.1">
-            <p id="section-7.2-4.1.1">the current throughput advice,<a href="#section-7.2-4.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-7.2-4.2">
-            <p id="section-7.2-4.2.1">any state necessary to monitor throughput
-(that is, throughput usage state, such as the state in <a href="#sliding-window" class="auto internal xref">Appendix A</a>),<a href="#section-7.2-4.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-7.2-4.3">
-            <p id="section-7.2-4.3.1">a timer used for rate increases, and<a href="#section-7.2-4.3.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-7.2-4.4">
-            <p id="section-7.2-4.4.1">the time at which that throughput advice was last updated.<a href="#section-7.2-4.4.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-7.2-5">When advice is set or updated,
-the network element waits until
-it receives the next SCONE packet on affected flows.
-It then updates the throughput advice in that packet (<a href="#apply" class="auto internal xref">Section 7.1</a>).<a href="#section-7.2-5" class="pilcrow">¶</a></p>
-<p id="section-7.2-6">A network element can then monitor affected flows
+or using a higher rate than is signaled,
+has no risk of incorrect classification.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2-4">When a network changes the value
+it intends to signal,
+applications need time to adjust their sending behavior.
+As a result, any monitoring needs to allow time
+for SCONE packets to be updated,
+for those packets to be received by endpoints,
+and for applications to adapt.<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.2-5">A network element can then monitor affected flows
 to determine whether the throughput advice it provided
-was followed.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
-<p id="section-7.2-7">A network element <span class="bcp14">SHOULD</span> base its monitoring
-on the maximum value it provided for throughput advice
-over at least the preceding monitoring period.
-Additional time might be allowed
-to account for the possibility that some SCONE packets might be lost.
+was followed.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
+<p id="section-7.2-6">A network element <span class="bcp14">SHOULD</span> base its monitoring
+on the maximum value that was configured to apply
+during the preceding two monitoring periods.
+If the network element cannot update the throughput advice in every SCONE packet
+(or can do so only infrequently), a longer period might be used
+to account for the possibility that the updated SCONE packets are lost.
 This allows applications time to receive advice
-and adapt their sending rate.<a href="#section-7.2-7" class="pilcrow">¶</a></p>
-<p id="section-7.2-8">A network element <span class="bcp14">MUST NOT</span> alter datagrams to add SCONE packets
-or synthesize datagrams that contain SCONE packets.
-The latter will not be accepted and the former,
-even if they do not exceed the path MTU as a result,
-can be detected by applications and could be ignored.
-This document does not define a mechanism to support detection,
-but one might be added in future.<a href="#section-7.2-8" class="pilcrow">¶</a></p>
+and adapt their sending rate.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
+<p id="section-7.2-7">Any monitoring and policy enforcement could be implemented
+in different network elements than the ones that signal throughput advice.<a href="#section-7.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="policing">
@@ -2038,20 +2031,22 @@ but one might be added in future.<a href="#section-7.2-8" class="pilcrow">¶</a>
         <h3 id="name-flows-that-exceed-throughpu">
 <a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-flows-that-exceed-throughpu" class="section-name selfRef">Flows That Exceed Throughput Advice</a>
         </h3>
-<p id="section-7.3-1">Network elements that provide throughput advice
-can monitor flows --
-or sets of flows that are subject to the same throughput limit --
-for adherance to that advice.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3-2">In the event that a flow exceeds these limits,
-a network element could immediately start
-enforcing adherence to the advice as though it were a hard limit.
-However, this risks creating a situation where communication ceases entirely
-for a significant period of time;
-that is, up to the period defined in <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">A better approach is to exclude any data transmitted
-before sending reduced throughput advice
-from any monitoring that uses the reduced rate.
-This ensures that the enforcement of limits is minimally disruptive.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-1">A network could deploy policy enforcement that drops or delays packets
+to ensure that applications do not exceed throughput limits set in policy.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">SCONE allows networks to provide advice to applications,
+so that stricter limits,
+which can be inefficient and lead to worse application performance,
+are not necessary in all cases.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">Some applications will not support SCONE.
+Other applications either will not
+or cannot
+follow throughput advice.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">Networks can monitor flows to determine if applications follow advice;
+see <a href="#monitoring" class="auto internal xref">Section 7.2</a>.
+A network could choose to either disable or loosen policy enforcement
+for flows where SCONE is active,
+but re-enable or tighten enforcement if monitoring indicates
+that throughput advice is not being respected.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
