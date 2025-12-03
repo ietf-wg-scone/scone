@@ -657,10 +657,6 @@ and adapt their sending rate.
 
 Any monitoring and policy enforcement could be implemented
 in different network elements than the ones that signal throughput advice.
-However, network elements MUST NOT enforce throughput based on throughput advice
-found in SCONE packets received from other entities, because unlike endpoints,
-network elements do not have the capability to validate other QUIC packets
-contained in the same datagram; see {{fake-packets}}.
 
 
 ## Flows That Exceed Throughput Advice {#policing}
@@ -840,7 +836,7 @@ Similarly, if there is a strong need to ensure that throughput advice is respect
 network elements cannot assume that the signaled advice will be respected by
 endpoints.
 
-## Fake SCONE Packets {#fake-packets}
+## Fake SCONE Packets
 
 Attackers that can inject packets could compose arbitrary "SCONE-like" packets
 by selecting a pair of IP addresses and ports, an arbitrary rate signal, a
