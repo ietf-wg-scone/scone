@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-04T01:47:03.233185+00:00",
+  "timestamp": "2025-12-07T01:55:04.154241+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2185,15 +2185,15 @@
       "id": "I_kwDON1dwo87RyyvR",
       "title": "Is sending advice every 67 seconds too computationally expensive for network elements?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/75",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "afrind",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This discussion arose from #70 during the 10/15 interim.\n\nSome network elements are already deployed with relatively fixed capacity.  SCONE's current requirement is that in order to maintain a limited flow, the NE needs to mark packets every monitoring period.  @ihlar made some back of the envelope [computations](https://github.com/ietf-wg-scone/scone/pull/70#discussion_r2433930965) that make it seem like it's ok.  This is a placeholder issue we can revisit once we can measure the impact in production(like) requirements.",
       "createdAt": "2025-10-15T22:23:11Z",
-      "updatedAt": "2025-11-27T00:56:41Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-05T01:11:01Z",
+      "closedAt": "2025-12-05T01:11:01Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2229,6 +2229,13 @@
           "body": "What you both are saying is that the cost of updating is not high. Agree with this. But there is a cost associated with doing frequent updates and if we can design the protocol to help reduce the update cost, without complexity would be great. As I said originally, 67 soft-state may not be applicable in all situations. So if we can allow the server to keep soft state for longer and signal the fact that the last provided soft-state is still valid would be good. Two possible ways: (1) one of the rate codes is dedicated to just signaling that soft-state is still valid, or (2) the client forwards the rate to the server and the server repeats this value in SCONE packets for as long as soft-state is maintained. For (1), I do see the issue of handling error scenario that network element updates the rate, but that SCONE packet(s) get dropped. So server is still using older recommendation whereas the network element assumes that the new rate has been accepted. (2) can be a bit better, but would work only in case the client signals the rate to the server (which may not always be the case, since client may signal something which is a function of the rate and not the rate itself).",
           "createdAt": "2025-11-04T14:20:15Z",
           "updatedAt": "2025-11-04T14:20:15Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Based on discussion here, I'm going to close this one with no action.  Obviously, if there is concrete information people want to bring to suggest that our analysis is incorrect, we're happy to look at that information.",
+          "createdAt": "2025-12-05T01:11:01Z",
+          "updatedAt": "2025-12-05T01:11:01Z"
         }
       ]
     },
@@ -2315,7 +2322,7 @@
       "labels": [],
       "body": "I noticed that the draft now uses both \u201cmaximum achievable throughput\u201d and \u201cmaximum sustained throughput\u201d interchangeably, however, they are two different concepts. \n\nFrom my understanding, what the SCONE network elements can provide is the maximum achievable throughput, They can\u2019t guarantee what is sustained for a particular 4-tuple (for instance when a number of flows share the same max).\n\nUnless we define what \"sustrained\" means, using both terms are confusing. I suggest we use \u201cmaximum achievable throughput\u201d.\n",
       "createdAt": "2025-10-23T14:24:43Z",
-      "updatedAt": "2025-10-29T01:36:28Z",
+      "updatedAt": "2025-12-05T09:42:08Z",
       "closedAt": null,
       "comments": [
         {
@@ -2373,6 +2380,13 @@
           "body": "> To my understanding, the \"max sustrained throughput\" is something that can be maintained over certain period of time. Here, there is some sort of gurantee to provide that throughput over a period of time, for scone we don't know that configured period. However, we have 67s of monitoring period.\n\nI think the most detailed definition at the moment is the one we have in [Section 5.4](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.4-2): i.e., _an endpoint that receives throughput advice might receive multiple different rate limits. If advice is applied by applications, applications MUST apply the lowest throughput advice received during any monitoring period._\n\nReading the quoted paragraph, I realize that we also use the term \"throughput advice\" as well.\n\nRegarding the signal that SCONE provides, I'm starting to wonder if \"throughput advice\" is a term better than \"rate limit.\" The problem with \"rate limit\" is that, in the document, we talk about things like \"rate limits\" or \"rate limit policy\" to refer to CC-based throttling techniques not necessary tied to SCONE.",
           "createdAt": "2025-10-28T22:48:50Z",
           "updatedAt": "2025-10-29T01:36:28Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "Similarly, I have often argued against \"rate limit\" implies that a network element is \"limiting\" -- rather than a network element is now providing guidance/hints to prevent unwanted side effects (that may well be rate-limiting or some other form of policing/queueing.... but that is side effect of not heeding the advice). I also think \"achievable throughput\u201d implies more knowledge than necessarily true\n\nWhen we made milestones for the WG, we used \u201cthroughput guidance\u201d to describe this, that seems better.  \"advised throughput\" or \"rate guidance\" or some other term could also reflects this is advisory information. (Sustainable throughput seems like something else).\n",
+          "createdAt": "2025-12-05T09:42:08Z",
+          "updatedAt": "2025-12-05T09:42:08Z"
         }
       ]
     },
@@ -2540,15 +2554,15 @@
       "id": "I_kwDON1dwo87bm6JD",
       "title": "network elements must not use the bitrate field set by third party",
       "url": "https://github.com/ietf-wg-scone/scone/issues/98",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Network elements must not use (e.g., for monitoring, throttling) the rate signal included in the SCONE packets, unless they have a trust relationship with the party that set the rate signal included in _that_ SCONE packet.\n\nQuoting from https://github.com/ietf-wg-scone/scone/pull/95#discussion_r2567231140:\n> (doing so) does not match the current security model described in the draft, where devices (endpoints) that act on SCONE advice only do so when the SCONE signal is attached to a valid QUIC packet, preventing an off-path attacker from inserting spurious advice. A network element that relies on pass-through / third-party advice cannot apply that \"accepts only SCONE signals attached to valid QUIC packets\" condition...\n\nand from https://github.com/ietf-wg-scone/scone/pull/95#discussion_r2567256749:\n> Relying on packets that \"just happen to pass by\" is a security breach waiting to happen.\n\nAside from describing how monitoring could be done (which IIUC is the aim of #95), it might make sense to have a dedicated issue for discussing if we need a statement forbidding / discouraging such behavior.",
       "createdAt": "2025-12-02T07:07:02Z",
-      "updatedAt": "2025-12-03T01:25:43Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-05T01:09:37Z",
+      "closedAt": "2025-12-05T01:09:37Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2584,6 +2598,13 @@
           "body": "+1 Kazuho.\n\nSuppose a situation in which the endpoint sends Scone packets a few times per interval. An attacker can inject a fake packet at a slightly higher frequency -- say 10 per minute instead of the recommended 2 to 4. The attacker can set the field to a low bit rate. Then the network element will end up never sending the signal on the \"real\" packets, but still doing enforcement.",
           "createdAt": "2025-12-03T01:25:43Z",
           "updatedAt": "2025-12-03T01:25:43Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Closing on the assumption that #99 addresses this; re-open if I'm wrong.",
+          "createdAt": "2025-12-05T01:09:37Z",
+          "updatedAt": "2025-12-05T01:09:37Z"
         }
       ]
     }
@@ -10416,7 +10437,7 @@
       "labels": [],
       "body": "This PR closes #98; it builds on top of #93, assuming that #93 will be merged.",
       "createdAt": "2025-12-03T05:29:54Z",
-      "updatedAt": "2025-12-03T21:58:47Z",
+      "updatedAt": "2025-12-05T00:16:46Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "sender-min-ne-max",
       "baseRefOid": "fc66476363d6e5a80dd35404c83a5d0789e4b26b",
@@ -10450,6 +10471,20 @@
           "body": "No worries.  That's the best sort of approval and I think that we're at the point where it should be merged anyway.",
           "createdAt": "2025-12-03T21:58:47Z",
           "updatedAt": "2025-12-03T21:58:47Z"
+        },
+        {
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I noticed this got merged into a branch that had already merged into main, I don't think it's in main yet.",
+          "createdAt": "2025-12-05T00:15:26Z",
+          "updatedAt": "2025-12-05T00:15:26Z"
+        },
+        {
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "nvm, it's in PR #93 now",
+          "createdAt": "2025-12-05T00:16:46Z",
+          "updatedAt": "2025-12-05T00:16:46Z"
         }
       ],
       "reviews": [
