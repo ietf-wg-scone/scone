@@ -13,12 +13,3 @@ else
 	    https://github.com/martinthomson/i-d-template $(LIBDIR)
 endif
 endif
-
-.INTERMEDIATE: ta.py.excerpt
-ta.py.excerpt: ta.py
-	sed -e '1,/^#>>>/d;/^#<<</,$$d' $< > $@
-
-draft-ietf-scone-protocol.xml: ta.py.excerpt
-
-clean::
-	-rm -rf ta.py.excerpt

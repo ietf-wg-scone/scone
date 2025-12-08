@@ -403,9 +403,6 @@ but also includes timers for middleboxes; see {{Section 4.3 of ?RFC4787}}.
 Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
-A sample algorithm for ensuring adherance to throughput advice
-is included in {{sliding-window}}.
-
 
 ## Endpoint Processing of SCONE Packets
 
@@ -458,12 +455,6 @@ only that these limits are now unknown.
 Other constraints on usage will still apply,
 which necessarily includes congestion control
 and might include other, application-specific constraints.
-
-Applications MAY discard throughput usage state
-when they receive throughput advice that indicates a reduced rate.
-Otherwise, data that was sent at a higher rate
-might force the available rate to zero
-for the remainder of the monitoring period; see also {{monitoring}}.
 
 The relatively long duration of the monitoring period
 means that this is preferable to disabling sending completely.
@@ -572,7 +563,7 @@ This applies to both client and server endpoints,
 but only if the peer has sent the transport parameter; see {{tp}}.
 
 
-# Deployment
+# Network Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol by sending SCONE packets
 {{packet}}.  Network elements then apply or replace the Rate Signal field
@@ -627,78 +618,6 @@ To reduce the risk of synchronization across multiple senders,
 which may cause network elements to miss updates,
 senders can include a small random delay.
 
-
-## Monitoring Flows {#monitoring}
-
-Network elements can monitor flows
-to determine which flows are from applications
-that respect throughput advice.
-This section outlines an exemplary algorithm
-for network elements.
-
-This monitoring algorithm is guidance only.
-Network elements are advised that monitoring
-any more strictly than the following likely invalidates their advice.
-Network elements could choose not to monitor in this way
-or use a looser monitoring approach.
-For instance, monitoring over a longer time window
-than the monitoring period (67s)
-or using a higher rate than is signaled
-is possible.
-
-To operate this algorithm,
-the minimal state a network element maintains is:
-
-* the current throughput advice,
-* any state necessary to monitor throughput
-  (that is, throughput usage state, such as the state in {{sliding-window}}),
-* a timer used for rate increases, and
-* the time at which that throughput advice was last updated.
-
-When advice is set or updated,
-the network element waits until
-it receives the next SCONE packet on affected flows.
-It then updates the throughput advice in that packet ({{apply}})
-and updates its monitoring state as follows:
-
-* If the signaled throughput advice
-  is the same as the current throughput advice,
-  set the last update time to the current time.
-
-* If the signaled rate is higher than the current value,
-  then:
-
-  * If the time since the last SCONE packet was updated
-    is greater than the monitoring period,
-    the current throughput advice is increased to the received value
-    and the last update time is set to the current time.
-
-  * Otherwise, the throughput advice is deferred.
-    The implementation sets the rate increase timer
-    to one monitoring period
-    relative to the time that the last SCONE packet was updated.
-    When the timer lapses,
-    change the rate monitoring to the higher rate.
-
-* If the signaled throughput advice is lower than the current value,
-  set the current throughput advice to match the signaled value,
-  cancel any rate increase timer,
-  discard all rate monitoring state,
-  and set the last update time to the current time.
-
-A network element that reduces the throughput advice it provides
-MUST also discard any state it maintains
-about the use of the network under previous, higher rates.
-This is necessary to allow senders to discard state
-when advice is reduced (see {{algorithm}}).
-This avoids cases where an application that has planned usage
-might otherwise be completely unable to send due to a lower limits.
-
-A network element that reduces its throughput advice
-might also need delay monitoring or enforcement
-to allow applications time
-to receive and act on the updated advice.
-
 A network element MUST NOT alter datagrams to add SCONE packets
 or synthesize datagrams that contain SCONE packets.
 The latter will not be accepted and the former,
@@ -708,24 +627,79 @@ This document does not define a mechanism to support detection,
 but one might be added in future.
 
 
+## Monitoring Flows {#monitoring}
+
+Sending throughput advice is optional for any network.
+A network that sends throughput advice might, also optionally,
+choose to monitor flows
+to determine whether applications are following advice.
+
+This section outlines a method
+that a network element could use
+to determine whether advice is being followed.
+Network deployments that choose to monitor
+are free to follow any monitoring regime that suits their needs.
+
+This monitoring algorithm is guidance only.
+However, monitoring any more strictly than the following
+could mean that an application
+might be incorrectly classified as not following advice.
+A looser monitoring approach,
+such as monitoring over a longer time window
+than the monitoring period (67s)
+or using a higher rate than is signaled,
+has no risk of incorrect classification.
+
+When a network changes the value
+it intends to signal,
+applications need time to adjust their sending behavior.
+As a result, any monitoring needs to allow time
+for SCONE packets to be updated,
+for those packets to be received by endpoints,
+and for applications to adapt.
+
+A network element can then monitor affected flows
+to determine whether the throughput advice it provided
+was followed.
+
+A network element SHOULD base its monitoring
+on the maximum value that was configured to apply
+during the preceding two monitoring periods.
+If the network element cannot update the throughput advice in every SCONE packet
+(or can do so only infrequently), a longer period might be used
+to account for the possibility that the updated SCONE packets are lost.
+This allows applications time to receive advice
+and adapt their sending rate.
+
+Any monitoring and policy enforcement could be implemented
+in different network elements than the ones that signal throughput advice.
+However, network elements MUST NOT enforce throughput based on throughput advice
+found in SCONE packets received from other entities, because unlike endpoints,
+network elements do not have the capability to validate other QUIC packets
+contained in the same datagram; see {{fake-packets}}.
+
+
 ## Flows That Exceed Throughput Advice {#policing}
 
-Network elements that provide throughput advice
-can monitor flows --
-or sets of flows that are subject to the same throughput limit --
-for adherance to that advice.
+A network could deploy policy enforcement that drops or delays packets
+to ensure that applications do not exceed throughput limits set in policy.
 
-In the event that a flow exceeds these limits,
-a network element could immediately start
-enforcing adherence to the advice as though it were a hard limit.
-However, this risks creating a situation where communication ceases entirely
-for a significant period of time;
-that is, up to the period defined in {{time}}.
+SCONE allows networks to provide advice to applications,
+so that stricter limits,
+which can be inefficient and lead to worse application performance,
+are not necessary in all cases.
 
-A better approach is to exclude any data transmitted
-before sending reduced throughput advice
-from any monitoring that uses the reduced rate.
-This ensures that the enforcement of limits is minimally disruptive.
+Some applications will not support SCONE.
+Other applications either will not
+or cannot
+follow throughput advice.
+
+Networks can monitor flows to determine if applications follow advice;
+see {{monitoring}}.
+A network could choose to either disable or loosen policy enforcement
+for flows where SCONE is active,
+but re-enable or tighten enforcement if monitoring indicates
+that throughput advice is not being respected.
 
 
 # Version Interaction {#version-interaction}
@@ -882,7 +856,7 @@ Similarly, if there is a strong need to ensure that throughput advice is respect
 network elements cannot assume that the signaled advice will be respected by
 endpoints.
 
-## Fake SCONE Packets
+## Fake SCONE Packets {#fake-packets}
 
 Attackers that can inject packets could compose arbitrary "SCONE-like" packets
 by selecting a pair of IP addresses and ports, an arbitrary rate signal, a
@@ -1117,27 +1091,6 @@ Notes:
 {:compact}
 
 --- back
-
-# Sliding Window for Rate Monitoring {#sliding-window}
-
-One way to account for usage
-is to divide time into multiple smaller spans.
-For instance, 67 consecutive one second intervals
-or 134 half second intervals.
-
-The amount of data transmitted in each interval is recorded
-in a circular buffer,
-as well as the total amount over 67 seconds.
-As time passes and new intervals are added,
-the overall total is reduced by the amount attributed to the oldest interval.
-The oldest interval is reset to zero and becomes the newest interval.
-
-Sample code for this algorithm is included in {{x-ta}}.
-
-~~~ pseudocode
-{::include ta.py.excerpt}
-~~~
-{: #x-ta title="Sample code for managing throughput advice"}
 
 # Acknowledgments
 {:numbered="false"}
