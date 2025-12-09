@@ -1445,8 +1445,9 @@ strictly advisory.<a href="#section-3-3" class="pilcrow">¶</a></p>
         <h3 id="name-independent-of-congestion-s">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-independent-of-congestion-s" class="section-name selfRef">Independent of Congestion Signals</a>
         </h3>
-<p id="section-3.1-1">Throughput advice signals are not a substitute for congestion feedback.
-Congestion signals, such as acknowledgments or ECN markings <span>[<a href="#ECN" class="cite xref">ECN</a>]</span>,
+<p id="section-3.1-1">Throughput advice signals are not a substitute for congestion feedback or congestion control.
+Congestion signals,
+such as acknowledgments or ECN markings <span>[<a href="#ECN" class="cite xref">ECN</a>]</span><span>[<a href="#WHY-ECN" class="cite xref">WHY-ECN</a>]</span>,
 provide information on loss and delay
 that indicate the real-time condition of a network path.
 Congestion signals might indicate a throughput limit
@@ -1524,7 +1525,8 @@ A separate signal can be sent for each flow.<a href="#section-3.3-3" class="pilc
         </h3>
 <p id="section-3.4-1">Throughput advice is signaled with SCONE packets
 that are transmitted as part of the flow that the advice applies to.
-Carrying signals in the affected flow, like ECN,
+Carrying signals in the affected flow,
+in the same way that ECN signals are conveyed,
 ensures that there is no ambiguity about what flow is affected.
 However, this means that the endpoint that receives throughput advice
 is not the endpoint that might need to adapt its sending behavior.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
@@ -1539,7 +1541,8 @@ as this is specific to the application in use.<a href="#section-3.4-2" class="pi
         <h3 id="name-advisory-signal">
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-advisory-signal" class="section-name selfRef">Advisory Signal</a>
         </h3>
-<p id="section-3.5-1">Throughput advice is a throughput that one network element expects to be supported.
+<p id="section-3.5-1">Throughput advice indicates what one part of the network
+expects to be achievable for flows that transit that portion of the network.
 It is possible that very different throughput is achievable --
 either higher or lower than the advice --
 as determined by congestion control.
@@ -1573,11 +1576,13 @@ limiting is necessary.  Alternatively, a receiver can control the release of
 flow control credit (see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-4" class="relref">Section 4</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>) to indirectly limit the sending
 rate of a peer.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
 <p id="section-3.6-3">Some applications offer options for rate control that can offer superior outcomes.
-Applications that are able to adapt bit rates,
-such as real-time and streaming video applications,
-can adjust video quality to fit within a target throughput.
-For instance, an HTTP Live Streaming <span>[<a href="#HLS" class="cite xref">HLS</a>]</span> or DASH <span>[<a href="#DASH" class="cite xref">DASH</a>]</span>
-client can ask for lower bitrate, lower quality media segments.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+Most video applications,
+especially real-time and streaming video applications,
+can adapt their use of network bandwidth.
+For instance, typical HTTP Live Streaming <span>[<a href="#HLS" class="cite xref">HLS</a>]</span> or DASH <span>[<a href="#DASH" class="cite xref">DASH</a>]</span>
+clients are provided with manifests that allow them to
+adjust the bitrate and quality of media segments
+based on available network capacity.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1988,9 +1993,9 @@ with no more than a monitoring period (<a href="#time" class="auto internal xref
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
-Updating advice in SCONE packets twice per monitoring period,
-to match endpoint behavior (see <a href="#extra-packets" class="auto internal xref">Section 8.1</a>),
-is ideal.<a href="#section-7.1-7" class="pilcrow">¶</a></p>
+Ideally, network elements update advice in SCONE packets
+twice per monitoring period,
+to match endpoint behavior (see <a href="#extra-packets" class="auto internal xref">Section 8.1</a>).<a href="#section-7.1-7" class="pilcrow">¶</a></p>
 <p id="section-7.1-8">At the start of a flow, network elements are encouraged to update the rate
 signal of the first few SCONE packets it observes so that endpoints can obtain
 throughput advice early.<a href="#section-7.1-8" class="pilcrow">¶</a></p>
@@ -2659,8 +2664,12 @@ Transport Parameters" registry maintained at
 <span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Managing multiple paths for a QUIC connection"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-18</span>, <time datetime="2025-12-08" class="refDate">8 December 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-18">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-18</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4787">[RFC4787]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Audet, F., Ed.</span> and <span class="refAuthor">C. Jennings</span>, <span class="refTitle">"Network Address Translation (NAT) Behavioral Requirements for Unicast UDP"</span>, <span class="seriesInfo">BCP 127</span>, <span class="seriesInfo">RFC 4787</span>, <span class="seriesInfo">DOI 10.17487/RFC4787</span>, <time datetime="2007-01" class="refDate">January 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4787">https://www.rfc-editor.org/rfc/rfc4787</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="WHY-ECN">[WHY-ECN]</dt>
+      <dd>
+<span class="refAuthor">Fairhurst, G.</span> and <span class="refAuthor">M. Welzl</span>, <span class="refTitle">"The Benefits of Using Explicit Congestion Notification (ECN)"</span>, <span class="seriesInfo">RFC 8087</span>, <span class="seriesInfo">DOI 10.17487/RFC8087</span>, <time datetime="2017-03" class="refDate">March 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8087">https://www.rfc-editor.org/rfc/rfc8087</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

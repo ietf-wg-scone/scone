@@ -211,11 +211,11 @@ Table of Contents
 3.1.  Independent of Congestion Signals
 
    Throughput advice signals are not a substitute for congestion
-   feedback.  Congestion signals, such as acknowledgments or ECN
-   markings [ECN], provide information on loss and delay that indicate
-   the real-time condition of a network path.  Congestion signals might
-   indicate a throughput limit that is different from the signaled
-   throughput advice.
+   feedback or congestion control.  Congestion signals, such as
+   acknowledgments or ECN markings [ECN][WHY-ECN], provide information
+   on loss and delay that indicate the real-time condition of a network
+   path.  Congestion signals might indicate a throughput limit that is
+   different from the signaled throughput advice.
 
    Endpoints cannot assume that the rate indicated in throughput advice
    is achievable if congestion signals indicate otherwise.  Congestion
@@ -284,10 +284,10 @@ Table of Contents
 
    Throughput advice is signaled with SCONE packets that are transmitted
    as part of the flow that the advice applies to.  Carrying signals in
-   the affected flow, like ECN, ensures that there is no ambiguity about
-   what flow is affected.  However, this means that the endpoint that
-   receives throughput advice is not the endpoint that might need to
-   adapt its sending behavior.
+   the affected flow, in the same way that ECN signals are conveyed,
+   ensures that there is no ambiguity about what flow is affected.
+   However, this means that the endpoint that receives throughput advice
+   is not the endpoint that might need to adapt its sending behavior.
 
    A receiving endpoint might need to communicate the value it receives
    to the sending peer in order to ensure that the limit is respected.
@@ -296,11 +296,12 @@ Table of Contents
 
 3.5.  Advisory Signal
 
-   Throughput advice is a throughput that one network element expects to
-   be supported.  It is possible that very different throughput is
-   achievable -- either higher or lower than the advice -- as determined
-   by congestion control.  Endpoints that receive this signal therefore
-   need to treat the information as advisory.
+   Throughput advice indicates what one part of the network expects to
+   be achievable for flows that transit that portion of the network.  It
+   is possible that very different throughput is achievable -- either
+   higher or lower than the advice -- as determined by congestion
+   control.  Endpoints that receive this signal therefore need to treat
+   the information as advisory.
 
    The fact that an endpoint requests throughput advice does not
    necessarily mean that it will adhere to them; in some cases, the
@@ -333,11 +334,12 @@ Table of Contents
    Section 4 of [QUIC]) to indirectly limit the sending rate of a peer.
 
    Some applications offer options for rate control that can offer
-   superior outcomes.  Applications that are able to adapt bit rates,
-   such as real-time and streaming video applications, can adjust video
-   quality to fit within a target throughput.  For instance, an HTTP
-   Live Streaming [HLS] or DASH [DASH] client can ask for lower bitrate,
-   lower quality media segments.
+   superior outcomes.  Most video applications, especially real-time and
+   streaming video applications, can adapt their use of network
+   bandwidth.  For instance, typical HTTP Live Streaming [HLS] or DASH
+   [DASH] clients are provided with manifests that allow them to adjust
+   the bitrate and quality of media segments based on available network
+   capacity.
 
 4.  Conventions and Definitions
 
@@ -670,8 +672,9 @@ Table of Contents
    monitoring period (Section 5.2) between each update.  Because this
    depends on the availability of SCONE packets and packet loss can
    cause signals to be missed, network elements might need to update
-   more often.  Updating advice in SCONE packets twice per monitoring
-   period, to match endpoint behavior (see Section 8.1), is ideal.
+   more often.  Ideally, network elements update advice in SCONE packets
+   twice per monitoring period, to match endpoint behavior (see
+   Section 8.1).
 
    At the start of a flow, network elements are encouraged to update the
    rate signal of the first few SCONE packets it observes so that
@@ -1170,6 +1173,11 @@ Table of Contents
               Translation (NAT) Behavioral Requirements for Unicast
               UDP", BCP 127, RFC 4787, DOI 10.17487/RFC4787, January
               2007, <https://www.rfc-editor.org/rfc/rfc4787>.
+
+   [WHY-ECN]  Fairhurst, G. and M. Welzl, "The Benefits of Using
+              Explicit Congestion Notification (ECN)", RFC 8087,
+              DOI 10.17487/RFC8087, March 2017,
+              <https://www.rfc-editor.org/rfc/rfc8087>.
 
 Acknowledgments
 
