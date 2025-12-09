@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-07T01:55:04.154241+00:00",
+  "timestamp": "2025-12-09T01:47:02.777437+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -1904,15 +1904,15 @@
       "id": "I_kwDON1dwo87IbeaN",
       "title": "Make the grace period for rate reductions reasonable",
       "url": "https://github.com/ietf-wg-scone/scone/issues/65",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "@kazuho observed in #61:\n\n> My high order point is that the logic used by network elements for testing conformance should reflect what applications can do, taking into considerations the time required to adapt and the impact of packet loss; otherwise we would have may false positives.\n\nRight now, #61 has advice on allowing a grace period for applications that is vague, but probably it will be too short.  It only really considers the time that a signal might take to propagate to applications.  In practice, a lot of applications will need some time to adjust downward.  A network element that signals a lower rate cannot reasonably start enforcing that rate until applications have time to receive the signal **and react**.  While some applications will be able to adjust quickly (real-time applications are particularly good at this), none can react immediately without disruption and some might take a little while.\n\nStreaming video applications are generally pretty good at adjusting and advice will help a lot.  However, they can't flip states instantaneously without disruption.  We probably want to allow enough time for a smoother reaction than having the video stall out until a lower quality stream can be found, buffered, and started.  That might take more than a few seconds.  Especially when you consider that quality ladder changes need I-frames, which are not always immediately available.\n\nWe don't need to be too precise in the advice, we just need to signal that while the network might be inclined to engage a policer/shaper during a change in rate, network elements should reassess once applications have had a little time to settle their usage out.  We might even suggest that the network apply monitoring based on the *maximum* rate active in the last period, where the endpoints sending follows the *minimum* rate received over the same period.  That would be the most generous interpretation and would allow the most time (67 seconds, perhaps) for endpoints to follow the advice.",
       "createdAt": "2025-08-28T09:52:12Z",
-      "updatedAt": "2025-11-26T06:57:37Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-08T23:56:48Z",
+      "closedAt": "2025-12-08T23:56:48Z",
       "comments": [
         {
           "author": "ihlar",
@@ -2315,15 +2315,15 @@
       "id": "I_kwDON1dwo87TS3pl",
       "title": "\"maximum achievable throughput\" or \"maximum sustained throughput\" ?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/84",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "zaheduzzaman",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I noticed that the draft now uses both \u201cmaximum achievable throughput\u201d and \u201cmaximum sustained throughput\u201d interchangeably, however, they are two different concepts. \n\nFrom my understanding, what the SCONE network elements can provide is the maximum achievable throughput, They can\u2019t guarantee what is sustained for a particular 4-tuple (for instance when a number of flows share the same max).\n\nUnless we define what \"sustrained\" means, using both terms are confusing. I suggest we use \u201cmaximum achievable throughput\u201d.\n",
       "createdAt": "2025-10-23T14:24:43Z",
-      "updatedAt": "2025-12-05T09:42:08Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-08T23:56:48Z",
+      "closedAt": "2025-12-08T23:56:48Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2440,15 +2440,15 @@
       "id": "I_kwDON1dwo87V4hRU",
       "title": "Confusion stemming from the responsibility of the element",
       "url": "https://github.com/ietf-wg-scone/scone/issues/91",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjoras",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "For SCONE to work as a protocol a Network Element (or the \"SCONE Function\" as we might call it) minimally has to periodically modify SCONE packets. In the Deployment section we currently say:\n\n> Network elements can monitor flows to determine which flows are from applications that respect throughput advice. This section outlines an exemplary algorithm for network elements.\n\n> This monitoring algorithm is guidance only. Network elements are advised that monitoring any more strictly than the following likely invalidates their advice. Network elements could choose not to monitor in this way or use a looser monitoring approach. For instance, monitoring over a longer time window than the monitoring period (67s) or using a higher rate than is signaled is possible.\n\nThis does imply some degree of it being an \"optional\" responsibility, but we have gotten feedback from those going in \"cold\" to the document that the monitoring feels much more mandatory. Most of the subsequent discussion resolve around monitoring and not the actual protocol.\n\nI think we should consider structural changes to the document (e.g. moving example monitoring to an addendum, making the language more explicit about how it's not normative, moving to another document entirely) to address this.",
       "createdAt": "2025-11-04T22:48:51Z",
-      "updatedAt": "2025-12-02T04:49:37Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-08T23:56:48Z",
+      "closedAt": "2025-12-08T23:56:48Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2509,15 +2509,15 @@
       "id": "I_kwDON1dwo87bl7YH",
       "title": "is it correct to discard state when rate is reduced?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/97",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "At the moment, we state:\n* Applications MAY discard throughput usage state when they receive throughput advice that indicates a reduced rate.  Otherwise, data that was sent at a higher rate might force the available rate to zero for the remainder of the monitoring period. ([section 5.4](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.4-4))\n* A network element that reduces the throughput advice it provides MUST also discard any state it maintains about the use of the network under previous, higher rates. This is necessary to allow senders to discard state when advice is reduced. This avoids cases where an application that has planned usage might otherwise be completely unable to send due to a lower limits. ([section 7.2](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-7.2-7))\n\nI'm not sure if this approach correct: the assumption behind this approach is that network elements can discard state whenever the rate observed _by the client_ is reduced. However, that is not possible when multiple network elements are involved, and the one downstream changes the advice.\n\nConsider the following scenario:\n* A sender sends a SCONE packet every 20 seconds.\n* The first network element always sets the advice to 1.12Mbps (signal 21).\n* The second network element passed through the first SCONE packet, leaving the throughput advice as-is to 1.12Mbps, but rewrites the advice in the following SCONE packet to 1Mbps.\n\nAfter one monitoring period (i.e., 67 seconds), section 5.4 states that the client could have used 1.12Mbps * 67s + 1Mbps * 67s ~ 142Mbits.\n\nBut because the first network element never changed its advice, the maximum rate that the first network element expects is 1.12Mbps * 67s ~ 75Mbpts.\n\nThis discrepancy might lead to flows that obey to section 5.4 becoming flagged (and therefore punished) by network elements that obey to section 7.2.",
       "createdAt": "2025-12-02T05:45:28Z",
-      "updatedAt": "2025-12-02T06:54:46Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-08T23:56:49Z",
+      "closedAt": "2025-12-08T23:56:49Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2605,6 +2605,275 @@
           "body": "Closing on the assumption that #99 addresses this; re-open if I'm wrong.",
           "createdAt": "2025-12-05T01:09:37Z",
           "updatedAt": "2025-12-05T01:09:37Z"
+        }
+      ]
+    },
+    {
+      "number": 100,
+      "id": "I_kwDON1dwo87c4muc",
+      "title": "Please expand scope beyond just indicating rate limiting policy",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/100",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "OLD:\nHaving the network indicate what its rate limiting policy is, in a way that is accessible to endpoints, allows applications to use this information when adapting their send rate.\n- This seems like it it uncesserily focuss on a policy. I think this should be wider in scope, e.g.\n\nAllowing the network to indicate the current supported rate (e.g., resulting from a rate limiting policy), can make this information accessible to endpoints, and allows applications to use this information when adapting their send rate.\n",
+      "createdAt": "2025-12-08T10:55:58Z",
+      "updatedAt": "2025-12-09T00:05:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Rate limiting policies are the primary motivating use case, so I don't think that it's wrong to use that in the introduction as motivation.\n\nSection 3.1 also mentions a range of other reasons to provide advice.  I've sharpened that text (in a PR that is coming soon, that I'll link to this issue once posted; I want to include some of your other issues).",
+          "createdAt": "2025-12-09T00:05:45Z",
+          "updatedAt": "2025-12-09T00:05:45Z"
+        }
+      ]
+    },
+    {
+      "number": 101,
+      "id": "I_kwDON1dwo87c4pkr",
+      "title": "Please add a figure caption to the figure 1.",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/101",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-08T10:59:27Z",
+      "updatedAt": "2025-12-08T10:59:27Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 102,
+      "id": "I_kwDON1dwo87c4xt3",
+      "title": "Possible repetition between 3.1 and 3.2 on advisory throughout v. CC rate",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/102",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The para in section 3.2 starting; \"Endpoints can therefore be more confident...\" seems useful, but this seems a very similar message to the message just presented earlier in 3.1. Is there some way to differentiate (or even better combine) these two sets of words?",
+      "createdAt": "2025-12-08T11:09:21Z",
+      "updatedAt": "2025-12-09T00:22:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "Wherever the various text lands, it would be useful to add a forward reference also warning about  \"[7.3. ]Flows That Exceed Throughput Advice\".",
+          "createdAt": "2025-12-08T12:03:44Z",
+          "updatedAt": "2025-12-08T12:03:44Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The text in 3.1 is about congestion control.  3.2 is about the possibility of needing policing for policies, as you say.  I've added references in both directions (in the upcoming PR)",
+          "createdAt": "2025-12-09T00:22:32Z",
+          "updatedAt": "2025-12-09T00:22:32Z"
+        }
+      ]
+    },
+    {
+      "number": 103,
+      "id": "I_kwDON1dwo87c404z",
+      "title": "What are these additional signals?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/103",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 3.3 says:\n\nOLD:\n\"Network elements that signal about a flow might choose to send additional signals, using connection IDs to indicate when new connections could be involved.\"\n\n- I can see how additional information might help, but I do not understand what is suggested to provide this. How would the signals be communicated and what fo they say: e.g., is this over the same set of ports; does the network element do this or the endpoint?",
+      "createdAt": "2025-12-08T11:12:54Z",
+      "updatedAt": "2025-12-09T00:12:11Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "As far as I can see, this statement no longer makes sense given the solution we're presenting.  The only sensible way to handle multiple QUIC connections is to apply SCONE advice to of them.",
+          "createdAt": "2025-12-09T00:12:11Z",
+          "updatedAt": "2025-12-09T00:12:11Z"
+        }
+      ]
+    },
+    {
+      "number": 104,
+      "id": "I_kwDON1dwo87c4349",
+      "title": "3.4. Undirectional Signal (what is \"This\")",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/104",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "\nOLD:\nThe endpoint that receives a throughput advice signal is not the endpoint that might adapt its sending behavior as a result of receiving the signal. This ensures that the throughput advice signal is attached to the flow that it is mostly likely to apply to.\n\n- I think I understand the protocol interaction, but from the above two sentences, I don't understand what \"This\" is, (presumably the \"SCONE protocol\"?).\n- Could the final part also be clearer? e.g.: /the flow that it is mostly likely to apply to/the flow to which it mostly likely to applies\"?\n\n",
+      "createdAt": "2025-12-08T11:16:39Z",
+      "updatedAt": "2025-12-09T00:30:19Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree that this isn't especially clear.  I've tried again:\n\n> Throughput advice is signaled with SCONE packets\nthat are transmitted as part of the flow that the advice applies to.\nCarrying signals in the affected flow, like ECN,\nensures that there is no ambiguity about what flow is affected.\nHowever, this means that the endpoint that receives throughput advice\nis not the endpoint that might need to adapt its sending behavior.\n>\n> A receiving endpoint might need to communicate the value it receives\nto the sending peer in order to ensure that the limit is respected.\nThis document does not define how that signaling occurs\nas this is specific to the application in use.",
+          "createdAt": "2025-12-09T00:30:19Z",
+          "updatedAt": "2025-12-09T00:30:19Z"
+        }
+      ]
+    },
+    {
+      "number": 105,
+      "id": "I_kwDON1dwo87c5BC5",
+      "title": "Section 3.5 on guarantees and advisory nature",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/105",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "1) \"Receiving throughput advice does not guarantee that a higher throughput is not achievable.\"\n- I stumbled a little on what \"does not guarantee: relating to \"not achievable\" means, although I expect this might be a little easier as:\n\"Receiving throughput advice inidicates the the network expects the throughtput to be supported. It may be possible to achieve a higher throughput subject to congestion control.\"\n---\n2)  The second para of 5.1 to me, seems like it is closely-related to section 3.6. Is it possible for this to be relocated there? \n---\n3)  the para starting, \"The signaled advice applies to the flow of packets\" relates to teh association with the UDP Flow, this is discussed in section 3.3. Is it possible for this to be relocated there? \n---\n4) The final para speaks of \"Network conditions and rate-limit policies\" being changable, which is good. I think it would also be useful to indicate that paths can change, and mention that this might chnage the on-path network element performing SCONE.\n",
+      "createdAt": "2025-12-08T11:28:06Z",
+      "updatedAt": "2025-12-09T00:42:59Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "1. I'll reword that; the double-negative is clumsy, I agree.\n2. These are related, but the sections serve different purposes.  3.6 is for general applicability.  5.1 defines semantics.\n3. Yes, that's a good idea.\n4.  Also a good idea.",
+          "createdAt": "2025-12-09T00:42:59Z",
+          "updatedAt": "2025-12-09T00:42:59Z"
+        }
+      ]
+    },
+    {
+      "number": 106,
+      "id": "I_kwDON1dwo87c5EcM",
+      "title": "Please explain a receiver can control the release of flow control credit.",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/106",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "OLD:\nAlternatively, a receiver can control the release of flow control credit (see [Section 4](https://rfc-editor.org/rfc/rfc9000#section-4) of [[QUIC](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#QUIC)]) to indirectly limit the sending rate of a peer.\n\n- I saw this, and couldn't argue that a design could so this. But, there again, there are many things a receiver could do. If this is being called out as one of these why is this a good or bad idea to do this? If this is a recommended approach, I'd expect an example and explanation to avoid reacting to the signal at multiple levels in the stack, which I suspect could be awkard when there is a changing signal. Who has experience? Are there thoughts?",
+      "createdAt": "2025-12-08T11:31:31Z",
+      "updatedAt": "2025-12-09T00:49:19Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm not a believer in the use of flow control for this, but I know that some people are actively doing that.\n\nAt a high-level, it isn't especially complicated.  If you want to receive at a rate of X bytes/second, you limit the rate at which you provide flow control to X bytes/second.\n\nOf course, this inevitably leads to something less than X bytes/second of throughput because any signaling needs to propagate.  So documenting how you avoid that happening is the subject of an entirely new internet draft.  (I know that some people are working on documenting flow control auto-tuning algorithms, which turns out to be subtle.)\n\nI don't know how to address this.  A simple way to manage this would be to cut the text, but that seems unsatisfactory.  I'm happy with where it stands, even though this is suggesting something that is probably too subtle for many implementers to get right.  But, given that good flow control algorithms are not subject to standardization, I'm comfortable with that remaining as \"special sauce\".",
+          "createdAt": "2025-12-09T00:49:19Z",
+          "updatedAt": "2025-12-09T00:49:19Z"
+        }
+      ]
+    },
+    {
+      "number": 107,
+      "id": "I_kwDON1dwo87c5cpK",
+      "title": "What is implied of Network Elements in general?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/107",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 7, says:\nOLD:\nNetwork elements then apply or replace the Rate Signal field ([Section 7.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#apply)) according to their policies.\n- I said previously that this seems to be a little open to confusion regarding whether this applies to ALL network elements. It still has this ambiguity.\n\nCould we say something like:\n\"Network elements can then use the SCONE protocol to apply or replace the Rate Signal field ([Section 7.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#apply)) according to their policies.\"",
+      "createdAt": "2025-12-08T11:57:17Z",
+      "updatedAt": "2025-12-08T11:57:17Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 108,
+      "id": "I_kwDON1dwo87c5gBs",
+      "title": "Section 7.1: \"at least once per monitoring period\"",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/108",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I think I understand the goal of the text below, but the text below does not read quite right to me. Is a need to send at least once per monitoring period? or no more than once per period (twice)? or something else?\n\nOLD:\nA network element needs to ensure that it sends updated rate signals with no more than a monitoring period \n\nAnd of course, later in 8.1 (which might be a useful cross-ref) it says:\n\"After that, endpoints that seek to receive throughput advice on a flow MUST send a SCONE packet at least twice each monitoring period\"",
+      "createdAt": "2025-12-08T12:00:45Z",
+      "updatedAt": "2025-12-09T00:56:06Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Agreed.  The forward reference is useful.",
+          "createdAt": "2025-12-09T00:56:05Z",
+          "updatedAt": "2025-12-09T00:56:05Z"
+        }
+      ]
+    },
+    {
+      "number": 109,
+      "id": "I_kwDON1dwo87c5xiw",
+      "title": "ECN in general provides advice (e.g, RFC 8511 / ABE also provides this using ECT(0)).",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/109",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm not sure citing L4S alone here is quite right.\nOLD:\n\"Consider for example a path in which the bottleneck router implements Early Congestion Notification as specified in the L4S architecture [RFC9330].\"\n\nThe benefit cited is actually from the use of ECN, not specifically from L4S. This benefit is set out in RFC8087.\n\nExamples where ECN provides this benefit are ABE [RFC 8511] and L4S, it's not just L4S here.",
+      "createdAt": "2025-12-08T12:17:26Z",
+      "updatedAt": "2025-12-09T01:00:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "RFC 8511 is experimental. Its stated goal was to collect experience about using ECN feedback. Did the authors publish something describing the result of that experiment?\n\nFrom a 10,000ft view, it seems that most of the actual deployments of ECN are either L4S, or maybe scalable ECN variants of PIE and CODEL.",
+          "createdAt": "2025-12-08T19:25:21Z",
+          "updatedAt": "2025-12-08T19:25:21Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "NONE",
+          "body": "If I may chime in here: L4S is experimental too. It could seem more appropriate to cite RFC 3168, and/or perhaps RFC 8087 for information on what ECN is. If we cite experiments, both L4S and ABE are in that bucket.\n\nAbout experiment results: ABE (RFC 8511) came from RITE, the same EC project L4S came from, and L4S proponents fought against its very existence on the basis of: RFC 3168 style ECN (ECT(0)) should be obsoleted. We got RFC 8511 published anyhow, and hope for people to be interested because it's simple and makes sense, when you have ECN in place. This said, in the context of the decade-long L4S debates, trying to push for ABE deployment (as we should do for an experiment) would have inevitably been a fight with L4S which none of us authors was willing to have, at least at that time.  This said, it *is* available in FreeBSD as a socket option, and we're still interested in getting people to try it out.\n\nYour mention of PIE and CoDel as if they were \"different from ABE\" indicates a misunderstanding, though, so just to clarify: ABE doesn't change anything about what CoDel or PIE do. They can be used as they are. It's the simplest possible change, **sender-side only**, that can yield more benefit from RFC 3168 style ECN: because an ECN mark not only conveys \"there was congestion\" but also \"the queue which marked this packet probably wasn't huge\", it makes sense to back off by a smaller amount in response to ECN. That's all this is.\n\nSome results are [here](https://folk.universitetetioslo.no/michawe/research/publications/Networking2017ABE.pdf).",
+          "createdAt": "2025-12-08T22:55:40Z",
+          "updatedAt": "2025-12-08T22:55:40Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'll switch to 3168, as the precise details of the ECN feedback mechanism are irrelevant in this example.",
+          "createdAt": "2025-12-09T01:00:27Z",
+          "updatedAt": "2025-12-09T01:00:27Z"
+        }
+      ]
+    },
+    {
+      "number": 110,
+      "id": "I_kwDON1dwo87c59MV",
+      "title": "HLS? ABR? DASH?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/110",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "There is an example that cites HLS? \n- Ought we also to note ABR in genereal and perhaps DASH. A little more might be useful here.",
+      "createdAt": "2025-12-08T12:29:27Z",
+      "updatedAt": "2025-12-09T01:10:34Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I didn't originally, because citing ISO specs is a PITA.  But since you asked.",
+          "createdAt": "2025-12-09T01:10:34Z",
+          "updatedAt": "2025-12-09T01:10:34Z"
         }
       ]
     }
@@ -9566,24 +9835,26 @@
       "id": "PR_kwDON1dwo861kG6f",
       "title": "What advice means",
       "url": "https://github.com/ietf-wg-scone/scone/pull/93",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "For a sender, advice is cumulative.  They should follow any advice they have received in the last monitoring period.\r\n\r\nFor a network, the advice they send is something that might take time to respond to.  They should allow a monitoring period before they expect an application to be able to follow advice.\r\n\r\nThe text on following/monitoring advice is now shorter.\r\n\r\nI've also updated the sample code to track all active advice.  If multiple pieces of advice are received, this now tracks sending against all of them.  A sender/application follows the least permissive; a network allows the most permissive.\r\n\r\nThe effect of this is similar to what was in the previous sample code, but it's a little less vulnerable to weirdness.\r\n\r\nFor instance, if the advice increases, the old send rate is monitored until that advice expires.  Applications will therefore continue to follow that old advice, but switch to the new one once the old advice is more than 67s old.\r\n\r\nSimilarly, if the advice to an application reduces, the old rate is also monitored, but the new rate also applies.  Because the new rate is initialized with no memory of what has been sent, the new rate probably allows for more sending, but because the old advice remains active until it expires, you don't get a complete reset.\r\n\r\nThe cost is that the code tracks as many rates as there is different advice received over a monitoring period.\r\n\r\nI'm not sure that we really need the sample code here, but it was a useful exercise to go through in order to understand how this might work in practice.  Looking for input on whether it is useful to retain.",
       "createdAt": "2025-11-26T05:30:56Z",
-      "updatedAt": "2025-12-03T16:17:43Z",
+      "updatedAt": "2025-12-08T23:56:47Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "db144c5739aea5843ef4918d5b215a8b382c4602",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "sender-min-ne-max",
       "headRefOid": "2be48ec01c1cfb1c71d0c59f83f481da34d5404e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-12-08T23:56:47Z",
+      "mergedAt": "2025-12-08T23:56:47Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "2335b3faaa9f7d3e960b134e02fb7be017698e44"
+      },
       "comments": [
         {
           "author": "martinthomson",
@@ -10513,6 +10784,79 @@
           "createdAt": "2025-12-03T08:18:23Z",
           "updatedAt": "2025-12-03T08:18:45Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 111,
+      "id": "PR_kwDON1dwo863yv0-",
+      "title": "Update Acknowledgments",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/111",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Feel free to add others.  I'm certain that I missed some.",
+      "createdAt": "2025-12-09T00:01:13Z",
+      "updatedAt": "2025-12-09T00:01:14Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "2335b3faaa9f7d3e960b134e02fb7be017698e44",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "moaracks",
+      "headRefOid": "69cfbd33e311069d3282a9420ff75e196a9e8f8c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 112,
+      "id": "PR_kwDON1dwo863zTXY",
+      "title": "Gorry's review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/112",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This includes a bunch of commits, each addressing a different aspect of Gorry's review.  Merging this should close all of the issues that @gorryfair raised, aside from #106.  My inclination there is to do nothing, but it's more complicated than that.  See that issue discussion.",
+      "createdAt": "2025-12-09T01:12:08Z",
+      "updatedAt": "2025-12-09T01:46:49Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "2335b3faaa9f7d3e960b134e02fb7be017698e44",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "gorry-reviews",
+      "headRefOid": "0077603a68e997f3e0f8a3520a6f52fe0b2e9ab4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87T40sp",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T01:46:49Z",
+          "updatedAt": "2025-12-09T01:46:49Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "```suggestion\nSome applications offer options for rate control that can result in superior outcomes.\nApplications that are able to adapt their bitrate,\nsuch as real-time and streaming video applications,\ncan adjust video quality to fit within a target throughput.\nFor instance, an HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}\nclient can ask for lower bitrate, lower quality media segments.\nFor such applications, the most straightforward way to keep within the throughput advice is to\ncommunicate the advised limit to the sending peer, so that the peer can adapt its sending behavior.\n\nAlternatively, when such direct rate adaptation by the sending peer is\nnot available, a receiver might control the release of flow control credit\n(see {{Section 4 of QUIC}}) to indirectly constrain the peer\u2019s sending\nrate. By metering the issuance of credit in accordance with the\nthroughput advice, the receiver can keep the peer's sustained sending\nrate within the advised limit and reduce the likelihood of triggering\nnetwork enforcement using congestion-control signals, while still\nretaining the capability to send time-critical data using brief high-rate\ntransmissions.\n```\n\nTo resolove #106, maybe use one paragraphs for each approach and explain how they would work / what the benefits are?",
+              "createdAt": "2025-12-09T01:46:49Z",
+              "updatedAt": "2025-12-09T01:46:49Z"
+            }
+          ]
         }
       ]
     }
