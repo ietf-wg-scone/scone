@@ -287,11 +287,13 @@ flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
 rate of a peer.
 
 Some applications offer options for rate control that can offer superior outcomes.
-Applications that are able to adapt bit rates,
-such as real-time and streaming video applications,
-can adjust video quality to fit within a target throughput.
-For instance, an HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
-client can ask for lower bitrate, lower quality media segments.
+Most video applications,
+especially real-time and streaming video applications,
+can adapt their use of network bandwidth.
+For instance, typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
+clients are provided with manifests that allow them to
+adjust the bitrate and quality of media segments
+based on available network capacity.
 
 
 # Conventions and Definitions
