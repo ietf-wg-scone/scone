@@ -247,7 +247,10 @@ as this is specific to the application in use.
 
 ## Advisory Signal
 
-Receiving throughput advice does not guarantee that a higher throughput is not achievable.
+Throughput advice is a throughput that one network element expects to be supported.
+It is possible that very different throughput is achievable --
+either higher or lower than the advice --
+as determined by congestion control.
 Endpoints that receive this signal therefore need to treat the information as advisory.
 
 The fact that an endpoint requests throughput advice does not necessarily mean
@@ -261,9 +264,9 @@ when a network element detects that throughput exceeds the advertised throughput
 it might switch to applying its policies for non-SCONE flows,
 using congestion control signals.
 
-
-Network conditions and rate-limit policies can change in ways that make
-previously signaled advice obsolete.
+Network conditions and rate-limit policies can change
+in ways that make previously signaled advice obsolete.
+For example, routing changes can cause a flow to move to a different network path.
 There are no guarantees that updated advice will be sent at such events.
 
 
