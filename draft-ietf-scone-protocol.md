@@ -211,9 +211,9 @@ to be split between multiple active flows.
 
 The same UDP address tuple might be used for multiple QUIC connections.  A
 single signal might be lost or only reach a single application endpoint.
-Network elements that signal about a flow might choose to send additional
-signals, using connection IDs to indicate when new connections could be
-involved.
+Network elements can apply SCONE advice
+to all flows that include SCONE packets
+to ensure that advice is received by the endpoints of all flows.
 
 ## Undirectional Signal
 
