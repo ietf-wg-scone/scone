@@ -112,18 +112,22 @@ Network elements that have rate limiting policies can detect flows that include
 SCONE packets.  The network element can indicate a maximum sustained throughput
 by modifying the SCONE packet as it transits the network element.
 
+The propagation of SCONE packets, including the throughput advice that is added,
+is shown in {{f-scone}}.
+
 ~~~ aasvg
 +--------+    +---------+     +----------+
 |  QUIC  |    | Network |     |   QUIC   |
 | Sender |    | Element |     | Receiver |
 +---+----+    +----+----+     +----+-----+
     |              |               |
-    +--- SCONE --->|   SCONE+rate  |
+    +--- SCONE --->|  SCONE+advice |
     |    +QUIC     +---- +QUIC --->|
     |              |               |  Validate QUIC packet
     |              |               |  and record rate
     |              |               |
 ~~~
+{: #f-scone title="Propagation of SCONE signal"}
 
 QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.
