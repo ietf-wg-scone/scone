@@ -222,14 +222,17 @@ to ensure that advice is received by the endpoints of all flows.
 
 ## Undirectional Signal
 
-The endpoint that receives a throughput advice signal is not the endpoint that might
-adapt its sending behavior as a result of receiving the signal.  This ensures
-that the throughput advice signal is attached to the flow that it is mostly likely to
-apply to.
+Throughput advice is signaled with SCONE packets
+that are transmitted as part of the flow that the advice applies to.
+Carrying signals in the affected flow, like ECN,
+ensures that there is no ambiguity about what flow is affected.
+However, this means that the endpoint that receives throughput advice
+is not the endpoint that might need to adapt its sending behavior.
 
-An endpoint might need to communicate the value it receives to its peer in order
-to ensure that the limit is respected.  This document does not define how that
-signaling occurs as this is specific to the application in use.
+A receiving endpoint might need to communicate the value it receives
+to the sending peer in order to ensure that the limit is respected.
+This document does not define how that signaling occurs
+as this is specific to the application in use.
 
 ## Advisory Signal
 
