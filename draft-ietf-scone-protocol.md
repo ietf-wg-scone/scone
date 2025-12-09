@@ -155,11 +155,12 @@ The throughput advice signal that this protocol carries is independent of conges
 signals, limited to a single path and UDP packet flow, unidirectional, and
 strictly advisory.
 
-## Independent of Congestion Signals
+## Independent of Congestion Signals {#not-cc}
 
-Throughput advice signals are not a substitute for congestion feedback.  Congestion
-signals, such as acknowledgments, provide information on loss, delay, or ECN
-markings {{?ECN=RFC3168}} that indicate the real-time condition of a network path.
+Throughput advice signals are not a substitute for congestion feedback.
+Congestion signals, such as acknowledgments or ECN markings {{?ECN=RFC3168}},
+provide information on loss and delay
+that indicate the real-time condition of a network path.
 Congestion signals might indicate a throughput limit
 that is different from the signaled throughput advice.
 
@@ -197,7 +198,11 @@ but usage all contributes to a shared policy limit.
 Endpoints can therefore be more confident in the throughput signal
 as an indication of the maximum achievable throughput
 than as any indication of expected throughput.
-The advised throughput will only be achievable
+In addition to endpoints respecting congestion signals (see {{not-cc}}),
+networks might need to monitor and enforce policies,
+even where applications attempt to follow advice (see {{policing}}).
+
+The advised throughput will likely only be achievable
 when the application is the only user of throughput
 within the scope that the advice applies to.
 In the presence of other flows,
