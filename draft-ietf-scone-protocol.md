@@ -162,8 +162,9 @@ strictly advisory.
 
 ## Independent of Congestion Signals {#not-cc}
 
-Throughput advice signals are not a substitute for congestion feedback.
-Congestion signals, such as acknowledgments or ECN markings {{?ECN=RFC3168}},
+Throughput advice signals are not a substitute for congestion feedback or congestion control.
+Congestion signals,
+such as acknowledgments or ECN markings {{?ECN=RFC3168}}{{?WHY-ECN=RFC8087}},
 provide information on loss and delay
 that indicate the real-time condition of a network path.
 Congestion signals might indicate a throughput limit
@@ -240,7 +241,8 @@ A separate signal can be sent for each flow.
 
 Throughput advice is signaled with SCONE packets
 that are transmitted as part of the flow that the advice applies to.
-Carrying signals in the affected flow, like ECN,
+Carrying signals in the affected flow,
+in the same way that ECN signals are conveyed,
 ensures that there is no ambiguity about what flow is affected.
 However, this means that the endpoint that receives throughput advice
 is not the endpoint that might need to adapt its sending behavior.
@@ -252,7 +254,8 @@ as this is specific to the application in use.
 
 ## Advisory Signal
 
-Throughput advice is a throughput that one network element expects to be supported.
+Throughput advice indicates what one part of the network
+expects to be achievable for flows that transit that portion of the network.
 It is possible that very different throughput is achievable --
 either higher or lower than the advice --
 as determined by congestion control.
@@ -638,9 +641,9 @@ with no more than a monitoring period ({{time}}) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
-Updating advice in SCONE packets twice per monitoring period,
-to match endpoint behavior (see {{extra-packets}}),
-is ideal.
+Ideally, network elements update advice in SCONE packets
+twice per monitoring period,
+to match endpoint behavior (see {{extra-packets}}).
 
 At the start of a flow, network elements are encouraged to update the rate
 signal of the first few SCONE packets it observes so that endpoints can obtain
