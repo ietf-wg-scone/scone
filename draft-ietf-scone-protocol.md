@@ -623,11 +623,15 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
 Once the throughput advice signal is updated,
 the network element updates the UDP checksum for the datagram.
 
-A network element needs to ensure that it sends updated rate signals
+To avoid throughput advice expiring,
+a network element needs to ensure that it sends updated rate signals
 with no more than a monitoring period ({{time}}) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
+Updating advice in SCONE packets twice per monitoring period,
+to match endpoint behavior (see {{extra-packets}}),
+is ideal.
 
 At the start of a flow, network elements are encouraged to update the rate
 signal of the first few SCONE packets it observes so that endpoints can obtain
