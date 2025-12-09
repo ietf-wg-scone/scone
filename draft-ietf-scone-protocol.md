@@ -1095,5 +1095,8 @@ Notes:
 # Acknowledgments
 {:numbered="false"}
 
-Jana Iyengar has made significant contributions to the original TRAIN
+{{{Jana Iyengar}}} made significant contributions to the original TRAIN
 specification that forms the basis for a large part of this document.
+The following people also contributed significantly
+to the development of the protocol: {{{Alan Frindell}}},
+{{{Gorry Fairhurst}}}, {{{Kevin Smith}}}, and {{{Zaheduzzaman Sarker}}}.
