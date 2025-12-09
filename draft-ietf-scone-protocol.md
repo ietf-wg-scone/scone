@@ -836,12 +836,12 @@ the "minimum" capacity of a path. SCONE informs the endpoint
 of the maximum capacity of a path based on network rate limit policy,
 network conditions, or a combination of the two.
 
-Consider for example a path in which the bottleneck router implements Early
-Congestion Notification as specified in the L4S architecture {{?RFC9330}}.
+Consider for example a path in which the bottleneck router implements
+some form of Early Congestion Notification {{?ECN=RFC3168}}.
 If the path capacity diminishes, queues will build up and the router
 will immediately start increasing the rate at which packets are marked
 as "Congestion Experienced". The receiving endpoint will notice these marks,
-and inform its peer. The incoming congestion will be detected within
+and inform its peer. The incoming congestion will be detected in
 1 round trip time (RTT). This scenario will play out whatever the reason
 for the change in capacity, whether due to increased competition between
 multiple applications or, for example, to a change in capacity of a wireless
