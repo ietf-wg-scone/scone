@@ -52,7 +52,12 @@ normative:
   INVARIANTS: RFC8999
 
 informative:
-
+  DASH:
+    title: "Information technology — Dynamic adaptive streaming over HTTP (DASH) — Part 1: Media presentation description and segment formats"
+    target: https://www.iso.org/standard/83314.html
+    seriesinfo:
+      ISO/IEC: 23009-1:2022
+    date: 2022-08
 
 --- abstract
 
@@ -281,10 +286,12 @@ limiting is necessary.  Alternatively, a receiver can control the release of
 flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
 rate of a peer.
 
-Some applications offer options for rate control that can offer superior
-outcomes.  Real-time and streaming video applications are able to adjust video
-quality to fit within a target throughput.  For instance, an HTTP Live Streaming
-client {{?HLS=RFC8216}} can ask for lower bitrate, lower quality media segments.
+Some applications offer options for rate control that can offer superior outcomes.
+Applications that are able to adapt bit rates,
+such as real-time and streaming video applications,
+can adjust video quality to fit within a target throughput.
+For instance, an HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
+client can ask for lower bitrate, lower quality media segments.
 
 
 # Conventions and Definitions
