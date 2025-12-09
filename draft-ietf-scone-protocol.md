@@ -172,11 +172,12 @@ could provide throughput advice to guide application use of network capacity,
 in any way that is separate from any signals
 that are intended to influence congestion response.
 
-Throughput advice can indicate temporary increases in available capacity,
-or temporarily reduced capacity
-due to persistent overuse, equipment faults, or other transient issues.
-This applies to increases or reductions
-that are expected to last at least one minute.
+In addition to rate limiting policies,
+throughput advice can indicate temporary increases in available capacity
+or temporarily reduced capacity.
+This includes persistent overuse, equipment faults, or other transient issues.
+Providing advice is applicable if increases or reductions
+are expected to last at least one minute.
 
 
 ## Unspecified Scope
