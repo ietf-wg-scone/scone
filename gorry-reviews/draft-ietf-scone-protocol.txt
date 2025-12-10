@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 12 June 2026                               Private Octopus Inc.
+Expires: 13 June 2026                               Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         9 December 2025
+                                                        10 December 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 June 2026.
+   This Internet-Draft will expire on 13 June 2026.
 
 Copyright Notice
 
@@ -631,9 +631,9 @@ Table of Contents
 7.  Network Deployment
 
    QUIC endpoints can enable the use of the SCONE protocol by sending
-   SCONE packets Section 5.  Network elements can then use SCONE to
-   apply or replace the Rate Signal field (Section 7.1) according to
-   their policies.
+   SCONE packets Section 5.  Network elements can then use SCONE and
+   replace the Rate Signal field (Section 7.1) according to their
+   policies.
 
 7.1.  Applying Throughput Advice Signals
 
