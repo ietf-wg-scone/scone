@@ -599,7 +599,7 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 
 QUIC endpoints can enable the use of the SCONE protocol
 by sending SCONE packets {{packet}}.
-Network elements can then use SCONE to apply or replace
+Network elements can then use SCONE and replace
 the Rate Signal field ({{apply}})
 according to their policies.
 
