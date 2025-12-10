@@ -283,12 +283,6 @@ There are no guarantees that updated advice will be sent at such events.
 The SCONE throughput advice is advisory (see {{advisory-signal}}).
 Applications that chose to follow it will do so in the way that best suits their needs.
 
-The most obvious way to keep within the limits set by throughput advice is to
-inform the sending peer of the limit so that the peer can do whatever rate
-limiting is necessary.  Alternatively, a receiver can control the release of
-flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
-rate of a peer.
-
 Some applications offer options for rate control that can offer superior outcomes.
 Most video applications,
 especially real-time and streaming video applications,
@@ -297,6 +291,19 @@ For instance, typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
 clients are provided with manifests that allow them to
 adjust the bitrate and quality of media segments
 based on available network capacity.
+For such applications, the most straightforward way to keep within the
+throughput advice is to communicate the advised limit to the sending peer, so
+that the peer can adapt its sending behavior.
+
+Alternatively, when such direct rate adaptation by the sending peer is not
+available, a receiver might control the release of the flow control credit (see
+{{Section 4 of QUIC}}) to indirectly constrain the peer's sending rate. By doing
+so, the receiver can keep the peer's sustained sending rate within the advised
+limit and reduce the likelihood of triggering network enforcement using
+congestion signals. This approach may reduce average throughput, but for
+background bulk transfers such as software updates, the overall completion time
+can be less important than retaining the ability to promptly exchange foreground
+information using brief high-rate transmissions.
 
 
 # Conventions and Definitions
