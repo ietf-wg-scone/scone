@@ -300,10 +300,11 @@ available, a receiver might control the release of the flow control credit (see
 {{Section 4 of QUIC}}) to indirectly constrain the peer's sending rate. By doing
 so, the receiver can keep the peer's sustained sending rate within the advised
 limit and reduce the likelihood of triggering network enforcement using
-congestion signals. This approach may reduce average throughput, but for
-background bulk transfers such as software updates, the overall completion time
-can be less important than retaining the ability to promptly exchange foreground
-information using brief high-rate transmissions.
+congestion signals. This approach is imprecise, as the delays in communicating
+flow control credit can reduce throughput well below target rates. However, for
+some applications, like background bulk transfers such as software updates, the
+overall completion time can be less important than retaining the ability to
+promptly exchange foreground information using brief high-rate transmissions.
 
 
 # Conventions and Definitions
