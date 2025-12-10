@@ -642,7 +642,7 @@ Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
 network elements might need to update more often.
 Ideally, network elements update advice in SCONE packets
-twice per monitoring period,
+at least twice per monitoring period,
 to match endpoint behavior (see {{extra-packets}}).
 
 At the start of a flow, network elements are encouraged to update the rate
