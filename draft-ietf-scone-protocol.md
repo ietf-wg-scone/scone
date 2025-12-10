@@ -297,7 +297,8 @@ that the peer can adapt its sending behavior.
 
 Alternatively, when such direct rate adaptation by the sending peer is not
 available, a receiver might control the release of the flow control credit (see
-{{Section 4 of QUIC}}) to indirectly constrain the peer's sending rate. By doing
+{{Section 4 of QUIC}}) to indirectly constrain the peer's sending rate over QUIC
+streams. By doing
 so, the receiver can keep the peer's sustained sending rate within the advised
 limit and reduce the likelihood of triggering network enforcement using
 congestion signals. This approach is imprecise, as the delays in communicating
