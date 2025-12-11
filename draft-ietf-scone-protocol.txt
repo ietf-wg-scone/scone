@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 11 June 2026                               Private Octopus Inc.
+Expires: 14 June 2026                               Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         8 December 2025
+                                                        11 December 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 June 2026.
+   This Internet-Draft will expire on 14 June 2026.
 
 Copyright Notice
 
@@ -165,16 +165,21 @@ Table of Contents
    maximum sustained throughput by modifying the SCONE packet as it
    transits the network element.
 
+   The propagation of SCONE packets, including the throughput advice
+   that is added, is shown in Figure 1.
+
    +--------+    +---------+     +----------+
    |  QUIC  |    | Network |     |   QUIC   |
    | Sender |    | Element |     | Receiver |
    +---+----+    +----+----+     +----+-----+
        |              |               |
-       +--- SCONE --->|   SCONE+rate  |
+       +--- SCONE --->|  SCONE+advice |
        |    +QUIC     +---- +QUIC --->|
        |              |               |  Validate QUIC packet
        |              |               |  and record rate
        |              |               |
+
+                   Figure 1: Propagation of SCONE signal
 
    QUIC endpoints that receive modified SCONE packets observe the
    indicated version, process the QUIC packet, and then record the
@@ -206,11 +211,11 @@ Table of Contents
 3.1.  Independent of Congestion Signals
 
    Throughput advice signals are not a substitute for congestion
-   feedback.  Congestion signals, such as acknowledgments, provide
-   information on loss, delay, or ECN markings [ECN] that indicate the
-   real-time condition of a network path.  Congestion signals might
-   indicate a throughput limit that is different from the signaled
-   throughput advice.
+   feedback or congestion control.  Congestion signals, such as
+   acknowledgments or ECN markings [ECN][WHY-ECN], provide information
+   on loss and delay that indicate the real-time condition of a network
+   path.  Congestion signals might indicate a throughput limit that is
+   different from the signaled throughput advice.
 
    Endpoints cannot assume that the rate indicated in throughput advice
    is achievable if congestion signals indicate otherwise.  Congestion
@@ -225,11 +230,12 @@ Table of Contents
    application use of network capacity, in any way that is separate from
    any signals that are intended to influence congestion response.
 
-   Throughput advice can indicate temporary increases in available
-   capacity, or temporarily reduced capacity due to persistent overuse,
-   equipment faults, or other transient issues.  This applies to
-   increases or reductions that are expected to last at least one
-   minute.
+   In addition to rate limiting policies, throughput advice can indicate
+   temporary increases in available capacity or temporarily reduced
+   capacity.  This includes persistent overuse, equipment faults, or
+   other transient issues.  Providing advice is applicable if increases
+   or reductions are expected to last for more than one monitoring
+   period; see Section 5.2.
 
 3.2.  Unspecified Scope
 
@@ -244,11 +250,15 @@ Table of Contents
 
    Endpoints can therefore be more confident in the throughput signal as
    an indication of the maximum achievable throughput than as any
-   indication of expected throughput.  The advised throughput will only
-   be achievable when the application is the only user of throughput
-   within the scope that the advice applies to.  In the presence of
-   other flows, congestion limits are likely to determine actual
-   throughput.
+   indication of expected throughput.  In addition to endpoints
+   respecting congestion signals (see Section 3.1), networks might need
+   to monitor and enforce policies, even where applications attempt to
+   follow advice (see Section 7.3).
+
+   The advised throughput will likely only be achievable when the
+   application is the only user of throughput within the scope that the
+   advice applies to.  In the presence of other flows, congestion limits
+   are likely to determine actual throughput.
 
    This implies that signals can most usefully be applied to a downlink
    flow in access networks, close to an endpoint.  In that case,
@@ -258,27 +268,41 @@ Table of Contents
 
    The same UDP address tuple might be used for multiple QUIC
    connections.  A single signal might be lost or only reach a single
-   application endpoint.  Network elements that signal about a flow
-   might choose to send additional signals, using connection IDs to
-   indicate when new connections could be involved.
+   application endpoint.  Network elements can apply SCONE advice to all
+   QUIC connections that include SCONE packets to ensure that advice is
+   received by all application endpoints.
+
+   The signaled advice applies to the flow of packets on the same UDP
+   address tuple for the duration of the current monitoring period,
+   unless it is updated earlier or the flow ends; see Section 5.2 for
+   details on the monitoring period.
+
+   Rate limiting policies often apply on the level of a device or
+   subscription, but endpoints cannot assume that this is the case.  A
+   separate signal can be sent for each flow.
 
 3.4.  Undirectional Signal
 
-   The endpoint that receives a throughput advice signal is not the
-   endpoint that might adapt its sending behavior as a result of
-   receiving the signal.  This ensures that the throughput advice signal
-   is attached to the flow that it is mostly likely to apply to.
+   Throughput advice is signaled with SCONE packets that are transmitted
+   as part of the flow that the advice applies to.  Carrying signals in
+   the affected flow, in the same way that ECN signals are conveyed,
+   ensures that there is no ambiguity about what flow is affected.
+   However, this means that the endpoint that receives throughput advice
+   is not the endpoint that might need to adapt its sending behavior.
 
-   An endpoint might need to communicate the value it receives to its
-   peer in order to ensure that the limit is respected.  This document
-   does not define how that signaling occurs as this is specific to the
-   application in use.
+   A receiving endpoint might need to communicate the value it receives
+   to the sending peer in order to ensure that the limit is respected.
+   This document does not define how that signaling occurs as this is
+   specific to the application in use.
 
 3.5.  Advisory Signal
 
-   Receiving throughput advice does not guarantee that a higher
-   throughput is not achievable.  Endpoints that receive this signal
-   therefore need to treat the information as advisory.
+   Throughput advice indicates what one part of the network expects to
+   be achievable for flows that transit that portion of the network.  It
+   is possible that very different throughput is achievable -- either
+   higher or lower than the advice -- as determined by congestion
+   control.  Endpoints that receive this signal therefore need to treat
+   the information as advisory.
 
    The fact that an endpoint requests throughput advice does not
    necessarily mean that it will adhere to them; in some cases, the
@@ -293,16 +317,10 @@ Table of Contents
    switch to applying its policies for non-SCONE flows, using congestion
    control signals.
 
-   The signaled advice applies to the flow of packets on the same UDP
-   address tuple for the duration of the current monitoring period,
-   unless it is updated earlier or the flow ends; see Section 5.2 for
-   details on the monitoring period.  Rate limiting policies often apply
-   on the level of a device or subscription, but endpoints cannot assume
-   that this is the case.  A separate signal can be sent for each flow.
-
    Network conditions and rate-limit policies can change in ways that
-   make previously signaled advice obsolete.  There are no guarantees
-   that updated advice will be sent at such events.
+   make previously signaled advice obsolete.  For example, routing
+   changes can cause a flow to move to a different network path.  There
+   are no guarantees that updated advice will be sent at such events.
 
 3.6.  Following Advice
 
@@ -317,10 +335,12 @@ Table of Contents
    Section 4 of [QUIC]) to indirectly limit the sending rate of a peer.
 
    Some applications offer options for rate control that can offer
-   superior outcomes.  Real-time and streaming video applications are
-   able to adjust video quality to fit within a target throughput.  For
-   instance, an HTTP Live Streaming client [HLS] can ask for lower
-   bitrate, lower quality media segments.
+   superior outcomes.  Most video applications, especially real-time and
+   streaming video applications, can adapt their use of network
+   bandwidth.  For instance, typical HTTP Live Streaming [HLS] or DASH
+   [DASH] clients are provided with manifests that allow them to adjust
+   the bitrate and quality of media segments based on available network
+   capacity.
 
 4.  Conventions and Definitions
 
@@ -335,7 +355,7 @@ Table of Contents
    A SCONE packet is a QUIC long header packet that follows the QUIC
    invariants; see Section 5.1 of [INVARIANTS].
 
-   Figure 1 shows the format of the SCONE packet using the conventions
+   Figure 2 shows the format of the SCONE packet using the conventions
    from Section 4 of [INVARIANTS].
 
    SCONE Packet {
@@ -349,7 +369,7 @@ Table of Contents
      Source Connection ID (0..2040),
    }
 
-                       Figure 1: SCONE Packet Format
+                       Figure 2: SCONE Packet Format
 
    The most significant bit (0x80) of the packet indicates that this is
    a QUIC long header packet.  The next bit (0x40) is reserved and can
@@ -612,8 +632,9 @@ Table of Contents
 7.  Network Deployment
 
    QUIC endpoints can enable the use of the SCONE protocol by sending
-   SCONE packets Section 5.  Network elements then apply or replace the
-   Rate Signal field (Section 7.1) according to their policies.
+   SCONE packets Section 5.  Network elements can then use SCONE and
+   replace the Rate Signal field (Section 7.1) according to their
+   policies.
 
 7.1.  Applying Throughput Advice Signals
 
@@ -647,11 +668,14 @@ Table of Contents
    Once the throughput advice signal is updated, the network element
    updates the UDP checksum for the datagram.
 
-   A network element needs to ensure that it sends updated rate signals
-   with no more than a monitoring period (Section 5.2) between each
-   update.  Because this depends on the availability of SCONE packets
-   and packet loss can cause signals to be missed, network elements
-   might need to update more often.
+   To avoid throughput advice expiring, a network element needs to
+   ensure that it sends updated rate signals with no more than a
+   monitoring period (Section 5.2) between each update.  Because this
+   depends on the availability of SCONE packets and packet loss can
+   cause signals to be missed, network elements might need to update
+   more often.  Ideally, network elements update advice in SCONE packets
+   at least twice per monitoring period, to match endpoint behavior (see
+   Section 8.1).
 
    At the start of a flow, network elements are encouraged to update the
    rate signal of the first few SCONE packets it observes so that
@@ -842,16 +866,15 @@ Table of Contents
    the two.
 
    Consider for example a path in which the bottleneck router implements
-   Early Congestion Notification as specified in the L4S architecture
-   [RFC9330].  If the path capacity diminishes, queues will build up and
-   the router will immediately start increasing the rate at which
-   packets are marked as "Congestion Experienced".  The receiving
-   endpoint will notice these marks, and inform its peer.  The incoming
-   congestion will be detected within 1 round trip time (RTT).  This
-   scenario will play out whatever the reason for the change in
-   capacity, whether due to increased competition between multiple
-   applications or, for example, to a change in capacity of a wireless
-   channel.
+   some form of Early Congestion Notification [ECN].  If the path
+   capacity diminishes, queues will build up and the router will
+   immediately start increasing the rate at which packets are marked as
+   "Congestion Experienced".  The receiving endpoint will notice these
+   marks, and inform its peer.  The incoming congestion will be detected
+   in 1 round trip time (RTT).  This scenario will play out whatever the
+   reason for the change in capacity, whether due to increased
+   competition between multiple applications or, for example, to a
+   change in capacity of a wireless channel.
 
 9.  Security Considerations
 
@@ -1126,6 +1149,11 @@ Table of Contents
 
 12.2.  Informative References
 
+   [DASH]     "Information technology — Dynamic adaptive streaming over
+              HTTP (DASH) — Part 1: Media presentation description and
+              segment formats", ISO/IEC 23009-1:2022, August 2022,
+              <https://www.iso.org/standard/83314.html>.
+
    [ECN]      Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
@@ -1147,11 +1175,10 @@ Table of Contents
               UDP", BCP 127, RFC 4787, DOI 10.17487/RFC4787, January
               2007, <https://www.rfc-editor.org/rfc/rfc4787>.
 
-   [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.
-              White, "Low Latency, Low Loss, and Scalable Throughput
-              (L4S) Internet Service: Architecture", RFC 9330,
-              DOI 10.17487/RFC9330, January 2023,
-              <https://www.rfc-editor.org/rfc/rfc9330>.
+   [WHY-ECN]  Fairhurst, G. and M. Welzl, "The Benefits of Using
+              Explicit Congestion Notification (ECN)", RFC 8087,
+              DOI 10.17487/RFC8087, March 2017,
+              <https://www.rfc-editor.org/rfc/rfc8087>.
 
 Acknowledgments
 
