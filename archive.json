@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-09T01:47:02.777437+00:00",
+  "timestamp": "2025-12-11T01:50:28.297353+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2763,7 +2763,7 @@
       "labels": [],
       "body": "OLD:\nAlternatively, a receiver can control the release of flow control credit (see [Section 4](https://rfc-editor.org/rfc/rfc9000#section-4) of [[QUIC](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#QUIC)]) to indirectly limit the sending rate of a peer.\n\n- I saw this, and couldn't argue that a design could so this. But, there again, there are many things a receiver could do. If this is being called out as one of these why is this a good or bad idea to do this? If this is a recommended approach, I'd expect an example and explanation to avoid reacting to the signal at multiple levels in the stack, which I suspect could be awkard when there is a changing signal. Who has experience? Are there thoughts?",
       "createdAt": "2025-12-08T11:31:31Z",
-      "updatedAt": "2025-12-09T00:49:19Z",
+      "updatedAt": "2025-12-09T09:07:51Z",
       "closedAt": null,
       "comments": [
         {
@@ -2772,6 +2772,20 @@
           "body": "I'm not a believer in the use of flow control for this, but I know that some people are actively doing that.\n\nAt a high-level, it isn't especially complicated.  If you want to receive at a rate of X bytes/second, you limit the rate at which you provide flow control to X bytes/second.\n\nOf course, this inevitably leads to something less than X bytes/second of throughput because any signaling needs to propagate.  So documenting how you avoid that happening is the subject of an entirely new internet draft.  (I know that some people are working on documenting flow control auto-tuning algorithms, which turns out to be subtle.)\n\nI don't know how to address this.  A simple way to manage this would be to cut the text, but that seems unsatisfactory.  I'm happy with where it stands, even though this is suggesting something that is probably too subtle for many implementers to get right.  But, given that good flow control algorithms are not subject to standardization, I'm comfortable with that remaining as \"special sauce\".",
           "createdAt": "2025-12-09T00:49:19Z",
           "updatedAt": "2025-12-09T00:49:19Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think it would make sense to explain, for each approach, why it is better to use SCONE than becoming rate-limited by CC signals.\n\nFor the approach that uses flow control credits, the benefit is that adhering to the throughput advice reduces the likelihood of becoming rate-limited by CC, and in turn increases the likelihood of retaining the capability to communicate in bursts.\n\nOne example is web browsing while downloading a software update. If the download respects the throughput advice, it would be less likely to see the web browsing traffic getting throttled.\n\nSubmitted a suggestion as https://github.com/ietf-wg-scone/scone/pull/112#discussion_r2600757193.",
+          "createdAt": "2025-12-09T01:54:26Z",
+          "updatedAt": "2025-12-09T01:54:48Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "The above make sense at least to me, and splitting into 2 para's help!",
+          "createdAt": "2025-12-09T09:07:51Z",
+          "updatedAt": "2025-12-09T09:07:51Z"
         }
       ]
     },
@@ -2820,15 +2834,15 @@
       "id": "I_kwDON1dwo87c5xiw",
       "title": "ECN in general provides advice (e.g, RFC 8511 / ABE also provides this using ECT(0)).",
       "url": "https://github.com/ietf-wg-scone/scone/issues/109",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I'm not sure citing L4S alone here is quite right.\nOLD:\n\"Consider for example a path in which the bottleneck router implements Early Congestion Notification as specified in the L4S architecture [RFC9330].\"\n\nThe benefit cited is actually from the use of ECN, not specifically from L4S. This benefit is set out in RFC8087.\n\nExamples where ECN provides this benefit are ABE [RFC 8511] and L4S, it's not just L4S here.",
       "createdAt": "2025-12-08T12:17:26Z",
-      "updatedAt": "2025-12-09T01:00:27Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-10T08:31:09Z",
+      "closedAt": "2025-12-10T08:31:09Z",
       "comments": [
         {
           "author": "huitema",
@@ -2850,6 +2864,27 @@
           "body": "I'll switch to 3168, as the precise details of the ECN feedback mechanism are irrelevant in this example.",
           "createdAt": "2025-12-09T01:00:27Z",
           "updatedAt": "2025-12-09T01:00:27Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree that 3168 is the right reference.\n\n@mwelzl, @gorryfair -- I think the respective merits of L4S, ABE, FQ_PIE+ECN, or FQ-CODEL+ECN are best discussed in person, preferably in a relaxed pub-like setting. It is pretty clear that the dependency on the asymptotic limit of Reno in L4S is rather questionable, since BBR does not have this limit, and any algorithm that react on average rate of packet marks/drop instead of reacting on first mark/drop does not have this limit either. It is also clear that the \"integral controller\" part of the PIE algorithm has to make hypotheses about the end-to-end delays, that these hypotheses may not be robust, and that L4S incorporates them without much discussion. Again, good discussions in a pub-like setting, or possibly in ICCRG or CCWG, but for SCONE that's not exactly a core issue.",
+          "createdAt": "2025-12-10T07:13:08Z",
+          "updatedAt": "2025-12-10T07:13:08Z"
+        },
+        {
+          "author": "mwelzl",
+          "authorAssociation": "NONE",
+          "body": "+1 on 3168.\n\n@huitema - agree 100%, getting into \"ABE vs. L4S\" is exactly what I want to avoid (and have been avoiding over the \"pushing for L4S\" decade).  I can't make it to Shenzhen, but I'd love to drink to this in Vienna!",
+          "createdAt": "2025-12-10T07:22:41Z",
+          "updatedAt": "2025-12-10T07:22:41Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "It looks like the text for SCONE has changed to something that seems appropriate. I'd still encourage use of L4S and ABE, but as you note, ECN is a topic that is worth more discussion at some future time!",
+          "createdAt": "2025-12-10T08:31:09Z",
+          "updatedAt": "2025-12-10T08:31:09Z"
         }
       ]
     },
@@ -10825,18 +10860,26 @@
       "labels": [],
       "body": "This includes a bunch of commits, each addressing a different aspect of Gorry's review.  Merging this should close all of the issues that @gorryfair raised, aside from #106.  My inclination there is to do nothing, but it's more complicated than that.  See that issue discussion.",
       "createdAt": "2025-12-09T01:12:08Z",
-      "updatedAt": "2025-12-09T01:46:49Z",
+      "updatedAt": "2025-12-11T00:03:12Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2335b3faaa9f7d3e960b134e02fb7be017698e44",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "gorry-reviews",
-      "headRefOid": "0077603a68e997f3e0f8a3520a6f52fe0b2e9ab4",
+      "headRefOid": "bbd14c4a9372bf3400f64ab596a92e173284c393",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi Gorry, I know that you already approve, but if you care to, I've reworded a few pieces in response to your (helpful) feedback.",
+          "createdAt": "2025-12-09T23:38:17Z",
+          "updatedAt": "2025-12-09T23:38:17Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87T40sp",
@@ -10857,6 +10900,595 @@
               "updatedAt": "2025-12-09T01:46:49Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T4-4G",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T02:03:17Z",
+          "updatedAt": "2025-12-09T02:03:17Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "Yeah, I think that ends up being more of a potential footgun than leaving well alone.  The problem is that following this advice will probably keep well within the advice only if there is no loss, because flow control doesn't limit retransmissions.  And, depending on update rates, it will limit throughput too much, because the time between flow control updates will not be accounted for.  That will make people unhappy and they won't understand why.",
+              "createdAt": "2025-12-09T02:03:17Z",
+              "updatedAt": "2025-12-09T02:03:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T5GjI",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T02:12:12Z",
+          "updatedAt": "2025-12-09T02:12:12Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "Thanks, but as to your points:\r\n* Regarding retransmissions, I'm not sure if it is relevant, as the problem exists with video bit rate selection. To paraphrase, SCONE assumes a low PLR.\r\n* I wouldn't mind keeping status quo as-is, but if we want to explain why, maybe we should be more direct about the types of traffic might respect SCONE using flow control. We could use background software updates as an example, pointing out that, in some cases, avoiding CC-throttled is more important than the speed of background operation.",
+              "createdAt": "2025-12-09T02:12:12Z",
+              "updatedAt": "2025-12-09T02:12:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T5RL6",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T02:25:35Z",
+          "updatedAt": "2025-12-09T02:25:36Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "I.e., maybe change the last sentence of the proposal above to something along the lines of:\r\n> By metering the issuance of credit in accordance with the throughput advice, the receiver can keep the peer's sustained sending rate within the advised limit and reduce the likelihood of triggering network enforcement that relies on congestion-control signals. This approach may reduce average throughput, but for background bulk transfers such as software updates, the overall completion time can be less important than retaining the ability to promptly exchange foreground information using brief high-rate transmissions.",
+              "createdAt": "2025-12-09T02:25:35Z",
+              "updatedAt": "2025-12-09T02:25:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_PiZ",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "This was why the WG published RFC 8087, so I think that RFC 8087 would be useful to cite to explain why.",
+          "createdAt": "2025-12-09T10:16:36Z",
+          "updatedAt": "2025-12-09T10:16:36Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_Qz0",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-09T10:17:56Z",
+          "updatedAt": "2025-12-09T10:17:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_VJi",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T10:22:12Z",
+          "updatedAt": "2025-12-09T10:23:18Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Seems slightly clunky. It could be something alonmg the lines of: \"Video-based applications that can adjust video quality, such as real-time and streaming video applications,\r\ncan adjust their rate to fit within a target throughput\"",
+              "createdAt": "2025-12-09T10:22:12Z",
+              "updatedAt": "2025-12-09T10:23:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_Xa9",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2025-12-09T10:24:12Z",
+          "updatedAt": "2025-12-09T10:32:13Z",
+          "comments": [
+            {
+              "originalPosition": 48,
+              "body": "/congestion feedback/ or /congestion control/.",
+              "createdAt": "2025-12-09T10:24:13Z",
+              "updatedAt": "2025-12-09T10:32:13Z"
+            },
+            {
+              "originalPosition": 116,
+              "body": "/like/ could be less ambiguous if stated as /in teh same way as ECN/",
+              "createdAt": "2025-12-09T10:28:32Z",
+              "updatedAt": "2025-12-09T10:32:13Z"
+            },
+            {
+              "originalPosition": 204,
+              "body": "/is ideal/ at the end of the sentence might be easier for a reader, had the sentence been more like; \"Ideally this advice is updated twice per monitoring period, to match the endpoint behaviour  {{extra-packets}})",
+              "createdAt": "2025-12-09T10:31:21Z",
+              "updatedAt": "2025-12-09T10:32:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_k7x",
+          "commit": {
+            "abbreviatedOid": "8ad940b"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-09T10:33:51Z",
+          "updatedAt": "2025-12-09T10:33:51Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Perhaps better as: \"The throughput advice indicates the throughput that a specific network element expects to be supported.\"",
+              "createdAt": "2025-12-09T10:33:51Z",
+              "updatedAt": "2025-12-09T10:33:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_nHo",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-09T10:35:00Z",
+          "updatedAt": "2025-12-09T10:35:00Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_o8_",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": ":-)",
+          "createdAt": "2025-12-09T10:36:03Z",
+          "updatedAt": "2025-12-09T10:36:03Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_pdj",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-09T10:36:27Z",
+          "updatedAt": "2025-12-09T10:36:27Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87T_qYb",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-09T10:37:15Z",
+          "updatedAt": "2025-12-09T10:37:15Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQBo4",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes, these are all good ways of dotting the T's and crossing the I's!",
+          "createdAt": "2025-12-10T06:35:40Z",
+          "updatedAt": "2025-12-10T06:35:40Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQKhf",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Thank you for all the edits. The PR is looking good.\n\nI'd be fine to discuss how to close #106 separately.",
+          "createdAt": "2025-12-10T06:49:00Z",
+          "updatedAt": "2025-12-10T07:02:01Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "```suggestion\nare expected to last at least 67 seconds; see {{time}}.\n```\n\nI know that this is old text, and that it is hard to provide guidance on the exact threshold. However, \"one minute\" sounds incorrect. It could make sense to change the threshold to 67 seconds (i.e., one monitoring period).",
+              "createdAt": "2025-12-10T06:49:00Z",
+              "updatedAt": "2025-12-10T07:02:01Z"
+            },
+            {
+              "originalPosition": 95,
+              "body": "```suggestion\nto all datagrams that include SCONE packets\n```\n\nIs this the intent?",
+              "createdAt": "2025-12-10T06:50:53Z",
+              "updatedAt": "2025-12-10T07:02:01Z"
+            },
+            {
+              "originalPosition": 190,
+              "body": "```suggestion\nNetwork elements can then use SCONE and replace\n```\n\n\"~ use SCONE to apply or replace the Rate Signal field ~\" might sounds as if the network element is going to use the value of the Rate Signal field in certain ways (which is, in fact, prohibited).",
+              "createdAt": "2025-12-10T06:57:43Z",
+              "updatedAt": "2025-12-10T07:02:01Z"
+            },
+            {
+              "originalPosition": 208,
+              "body": "```suggestion\nat least twice per monitoring period,\n```\nMore than twice is even better.",
+              "createdAt": "2025-12-10T06:59:30Z",
+              "updatedAt": "2025-12-10T07:02:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQfJL",
+          "commit": {
+            "abbreviatedOid": "0077603"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T07:16:44Z",
+          "updatedAt": "2025-12-10T07:16:44Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "Opened #113 so that we could discuss the point separately.",
+              "createdAt": "2025-12-10T07:16:44Z",
+              "updatedAt": "2025-12-10T07:16:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87URMhr",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T08:16:12Z",
+          "updatedAt": "2025-12-10T08:16:12Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "~ I don't have a strong preference, but I'd personally say \"one monitoring period (see section xx)\".",
+              "createdAt": "2025-12-10T08:16:12Z",
+              "updatedAt": "2025-12-10T08:16:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87URQVq",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "This looks good. See comments on updated text.",
+          "createdAt": "2025-12-10T08:21:07Z",
+          "updatedAt": "2025-12-10T08:21:07Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87US4yI",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T10:08:06Z",
+          "updatedAt": "2025-12-10T10:08:06Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "I agree with @gorryfair, spelling out that it's a monitoring period makes it look less arbitrary. ",
+              "createdAt": "2025-12-10T10:08:06Z",
+              "updatedAt": "2025-12-10T10:08:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UTd4L",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T10:39:18Z",
+          "updatedAt": "2025-12-10T10:39:18Z",
+          "comments": [
+            {
+              "originalPosition": 95,
+              "body": "Flow is not a great word here, but adding advice to all datagrams is not necessarily the only strategy here either. \r\nAn element (that's ok with keeping some additional state) could for instance have a desired update frequency, but use observed CID changes as triggers for adding advice. \r\nHowever, more nuanced guidance and discussion around this might be better suited for the app-man document.",
+              "createdAt": "2025-12-10T10:39:18Z",
+              "updatedAt": "2025-12-10T10:39:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UfW3V",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T23:54:50Z",
+          "updatedAt": "2025-12-10T23:54:50Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "I think that the problem is \"one\", not that the text is vague.  Because what we really want to say is \"at least several monitoring periods\".  There's no value in signaling for anything of shorter duration.\r\n\r\n```suggestion\r\nare expected to last for more than one monitoring period; see {{time}}.\r\n```",
+              "createdAt": "2025-12-10T23:54:50Z",
+              "updatedAt": "2025-12-10T23:54:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UfbUb",
+          "commit": {
+            "abbreviatedOid": "75792cd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-11T00:03:12Z",
+          "updatedAt": "2025-12-11T00:03:12Z",
+          "comments": [
+            {
+              "originalPosition": 95,
+              "body": "\"flows\" is correct in this context.  The title of the section is \"Per-Flow Signal\".",
+              "createdAt": "2025-12-11T00:03:12Z",
+              "updatedAt": "2025-12-11T00:03:12Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 113,
+      "id": "PR_kwDON1dwo864Eusl",
+      "title": "explain how flow control can be used",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/113",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "At the moment, the PR points to #112. We can either merge this PR to #112, or merge #112 and then discuss separately, by changing the base branch to main.\r\n\r\nCloses #106.",
+      "createdAt": "2025-12-10T07:15:53Z",
+      "updatedAt": "2025-12-11T01:02:13Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "gorry-reviews",
+      "baseRefOid": "75792cde22ba989356ce915ab9ba195baf2cea05",
+      "headRepository": "kazuho/i-d-trone",
+      "headRefName": "kazuho/why-flow-control",
+      "headRefOid": "96a1588ee36748d7572857ea26b95c69d4b6df7f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Overall, I am starting to reach the conclusion that even mentioning flow control is a mistake.  Would removing the mention be acceptable?",
+          "createdAt": "2025-12-11T00:11:50Z",
+          "updatedAt": "2025-12-11T00:11:50Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Overall, I am starting to reach the conclusion that even mentioning flow control is a mistake. Would removing the mention be acceptable?\r\n\r\nYes, I think that would be the simplest.",
+          "createdAt": "2025-12-11T01:02:13Z",
+          "updatedAt": "2025-12-11T01:02:13Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87UQi0m",
+          "commit": {
+            "abbreviatedOid": "66eea07"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I'm so-so on this, but if we go here, we need to be clear that flow control is an imprecise way to control send rate.",
+          "createdAt": "2025-12-10T07:22:12Z",
+          "updatedAt": "2025-12-10T07:22:46Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "```suggestion\ncongestion signals. This approach can be imprecise, as the delays in communicating\nflow control credit can reduce throughput well below target rates and loss recovery\ncan cause rates to exceed targets. For some applications, like\n```",
+              "createdAt": "2025-12-10T07:22:12Z",
+              "updatedAt": "2025-12-10T07:22:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQsja",
+          "commit": {
+            "abbreviatedOid": "66eea07"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Given that the datagram hole is big enough to pass truckloads of RTP packets, maybe we should just completely abandon this discussion of using flow control to manage how quickly the peer can send...",
+          "createdAt": "2025-12-10T07:35:21Z",
+          "updatedAt": "2025-12-10T07:35:21Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQua_",
+          "commit": {
+            "abbreviatedOid": "66eea07"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T07:37:03Z",
+          "updatedAt": "2025-12-10T07:37:04Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Thank you for the suggestion. I've applied the first half in d1fbf53. For the second half, I'm not sure if the discussion of packet loss is relevant specifically to this approach.",
+              "createdAt": "2025-12-10T07:37:03Z",
+              "updatedAt": "2025-12-10T07:37:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQvqd",
+          "commit": {
+            "abbreviatedOid": "66eea07"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T07:38:44Z",
+          "updatedAt": "2025-12-10T07:38:44Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Except this does not work. Or more precisely, it does not work if the application is sending media as QUIC datagrams, which is the mapping of RTP to QUIC described in[ the AVTCORE draft](https://www.ietf.org/archive/id/draft-ietf-avtcore-rtp-over-quic-14.html). Or if an MoQ application is sending some media using datagrams. Flow control only applies to data sent in streams.",
+              "createdAt": "2025-12-10T07:38:44Z",
+              "updatedAt": "2025-12-10T07:38:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UQ5rC",
+          "commit": {
+            "abbreviatedOid": "66eea07"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T07:53:12Z",
+          "updatedAt": "2025-12-10T07:53:12Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Yeah, I think you are correct to point out that it does not work on some applications. To paraphrase, it works well enough for some applications, and the paragraph uses software update as an example. Does 96a1588 address the concern?\r\n\r\nHonestly, I might prefer seeing a QUIC extension for signalling the desired sending rate for the cases where application-level interaction is unneeded. But until then, I think it makes sense to (ab)use flow control.",
+              "createdAt": "2025-12-10T07:53:12Z",
+              "updatedAt": "2025-12-10T07:53:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UcGbs",
+          "commit": {
+            "abbreviatedOid": "96a1588"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-10T19:20:06Z",
+          "updatedAt": "2025-12-10T19:20:06Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "This is still not sufficient. Saying that the approach \"constrain the peer's sending rate over QUIC\r\nstreams\" is true, but it fails to convey the weakness of the approach. I would like to add a sentence such as:\r\n\r\nThis approach will not work for applications that send traffic as QUIC datagram frames, because these frames are not subject to flow control.",
+              "createdAt": "2025-12-10T19:20:06Z",
+              "updatedAt": "2025-12-10T19:20:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 114,
+      "id": "PR_kwDON1dwo864QDn4",
+      "title": "Remove mention of flow control for rate control",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/114",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "At best, this is hard to use and indirect.  At worst, this is totally ineffectual.\r\n\r\n@kazuho, does this work for you?\r\n\r\nCloses #113.",
+      "createdAt": "2025-12-11T01:07:01Z",
+      "updatedAt": "2025-12-11T01:34:32Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "gorry-reviews",
+      "baseRefOid": "bbd14c4a9372bf3400f64ab596a92e173284c393",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "no-fc",
+      "headRefOid": "cd4c00a3d5d81fe8414102c26b324269a198f4ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87UgX8z",
+          "commit": {
+            "abbreviatedOid": "cd4c00a"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes. That's the simplest way to fix this, we don't have to speculate on what apps will do.",
+          "createdAt": "2025-12-11T01:34:32Z",
+          "updatedAt": "2025-12-11T01:34:32Z",
+          "comments": []
         }
       ]
     }
