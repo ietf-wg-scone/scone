@@ -1506,8 +1506,8 @@ to be split between multiple active flows.<a href="#section-3.2-5" class="pilcro
 <p id="section-3.3-1">The same UDP address tuple might be used for multiple QUIC connections.  A
 single signal might be lost or only reach a single application endpoint.
 Network elements can apply SCONE advice
-to all flows that include SCONE packets
-to ensure that advice is received by the endpoints of all flows.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+to all QUIC connections that include SCONE packets
+to ensure that advice is received by all application endpoints.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">The signaled advice applies to the flow of packets
 on the same UDP address tuple for the duration of
 the current monitoring period, unless it is updated

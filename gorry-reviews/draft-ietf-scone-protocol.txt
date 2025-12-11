@@ -269,8 +269,8 @@ Table of Contents
    The same UDP address tuple might be used for multiple QUIC
    connections.  A single signal might be lost or only reach a single
    application endpoint.  Network elements can apply SCONE advice to all
-   flows that include SCONE packets to ensure that advice is received by
-   the endpoints of all flows.
+   QUIC connections that include SCONE packets to ensure that advice is
+   received by all application endpoints.
 
    The signaled advice applies to the flow of packets on the same UDP
    address tuple for the duration of the current monitoring period,
