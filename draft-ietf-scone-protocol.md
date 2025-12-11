@@ -285,9 +285,7 @@ Applications that chose to follow it will do so in the way that best suits their
 
 The most obvious way to keep within the limits set by throughput advice is to
 inform the sending peer of the limit so that the peer can do whatever rate
-limiting is necessary.  Alternatively, a receiver can control the release of
-flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
-rate of a peer.
+limiting is necessary.
 
 Some applications offer options for rate control that can offer superior outcomes.
 Most video applications,
