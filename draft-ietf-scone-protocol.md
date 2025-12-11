@@ -188,7 +188,7 @@ throughput advice can indicate temporary increases in available capacity
 or temporarily reduced capacity.
 This includes persistent overuse, equipment faults, or other transient issues.
 Providing advice is applicable if increases or reductions
-are expected to last at least one minute.
+are expected to last for more than one monitoring period; see {{time}}.
 
 
 ## Unspecified Scope
