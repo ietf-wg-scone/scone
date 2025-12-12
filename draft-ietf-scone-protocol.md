@@ -283,18 +283,26 @@ There are no guarantees that updated advice will be sent at such events.
 The SCONE throughput advice is advisory (see {{advisory-signal}}).
 Applications that chose to follow it will do so in the way that best suits their needs.
 
-The most obvious way to keep within the limits set by throughput advice is to
-inform the sending peer of the limit so that the peer can do whatever rate
-limiting is necessary.
+The most obvious way to follow throughput advice is to
+inform the sending peer of the advice so that the peer
+can adjust send rates as necessary.
+This document does not provide specific guidance on how applications
+might adapt their use of network capacity in response to advice.
 
-Some applications offer options for rate control that can offer superior outcomes.
-Most video applications,
-especially real-time and streaming video applications,
-can adapt their use of network bandwidth.
-For instance, typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
+Some applications offer options for rate control
+that can offer improved performance when following advice.
+For instance, real-time and streaming video applications can often adapt usage.
+Typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
 clients are provided with manifests that allow them to
 adjust the bitrate and quality of media segments
 based on available network capacity.
+Low priority bulk transfer applications, such as software updates,
+might also choose to follow advice.
+
+Following throughput advice could
+reduce the impact of an application on other network users,
+reserves capacity for high-priority activities,
+and could avoid potential enforcement action by the network; see {{policing}}.
 
 
 # Conventions and Definitions
