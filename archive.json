@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-11T01:50:28.297353+00:00",
+  "timestamp": "2025-12-14T01:55:48.567683+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2613,15 +2613,15 @@
       "id": "I_kwDON1dwo87c4muc",
       "title": "Please expand scope beyond just indicating rate limiting policy",
       "url": "https://github.com/ietf-wg-scone/scone/issues/100",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "OLD:\nHaving the network indicate what its rate limiting policy is, in a way that is accessible to endpoints, allows applications to use this information when adapting their send rate.\n- This seems like it it uncesserily focuss on a policy. I think this should be wider in scope, e.g.\n\nAllowing the network to indicate the current supported rate (e.g., resulting from a rate limiting policy), can make this information accessible to endpoints, and allows applications to use this information when adapting their send rate.\n",
       "createdAt": "2025-12-08T10:55:58Z",
-      "updatedAt": "2025-12-09T00:05:45Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:29Z",
+      "closedAt": "2025-12-11T04:16:29Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2637,15 +2637,15 @@
       "id": "I_kwDON1dwo87c4pkr",
       "title": "Please add a figure caption to the figure 1.",
       "url": "https://github.com/ietf-wg-scone/scone/issues/101",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-12-08T10:59:27Z",
-      "updatedAt": "2025-12-08T10:59:27Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:29Z",
+      "closedAt": "2025-12-11T04:16:29Z",
       "comments": []
     },
     {
@@ -2684,15 +2684,15 @@
       "id": "I_kwDON1dwo87c404z",
       "title": "What are these additional signals?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/103",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Section 3.3 says:\n\nOLD:\n\"Network elements that signal about a flow might choose to send additional signals, using connection IDs to indicate when new connections could be involved.\"\n\n- I can see how additional information might help, but I do not understand what is suggested to provide this. How would the signals be communicated and what fo they say: e.g., is this over the same set of ports; does the network element do this or the endpoint?",
       "createdAt": "2025-12-08T11:12:54Z",
-      "updatedAt": "2025-12-09T00:12:11Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:29Z",
+      "closedAt": "2025-12-11T04:16:29Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2708,15 +2708,15 @@
       "id": "I_kwDON1dwo87c4349",
       "title": "3.4. Undirectional Signal (what is \"This\")",
       "url": "https://github.com/ietf-wg-scone/scone/issues/104",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "\nOLD:\nThe endpoint that receives a throughput advice signal is not the endpoint that might adapt its sending behavior as a result of receiving the signal. This ensures that the throughput advice signal is attached to the flow that it is mostly likely to apply to.\n\n- I think I understand the protocol interaction, but from the above two sentences, I don't understand what \"This\" is, (presumably the \"SCONE protocol\"?).\n- Could the final part also be clearer? e.g.: /the flow that it is mostly likely to apply to/the flow to which it mostly likely to applies\"?\n\n",
       "createdAt": "2025-12-08T11:16:39Z",
-      "updatedAt": "2025-12-09T00:30:19Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:30Z",
+      "closedAt": "2025-12-11T04:16:30Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2794,15 +2794,15 @@
       "id": "I_kwDON1dwo87c5cpK",
       "title": "What is implied of Network Elements in general?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/107",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Section 7, says:\nOLD:\nNetwork elements then apply or replace the Rate Signal field ([Section 7.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#apply)) according to their policies.\n- I said previously that this seems to be a little open to confusion regarding whether this applies to ALL network elements. It still has this ambiguity.\n\nCould we say something like:\n\"Network elements can then use the SCONE protocol to apply or replace the Rate Signal field ([Section 7.1](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#apply)) according to their policies.\"",
       "createdAt": "2025-12-08T11:57:17Z",
-      "updatedAt": "2025-12-08T11:57:17Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:30Z",
+      "closedAt": "2025-12-11T04:16:30Z",
       "comments": []
     },
     {
@@ -2810,15 +2810,15 @@
       "id": "I_kwDON1dwo87c5gBs",
       "title": "Section 7.1: \"at least once per monitoring period\"",
       "url": "https://github.com/ietf-wg-scone/scone/issues/108",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I think I understand the goal of the text below, but the text below does not read quite right to me. Is a need to send at least once per monitoring period? or no more than once per period (twice)? or something else?\n\nOLD:\nA network element needs to ensure that it sends updated rate signals with no more than a monitoring period \n\nAnd of course, later in 8.1 (which might be a useful cross-ref) it says:\n\"After that, endpoints that seek to receive throughput advice on a flow MUST send a SCONE packet at least twice each monitoring period\"",
       "createdAt": "2025-12-08T12:00:45Z",
-      "updatedAt": "2025-12-09T00:56:06Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:30Z",
+      "closedAt": "2025-12-11T04:16:30Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2893,15 +2893,15 @@
       "id": "I_kwDON1dwo87c59MV",
       "title": "HLS? ABR? DASH?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/110",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "There is an example that cites HLS? \n- Ought we also to note ABR in genereal and perhaps DASH. A little more might be useful here.",
       "createdAt": "2025-12-08T12:29:27Z",
-      "updatedAt": "2025-12-09T01:10:34Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-11T04:16:31Z",
+      "closedAt": "2025-12-11T04:16:31Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -10853,24 +10853,26 @@
       "id": "PR_kwDON1dwo863zTXY",
       "title": "Gorry's review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/112",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This includes a bunch of commits, each addressing a different aspect of Gorry's review.  Merging this should close all of the issues that @gorryfair raised, aside from #106.  My inclination there is to do nothing, but it's more complicated than that.  See that issue discussion.",
       "createdAt": "2025-12-09T01:12:08Z",
-      "updatedAt": "2025-12-11T00:03:12Z",
+      "updatedAt": "2025-12-11T04:16:28Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2335b3faaa9f7d3e960b134e02fb7be017698e44",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "gorry-reviews",
-      "headRefOid": "bbd14c4a9372bf3400f64ab596a92e173284c393",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "13d76b9a1c771bb71ccb4c21963a47419fd18b1d",
+      "closedAt": "2025-12-11T04:16:28Z",
+      "mergedAt": "2025-12-11T04:16:28Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "f0cffbb363985059d2d8449cf3cee2d013818bba"
+      },
       "comments": [
         {
           "author": "martinthomson",
@@ -11294,6 +11296,26 @@
               "updatedAt": "2025-12-11T00:03:12Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87Ug6Tv",
+          "commit": {
+            "abbreviatedOid": "bbd14c4"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you. Looks good.",
+          "createdAt": "2025-12-11T03:00:03Z",
+          "updatedAt": "2025-12-11T03:00:23Z",
+          "comments": [
+            {
+              "originalPosition": 96,
+              "body": "> \"flows\" is correct in this context. The title of the section is \"Per-Flow Signal\".\r\n\r\nI see, \"flow\" here is a rephrase of: all QUIC connections that share the same UDP address tuple. If so, could we be a bit more direct and say something like:\r\n\r\n```suggestion\r\nto all QUIC connections that include SCONE packets\r\nto ensure that advice is received by all application endpoints.\r\n```\r\n\r\nWe talk about \"flow of packets on the same UDP address tuple\" right below; it could make sense to avoid using the same term in multiple meanings.",
+              "createdAt": "2025-12-11T03:00:03Z",
+              "updatedAt": "2025-12-11T03:51:24Z"
+            }
+          ]
         }
       ]
     },
@@ -11309,7 +11331,7 @@
       "labels": [],
       "body": "At the moment, the PR points to #112. We can either merge this PR to #112, or merge #112 and then discuss separately, by changing the base branch to main.\r\n\r\nCloses #106.",
       "createdAt": "2025-12-10T07:15:53Z",
-      "updatedAt": "2025-12-11T01:02:13Z",
+      "updatedAt": "2025-12-11T02:44:02Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "gorry-reviews",
       "baseRefOid": "75792cde22ba989356ce915ab9ba195baf2cea05",
@@ -11334,6 +11356,13 @@
           "body": "> Overall, I am starting to reach the conclusion that even mentioning flow control is a mistake. Would removing the mention be acceptable?\r\n\r\nYes, I think that would be the simplest.",
           "createdAt": "2025-12-11T01:02:13Z",
           "updatedAt": "2025-12-11T01:02:13Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Overall, I am starting to reach the conclusion that even mentioning flow control is a mistake. Would removing the mention be acceptable?\r\n\r\nThanks, I think my points are:\r\n* It'd be helpful to point out that SCONE can be used for other types of traffics than just video.\r\n* If we want to give a concrete example, software updates are a good candidate.\r\n* I do not see particular pitfalls in using flow control for this, but that level of detail can probably be omitted.\r\n\r\nPlease see https://github.com/ietf-wg-scone/scone/pull/114#pullrequestreview-3565295564.",
+          "createdAt": "2025-12-11T02:44:02Z",
+          "updatedAt": "2025-12-11T02:44:02Z"
         }
       ],
       "reviews": [
@@ -11464,18 +11493,26 @@
       "labels": [],
       "body": "At best, this is hard to use and indirect.  At worst, this is totally ineffectual.\r\n\r\n@kazuho, does this work for you?\r\n\r\nCloses #113.",
       "createdAt": "2025-12-11T01:07:01Z",
-      "updatedAt": "2025-12-11T01:34:32Z",
+      "updatedAt": "2025-12-12T13:57:43Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "gorry-reviews",
       "baseRefOid": "bbd14c4a9372bf3400f64ab596a92e173284c393",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "no-fc",
-      "headRefOid": "cd4c00a3d5d81fe8414102c26b324269a198f4ee",
+      "headRefOid": "c066acb331c54c7bd1426ab9119795251c7b19de",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks @kazuho, @ihlar.  I've made some more significant changes to the section based on the feedback here.  Let me know if that works for you.",
+          "createdAt": "2025-12-12T01:11:34Z",
+          "updatedAt": "2025-12-12T01:11:34Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87UgX8z",
@@ -11488,6 +11525,72 @@
           "body": "Yes. That's the simplest way to fix this, we don't have to speculate on what apps will do.",
           "createdAt": "2025-12-11T01:34:32Z",
           "updatedAt": "2025-12-11T01:34:32Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87UghfM",
+          "commit": {
+            "abbreviatedOid": "cd4c00a"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "> we don't have to speculate on what apps will do.\n\nYeah. The problem at the moment is that this subsection explains how things can be implemented, then goes on to clarify why some applications can do so (e.g., video players switching between segments with different bitrates). In that structure, mentioning flow control without framing it in terms of an application is not only odd, but, as @huitema notes, could also mislead readers into thinking that the technique applies equally well to non-stream transfers.\n\nI think the subsection might flow better if we focus on applications that might benefit from SCONE, and optionally note how specifically they might use SCONE.\n\nGiven the illustrative nature of the subsection, I think it's worth pointing out that there are use cases beyond video.\n\nSoftware updates are probably the largest type of traffic after video and are also spiky. User experience of other applications suffer when CC-based throttling is applied equally to both software updates and other traffic.\n\nMaybe we can just stop there, without explaining in detail how bulk transfers might respect SCONE.\n\nHonestly, I do not see any pitfalls in using a flow-control-based approach for bulk downloads. If the throughput advice is 1Mbps, for example, I would issue flow-control credit every 8 seconds. for 1MB beyond the last contiguous byte received). But that is just one way of doing it, and I agree that we do not want to discuss in the document how these things can be done (or should not be done).",
+          "createdAt": "2025-12-11T01:59:03Z",
+          "updatedAt": "2025-12-11T02:36:44Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\nSome applications offer options for rate control that can offer superior\noutcomes. Most video applications, especially real-time and streaming\nvideo applications, can adapt their use of network bandwidth. For instance, typical\nHTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}} clients are provided with\nmanifests that allow them to adjust the bitrate and quality of media segments\nbased on available network capacity. For these applications, the most obvious\nway to keep within the limits set by throughput advice is to inform the sending\npeer of the limit so that the peer can do whatever rate limiting is necessary.\n\nOther applications, for example background bulk transfers such as software\nupdates, might also respect the throughput advice to reduce the likelihood of\ntriggering network enforcement based on congestion signals, thereby preserving\nthe ability to promptly exchange foreground traffic using brief, high-rate\ntransmissions.\n```\n\nThe discussion about other applications might seem still too much, but I think it'd better to talk about something other than video.",
+              "createdAt": "2025-12-11T01:59:03Z",
+              "updatedAt": "2025-12-11T02:36:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UpFDC",
+          "commit": {
+            "abbreviatedOid": "cd4c00a"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-12-11T13:49:23Z",
+          "updatedAt": "2025-12-11T13:49:24Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "I think this is a good paragraph.\nPerhaps add a line like: \"This document does not provide guidance on how such applications might follow throughput advice.\"",
+              "createdAt": "2025-12-11T13:49:24Z",
+              "updatedAt": "2025-12-11T13:49:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87UyKfg",
+          "commit": {
+            "abbreviatedOid": "c066acb"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you @martinthomson! LG.",
+          "createdAt": "2025-12-12T01:33:02Z",
+          "updatedAt": "2025-12-12T01:33:02Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87U50dA",
+          "commit": {
+            "abbreviatedOid": "c066acb"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks for the updates @martinthomson. This looks good to me. ",
+          "createdAt": "2025-12-12T13:57:43Z",
+          "updatedAt": "2025-12-12T13:57:43Z",
           "comments": []
         }
       ]
