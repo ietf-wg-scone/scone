@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-14T01:55:48.567683+00:00",
+  "timestamp": "2025-12-16T01:50:11.887461+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2653,15 +2653,15 @@
       "id": "I_kwDON1dwo87c4xt3",
       "title": "Possible repetition between 3.1 and 3.2 on advisory throughout v. CC rate",
       "url": "https://github.com/ietf-wg-scone/scone/issues/102",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "The para in section 3.2 starting; \"Endpoints can therefore be more confident...\" seems useful, but this seems a very similar message to the message just presented earlier in 3.1. Is there some way to differentiate (or even better combine) these two sets of words?",
       "createdAt": "2025-12-08T11:09:21Z",
-      "updatedAt": "2025-12-09T00:22:32Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-14T23:15:05Z",
+      "closedAt": "2025-12-14T23:15:05Z",
       "comments": [
         {
           "author": "gorryfair",
@@ -2676,6 +2676,13 @@
           "body": "The text in 3.1 is about congestion control.  3.2 is about the possibility of needing policing for policies, as you say.  I've added references in both directions (in the upcoming PR)",
           "createdAt": "2025-12-09T00:22:32Z",
           "updatedAt": "2025-12-09T00:22:32Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Resolved in #112.",
+          "createdAt": "2025-12-14T23:15:05Z",
+          "updatedAt": "2025-12-14T23:15:05Z"
         }
       ]
     },
@@ -2732,15 +2739,15 @@
       "id": "I_kwDON1dwo87c5BC5",
       "title": "Section 3.5 on guarantees and advisory nature",
       "url": "https://github.com/ietf-wg-scone/scone/issues/105",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "1) \"Receiving throughput advice does not guarantee that a higher throughput is not achievable.\"\n- I stumbled a little on what \"does not guarantee: relating to \"not achievable\" means, although I expect this might be a little easier as:\n\"Receiving throughput advice inidicates the the network expects the throughtput to be supported. It may be possible to achieve a higher throughput subject to congestion control.\"\n---\n2)  The second para of 5.1 to me, seems like it is closely-related to section 3.6. Is it possible for this to be relocated there? \n---\n3)  the para starting, \"The signaled advice applies to the flow of packets\" relates to teh association with the UDP Flow, this is discussed in section 3.3. Is it possible for this to be relocated there? \n---\n4) The final para speaks of \"Network conditions and rate-limit policies\" being changable, which is good. I think it would also be useful to indicate that paths can change, and mention that this might chnage the on-path network element performing SCONE.\n",
       "createdAt": "2025-12-08T11:28:06Z",
-      "updatedAt": "2025-12-09T00:42:59Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-14T23:15:18Z",
+      "closedAt": "2025-12-14T23:15:18Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2748,6 +2755,13 @@
           "body": "1. I'll reword that; the double-negative is clumsy, I agree.\n2. These are related, but the sections serve different purposes.  3.6 is for general applicability.  5.1 defines semantics.\n3. Yes, that's a good idea.\n4.  Also a good idea.",
           "createdAt": "2025-12-09T00:42:59Z",
           "updatedAt": "2025-12-09T00:42:59Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "#112 covered this.",
+          "createdAt": "2025-12-14T23:15:18Z",
+          "updatedAt": "2025-12-14T23:15:18Z"
         }
       ]
     },
@@ -2756,15 +2770,15 @@
       "id": "I_kwDON1dwo87c5EcM",
       "title": "Please explain a receiver can control the release of flow control credit.",
       "url": "https://github.com/ietf-wg-scone/scone/issues/106",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "OLD:\nAlternatively, a receiver can control the release of flow control credit (see [Section 4](https://rfc-editor.org/rfc/rfc9000#section-4) of [[QUIC](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#QUIC)]) to indirectly limit the sending rate of a peer.\n\n- I saw this, and couldn't argue that a design could so this. But, there again, there are many things a receiver could do. If this is being called out as one of these why is this a good or bad idea to do this? If this is a recommended approach, I'd expect an example and explanation to avoid reacting to the signal at multiple levels in the stack, which I suspect could be awkard when there is a changing signal. Who has experience? Are there thoughts?",
       "createdAt": "2025-12-08T11:31:31Z",
-      "updatedAt": "2025-12-09T09:07:51Z",
-      "closedAt": null,
+      "updatedAt": "2025-12-14T23:15:37Z",
+      "closedAt": "2025-12-14T23:15:36Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -2786,6 +2800,13 @@
           "body": "The above make sense at least to me, and splitting into 2 para's help!",
           "createdAt": "2025-12-09T09:07:51Z",
           "updatedAt": "2025-12-09T09:07:51Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Covered in #114.  Mostly by removing mention of flow control.",
+          "createdAt": "2025-12-14T23:15:37Z",
+          "updatedAt": "2025-12-14T23:15:37Z"
         }
       ]
     },
@@ -10827,24 +10848,26 @@
       "id": "PR_kwDON1dwo863yv0-",
       "title": "Update Acknowledgments",
       "url": "https://github.com/ietf-wg-scone/scone/pull/111",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Feel free to add others.  I'm certain that I missed some.",
       "createdAt": "2025-12-09T00:01:13Z",
-      "updatedAt": "2025-12-09T00:01:14Z",
+      "updatedAt": "2025-12-14T23:13:49Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "2335b3faaa9f7d3e960b134e02fb7be017698e44",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "moaracks",
       "headRefOid": "69cfbd33e311069d3282a9420ff75e196a9e8f8c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-12-14T23:13:48Z",
+      "mergedAt": "2025-12-14T23:13:48Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "700e0e711d0394cdecde4acb951a5091f6754019"
+      },
       "comments": [],
       "reviews": []
     },
@@ -11324,21 +11347,21 @@
       "id": "PR_kwDON1dwo864Eusl",
       "title": "explain how flow control can be used",
       "url": "https://github.com/ietf-wg-scone/scone/pull/113",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "At the moment, the PR points to #112. We can either merge this PR to #112, or merge #112 and then discuss separately, by changing the base branch to main.\r\n\r\nCloses #106.",
       "createdAt": "2025-12-10T07:15:53Z",
-      "updatedAt": "2025-12-11T02:44:02Z",
+      "updatedAt": "2025-12-14T23:14:34Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "gorry-reviews",
       "baseRefOid": "75792cde22ba989356ce915ab9ba195baf2cea05",
       "headRepository": "kazuho/i-d-trone",
       "headRefName": "kazuho/why-flow-control",
       "headRefOid": "96a1588ee36748d7572857ea26b95c69d4b6df7f",
-      "closedAt": null,
+      "closedAt": "2025-12-14T23:14:34Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -11363,6 +11386,13 @@
           "body": "> Overall, I am starting to reach the conclusion that even mentioning flow control is a mistake. Would removing the mention be acceptable?\r\n\r\nThanks, I think my points are:\r\n* It'd be helpful to point out that SCONE can be used for other types of traffics than just video.\r\n* If we want to give a concrete example, software updates are a good candidate.\r\n* I do not see particular pitfalls in using flow control for this, but that level of detail can probably be omitted.\r\n\r\nPlease see https://github.com/ietf-wg-scone/scone/pull/114#pullrequestreview-3565295564.",
           "createdAt": "2025-12-11T02:44:02Z",
           "updatedAt": "2025-12-11T02:44:02Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Overcome by events, #114 covers this well enough.",
+          "createdAt": "2025-12-14T23:14:34Z",
+          "updatedAt": "2025-12-14T23:14:34Z"
         }
       ],
       "reviews": [
@@ -11486,24 +11516,26 @@
       "id": "PR_kwDON1dwo864QDn4",
       "title": "Remove mention of flow control for rate control",
       "url": "https://github.com/ietf-wg-scone/scone/pull/114",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "At best, this is hard to use and indirect.  At worst, this is totally ineffectual.\r\n\r\n@kazuho, does this work for you?\r\n\r\nCloses #113.",
       "createdAt": "2025-12-11T01:07:01Z",
-      "updatedAt": "2025-12-12T13:57:43Z",
+      "updatedAt": "2025-12-14T23:13:31Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "gorry-reviews",
       "baseRefOid": "bbd14c4a9372bf3400f64ab596a92e173284c393",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "no-fc",
       "headRefOid": "c066acb331c54c7bd1426ab9119795251c7b19de",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-12-14T23:13:31Z",
+      "mergedAt": "2025-12-14T23:13:30Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "b5511994b317aefee9eaffa93c7e9b4238a73eb8"
+      },
       "comments": [
         {
           "author": "martinthomson",
