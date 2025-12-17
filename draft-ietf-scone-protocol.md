@@ -922,7 +922,7 @@ fake packets; or, use generic protection against Distributed DOS attacks.
 Attackers could also try to craft the fake SCONE packets in ways that trigger
 a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
-with implementations that fully conforms to the specification of {{packet}}.
+with an implementation that fully conforms to the specification of {{packet}}.
 
 ## Damage to Other Protocols
 
