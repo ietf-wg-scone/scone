@@ -849,7 +849,7 @@ of the maximum capacity of a path based on network rate limit policy,
 network conditions, or a combination of the two.
 
 Consider for example a path in which the bottleneck router implements
-some form of Early Congestion Notification {{?ECN=RFC3168}}.
+some form of Explicit Congestion Notification {{?ECN=RFC3168}}.
 If the path capacity diminishes, queues will build up and the router
 will immediately start increasing the rate at which packets are marked
 as "Congestion Experienced". The receiving endpoint will notice these marks,
