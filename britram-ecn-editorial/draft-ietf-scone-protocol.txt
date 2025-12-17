@@ -941,7 +941,7 @@ Table of Contents
    Attackers could also try to craft the fake SCONE packets in ways that
    trigger a processing error at network elements.  For example, they
    might pick connection identifiers of arbitrary length.  Network
-   elements can mitigate these attacks with implementations that fully
+   elements can mitigate these attacks with an implementation that fully
    conforms to the specification of Section 5.
 
 9.2.  Damage to Other Protocols
