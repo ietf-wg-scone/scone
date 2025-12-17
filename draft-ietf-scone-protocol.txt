@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 17 June 2026                               Private Octopus Inc.
+Expires: 20 June 2026                               Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        14 December 2025
+                                                        17 December 2025
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 June 2026.
+   This Internet-Draft will expire on 20 June 2026.
 
 Copyright Notice
 
@@ -866,7 +866,7 @@ Table of Contents
    the two.
 
    Consider for example a path in which the bottleneck router implements
-   some form of Early Congestion Notification [ECN].  If the path
+   some form of Explicit Congestion Notification [ECN].  If the path
    capacity diminishes, queues will build up and the router will
    immediately start increasing the rate at which packets are marked as
    "Congestion Experienced".  The receiving endpoint will notice these
@@ -941,7 +941,7 @@ Table of Contents
    Attackers could also try to craft the fake SCONE packets in ways that
    trigger a processing error at network elements.  For example, they
    might pick connection identifiers of arbitrary length.  Network
-   elements can mitigate these attacks with implementations that fully
+   elements can mitigate these attacks with an implementation that fully
    conforms to the specification of Section 5.
 
 9.2.  Damage to Other Protocols
