@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-16T01:50:11.887461+00:00",
+  "timestamp": "2025-12-18T01:46:19.003049+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -11623,6 +11623,48 @@
           "body": "Thanks for the updates @martinthomson. This looks good to me. ",
           "createdAt": "2025-12-12T13:57:43Z",
           "updatedAt": "2025-12-12T13:57:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 115,
+      "id": "PR_kwDON1dwo865WPfK",
+      "title": "Trivial typofixes",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/115",
+      "state": "MERGED",
+      "author": "britram",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-17T11:16:36Z",
+      "updatedAt": "2025-12-17T14:29:30Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "700e0e711d0394cdecde4acb951a5091f6754019",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "britram-ecn-editorial",
+      "headRefOid": "b8724c09f51b36fe2f11ad062ec701a9727f7bc8",
+      "closedAt": "2025-12-17T14:29:30Z",
+      "mergedAt": "2025-12-17T14:29:30Z",
+      "mergedBy": "britram",
+      "mergeCommit": {
+        "oid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87V0Tlb",
+          "commit": {
+            "abbreviatedOid": "6deadd1"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-12-17T11:19:33Z",
+          "updatedAt": "2025-12-17T11:19:33Z",
           "comments": []
         }
       ]
