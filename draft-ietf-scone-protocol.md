@@ -220,14 +220,14 @@ to be split between multiple active flows.
 
 ## Per-Flow Signal
 
-The same UDP address tuple might be used for multiple QUIC connections.  A
+The same address, UDP port tuple might be used for multiple QUIC connections.  A
 single signal might be lost or only reach a single application endpoint.
 Network elements can apply SCONE advice
 to all QUIC connections that include SCONE packets
 to ensure that advice is received by all application endpoints.
 
 The signaled advice applies to the flow of packets
-on the same UDP address tuple for the duration of
+on the same address, UDP port tuple for the duration of
 the current monitoring period, unless it is updated
 earlier or the flow ends; see {{time}} for details on
 the monitoring period.
@@ -351,7 +351,7 @@ value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
 The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
-({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty.
+({{Section 5.2 of INVARIANTS}}), the Source Connection ID Length is zero.
 
 SCONE packets MUST be included as the first packet in a datagram.
 This is primarily to simplify the process of updating throughput advice
@@ -423,7 +423,7 @@ Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
 Also, when circumstances change,
-applications are better able recover
+applications are better able to recover
 without exceeding limits for a significant time
 if they have exceeded limits.
 
@@ -598,7 +598,7 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 # Network Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol
-by sending SCONE packets {{packet}}.
+by sending SCONE packets ({{packet}}).
 Network elements can then use SCONE and replace
 the Rate Signal field ({{apply}})
 according to their policies.
