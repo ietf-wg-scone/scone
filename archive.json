@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-18T01:46:19.003049+00:00",
+  "timestamp": "2025-12-25T01:50:48.827488+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2932,6 +2932,22 @@
           "updatedAt": "2025-12-09T01:10:34Z"
         }
       ]
+    },
+    {
+      "number": 116,
+      "id": "I_kwDON1dwo87f3JPq",
+      "title": "merge miss of #114",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/116",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We agreed and merged #114, however it seems it did not get into `main`. Rather, it went into the `gorry-reviews` branch (#112) after #112 was merged.",
+      "createdAt": "2025-12-23T02:13:21Z",
+      "updatedAt": "2025-12-23T05:18:59Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -11668,6 +11684,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 117,
+      "id": "PR_kwDON1dwo866ZOiX",
+      "title": "WGLC Nits",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/117",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "A few nits I found in WGLC review.",
+      "createdAt": "2025-12-23T21:32:04Z",
+      "updatedAt": "2025-12-23T21:32:05Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
+      "headRepository": "martinduke/scone",
+      "headRefName": "patch-1",
+      "headRefOid": "d680498f8b7bd2d28076e76e675636dde4973ed1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
