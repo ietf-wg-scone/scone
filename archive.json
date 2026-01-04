@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-12-25T01:50:48.827488+00:00",
+  "timestamp": "2026-01-04T02:02:57.681312+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -11697,7 +11697,7 @@
       "labels": [],
       "body": "A few nits I found in WGLC review.",
       "createdAt": "2025-12-23T21:32:04Z",
-      "updatedAt": "2025-12-23T21:32:05Z",
+      "updatedAt": "2026-01-02T06:49:14Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
@@ -11709,7 +11709,21 @@
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87X6HRq",
+          "commit": {
+            "abbreviatedOid": "d680498"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "\"address tuple\" was used as QUIC used it, but we can take this change as we don't need to rely on QUIC for that definition.",
+          "createdAt": "2026-01-02T06:49:14Z",
+          "updatedAt": "2026-01-02T06:49:14Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
