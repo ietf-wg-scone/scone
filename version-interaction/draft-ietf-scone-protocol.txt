@@ -97,7 +97,7 @@ Table of Contents
      7.1.  Applying Throughput Advice Signals
      7.2.  Monitoring Flows
      7.3.  Flows That Exceed Throughput Advice
-   8.  Version Interaction
+   8.  Endpoint Usage
      8.1.  Providing Opportunities to Apply Throughput Advice Signals
      8.2.  Feedback To Sender About Signals
      8.3.  Interactions with Congestion Control
@@ -756,7 +756,7 @@ Table of Contents
    enable or tighten enforcement if monitoring indicates that throughput
    advice is not being respected.
 
-8.  Version Interaction
+8.  Endpoint Usage
 
    The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
    that combined carry throughput advice that covers a range of bitrates
