@@ -740,7 +740,7 @@ but re-enable or tighten enforcement if monitoring indicates
 that throughput advice is not being respected.
 
 
-# Version Interaction {#version-interaction}
+# Endpoint Usage
 
 The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
 that combined carry throughput advice that covers a range of bitrates
