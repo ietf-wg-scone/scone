@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-04T02:02:57.681312+00:00",
+  "timestamp": "2026-01-06T01:53:08.611640+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -11697,7 +11697,7 @@
       "labels": [],
       "body": "A few nits I found in WGLC review.",
       "createdAt": "2025-12-23T21:32:04Z",
-      "updatedAt": "2026-01-02T06:49:14Z",
+      "updatedAt": "2026-01-05T02:25:59Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
@@ -11721,6 +11721,179 @@
           "body": "\"address tuple\" was used as QUIC used it, but we can take this change as we don't need to rely on QUIC for that definition.",
           "createdAt": "2026-01-02T06:49:14Z",
           "updatedAt": "2026-01-02T06:49:14Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87YFk9w",
+          "commit": {
+            "abbreviatedOid": "d680498"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-05T02:25:59Z",
+          "updatedAt": "2026-01-05T02:25:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 118,
+      "id": "PR_kwDON1dwo867cni9",
+      "title": "Tunnels",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/118",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This might be stating the obvious, but it's probably worthwhile.",
+      "createdAt": "2026-01-04T23:55:17Z",
+      "updatedAt": "2026-01-05T23:57:26Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "tunnels",
+      "headRefOid": "8c841fbcc457a9f2e4eeac98690db015e8eb58f1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87YFkqZ",
+          "commit": {
+            "abbreviatedOid": "8c841fb"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-05T02:24:39Z",
+          "updatedAt": "2026-01-05T02:24:39Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87YJK_m",
+          "commit": {
+            "abbreviatedOid": "8c841fb"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-05T10:22:27Z",
+          "updatedAt": "2026-01-05T10:22:27Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I'm pleased to see some thought about tunnels. The additional text seems to ONLY relate to a QUIC flow provides an encrypted tunnel, and not other encrypted tunnels. Ought this to include \"QUIC\" somewhere in the sentence (e.g., before \"flow\")?",
+              "createdAt": "2026-01-05T10:22:27Z",
+              "updatedAt": "2026-01-05T10:22:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YJa9m",
+          "commit": {
+            "abbreviatedOid": "8c841fb"
+          },
+          "author": "alvestrand",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-05T10:43:00Z",
+          "updatedAt": "2026-01-05T10:43:00Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I'd like to think that the tunneling advice applies to any sort of tunnel (my particular concern is with TURN flows, once (if) we get SCONE working with ICE), so I'm happy to see generic language here.",
+              "createdAt": "2026-01-05T10:43:00Z",
+              "updatedAt": "2026-01-05T10:43:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YJnJl",
+          "commit": {
+            "abbreviatedOid": "8c841fb"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-05T10:58:14Z",
+          "updatedAt": "2026-01-05T10:58:14Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "I am happy also to see generic advice, but for encrypted tunnels the network element can only apply the SCONE protocol to the outer-most QUIC packet header.",
+              "createdAt": "2026-01-05T10:58:14Z",
+              "updatedAt": "2026-01-05T10:58:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YSyJ9",
+          "commit": {
+            "abbreviatedOid": "8c841fb"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-05T23:57:26Z",
+          "updatedAt": "2026-01-05T23:57:26Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "In all cases, SCONE can only (currently) be applied to QUIC flows.  Like Harald, I thought about this a fair bit and decided not to add \"QUIC\", both because that is addressed elsewhere and because the generic language is clear, short, and does open that possibility of having other SCONE applications.\r\n\r\n(I like SCONE-ICE, though maybe iced scones, rather than icy scones.)",
+              "createdAt": "2026-01-05T23:57:26Z",
+              "updatedAt": "2026-01-05T23:57:26Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 119,
+      "id": "PR_kwDON1dwo867cq-g",
+      "title": "The text here was outdated",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/119",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Missed in recent updates.  Changing the title seemed like a good idea as well.",
+      "createdAt": "2026-01-05T00:13:08Z",
+      "updatedAt": "2026-01-05T02:25:09Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "version-interaction",
+      "headRefOid": "c4737458dcb27315cd49f20dcada40a778cc5bbe",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87YFkxA",
+          "commit": {
+            "abbreviatedOid": "c473745"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-05T02:25:09Z",
+          "updatedAt": "2026-01-05T02:25:09Z",
           "comments": []
         }
       ]
