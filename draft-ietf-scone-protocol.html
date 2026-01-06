@@ -24,12 +24,12 @@ throughput might be for QUIC flows.
     Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
-    intervaltree 3.1.0
+    intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 5.3.1
-    platformdirs 4.5.0
+    lxml 6.0.2
+    platformdirs 4.5.1
     pycountry 24.6.1
-    PyYAML 6.0.2
+    PyYAML 6.0.3
     requests 2.32.5
     wcwidth 0.2.14
 -->
@@ -1050,11 +1050,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">December 2025</td>
+<td class="right">January 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 20 June 2026</td>
+<td class="center">Expires 10 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-12-17" class="published">17 December 2025</time>
+<time datetime="2026-01-06" class="published">6 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-06-20">20 June 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-10">10 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1141,7 +1141,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 10 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1150,7 +1150,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2025 IETF Trust and the persons identified as the
+            Copyright (c) 2026 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1570,19 +1570,24 @@ There are no guarantees that updated advice will be sent at such events.<a href=
         </h3>
 <p id="section-3.6-1">The SCONE throughput advice is advisory (see <a href="#advisory-signal" class="auto internal xref">Section 3.5</a>).
 Applications that chose to follow it will do so in the way that best suits their needs.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
-<p id="section-3.6-2">The most obvious way to keep within the limits set by throughput advice is to
-inform the sending peer of the limit so that the peer can do whatever rate
-limiting is necessary.  Alternatively, a receiver can control the release of
-flow control credit (see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-4" class="relref">Section 4</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>) to indirectly limit the sending
-rate of a peer.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
-<p id="section-3.6-3">Some applications offer options for rate control that can offer superior outcomes.
-Most video applications,
-especially real-time and streaming video applications,
-can adapt their use of network bandwidth.
-For instance, typical HTTP Live Streaming <span>[<a href="#HLS" class="cite xref">HLS</a>]</span> or DASH <span>[<a href="#DASH" class="cite xref">DASH</a>]</span>
+<p id="section-3.6-2">The most obvious way to follow throughput advice is to
+inform the sending peer of the advice so that the peer
+can adjust send rates as necessary.
+This document does not provide specific guidance on how applications
+might adapt their use of network capacity in response to advice.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-3">Some applications offer options for rate control
+that can offer improved performance when following advice.
+For instance, real-time and streaming video applications can often adapt usage.
+Typical HTTP Live Streaming <span>[<a href="#HLS" class="cite xref">HLS</a>]</span> or DASH <span>[<a href="#DASH" class="cite xref">DASH</a>]</span>
 clients are provided with manifests that allow them to
 adjust the bitrate and quality of media segments
-based on available network capacity.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+based on available network capacity.
+Low priority bulk transfer applications, such as software updates,
+might also choose to follow advice.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+<p id="section-3.6-4">Following throughput advice could
+reduce the impact of an application on other network users,
+reserves capacity for high-priority activities,
+and could avoid potential enforcement action by the network; see <a href="#policing" class="auto internal xref">Section 7.3</a>.<a href="#section-3.6-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
