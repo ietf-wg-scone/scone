@@ -855,7 +855,7 @@ of the maximum capacity of a path based on network rate limit policy,
 network conditions, or a combination of the two.
 
 Consider for example a path in which the bottleneck router implements
-some form of Early Congestion Notification {{?ECN=RFC3168}}.
+some form of Explicit Congestion Notification {{?ECN=RFC3168}}.
 If the path capacity diminishes, queues will build up and the router
 will immediately start increasing the rate at which packets are marked
 as "Congestion Experienced". The receiving endpoint will notice these marks,
@@ -928,7 +928,7 @@ fake packets; or, use generic protection against Distributed DOS attacks.
 Attackers could also try to craft the fake SCONE packets in ways that trigger
 a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
-with implementations that fully conforms to the specification of {{packet}}.
+with an implementation that fully conforms to the specification of {{packet}}.
 
 ## Damage to Other Protocols
 
@@ -1139,5 +1139,8 @@ Notes:
 # Acknowledgments
 {:numbered="false"}
 
-Jana Iyengar has made significant contributions to the original TRAIN
+{{{Jana Iyengar}}} made significant contributions to the original TRAIN
 specification that forms the basis for a large part of this document.
+The following people also contributed significantly
+to the development of the protocol: {{{Alan Frindell}}},
+{{{Gorry Fairhurst}}}, {{{Kevin Smith}}}, and {{{Zaheduzzaman Sarker}}}.
