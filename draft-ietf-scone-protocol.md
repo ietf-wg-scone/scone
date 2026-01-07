@@ -179,9 +179,9 @@ congestion controller.
 Networks can use SCONE to communicate throughput advice
 for reasons other than rate limiting policies.
 For example, a network element in an access network
-could provide throughput advice to guide application use of network capacity,
-in any way that is separate from any signals
-that are intended to influence congestion response.
+could provide reduced throughput advice
+to guide application use of network capacity
+during periods of unusually high usage.
 
 In addition to rate limiting policies,
 throughput advice can indicate temporary increases in available capacity
