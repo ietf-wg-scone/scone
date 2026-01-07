@@ -250,7 +250,7 @@ Carrying signals in the affected flow,
 in the same way that ECN signals are conveyed,
 ensures that there is no ambiguity about what flow is affected.
 However, this means that the endpoint that receives throughput advice
-is not the endpoint that might need to adapt its sending behavior.
+is not the endpoint that needs to adapt its sending behavior.
 
 A receiving endpoint might need to communicate the value it receives
 to the sending peer in order to ensure that the limit is respected.
