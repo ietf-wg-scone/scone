@@ -662,7 +662,7 @@ Senders that send a SCONE packet
 or network elements that update SCONE packets
 every 20&ndash;30 seconds are likely sufficient to ensure that throughput advice is not lost.
 To reduce the risk of synchronization across multiple senders,
-which might cause network elements to miss updates,
+which could cause network elements to miss updates,
 senders can include a small random delay.
 
 A network element MUST NOT alter datagrams to add SCONE packets
