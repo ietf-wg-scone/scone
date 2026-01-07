@@ -242,7 +242,7 @@ but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.
 
 
-## Undirectional Signal
+## Unidirectional Signal
 
 Throughput advice is signaled with SCONE packets
 that are transmitted as part of the flow that the advice applies to.
