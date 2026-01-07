@@ -449,7 +449,7 @@ unlikely to be due to other periodic effects.
 ## Endpoint Processing of SCONE Packets
 
 Processing a SCONE packet involves reading the value from the Rate Signal field.
-However, this value MUST NOT be used unless another packet from the same
+However, throughput advice MUST be ignored unless another packet from the same
 datagram is successfully processed.  Therefore, a SCONE packet always needs to
 be coalesced with other QUIC packets.
 
