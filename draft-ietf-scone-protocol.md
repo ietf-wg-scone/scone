@@ -614,8 +614,10 @@ Version field and the Rate Signal High Bits field with values of its choosing.
 
 A network element might receive a packet that already includes a rate signal.
 The network element replaces the rate signal if it wishes to signal a lower
-value for throughput advice; otherwise, the original values are retained, preserving the signal
-from the network element with the lower policy.
+value for throughput advice;
+otherwise, the original values are retained,
+preserving the signal from the network element with the lower policy.
+A network element MUST NOT replace a rate signal with a higher or unknown value.
 
 The following pseudocode indicates how a network element might detect a SCONE
 packet and replace the existing rate signal (`packet_signal`) with a new rate
