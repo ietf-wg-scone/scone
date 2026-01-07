@@ -433,10 +433,9 @@ The choice of 67 seconds is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
-Also, when circumstances change,
-applications are better able to recover
-without exceeding limits for a significant time
-if they have exceeded limits.
+A shorter period also allows applications
+to increase send rates sooner
+when rates increase.
 
 The choice of 67 seconds, as a prime number,
 also helps avoid synchronization with other periodic
