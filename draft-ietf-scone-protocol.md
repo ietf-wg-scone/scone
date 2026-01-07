@@ -143,8 +143,9 @@ received.  A connection that migrates or uses multipath
 cannot assume that throughput advice from one path apply to new paths.
 Advice for the client-to-server direction and the server-to-client direction of
 each path are independent, and are expected to be different, for reasons including
-asymmetric link capacity and path diversity. Applications may choose to utilize
-SCONE in either or both direction(s) of each path as they see fit.
+asymmetric link capacity and path diversity.
+Applications can use SCONE in either or both directions
+of each path as they see fit.
 
 
 # Applicability
@@ -268,7 +269,7 @@ Endpoints that receive this signal therefore need to treat the information as ad
 
 The fact that an endpoint requests throughput advice does not necessarily mean
 that it will adhere to them; in some cases, the endpoint cannot. For
-example, a flow may initially be used to serve video chunks, with the client
+example, a flow could initially be used to serve video chunks, with the client
 selecting appropriate chunks based on received advice, but later switch to a
 bulk download for which bitrate adaptation that cannot be similarly controlled. Composite flows
 from multiple applications, such as tunneled flows, might only have a subset of
@@ -659,9 +660,9 @@ throughput advice early.
 
 Senders that send a SCONE packet
 or network elements that update SCONE packets
-every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
+every 20&ndash;30 seconds are likely sufficient to ensure that throughput advice is not lost.
 To reduce the risk of synchronization across multiple senders,
-which may cause network elements to miss updates,
+which might cause network elements to miss updates,
 senders can include a small random delay.
 
 A network element MUST NOT alter datagrams to add SCONE packets
@@ -875,7 +876,7 @@ in a position to drop datagrams and could apply a rate limit policy.
 contains a packet that it accepts to prevent an off-path attacker from inserting
 spurious throughput advice signals.
 
-Some off-path attackers may be able to both
+Some off-path attackers could be able to both
 observe traffic and inject packets. Attackers with such capabilities could
 observe packets sent by an endpoint, create datagrams coalescing an
 arbitrary SCONE packet and the observed packet, and send these datagrams
@@ -992,8 +993,8 @@ There are two avenues of attack that require more analysis:
 
 ## Passive Attacks
 
-If only few clients and server pairs negotiate the usage of SCONE, the
-occasional observation of SCONE packets will "stick out". That observation,
+If only a few clients and server pairs negotiate the usage of SCONE, the
+occasional observation of SCONE packets will "stick out". That observation
 could be combined with observation of timing and volume of traffic to
 help identify the endpoint or categorize the application that they
 are using.
@@ -1003,8 +1004,8 @@ only used in some specific circumstances. In that case, observation of
 SCONE packets reveals information about the state of the endpoint.
 
 If multiple servers are accessed through the same front facing server,
-Encrypted Client Hello (ECH) may be used to prevent outside parties to
-identify which specific server a client is using. However, if only
+Encrypted Client Hello (ECH) can prevent outside parties from
+identifying which specific server a client is using. However, if only
 a few of these servers use SCONE, any SCONE packets
 will help identify which specific server a client is using.
 
