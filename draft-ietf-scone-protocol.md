@@ -936,9 +936,13 @@ with an implementation that fully conforms to the specification of {{packet}}.
 
 Network elements that update SCONE packet fields might do that for datagrams
 exchanged in other protocols.
-This could result in damage to those protocols.
+If the first five bytes of the datagram match
+the QUIC long header byte and SCONE version,
+the network element might modify the signal,
+resulting in damage to those protocols.
 
-The most serious damage occurs when every datagram is modified,
+The most serious damage occurs when every datagram matches
+and is subsequently modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
