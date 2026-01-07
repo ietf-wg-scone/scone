@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 10 July 2026                               Private Octopus Inc.
+Expires: 11 July 2026                               Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          6 January 2026
+                                                          7 January 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 July 2026.
+   This Internet-Draft will expire on 11 July 2026.
 
 Copyright Notice
 
@@ -185,9 +185,9 @@ Table of Contents
    indicated version, process the QUIC packet, and then record the
    indicated rate.
 
-   Throughput advice only apply to the direction and path for which they
-   are received.  A connection that migrates or uses multipath [QUIC-MP]
-   cannot assume that throughput advice from one path apply to new
+   Throughput advice only applies to the direction and path for which it
+   is received.  A connection that migrates or uses multipath [QUIC-MP]
+   cannot assume that throughput advice from one path applies to new
    paths.  Advice for the client-to-server direction and the server-to-
    client direction of each path are independent, and are expected to be
    different, for reasons including asymmetric link capacity and path
@@ -305,7 +305,7 @@ Table of Contents
    the information as advisory.
 
    The fact that an endpoint requests throughput advice does not
-   necessarily mean that it will adhere to them; in some cases, the
+   necessarily mean that it will adhere to it; in some cases, the
    endpoint cannot.  For example, a flow may initially be used to serve
    video chunks, with the client selecting appropriate chunks based on
    received advice, but later switch to a bulk download for which
