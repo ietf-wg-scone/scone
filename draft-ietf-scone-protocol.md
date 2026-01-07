@@ -434,7 +434,7 @@ Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
 Also, when circumstances change,
-applications are better able recover
+applications are better able to recover
 without exceeding limits for a significant time
 if they have exceeded limits.
 
