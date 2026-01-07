@@ -390,7 +390,7 @@ Throughput advice follows a logarithmic scale defined as:
 
 where n is an integer between 0 and 126 represented by the Rate Signal.
 
-{{ex-rates}} lists some of the potential values for signals
+{{ex-rates}} lists some of the values for signals
 and the corresponding bitrate for each.
 
 | Bitrate     | Rate Signal |
