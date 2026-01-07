@@ -499,11 +499,10 @@ Other constraints on usage will still apply,
 which necessarily includes congestion control
 and might include other, application-specific constraints.
 
-The relatively long duration of the monitoring period
-means that allowing advice to expire is preferable
-to disabling sending completely.
-The cost is that loss of information about recent send rate
-might result in temporarily exceeding the rates indicated by throughput advice.
+Allowing advice to expire
+ensures that changes in routing
+do not cause stale advice to persist indefinitely
+when network elements on a new path do not provide advice.
 
 This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
