@@ -499,12 +499,10 @@ which necessarily includes congestion control
 and might include other, application-specific constraints.
 
 The relatively long duration of the monitoring period
-means that this is preferable to disabling sending completely.
+means that allowing advice to expire is preferable
+to disabling sending completely.
 The cost is that loss of information about recent send rate
 might result in temporarily exceeding the rates indicated by throughput advice.
-In comparison,
-applications retain throughput usage state
-when throughput advice increases.
 
 This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
