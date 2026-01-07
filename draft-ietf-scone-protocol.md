@@ -285,8 +285,8 @@ There are no guarantees that updated advice will be sent at such events.
 
 ## Following Advice
 
-The SCONE throughput advice is advisory (see {{advisory-signal}}).
-Applications that chose to follow it will do so in the way that best suits their needs.
+Applications that chose to follow throughput advice
+do so in the way that best suits their needs.
 
 The most obvious way to follow throughput advice is to
 inform the sending peer of the advice so that the peer
