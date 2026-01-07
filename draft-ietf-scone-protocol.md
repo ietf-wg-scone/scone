@@ -197,7 +197,7 @@ are expected to last for more than one monitoring period; see {{time}}.
 Modifying a packet does not prove that the throughput that is indicated
 would be achievable.
 A signal that is sent for a specific flow
-is likely to apply to a collection of flows,
+could apply to a collection of flows,
 rather than a single flow.
 The scope of the flows that are included not carried in the signal.
 
