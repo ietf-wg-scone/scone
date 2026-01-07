@@ -137,10 +137,10 @@ is shown in {{f-scone}}.
 QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.
 
-Throughput advice only apply to the direction and path for which they are
+Throughput advice only applies to the direction and path for which it is
 received.  A connection that migrates or uses multipath
 {{?QUIC-MP=I-D.ietf-quic-multipath}}
-cannot assume that throughput advice from one path apply to new paths.
+cannot assume that throughput advice from one path applies to new paths.
 Advice for the client-to-server direction and the server-to-client direction of
 each path are independent, and are expected to be different, for reasons including
 asymmetric link capacity and path diversity. Applications may choose to utilize
@@ -262,7 +262,7 @@ as determined by congestion control.
 Endpoints that receive this signal therefore need to treat the information as advisory.
 
 The fact that an endpoint requests throughput advice does not necessarily mean
-that it will adhere to them; in some cases, the endpoint cannot. For
+that it will adhere to it; in some cases, the endpoint cannot. For
 example, a flow may initially be used to serve video chunks, with the client
 selecting appropriate chunks based on received advice, but later switch to a
 bulk download for which bitrate adaptation that cannot be similarly controlled. Composite flows
