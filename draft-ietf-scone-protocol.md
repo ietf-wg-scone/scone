@@ -193,9 +193,12 @@ are expected to last for more than one monitoring period; see {{time}}.
 
 ## Unspecified Scope
 
-Modifying a packet does not prove that the throughput that is indicated would be
-achievable.  A signal that is sent for a specific flow is likely enforced at a
-different scope.  The extent of that scope is not carried in the signal.
+Modifying a packet does not prove that the throughput that is indicated
+would be achievable.
+A signal that is sent for a specific flow
+is likely to apply to a collection of flows,
+rather than a single flow.
+The scope of the flows that are included not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
 such that multiple flows receive the same signal,
@@ -212,7 +215,7 @@ The advised throughput will likely only be achievable
 when the application is the only user of throughput
 within the scope that the advice applies to.
 In the presence of other flows,
-congestion limits are likely to determine actual throughput.
+congestion limits could determine actual throughput.
 
 This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
