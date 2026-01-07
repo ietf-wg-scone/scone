@@ -214,8 +214,10 @@ even where applications attempt to follow advice (see {{policing}}).
 The advised throughput will likely only be achievable
 when the application is the only user of throughput
 within the scope that the advice applies to.
-In the presence of other flows,
-congestion limits could determine actual throughput.
+In the presence of multiple flows,
+achievable throughput could be lower
+than what is indicated by the advice,
+with throughput determined by a congestion controller.
 
 This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
