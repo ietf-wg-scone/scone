@@ -552,10 +552,10 @@ This indicator is derived from the first two bytes of:
 https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-indication;field=version;codepoint=0xc813e2b1
 -->
 
-A client that uses a QUIC version that includes length-delimited packets,
+A client that uses a QUIC version that sends length-delimited packets during the handshake,
 which includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},
 can include an indicator of SCONE support
-at the end of datagrams that start a flow.
+outside of the QUIC packets at the end of datagrams that start a flow.
 The handshakes of these protocols ensures that
 the indication can be included in every datagram the client sends
 until it receives a response -- of any kind -- from the server.
