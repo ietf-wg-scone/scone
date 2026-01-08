@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-06T01:53:08.611640+00:00",
+  "timestamp": "2026-01-08T01:53:05.368385+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2938,15 +2938,15 @@
       "id": "I_kwDON1dwo87f3JPq",
       "title": "merge miss of #114",
       "url": "https://github.com/ietf-wg-scone/scone/issues/116",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "We agreed and merged #114, however it seems it did not get into `main`. Rather, it went into the `gorry-reviews` branch (#112) after #112 was merged.",
       "createdAt": "2025-12-23T02:13:21Z",
-      "updatedAt": "2025-12-23T05:18:59Z",
-      "closedAt": null,
+      "updatedAt": "2026-01-06T06:17:04Z",
+      "closedAt": "2026-01-06T06:17:04Z",
       "comments": []
     }
   ],
@@ -11894,6 +11894,454 @@
           "body": "",
           "createdAt": "2026-01-05T02:25:09Z",
           "updatedAt": "2026-01-05T02:25:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 120,
+      "id": "PR_kwDON1dwo867p6A6",
+      "title": "redo merge of #114",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/120",
+      "state": "MERGED",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In order to close #106, we agreed to merge #114 but the changes never made it to `main`.\r\n\r\nCloses #116.",
+      "createdAt": "2026-01-06T05:58:23Z",
+      "updatedAt": "2026-01-06T06:17:03Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
+      "headRepository": "kazuho/i-d-trone",
+      "headRefName": "kazuho/redo-merge114",
+      "headRefOid": "6f51f1981fcd2114b2a7d111b7b103e8e2cfccc7",
+      "closedAt": "2026-01-06T06:17:03Z",
+      "mergedAt": "2026-01-06T06:17:03Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "7e29e15a254c863b571a11d977c05e9284c5ddac"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87YVrsx",
+          "commit": {
+            "abbreviatedOid": "6f51f19"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks!  You beat me to it (and thanks for noticing).",
+          "createdAt": "2026-01-06T06:16:55Z",
+          "updatedAt": "2026-01-06T06:16:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 121,
+      "id": "PR_kwDON1dwo8671f-5",
+      "title": "Forbid increasing rate signals",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/121",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-07T05:05:02Z",
+      "updatedAt": "2026-01-07T16:31:47Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7e29e15a254c863b571a11d977c05e9284c5ddac",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "must-not-increase",
+      "headRefOid": "27fcb5ccc88c98efb9f8068e42fe8c71004b31d3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87YkMIJ",
+          "commit": {
+            "abbreviatedOid": "27fcb5c"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-07T05:09:51Z",
+          "updatedAt": "2026-01-07T05:09:51Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87YtLP5",
+          "commit": {
+            "abbreviatedOid": "27fcb5c"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-07T16:31:47Z",
+          "updatedAt": "2026-01-07T16:31:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 122,
+      "id": "PR_kwDON1dwo8671xNk",
+      "title": "Alan's review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/122",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "These are all editorial.  There were some substantive things raised in the review, which are not included here.  I think that the right response is to say \"no change\", but I don't want to foreclose on that.  If discussion leads to something substantive, we'll need separate changes.",
+      "createdAt": "2026-01-07T05:49:34Z",
+      "updatedAt": "2026-01-08T01:00:43Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "940762a0ac4ac263d0fe66f46eb28e0c65da6b24",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "afrind-edits",
+      "headRefOid": "3de64ab812c4a45276445077128240cfe4fc57b7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87YtNB7",
+          "commit": {
+            "abbreviatedOid": "e79ac30"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks for the quick turnaround.  I have a few small comments.",
+          "createdAt": "2026-01-07T16:33:26Z",
+          "updatedAt": "2026-01-07T16:45:26Z",
+          "comments": [
+            {
+              "originalPosition": 35,
+              "body": "```suggestion\r\ncould apply to a collection of flows,\r\n```",
+              "createdAt": "2026-01-07T16:33:26Z",
+              "updatedAt": "2026-01-07T16:45:26Z"
+            },
+            {
+              "originalPosition": 137,
+              "body": "It's not clear why \"disabling sending completely\" is the alternative to allowing advice to expire.  Isn't another alternative the previously discussed (and rejected) idea of sticky advice?",
+              "createdAt": "2026-01-07T16:38:31Z",
+              "updatedAt": "2026-01-07T16:45:26Z"
+            },
+            {
+              "originalPosition": 154,
+              "body": "```suggestion\r\nwhich could cause network elements to miss updates,\r\n```\r\nBut I don't feel strongly about it- feel free to ignore.",
+              "createdAt": "2026-01-07T16:40:15Z",
+              "updatedAt": "2026-01-07T16:45:26Z"
+            },
+            {
+              "originalPosition": 179,
+              "body": "Are there any other possible mitigations, like remembering flows a receiver indicated it's willing to receive SCONE packets on?",
+              "createdAt": "2026-01-07T16:43:28Z",
+              "updatedAt": "2026-01-07T16:45:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YyfPR",
+          "commit": {
+            "abbreviatedOid": "2c301e7"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-07T22:59:04Z",
+          "updatedAt": "2026-01-07T22:59:04Z",
+          "comments": [
+            {
+              "originalPosition": 137,
+              "body": "Yeah, a rework is in order here.",
+              "createdAt": "2026-01-07T22:59:04Z",
+              "updatedAt": "2026-01-07T22:59:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YygeD",
+          "commit": {
+            "abbreviatedOid": "2c301e7"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-07T23:00:09Z",
+          "updatedAt": "2026-01-07T23:00:09Z",
+          "comments": [
+            {
+              "originalPosition": 154,
+              "body": "Damn GitHub.  I won't let me apply this suggestion.  Piece of garbage software.",
+              "createdAt": "2026-01-07T23:00:09Z",
+              "updatedAt": "2026-01-07T23:00:09Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87Yyh8h",
+          "commit": {
+            "abbreviatedOid": "2c301e7"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-07T23:01:38Z",
+          "updatedAt": "2026-01-07T23:01:38Z",
+          "comments": [
+            {
+              "originalPosition": 179,
+              "body": "Even that signal is unreliable, so I wouldn't bank on that either.  Traffic analysis has limits in its ability to positively identify QUIC.",
+              "createdAt": "2026-01-07T23:01:38Z",
+              "updatedAt": "2026-01-07T23:01:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87Yyuha",
+          "commit": {
+            "abbreviatedOid": "9824f2b"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-07T23:27:32Z",
+          "updatedAt": "2026-01-07T23:27:32Z",
+          "comments": [
+            {
+              "originalPosition": 145,
+              "body": "@huitema @mjoras @kazuho @ihlar, drawing attention to this change.",
+              "createdAt": "2026-01-07T23:27:32Z",
+              "updatedAt": "2026-01-07T23:27:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87Yyvoj",
+          "commit": {
+            "abbreviatedOid": "9824f2b"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-07T23:30:20Z",
+          "updatedAt": "2026-01-07T23:33:53Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\nThe scope of the flows that are included is not carried in the signal.\n```\nIs this the intent?",
+              "createdAt": "2026-01-07T23:30:20Z",
+              "updatedAt": "2026-01-07T23:33:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YzHyF",
+          "commit": {
+            "abbreviatedOid": "ffe587e"
+          },
+          "author": "mjoras",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-08T00:33:22Z",
+          "updatedAt": "2026-01-08T00:41:00Z",
+          "comments": [
+            {
+              "originalPosition": 145,
+              "body": "I think this is a strict improvement.",
+              "createdAt": "2026-01-08T00:33:22Z",
+              "updatedAt": "2026-01-08T00:41:00Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\nThe scope of the flows that are included is not carried in the signal.\r\n```\r\nOne more change.",
+              "createdAt": "2026-01-08T00:37:48Z",
+              "updatedAt": "2026-01-08T00:41:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YzT1J",
+          "commit": {
+            "abbreviatedOid": "9824f2b"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-08T00:59:55Z",
+          "updatedAt": "2026-01-08T00:59:55Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "Kazuho caught that already :)",
+              "createdAt": "2026-01-08T00:59:55Z",
+              "updatedAt": "2026-01-08T00:59:55Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 123,
+      "id": "PR_kwDON1dwo86781ge",
+      "title": "Use singular verb and pronoun forms consistently for \"throughput advice\"",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/123",
+      "state": "MERGED",
+      "author": "afrind",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The AIs told me:\r\n\r\n\"Advice\" is an uncountable noun, so it's always treated as singular, taking singular verbs (e.g., \"advice is helpful\") and pronouns (e.g., \"give it to them\").",
+      "createdAt": "2026-01-07T17:04:35Z",
+      "updatedAt": "2026-01-07T23:53:08Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7e29e15a254c863b571a11d977c05e9284c5ddac",
+      "headRepository": "afrind/scone",
+      "headRefName": "afrind-singular-advice",
+      "headRefOid": "dfe35edb8f1f408e91630630ccefd0a9020a9cf6",
+      "closedAt": "2026-01-07T23:53:07Z",
+      "mergedAt": "2026-01-07T23:53:07Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "940762a0ac4ac263d0fe66f46eb28e0c65da6b24"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87Yy4uw",
+          "commit": {
+            "abbreviatedOid": "dfe35ed"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks.  Not as bad as I feared.\n\nLooking for an RPC job?",
+          "createdAt": "2026-01-07T23:53:03Z",
+          "updatedAt": "2026-01-07T23:53:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 124,
+      "id": "PR_kwDON1dwo86784is",
+      "title": "Clarify SCONE support indication placement in QUIC",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/124",
+      "state": "OPEN",
+      "author": "afrind",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-07T17:08:42Z",
+      "updatedAt": "2026-01-08T00:59:10Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "7e29e15a254c863b571a11d977c05e9284c5ddac",
+      "headRepository": "afrind/scone",
+      "headRefName": "afrind-indication-placement",
+      "headRefOid": "7f623c04bc09eeaa14cb8f5a6741b57689e780c5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87Yy5R9",
+          "commit": {
+            "abbreviatedOid": "4f51ea3"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2026-01-07T23:54:24Z",
+          "updatedAt": "2026-01-07T23:54:26Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I think that it is genuinely \"at the end\", not following.\n\nAs in [packet][packet][whatever][indication], not [packet][packet][indication][whatever].  Recognizing that [packet][packet][indication] might be what you are thinking.",
+              "createdAt": "2026-01-07T23:54:24Z",
+              "updatedAt": "2026-01-07T23:54:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YzKc6",
+          "commit": {
+            "abbreviatedOid": "4f51ea3"
+          },
+          "author": "afrind",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-08T00:39:33Z",
+          "updatedAt": "2026-01-08T00:39:33Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Ok, I wanted to capture that it's after the length delimited packets more explicitly.\r\n\r\nSomething other than [packet][packet+indication]\r\n\r\nMaybe\r\n\r\n```suggestion\r\noutside of the QUIC packets at the end of datagrams that start a flow.\r\n```\r\n\r\nBut I don't love it either.",
+              "createdAt": "2026-01-08T00:39:33Z",
+              "updatedAt": "2026-01-08T00:39:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YzTjf",
+          "commit": {
+            "abbreviatedOid": "4f51ea3"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-08T00:59:02Z",
+          "updatedAt": "2026-01-08T00:59:02Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I don't know, I think that's fine.",
+              "createdAt": "2026-01-08T00:59:02Z",
+              "updatedAt": "2026-01-08T00:59:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87YzTmg",
+          "commit": {
+            "abbreviatedOid": "7f623c0"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-08T00:59:10Z",
+          "updatedAt": "2026-01-08T00:59:10Z",
           "comments": []
         }
       ]
