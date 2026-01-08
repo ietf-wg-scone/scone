@@ -555,7 +555,7 @@ https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-indica
 A client that uses a QUIC version that includes length-delimited packets,
 which includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},
 can include an indicator of SCONE support
-following the QUIC packets in datagrams that start a flow.
+outside of the QUIC packets at the end of datagrams that start a flow.
 The handshakes of these protocols ensures that
 the indication can be included in every datagram the client sends
 until it receives a response -- of any kind -- from the server.
