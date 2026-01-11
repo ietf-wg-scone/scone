@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-08T01:53:05.368385+00:00",
+  "timestamp": "2026-01-11T02:02:37.434812+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12251,24 +12251,26 @@
       "id": "PR_kwDON1dwo86784is",
       "title": "Clarify SCONE support indication placement in QUIC",
       "url": "https://github.com/ietf-wg-scone/scone/pull/124",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "afrind",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-01-07T17:08:42Z",
-      "updatedAt": "2026-01-08T00:59:10Z",
+      "updatedAt": "2026-01-08T03:31:14Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7e29e15a254c863b571a11d977c05e9284c5ddac",
       "headRepository": "afrind/scone",
       "headRefName": "afrind-indication-placement",
-      "headRefOid": "7f623c04bc09eeaa14cb8f5a6741b57689e780c5",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "2c7d26cd98732ffa18f8dab70f6e2db889e28e1a",
+      "closedAt": "2026-01-08T03:31:14Z",
+      "mergedAt": "2026-01-08T03:31:14Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "1f0b20f92eda00ec5ba00f1ebf6af9f8f2b39b73"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12343,6 +12345,26 @@
           "createdAt": "2026-01-08T00:59:10Z",
           "updatedAt": "2026-01-08T00:59:10Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87Yz3wV",
+          "commit": {
+            "abbreviatedOid": "7f623c0"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good.\n\nIf we want to improve the sentence, it might make sense to adjust its beginning as well (I do not mind strongly at all).",
+          "createdAt": "2026-01-08T02:50:10Z",
+          "updatedAt": "2026-01-08T02:51:24Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\nA client that uses a QUIC version that sends length-delimited packets during the handshake,\n```",
+              "createdAt": "2026-01-08T02:50:10Z",
+              "updatedAt": "2026-01-08T02:52:04Z"
+            }
+          ]
         }
       ]
     }
