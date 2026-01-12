@@ -236,6 +236,14 @@ Rate limiting policies often apply on the level of a device or subscription,
 but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.
 
+Network elements that apply throughput advice to a flow
+that provides an encrypted tunnel for an encapsulated flow
+(such as {{?CONNECT-UDP=RFC9298}})
+only applies to the outermost flow.
+Advice can be applied on flows that are subsequently encapsulated,
+but following that advice can have security implications;
+see {{active-attacks}}.
+
 
 ## Undirectional Signal
 
@@ -1007,7 +1015,7 @@ QUIC implementations are therefore encouraged to make the feature available
 unconditionally.  Endpoints might send SCONE packets whenever a peer can accept
 them.
 
-## Active Attacks
+## Active Attacks {#active-attacks}
 
 Suppose a configuration in which multiple clients use a VPN or proxy
 service to access the same server. The attacker sees the IP addresses
