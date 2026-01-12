@@ -746,14 +746,11 @@ but re-enable or tighten enforcement if monitoring indicates
 that throughput advice is not being respected.
 
 
-# Version Interaction {#version-interaction}
+# Endpoint Usage
 
-The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd) that cover
-different ranges of bitrates. This design allows for:
-
-*  Support for both very low bitrates (down to 100 Kbps) and very high bitrates
-   (up to 199.5 Gbps)
-*  Graceful handling of network elements that might only recognize one version.
+The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
+that combined carry throughput advice that covers a range of bitrates
+between 100 Kbps and 199.5 Gbps.
 
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
