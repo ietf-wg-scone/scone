@@ -1516,6 +1516,13 @@ the monitoring period.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.3-3">Rate limiting policies often apply on the level of a device or subscription,
 but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">Network elements that apply throughput advice to a flow
+that provides an encrypted tunnel for an encapsulated flow
+(such as <span>[<a href="#CONNECT-UDP" class="cite xref">CONNECT-UDP</a>]</span>)
+only applies to the outermost flow.
+Advice can be applied on flows that are subsequently encapsulated,
+but following that advice can have security implications;
+see <a href="#active-attacks" class="auto internal xref">Section 10.2</a>.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="undirectional-signal">
@@ -2644,6 +2651,10 @@ Transport Parameters" registry maintained at
 <a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="CONNECT-UDP">[CONNECT-UDP]</dt>
+        <dd>
+<span class="refAuthor">Schinazi, D.</span>, <span class="refTitle">"Proxying UDP in HTTP"</span>, <span class="seriesInfo">RFC 9298</span>, <span class="seriesInfo">DOI 10.17487/RFC9298</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9298">https://www.rfc-editor.org/rfc/rfc9298</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="DASH">[DASH]</dt>
         <dd>
 <span class="refTitle">"Information technology — Dynamic adaptive streaming over HTTP (DASH) — Part 1: Media presentation description and segment formats"</span>, <span class="seriesInfo">ISO/IEC 23009-1:2022</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.iso.org/standard/83314.html">https://www.iso.org/standard/83314.html</a>&gt;</span>. </dd>

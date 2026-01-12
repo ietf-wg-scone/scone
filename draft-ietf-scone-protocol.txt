@@ -281,6 +281,12 @@ Table of Contents
    subscription, but endpoints cannot assume that this is the case.  A
    separate signal can be sent for each flow.
 
+   Network elements that apply throughput advice to a flow that provides
+   an encrypted tunnel for an encapsulated flow (such as [CONNECT-UDP])
+   only applies to the outermost flow.  Advice can be applied on flows
+   that are subsequently encapsulated, but following that advice can
+   have security implications; see Section 10.2.
+
 3.4.  Undirectional Signal
 
    Throughput advice is signaled with SCONE packets that are transmitted
@@ -1150,6 +1156,11 @@ Table of Contents
               <https://www.rfc-editor.org/rfc/rfc2474>.
 
 12.2.  Informative References
+
+   [CONNECT-UDP]
+              Schinazi, D., "Proxying UDP in HTTP", RFC 9298,
+              DOI 10.17487/RFC9298, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9298>.
 
    [DASH]     "Information technology — Dynamic adaptive streaming over
               HTTP (DASH) — Part 1: Media presentation description and
