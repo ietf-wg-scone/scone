@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-11T02:02:37.434812+00:00",
+  "timestamp": "2026-01-13T01:50:26.094770+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -11697,7 +11697,7 @@
       "labels": [],
       "body": "A few nits I found in WGLC review.",
       "createdAt": "2025-12-23T21:32:04Z",
-      "updatedAt": "2026-01-05T02:25:59Z",
+      "updatedAt": "2026-01-11T20:42:07Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
@@ -11735,6 +11735,32 @@
           "createdAt": "2026-01-05T02:25:59Z",
           "updatedAt": "2026-01-05T02:25:59Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87Zd0dl",
+          "commit": {
+            "abbreviatedOid": "d680498"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "I am not 100% sure what we are intending to say in the \"per flow\" section. Are we pointing out the potential confusion if multiple QUIC connections use the same 5-tuple? That's not implausible. I could see a QUIC client using a single UDP socket for all traffic, with multiple connections following each other on the same 5 tuple with 67 seconds. I guess that's kind of out of scope.\r\n\r\nI suggested replacing \"The same UDP address tuple\" by \"the same tuple of IP version, IP address and UDP port number\", which is how RFC 9000 defines it. However, we should decide whether we want to make a statement about the 3-tupe (IP address, UDP, port number) or the 5-tuple (IP addresses, UDP, port numbers). ",
+          "createdAt": "2026-01-11T20:35:51Z",
+          "updatedAt": "2026-01-11T20:42:07Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I don't think that \"address, UDP port tuple\" is the right way to express the concept. RFC 9000 uses the following definition:\r\n~~~\r\nAddress:\r\n\r\n    When used without qualification, the tuple of IP version, IP address, and UDP port number that represents one end of a network path.\r\n~~~\r\n\r\n```Suggestion\r\nThe same tuple of IP version, IP address, and UDP port number might be used for multiple QUIC connections.  A\r\n```",
+              "createdAt": "2026-01-11T20:35:51Z",
+              "updatedAt": "2026-01-11T20:42:07Z"
+            },
+            {
+              "originalPosition": 13,
+              "body": "```Suggestion\r\non the same tuple of IP version, IP address, and UDP port number for the duration of\r\n```",
+              "createdAt": "2026-01-11T20:36:03Z",
+              "updatedAt": "2026-01-11T20:42:07Z"
+            }
+          ]
         }
       ]
     },
@@ -11743,25 +11769,35 @@
       "id": "PR_kwDON1dwo867cni9",
       "title": "Tunnels",
       "url": "https://github.com/ietf-wg-scone/scone/pull/118",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This might be stating the obvious, but it's probably worthwhile.",
       "createdAt": "2026-01-04T23:55:17Z",
-      "updatedAt": "2026-01-05T23:57:26Z",
+      "updatedAt": "2026-01-12T03:55:30Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "tunnels",
       "headRefOid": "8c841fbcc457a9f2e4eeac98690db015e8eb58f1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2026-01-12T03:55:30Z",
+      "mergedAt": "2026-01-12T03:55:30Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "b328f329bb002b0731021cceafc73038cb4c644d"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Your analysis of the tunnel provider options are exactly right.  They could damage the encapsulated flow to adjust the throughput, but - just like any network provider - they are better off providing advice so that the application can adjust its usage.  The ECN shortcoming is why we've seen proposals for carrying ECN marks into RFC 9298 tunnels :)",
+          "createdAt": "2026-01-12T03:55:10Z",
+          "updatedAt": "2026-01-12T03:55:10Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87YFkqZ",
@@ -11855,6 +11891,19 @@
               "updatedAt": "2026-01-05T23:57:26Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87ZdiTe",
+          "commit": {
+            "abbreviatedOid": "8c841fb"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I think this text is correct. The network elements cannot see inside the tunnel, and the advice that might be given to encapsulated flows is something for the tunnel provider to decide. We could imagine all kinds of sophisticated handling. The tunnel provider is de facto a \"network element\", and could somehow provide SCONE advice to encapsulated flow. It could also implement some kind of AQM to indirectly provide the advice to these flows. (The RFC9298 cannot use ECN, see section 6.2 of RFC9298, so there is no need to consider that.)",
+          "createdAt": "2026-01-11T19:52:08Z",
+          "updatedAt": "2026-01-11T19:52:08Z",
+          "comments": []
         }
       ]
     },
@@ -11863,25 +11912,35 @@
       "id": "PR_kwDON1dwo867cq-g",
       "title": "The text here was outdated",
       "url": "https://github.com/ietf-wg-scone/scone/pull/119",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Missed in recent updates.  Changing the title seemed like a good idea as well.",
       "createdAt": "2026-01-05T00:13:08Z",
-      "updatedAt": "2026-01-05T02:25:09Z",
+      "updatedAt": "2026-01-12T03:51:38Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "version-interaction",
       "headRefOid": "c4737458dcb27315cd49f20dcada40a778cc5bbe",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2026-01-12T03:51:38Z",
+      "mergedAt": "2026-01-12T03:51:38Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "0624b497c113700ae6364d7649d7248263db0ee1"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The less said about supporting one or other SCONE version, the better.  It's a package deal.  Support both.\r\n\r\nThe only reason I can think of for paying attention to one of the two versions is if you are just monitoring for a specific value for the advice.  Why you would do that is beyond me, though maybe the \"unspecified\" value might qualify as something that is worth watching for.  In any real usage, you need to monitor the version because it contains the low bit of the advice.",
+          "createdAt": "2026-01-12T03:51:34Z",
+          "updatedAt": "2026-01-12T03:51:34Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87YFkxA",
@@ -11894,6 +11953,19 @@
           "body": "",
           "createdAt": "2026-01-05T02:25:09Z",
           "updatedAt": "2026-01-05T02:25:09Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87ZdklW",
+          "commit": {
+            "abbreviatedOid": "c473745"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I am happy to see the removal of \"Graceful handling of network elements that might only recognize one version.\" Do we need to say something about that \"partial support\" in the security section? A network element or an endpoint that only supports one of the versions will probably expose itself to creative use of the other version by attackers.",
+          "createdAt": "2026-01-11T19:57:04Z",
+          "updatedAt": "2026-01-11T19:57:04Z",
           "comments": []
         }
       ]
@@ -11945,24 +12017,26 @@
       "id": "PR_kwDON1dwo8671f-5",
       "title": "Forbid increasing rate signals",
       "url": "https://github.com/ietf-wg-scone/scone/pull/121",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-01-07T05:05:02Z",
-      "updatedAt": "2026-01-07T16:31:47Z",
+      "updatedAt": "2026-01-12T21:15:33Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "7e29e15a254c863b571a11d977c05e9284c5ddac",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "must-not-increase",
       "headRefOid": "27fcb5ccc88c98efb9f8068e42fe8c71004b31d3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-01-12T21:15:33Z",
+      "mergedAt": "2026-01-12T21:15:33Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "340456b09fccb607b32f81228e7cc6d3ee895177"
+      },
       "comments": [],
       "reviews": [
         {
@@ -11990,6 +12064,19 @@
           "createdAt": "2026-01-07T16:31:47Z",
           "updatedAt": "2026-01-07T16:31:47Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87Zd6Mb",
+          "commit": {
+            "abbreviatedOid": "27fcb5c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-11T20:48:02Z",
+          "updatedAt": "2026-01-11T20:48:02Z",
+          "comments": []
         }
       ]
     },
@@ -11998,24 +12085,26 @@
       "id": "PR_kwDON1dwo8671xNk",
       "title": "Alan's review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/122",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "These are all editorial.  There were some substantive things raised in the review, which are not included here.  I think that the right response is to say \"no change\", but I don't want to foreclose on that.  If discussion leads to something substantive, we'll need separate changes.",
       "createdAt": "2026-01-07T05:49:34Z",
-      "updatedAt": "2026-01-08T01:00:43Z",
+      "updatedAt": "2026-01-12T21:16:11Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "940762a0ac4ac263d0fe66f46eb28e0c65da6b24",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "afrind-edits",
       "headRefOid": "3de64ab812c4a45276445077128240cfe4fc57b7",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-01-12T21:16:11Z",
+      "mergedAt": "2026-01-12T21:16:11Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "9d89955522be341919ba17c37be9c44a3e2943d9"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12201,6 +12290,19 @@
               "updatedAt": "2026-01-08T00:59:55Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87Zd81L",
+          "commit": {
+            "abbreviatedOid": "3de64ab"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-11T20:53:50Z",
+          "updatedAt": "2026-01-11T20:53:50Z",
+          "comments": []
         }
       ]
     },
