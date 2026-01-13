@@ -137,14 +137,15 @@ is shown in {{f-scone}}.
 QUIC endpoints that receive modified SCONE packets observe the indicated
 version, process the QUIC packet, and then record the indicated rate.
 
-Throughput advice only apply to the direction and path for which they are
+Throughput advice only applies to the direction and path for which it is
 received.  A connection that migrates or uses multipath
 {{?QUIC-MP=I-D.ietf-quic-multipath}}
-cannot assume that throughput advice from one path apply to new paths.
+cannot assume that throughput advice from one path applies to new paths.
 Advice for the client-to-server direction and the server-to-client direction of
 each path are independent, and are expected to be different, for reasons including
-asymmetric link capacity and path diversity. Applications may choose to utilize
-SCONE in either or both direction(s) of each path as they see fit.
+asymmetric link capacity and path diversity.
+Applications can use SCONE in either or both directions
+of each path as they see fit.
 
 
 # Applicability
@@ -179,9 +180,9 @@ congestion controller.
 Networks can use SCONE to communicate throughput advice
 for reasons other than rate limiting policies.
 For example, a network element in an access network
-could provide throughput advice to guide application use of network capacity,
-in any way that is separate from any signals
-that are intended to influence congestion response.
+could provide reduced throughput advice
+to guide application use of network capacity
+during periods of unusually high usage.
 
 In addition to rate limiting policies,
 throughput advice can indicate temporary increases in available capacity
@@ -193,9 +194,12 @@ are expected to last for more than one monitoring period; see {{time}}.
 
 ## Unspecified Scope
 
-Modifying a packet does not prove that the throughput that is indicated would be
-achievable.  A signal that is sent for a specific flow is likely enforced at a
-different scope.  The extent of that scope is not carried in the signal.
+Modifying a packet does not prove that the throughput that is indicated
+would be achievable.
+A signal that is sent for a specific flow
+could apply to a collection of flows,
+rather than a single flow.
+The scope of the flows that are included is not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
 such that multiple flows receive the same signal,
@@ -211,8 +215,10 @@ even where applications attempt to follow advice (see {{policing}}).
 The advised throughput will likely only be achievable
 when the application is the only user of throughput
 within the scope that the advice applies to.
-In the presence of other flows,
-congestion limits are likely to determine actual throughput.
+In the presence of multiple flows,
+achievable throughput could be lower
+than what is indicated by the advice,
+with throughput determined by a congestion controller.
 
 This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
@@ -239,8 +245,16 @@ Rate limiting policies often apply on the level of a device or subscription,
 but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.
 
+Network elements that apply throughput advice to a flow
+that provides an encrypted tunnel for an encapsulated flow
+(such as {{?CONNECT-UDP=RFC9298}})
+only applies to the outermost flow.
+Advice can be applied on flows that are subsequently encapsulated,
+but following that advice can have security implications;
+see {{active-attacks}}.
 
-## Undirectional Signal
+
+## Unidirectional Signal
 
 Throughput advice is signaled with SCONE packets
 that are transmitted as part of the flow that the advice applies to.
@@ -248,7 +262,7 @@ Carrying signals in the affected flow,
 in the same way that ECN signals are conveyed,
 ensures that there is no ambiguity about what flow is affected.
 However, this means that the endpoint that receives throughput advice
-is not the endpoint that might need to adapt its sending behavior.
+is not the endpoint that needs to adapt its sending behavior.
 
 A receiving endpoint might need to communicate the value it receives
 to the sending peer in order to ensure that the limit is respected.
@@ -265,8 +279,8 @@ as determined by congestion control.
 Endpoints that receive this signal therefore need to treat the information as advisory.
 
 The fact that an endpoint requests throughput advice does not necessarily mean
-that it will adhere to them; in some cases, the endpoint cannot. For
-example, a flow may initially be used to serve video chunks, with the client
+that it will adhere to advice; in some cases, the endpoint cannot. For
+example, a flow could initially be used to serve video chunks, with the client
 selecting appropriate chunks based on received advice, but later switch to a
 bulk download for which bitrate adaptation that cannot be similarly controlled. Composite flows
 from multiple applications, such as tunneled flows, might only have a subset of
@@ -283,23 +297,29 @@ There are no guarantees that updated advice will be sent at such events.
 
 ## Following Advice
 
-The SCONE throughput advice is advisory (see {{advisory-signal}}).
-Applications that chose to follow it will do so in the way that best suits their needs.
+Applications that chose to follow throughput advice
+do so in the way that best suits their needs.
 
-The most obvious way to keep within the limits set by throughput advice is to
-inform the sending peer of the limit so that the peer can do whatever rate
-limiting is necessary.  Alternatively, a receiver can control the release of
-flow control credit (see {{Section 4 of QUIC}}) to indirectly limit the sending
-rate of a peer.
+The most obvious way to follow throughput advice is to
+inform the sending peer of the advice so that the peer
+can adjust send rates as necessary.
+This document does not provide specific guidance on how applications
+might adapt their use of network capacity in response to advice.
 
-Some applications offer options for rate control that can offer superior outcomes.
-Most video applications,
-especially real-time and streaming video applications,
-can adapt their use of network bandwidth.
-For instance, typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
+Some applications offer options for rate control
+that can offer improved performance when following advice.
+For instance, real-time and streaming video applications can often adapt usage.
+Typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
 clients are provided with manifests that allow them to
 adjust the bitrate and quality of media segments
 based on available network capacity.
+Low priority bulk transfer applications, such as software updates,
+might also choose to follow advice.
+
+Following throughput advice could
+reduce the impact of an application on other network users,
+reserves capacity for high-priority activities,
+and could avoid potential enforcement action by the network; see {{policing}}.
 
 
 # Conventions and Definitions
@@ -382,7 +402,7 @@ Throughput advice follows a logarithmic scale defined as:
 
 where n is an integer between 0 and 126 represented by the Rate Signal.
 
-{{ex-rates}} lists some of the potential values for signals
+{{ex-rates}} lists some of the values for signals
 and the corresponding bitrate for each.
 
 | Bitrate     | Rate Signal |
@@ -425,16 +445,15 @@ The choice of 67 seconds is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
 Shorter periods allow networks to administer policies more tightly.
-Also, when circumstances change,
-applications are better able to recover
-without exceeding limits for a significant time
-if they have exceeded limits.
+A shorter period also allows applications
+to increase send rates sooner
+when rates increase.
 
 The choice of 67 seconds, as a prime number,
 also helps avoid synchronization with other periodic
 effects that are commonly measured in whole seconds.
 This includes segment length or key frame intervals in video applications,
-but also includes timers for middleboxes; see {{Section 4.3 of ?RFC4787}}.
+but also includes timers for NAT devices; see {{Section 4.3 of ?RFC4787}}.
 Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
@@ -442,7 +461,7 @@ unlikely to be due to other periodic effects.
 ## Endpoint Processing of SCONE Packets
 
 Processing a SCONE packet involves reading the value from the Rate Signal field.
-However, this value MUST NOT be used unless another packet from the same
+However, throughput advice MUST be ignored unless another packet from the same
 datagram is successfully processed.  Therefore, a SCONE packet always needs to
 be coalesced with other QUIC packets.
 
@@ -491,13 +510,10 @@ Other constraints on usage will still apply,
 which necessarily includes congestion control
 and might include other, application-specific constraints.
 
-The relatively long duration of the monitoring period
-means that this is preferable to disabling sending completely.
-The cost is that loss of information about recent send rate
-might result in temporarily exceeding the rates indicated by throughput advice.
-In comparison,
-applications retain throughput usage state
-when throughput advice increases.
+Allowing advice to expire
+ensures that changes in routing
+do not cause stale advice to persist indefinitely
+when network elements on a new path do not provide advice.
 
 This approach ensures that network elements
 are able to reduce the frequency with which they send updated signals
@@ -549,10 +565,10 @@ This indicator is derived from the first two bytes of:
 https://martinthomson.github.io/quic-pick/#seed=draft-ietf-scone-protocol-indication;field=version;codepoint=0xc813e2b1
 -->
 
-A client that uses a QUIC version that includes length-delimited packets,
+A client that uses a QUIC version that sends length-delimited packets during the handshake,
 which includes QUIC versions 1 {{QUIC}} and 2 {{!QUICv2=RFC9369}},
 can include an indicator of SCONE support
-at the end of datagrams that start a flow.
+outside of the QUIC packets at the end of datagrams that start a flow.
 The handshakes of these protocols ensures that
 the indication can be included in every datagram the client sends
 until it receives a response -- of any kind -- from the server.
@@ -617,8 +633,10 @@ Version field and the Rate Signal High Bits field with values of its choosing.
 
 A network element might receive a packet that already includes a rate signal.
 The network element replaces the rate signal if it wishes to signal a lower
-value for throughput advice; otherwise, the original values are retained, preserving the signal
-from the network element with the lower policy.
+value for throughput advice;
+otherwise, the original values are retained,
+preserving the signal from the network element with the lower policy.
+A network element MUST NOT replace a rate signal with a higher or unknown value.
 
 The following pseudocode indicates how a network element might detect a SCONE
 packet and replace the existing rate signal (`packet_signal`) with a new rate
@@ -654,9 +672,9 @@ throughput advice early.
 
 Senders that send a SCONE packet
 or network elements that update SCONE packets
-every 20&ndash;30 seconds is likely sufficient to ensure that throughput advice is not lost.
+every 20&ndash;30 seconds are likely sufficient to ensure that throughput advice is not lost.
 To reduce the risk of synchronization across multiple senders,
-which may cause network elements to miss updates,
+which could cause network elements to miss updates,
 senders can include a small random delay.
 
 A network element MUST NOT alter datagrams to add SCONE packets
@@ -743,14 +761,11 @@ but re-enable or tighten enforcement if monitoring indicates
 that throughput advice is not being respected.
 
 
-# Version Interaction {#version-interaction}
+# Endpoint Usage
 
-The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd) that cover
-different ranges of bitrates. This design allows for:
-
-*  Support for both very low bitrates (down to 100 Kbps) and very high bitrates
-   (up to 199.5 Gbps)
-*  Graceful handling of network elements that might only recognize one version.
+The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
+that combined carry throughput advice that covers a range of bitrates
+between 100 Kbps and 199.5 Gbps.
 
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
@@ -870,7 +885,7 @@ in a position to drop datagrams and could apply a rate limit policy.
 contains a packet that it accepts to prevent an off-path attacker from inserting
 spurious throughput advice signals.
 
-Some off-path attackers may be able to both
+Some off-path attackers could be able to both
 observe traffic and inject packets. Attackers with such capabilities could
 observe packets sent by an endpoint, create datagrams coalescing an
 arbitrary SCONE packet and the observed packet, and send these datagrams
@@ -931,9 +946,13 @@ with an implementation that fully conforms to the specification of {{packet}}.
 
 Network elements that update SCONE packet fields might do that for datagrams
 exchanged in other protocols.
-This could result in damage to those protocols.
+If the first five bytes of the datagram match
+the QUIC long header byte and SCONE version,
+the network element might modify the signal,
+resulting in damage to those protocols.
 
-The most serious damage occurs when every datagram is modified,
+The most serious damage occurs when every datagram matches
+and is subsequently modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
@@ -983,8 +1002,8 @@ There are two avenues of attack that require more analysis:
 
 ## Passive Attacks
 
-If only few clients and server pairs negotiate the usage of SCONE, the
-occasional observation of SCONE packets will "stick out". That observation,
+If only a few clients and server pairs negotiate the usage of SCONE, the
+occasional observation of SCONE packets will "stick out". That observation
 could be combined with observation of timing and volume of traffic to
 help identify the endpoint or categorize the application that they
 are using.
@@ -994,8 +1013,8 @@ only used in some specific circumstances. In that case, observation of
 SCONE packets reveals information about the state of the endpoint.
 
 If multiple servers are accessed through the same front facing server,
-Encrypted Client Hello (ECH) may be used to prevent outside parties to
-identify which specific server a client is using. However, if only
+Encrypted Client Hello (ECH) can prevent outside parties from
+identifying which specific server a client is using. However, if only
 a few of these servers use SCONE, any SCONE packets
 will help identify which specific server a client is using.
 
@@ -1007,7 +1026,7 @@ QUIC implementations are therefore encouraged to make the feature available
 unconditionally.  Endpoints might send SCONE packets whenever a peer can accept
 them.
 
-## Active Attacks
+## Active Attacks {#active-attacks}
 
 Suppose a configuration in which multiple clients use a VPN or proxy
 service to access the same server. The attacker sees the IP addresses
