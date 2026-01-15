@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-13T01:50:26.094770+00:00",
+  "timestamp": "2026-01-15T01:53:01.759495+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12467,6 +12467,109 @@
               "updatedAt": "2026-01-08T02:52:04Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 125,
+      "id": "PR_kwDON1dwo86802oo",
+      "title": "Address tuple is more complicated",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/125",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Takes Christian's suggestions and makes the change clearer.\r\n\r\nCloses #117.\r\n\r\n@martinduke, @huitema, better?",
+      "createdAt": "2026-01-13T02:39:17Z",
+      "updatedAt": "2026-01-14T20:48:46Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "9d89955522be341919ba17c37be9c44a3e2943d9",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "pr117",
+      "headRefOid": "f5bda0eb65dbcb0c7ad7ca2ced5352feb317c2ee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87aUIyl",
+          "commit": {
+            "abbreviatedOid": "f5bda0e"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-14T20:48:46Z",
+          "updatedAt": "2026-01-14T20:48:46Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 126,
+      "id": "PR_kwDON1dwo869MdfX",
+      "title": "less ambiguous statement about coalescing",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/126",
+      "state": "MERGED",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses part of WGLC review from @zaheduzzaman ",
+      "createdAt": "2026-01-14T16:29:33Z",
+      "updatedAt": "2026-01-15T00:55:15Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "9d89955522be341919ba17c37be9c44a3e2943d9",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "coalesce-ambiguity",
+      "headRefOid": "a7d73d1675e678109e8e52cb08936d3274def46f",
+      "closedAt": "2026-01-15T00:55:15Z",
+      "mergedAt": "2026-01-15T00:55:15Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a"
+      },
+      "comments": [
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "LGTM, thanks!",
+          "createdAt": "2026-01-14T23:52:51Z",
+          "updatedAt": "2026-01-14T23:52:51Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87aU7tn",
+          "commit": {
+            "abbreviatedOid": "a7d73d1"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-14T21:42:27Z",
+          "updatedAt": "2026-01-14T21:42:27Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87aWpef",
+          "commit": {
+            "abbreviatedOid": "a7d73d1"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-01-15T00:10:51Z",
+          "updatedAt": "2026-01-15T00:10:51Z",
+          "comments": []
         }
       ]
     }
