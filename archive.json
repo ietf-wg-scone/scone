@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-15T01:53:01.759495+00:00",
+  "timestamp": "2026-01-25T02:04:49.726421+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12569,6 +12569,46 @@
           "body": "",
           "createdAt": "2026-01-15T00:10:51Z",
           "updatedAt": "2026-01-15T00:10:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 127,
+      "id": "PR_kwDON1dwo86-_Gc6",
+      "title": "Address WGLC review comments from Zahed",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/127",
+      "state": "OPEN",
+      "author": "mjoras",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "## Summary\r\n- Use \"achievable\" instead of \"sustained\" for consistency with abstract\r\n- Use \"Networks\" instead of \"Network elements\" for policy ownership clarity\r\n- Remove \"signal\" from \"throughput advice signal\" to avoid confusion with Rate Signal field\r\n- Clarify shared limit sentence wording\r\n- Simplify policy differentiation text\r\n- Rename \"Following Advice\" section to \"Application Use of Advice\"\r\n- Expand acknowledgment explanation with practical example\r\n\r\nThis does not address the diagram issues since I am not sure the suggestion is an improvement. It also does not remove the applicability section as that is a much larger change.",
+      "createdAt": "2026-01-23T17:40:08Z",
+      "updatedAt": "2026-01-24T04:36:54Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
+      "headRepository": "mjoras/scone",
+      "headRefName": "zahed-wglc-review",
+      "headRefOid": "2d32a6214f5472c5f16700e40e50ec04ef54e537",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87ckvkM",
+          "commit": {
+            "abbreviatedOid": "2d32a62"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I think this set of editorial changes improves the document.",
+          "createdAt": "2026-01-24T04:36:54Z",
+          "updatedAt": "2026-01-24T04:36:54Z",
           "comments": []
         }
       ]
