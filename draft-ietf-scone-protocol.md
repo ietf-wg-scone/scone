@@ -83,7 +83,8 @@ adapting their send rate.
 
 The Standard Communication with Network Elements (SCONE) protocol
 is negotiated by QUIC endpoints.
-SCONE provides a means for networks to signal the maximum sustainable throughput,
+SCONE provides a means for a network to signal its present best estimate
+for maximum sustainable throughput,
 or throughput advice,
 associated with the flows of UDP datagrams that QUIC exchanges.
 
@@ -114,7 +115,7 @@ QUIC endpoints can negotiate the use of SCONE by including a transport parameter
 which are always coalesced with ordinary QUIC packets that they send.
 
 Networks that have rate limiting policies can detect flows that include
-SCONE packets.  The network, via network element, can indicate a maximum
+SCONE packets.  The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.
 
