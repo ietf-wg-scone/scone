@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-25T02:04:49.726421+00:00",
+  "timestamp": "2026-01-27T02:00:55.485471+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12585,13 +12585,13 @@
       "labels": [],
       "body": "## Summary\r\n- Use \"achievable\" instead of \"sustained\" for consistency with abstract\r\n- Use \"Networks\" instead of \"Network elements\" for policy ownership clarity\r\n- Remove \"signal\" from \"throughput advice signal\" to avoid confusion with Rate Signal field\r\n- Clarify shared limit sentence wording\r\n- Simplify policy differentiation text\r\n- Rename \"Following Advice\" section to \"Application Use of Advice\"\r\n- Expand acknowledgment explanation with practical example\r\n\r\nThis does not address the diagram issues since I am not sure the suggestion is an improvement. It also does not remove the applicability section as that is a much larger change.",
       "createdAt": "2026-01-23T17:40:08Z",
-      "updatedAt": "2026-01-24T04:36:54Z",
+      "updatedAt": "2026-01-26T23:38:07Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
       "headRepository": "mjoras/scone",
       "headRefName": "zahed-wglc-review",
-      "headRefOid": "2d32a6214f5472c5f16700e40e50ec04ef54e537",
+      "headRefOid": "261b2c949978cb12aeab970fd564fc950ae39a4c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -12610,6 +12610,86 @@
           "createdAt": "2026-01-24T04:36:54Z",
           "updatedAt": "2026-01-24T04:36:54Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87cuSA9",
+          "commit": {
+            "abbreviatedOid": "2d32a62"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-25T03:07:24Z",
+          "updatedAt": "2026-01-25T03:07:25Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I kind of prefer retaining \"sustained,\" or something like:\n\n```suggestion\nSCONE provides a means for networks to signal the maximum sustainable throughput,\n```\n\nSCONE measures throughput as the average throughput over a monitoring period, which could be very different from the achievable throughput of short and bursty flows.\n\nBy removing \"sustained,\" readers might be misguided that the throughput advice might indicate the latter.",
+              "createdAt": "2026-01-25T03:07:25Z",
+              "updatedAt": "2026-01-25T03:07:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87c7y4J",
+          "commit": {
+            "abbreviatedOid": "2d32a62"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-26T15:41:55Z",
+          "updatedAt": "2026-01-26T15:41:55Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I still don't get how sustained can express the way you want to resolve the confusion at the client's interpretation. So what is your definitoin of \"the maximum sustainable throughput\"? how does the client know the period that the network can sustain? and how does that help not to overshoot the thoughput advice? ...\r\n\r\nI think we need to more descriptive text describe those, we cannot describe all those in those short term. In general, the client should know that they can achieve more rate than what is adviced to then, but they should not try to test the sustainablity of the network by overshooting the advice.. This isthe agreement here when the client says it is scone capable.  Otherwise they might be fall into other policy as the current document suggest. \r\n\r\nAlso as I wrote in the issue https://github.com/ietf-wg-scone/scone/issues/84, \"sustain\" to some of us means gurantee from the network.. which we can't really assume here.\r\n\r\n",
+              "createdAt": "2026-01-26T15:41:55Z",
+              "updatedAt": "2026-01-26T15:41:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87c72jF",
+          "commit": {
+            "abbreviatedOid": "2d32a62"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-26T15:45:21Z",
+          "updatedAt": "2026-01-26T15:45:21Z",
+          "comments": [
+            {
+              "originalPosition": 120,
+              "body": "s/signal/advice",
+              "createdAt": "2026-01-26T15:45:21Z",
+              "updatedAt": "2026-01-26T15:45:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87c73V8",
+          "commit": {
+            "abbreviatedOid": "2d32a62"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-01-26T15:46:03Z",
+          "updatedAt": "2026-01-26T15:46:03Z",
+          "comments": [
+            {
+              "originalPosition": 49,
+              "body": "We don't need to specify congestion control signal here as a means to do that.. ",
+              "createdAt": "2026-01-26T15:46:03Z",
+              "updatedAt": "2026-01-26T15:46:03Z"
+            }
+          ]
         }
       ]
     }
