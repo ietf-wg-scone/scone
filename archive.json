@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-27T02:00:55.485471+00:00",
+  "timestamp": "2026-01-29T02:10:56.211341+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12585,13 +12585,13 @@
       "labels": [],
       "body": "## Summary\r\n- Use \"achievable\" instead of \"sustained\" for consistency with abstract\r\n- Use \"Networks\" instead of \"Network elements\" for policy ownership clarity\r\n- Remove \"signal\" from \"throughput advice signal\" to avoid confusion with Rate Signal field\r\n- Clarify shared limit sentence wording\r\n- Simplify policy differentiation text\r\n- Rename \"Following Advice\" section to \"Application Use of Advice\"\r\n- Expand acknowledgment explanation with practical example\r\n\r\nThis does not address the diagram issues since I am not sure the suggestion is an improvement. It also does not remove the applicability section as that is a much larger change.",
       "createdAt": "2026-01-23T17:40:08Z",
-      "updatedAt": "2026-01-26T23:38:07Z",
+      "updatedAt": "2026-01-27T16:51:00Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
       "headRepository": "mjoras/scone",
       "headRefName": "zahed-wglc-review",
-      "headRefOid": "261b2c949978cb12aeab970fd564fc950ae39a4c",
+      "headRefOid": "082462ce33509b74e44492c031bf973e3f8c0c3c",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -12688,6 +12688,32 @@
               "body": "We don't need to specify congestion control signal here as a means to do that.. ",
               "createdAt": "2026-01-26T15:46:03Z",
               "updatedAt": "2026-01-26T15:46:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87dFkd8",
+          "commit": {
+            "abbreviatedOid": "261b2c9"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "One grammatical error and a suggestion to improve, but I agree with others about the overall improvement.  Thanks Matt and Zahed for these.",
+          "createdAt": "2026-01-27T05:45:08Z",
+          "updatedAt": "2026-01-27T05:47:05Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Or even\n\n```suggestion\nSCONE provides a means for a network to signal its present best estimate\nfor maximum sustainable throughput,\n```\n\nI know @kazuho suggested the flip in this direction, which I think is good, but Zahed's point about this being interpreted as a commitment is worth addressing somehow.",
+              "createdAt": "2026-01-27T05:45:08Z",
+              "updatedAt": "2026-01-27T05:47:05Z"
+            },
+            {
+              "originalPosition": 17,
+              "body": "```suggestion\nSCONE packets.  The network, via an on-path network element, can indicate a maximum\n```",
+              "createdAt": "2026-01-27T05:45:40Z",
+              "updatedAt": "2026-01-27T05:47:05Z"
             }
           ]
         }
