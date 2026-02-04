@@ -83,7 +83,8 @@ adapting their send rate.
 
 The Standard Communication with Network Elements (SCONE) protocol
 is negotiated by QUIC endpoints.
-SCONE provides a means for networks to signal the maximum available sustained throughput,
+SCONE provides a means for a network to signal its present best estimate
+for maximum sustainable throughput,
 or throughput advice,
 associated with the flows of UDP datagrams that QUIC exchanges.
 
@@ -113,9 +114,10 @@ QUIC endpoints can negotiate the use of SCONE by including a transport parameter
 ({{tp}}) in the QUIC handshake.  Endpoints then occasionally send SCONE packets,
 which are always coalesced with ordinary QUIC packets that they send.
 
-Network elements that have rate limiting policies can detect flows that include
-SCONE packets.  The network element can indicate a maximum sustained throughput
-by modifying the SCONE packet as it transits the network element.
+Networks that have rate limiting policies can detect flows that include
+SCONE packets.  The network, via an on-path network element, can indicate a maximum
+sustainable throughput by modifying the SCONE packet as it transits the
+network element.
 
 The propagation of SCONE packets, including the throughput advice that is added,
 is shown in {{f-scone}}.
@@ -157,7 +159,7 @@ network element, which provides endpoints strong evidence that the network
 element has the power to apply a rate limiting policy; though see {{security}} for
 potential limitations on this.
 
-The throughput advice signal that this protocol carries is independent of congestion
+The throughput advice that this protocol carries is independent of congestion
 signals, limited to a single path and UDP packet flow, unidirectional, and
 strictly advisory.
 
@@ -202,8 +204,8 @@ rather than a single flow.
 The scope of the flows that are included is not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
-such that multiple flows receive the same signal,
-but usage all contributes to a shared policy limit.
+such that multiple flows receive the same signal
+and combined usage contributes to the shared limit.
 
 Endpoints can therefore be more confident in the throughput signal
 as an indication of the maximum achievable throughput
@@ -283,8 +285,7 @@ bulk download for which bitrate adaptation that cannot be similarly controlled. 
 from multiple applications, such as tunneled flows, might only have a subset of
 the involved applications that are capable of handling SCONE signals. Therefore,
 when a network element detects that throughput exceeds the advertised throughput advice,
-it might switch to applying its policies for non-SCONE flows,
-using congestion control signals.
+it might apply rate limiting.
 
 Network conditions and rate-limit policies can change
 in ways that make previously signaled advice obsolete.
@@ -292,7 +293,7 @@ For example, routing changes can cause a flow to move to a different network pat
 There are no guarantees that updated advice will be sent at such events.
 
 
-## Following Advice
+## Application Use of Advice
 
 Applications that chose to follow throughput advice
 do so in the way that best suits their needs.
@@ -650,7 +651,7 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
     packet[1] = (packet[1] & 0x7f) | (target_signal << 7)
 ~~~
 
-Once the throughput advice signal is updated,
+Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram.
 
 To avoid throughput advice expiring,
@@ -835,7 +836,7 @@ using an implementation-defined mechanism.
 This document does not define a means for indicating what was received.
 That is, the expectation is that any signal is propagated to the application
 for handling, not handled automatically by the transport layer.
-How a receiving application communicates the throughput advice signal to a
+How a receiving application communicates throughput advice to a
 sending application will depend on the application in use.
 
 Different applications can choose different approaches. For example,
@@ -845,13 +846,15 @@ not be necessary to define additional signaling.
 A sender can use any acknowledgment mechanism provided by the QUIC version in
 use to learn whether datagrams containing SCONE packets were likely received.
 This might help inform whether to send additional SCONE packets in the event
-that a datagram is lost. However, rather than relying on transport signals, an
-application might be better able to indicate what has been received and
-processed.
+that a datagram is lost.  For instance, if a UDP datagram carrying both a
+SCONE packet and an ack-eliciting QUIC packet is acknowledged, the sender
+knows the SCONE packet was also received.  However, rather than relying
+solely on transport-layer acknowledgments, an application-layer mechanism
+might better indicate what has been received and acted upon.
 
 SCONE packets could be stripped from datagrams in the network, which cannot be
 reliably detected.  This could result in a sender falsely believing that no
-network element applied a throughput advice signal.
+network element applied throughput advice.
 Senders will therefore proceed as though there was no advice.
 
 ## Interactions with Congestion Control
@@ -880,7 +883,7 @@ The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and could apply a rate limit policy.
 {{extra-packets}} states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
-spurious throughput advice signals.
+spurious throughput advice.
 
 Some off-path attackers could be able to both
 observe traffic and inject packets. Attackers with such capabilities could
@@ -893,12 +896,12 @@ rate limiters. The attacker will thus get arbitrary SCONE packets accepted by
 the peer, with the result being that the endpoint receives a false
 or misleading rate limit.
 
-The recipient of a throughput advice signal therefore cannot guarantee that
+The recipient of throughput advice therefore cannot guarantee that
 the signal was generated by an on-path network element. However,
 the capabilities required of an off-path attacker are substantially
 similar to those of on path elements.
 
-The actual value of the throughput advice signal is not authenticated.  Any signal
+The throughput advice is not authenticated.  Throughput advice
 might be incorrectly set in order to encourage endpoints to behave in ways that
 are not in their interests.  Endpoints are free to ignore limits that they think
 are incorrect.  The congestion controller employed by a sender provides
@@ -1031,7 +1034,7 @@ in the packets behind VPN and proxy and also between the users and the VPN,
 but it does not know which VPN address corresponds to what user address.
 
 Suppose now that the attacker selects a flow on the link between the
-VPN/proxy and server. The attacker applies throughput advice signals to SCONE packets
+VPN/proxy and server. The attacker applies throughput advice to SCONE packets
 in that flow. The attacker chooses a bandwidth that is
 lower than the "natural" bandwidth of the connection. A reduction
 in the rate of flows between client and VPN/proxy might allow
@@ -1060,7 +1063,7 @@ That will also likely result in changes in the congestion response by
 the affected client.
 
 A VPN or proxy could defend against this style of attack by removing SCONE (and
-ECN) signals. There are few reasons to provide per-flow throughput advice signals in
+ECN) signals. There are few reasons to provide per-flow throughput advice in
 that situation.  Endpoints might also either disable this feature or ignore any
 signals when they are aware of the use of a VPN or proxy.
 
