@@ -664,7 +664,7 @@ Once the throughput advice signal is updated,
 the network element updates the UDP checksum for the datagram.
 
 To avoid throughput advice expiring,
-a network element needs to ensure that it sends updated rate signals
+a network element needs to ensure that it updates throughput advice in SCONE packets
 with no more than a monitoring period ({{time}}) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
@@ -695,9 +695,9 @@ but one might be added in future.
 
 ## Monitoring Flows {#monitoring}
 
-Sending throughput advice is optional for any network.
-A network that sends throughput advice might, also optionally,
-choose to monitor flows
+Providing throughput advice is optional for any network.
+A network that updates SCONE packets to provide throughput advice might,
+also optionally, choose to monitor flows
 to determine whether applications are following advice.
 
 This section outlines a method
@@ -716,8 +716,8 @@ than the monitoring period (67s)
 or using a higher rate than is signaled,
 has no risk of incorrect classification.
 
-When a network changes the value
-it intends to signal,
+When a network changes the throughput advice
+it intends to provide,
 applications need time to adjust their sending behavior.
 As a result, any monitoring needs to allow time
 for SCONE packets to be updated,
