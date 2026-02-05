@@ -163,8 +163,8 @@ strictly advisory.
 
 ## Independent of Congestion Signals {#not-cc}
 
-Throughput advice signals are not a substitute for congestion feedback or congestion control.
-SCONE provides a complementary signal.
+SCONE throughput advice is not a substitute for congestion feedback or congestion control.
+They are complementary.
 Congestion signals,
 such as acknowledgments or ECN markings {{?ECN=RFC3168}}{{?WHY-ECN=RFC8087}},
 provide information on loss and delay
