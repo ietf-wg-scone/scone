@@ -168,7 +168,8 @@ They are complementary.
 Congestion signals,
 such as acknowledgments or ECN markings {{?ECN=RFC3168}}{{?WHY-ECN=RFC8087}},
 provide information on loss and delay
-that indicate the real-time condition of a network path.
+that indicate the real-time condition of a network path,
+whereas SCONE throughput advice operates over a much longer period.
 
 A congestion controller needs to detect changed conditions
 and change sending behavior more quickly than SCONE allows for.
