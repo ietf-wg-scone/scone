@@ -552,7 +552,7 @@ transport parameters, and frame types registries established in {{Sections 22.2,
 
 All new flows that are initiated by a client that supports SCONE
 MUST include bytes with values 0xc8 and 0x13
-as the last two bytes of the UDP datagrams
+as the last two bytes of the payload of the UDP datagrams
 that commence a new flow, if the protocol permits it.
 
 For example, in QUIC version 1,
