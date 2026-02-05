@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 8 August 2026                              Private Octopus Inc.
+Expires: 9 August 2026                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         4 February 2026
+                                                         5 February 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2026.
+   This Internet-Draft will expire on 9 August 2026.
 
 Copyright Notice
 
@@ -209,11 +209,11 @@ Table of Contents
 
 3.1.  Independent of Congestion Signals
 
-   Throughput advice signals are not a substitute for congestion
-   feedback or congestion control.  SCONE provides a complementary
-   signal.  Congestion signals, such as acknowledgments or ECN markings
-   [ECN][WHY-ECN], provide information on loss and delay that indicate
-   the real-time condition of a network path.
+   SCONE throughput advice is not a substitute for congestion feedback
+   or congestion control.  They are complementary.  Congestion signals,
+   such as acknowledgments or ECN markings [ECN][WHY-ECN], provide
+   information on loss and delay that indicate the real-time condition
+   of a network path.
 
    A congestion controller needs to detect changed conditions and change
    sending behavior more quickly than SCONE allows for.  Congestion
