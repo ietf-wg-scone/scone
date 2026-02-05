@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-01-29T02:10:56.211341+00:00",
+  "timestamp": "2026-02-05T02:21:07.405299+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12578,24 +12578,26 @@
       "id": "PR_kwDON1dwo86-_Gc6",
       "title": "Address WGLC review comments from Zahed",
       "url": "https://github.com/ietf-wg-scone/scone/pull/127",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "mjoras",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "## Summary\r\n- Use \"achievable\" instead of \"sustained\" for consistency with abstract\r\n- Use \"Networks\" instead of \"Network elements\" for policy ownership clarity\r\n- Remove \"signal\" from \"throughput advice signal\" to avoid confusion with Rate Signal field\r\n- Clarify shared limit sentence wording\r\n- Simplify policy differentiation text\r\n- Rename \"Following Advice\" section to \"Application Use of Advice\"\r\n- Expand acknowledgment explanation with practical example\r\n\r\nThis does not address the diagram issues since I am not sure the suggestion is an improvement. It also does not remove the applicability section as that is a much larger change.",
       "createdAt": "2026-01-23T17:40:08Z",
-      "updatedAt": "2026-01-27T16:51:00Z",
+      "updatedAt": "2026-02-04T17:58:29Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
       "headRepository": "mjoras/scone",
       "headRefName": "zahed-wglc-review",
       "headRefOid": "082462ce33509b74e44492c031bf973e3f8c0c3c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-02-04T08:45:41Z",
+      "mergedAt": "2026-02-04T08:45:41Z",
+      "mergedBy": "britram",
+      "mergeCommit": {
+        "oid": "ca319914a8e20f187a98643d6e055b916781646f"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12714,6 +12716,219 @@
               "body": "```suggestion\nSCONE packets.  The network, via an on-path network element, can indicate a maximum\n```",
               "createdAt": "2026-01-27T05:45:40Z",
               "updatedAt": "2026-01-27T05:47:05Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 128,
+      "id": "PR_kwDON1dwo87BXcTq",
+      "title": "Trim out redundant congestion control text",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/128",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I've taken a couple of tiny things for the introductory material, but mostly this was just redundant.",
+      "createdAt": "2026-02-04T04:49:05Z",
+      "updatedAt": "2026-02-05T01:30:38Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "cc-collapse",
+      "headRefOid": "3a44e3035264658e029b1b23ce7a40c679361368",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "To be clear, I also liked your original text.  But it ended up being somewhat redundant. So it goes.",
+          "createdAt": "2026-02-05T01:30:03Z",
+          "updatedAt": "2026-02-05T01:30:03Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87fdxQt",
+          "commit": {
+            "abbreviatedOid": "b11e80d"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you for doing this. I have some suggestions, but I'd be fine with what we already have.",
+          "createdAt": "2026-02-04T05:44:02Z",
+          "updatedAt": "2026-02-04T05:47:41Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "It might be better to express SCONE is complementary to _what_. How about something like:\n\n```suggestion\nSCONE throughput advice is not a substitute for congestion feedback or congestion control.\nThey are complementary.\n```",
+              "createdAt": "2026-02-04T05:44:02Z",
+              "updatedAt": "2026-02-04T05:47:41Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "It might not be harmful to repeat the difference that we explain in the introduction.\n\n```suggestion\nthat indicate the real-time condition of a network path,\nwhereas SCONE throughput advice operates over a much longer period.\n```",
+              "createdAt": "2026-02-04T05:46:24Z",
+              "updatedAt": "2026-02-04T05:47:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87ftGbc",
+          "commit": {
+            "abbreviatedOid": "b11e80d"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I liked my original text, but I agree that this PR reflects the consensus from WG discussions.\n\nPlease apply Kazuho's suggestions.",
+          "createdAt": "2026-02-04T20:18:08Z",
+          "updatedAt": "2026-02-04T20:18:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDON1dwo87BXp3S",
+      "title": "Some minor edits from Sanjay's review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/129",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-04T05:06:39Z",
+      "updatedAt": "2026-02-04T20:20:12Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "sanjay",
+      "headRefOid": "e2302d307ba097427b15eb96c3629b8f7ad82936",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87fd00u",
+          "commit": {
+            "abbreviatedOid": "e2302d3"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T05:48:40Z",
+          "updatedAt": "2026-02-04T05:48:40Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87fqr0c",
+          "commit": {
+            "abbreviatedOid": "e2302d3"
+          },
+          "author": "mjoras",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T17:59:25Z",
+          "updatedAt": "2026-02-04T17:59:25Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87ftILr",
+          "commit": {
+            "abbreviatedOid": "e2302d3"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Fine.",
+          "createdAt": "2026-02-04T20:20:12Z",
+          "updatedAt": "2026-02-04T20:20:12Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 130,
+      "id": "PR_kwDON1dwo87BX3qI",
+      "title": "Magnus' Review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/130",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-04T05:24:18Z",
+      "updatedAt": "2026-02-05T01:29:08Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "magnus",
+      "headRefOid": "7868a745bcf2d4c65639b5deaa87c11db26ab29c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87fd10_",
+          "commit": {
+            "abbreviatedOid": "020470d"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-04T05:50:04Z",
+          "updatedAt": "2026-02-04T05:50:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87fkxYa",
+          "commit": {
+            "abbreviatedOid": "020470d"
+          },
+          "author": "gloinul",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Thanks these changes looks good and clarifies things. ",
+          "createdAt": "2026-02-04T13:04:15Z",
+          "updatedAt": "2026-02-04T13:04:15Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87ftMYl",
+          "commit": {
+            "abbreviatedOid": "020470d"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK. see optional suggestion.",
+          "createdAt": "2026-02-04T20:24:54Z",
+          "updatedAt": "2026-02-04T20:26:18Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```Suggestion\nas the last two bytes of the payload of the UDP datagrams\n```\n\nIf we want to be super precise. See [RFC9868](https://www.rfc-editor.org/rfc/rfc9868.pdf) for a proposed usage of pytes after the UDP payload in an IP apcket.",
+              "createdAt": "2026-02-04T20:24:54Z",
+              "updatedAt": "2026-02-04T20:26:18Z"
             }
           ]
         }
