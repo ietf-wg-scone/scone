@@ -131,7 +131,7 @@ is shown in {{f-scone}}.
     +--- SCONE --->|  SCONE+advice |
     |    +QUIC     +---- +QUIC --->|
     |              |               |  Validate QUIC packet
-    |              |               |  and record rate
+    |              |               |  and record advice
     |              |               |
 ~~~
 {: #f-scone title="Propagation of SCONE signal"}
