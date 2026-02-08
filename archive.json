@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-05T02:21:07.405299+00:00",
+  "timestamp": "2026-02-08T02:42:55.095403+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -12931,6 +12931,48 @@
               "updatedAt": "2026-02-04T20:26:18Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 131,
+      "id": "PR_kwDON1dwo87B6YE_",
+      "title": "Update diagram",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/131",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We stopped using \"rate\" a while back, but missed one.",
+      "createdAt": "2026-02-06T06:13:50Z",
+      "updatedAt": "2026-02-06T06:55:35Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "ca319914a8e20f187a98643d6e055b916781646f",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "rate-advice",
+      "headRefOid": "64c049dc77ceb5e2645ed95e4ab49fb359db9ba5",
+      "closedAt": "2026-02-06T06:55:35Z",
+      "mergedAt": "2026-02-06T06:55:35Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "44239fb12d74fdc85cb1fdee82cb31daf1510aaf"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87gLrcZ",
+          "commit": {
+            "abbreviatedOid": "64c049d"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-06T06:45:57Z",
+          "updatedAt": "2026-02-06T06:45:57Z",
+          "comments": []
         }
       ]
     }
