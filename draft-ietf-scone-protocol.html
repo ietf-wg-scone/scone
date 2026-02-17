@@ -1321,7 +1321,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
       </h2>
 <p id="section-1-1">Many networks have known, concrete rate limits, or apply these limits
 by policy to constrain data rates.
-This is often done without any indication to applications.
+This is often done without any ability to indicate rate limits to applications.
 The result can be that application performance is degraded,
 as the manner in which rate limits are enforced can be incompatible with the
 rate estimation or congestion control algorithms used at endpoints.<a href="#section-1-1" class="pilcrow">¶</a></p>
@@ -1335,8 +1335,8 @@ for maximum sustainable throughput,
 or throughput advice,
 associated with the flows of UDP datagrams that QUIC exchanges.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <p id="section-1-4">Any network function that is able to update the content of UDP datagrams
-qualifies as a network element that can participate in SCONE
-and provide throughput advice to QUIC endpoints.<a href="#section-1-4" class="pilcrow">¶</a></p>
+qualifies as a network element that can use SCONE packets
+to provide throughput advice to QUIC endpoints.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">Networks with rate limiting policies can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals -- such as ECN, delays and loss --
@@ -1588,7 +1588,7 @@ There are no guarantees that updated advice will be sent at such events.<a href=
         <h3 id="name-application-use-of-advice">
 <a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-application-use-of-advice" class="section-name selfRef">Application Use of Advice</a>
         </h3>
-<p id="section-3.6-1">Applications that chose to follow throughput advice
+<p id="section-3.6-1">Applications that choose to follow throughput advice
 do so in the way that best suits their needs.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.6-2">The most obvious way to follow throughput advice is to
 inform the sending peer of the advice so that the peer
