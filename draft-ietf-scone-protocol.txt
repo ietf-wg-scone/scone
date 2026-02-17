@@ -268,13 +268,14 @@ Table of Contents
 
 3.3.  Per-Flow Signal
 
-   The same UDP address tuple might be used for multiple QUIC
-   connections.  A single signal might be lost or only reach a single
-   application endpoint.  Network elements can apply SCONE advice to all
-   QUIC connections that include SCONE packets to ensure that advice is
+   The same address tuple (IP version, source and destination IP
+   addresses and UDP ports) might be used for multiple QUIC connections.
+   A single signal might be lost or only reach a single application
+   endpoint.  Network elements can apply SCONE advice to all QUIC
+   connections that include SCONE packets to ensure that advice is
    received by all application endpoints.
 
-   The signaled advice applies to the flow of packets on the same UDP
+   The signaled advice applies to the flow of packets on the same
    address tuple for the duration of the current monitoring period,
    unless it is updated earlier or the flow ends; see Section 5.2 for
    details on the monitoring period.
@@ -652,7 +653,7 @@ Table of Contents
 7.  Network Deployment
 
    QUIC endpoints can enable the use of the SCONE protocol by sending
-   SCONE packets Section 5.  Network elements can then use SCONE and
+   SCONE packets (Section 5).  Network elements can then use SCONE and
    replace the Rate Signal field (Section 7.1) according to their
    policies.
 

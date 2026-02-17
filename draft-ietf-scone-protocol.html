@@ -1513,13 +1513,16 @@ to be split between multiple active flows.<a href="#section-3.2-5" class="pilcro
         <h3 id="name-per-flow-signal">
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-per-flow-signal" class="section-name selfRef">Per-Flow Signal</a>
         </h3>
-<p id="section-3.3-1">The same UDP address tuple might be used for multiple QUIC connections.  A
-single signal might be lost or only reach a single application endpoint.
+<p id="section-3.3-1">The same address tuple
+(IP version, source and destination IP addresses and UDP ports)
+might be used for multiple QUIC connections.
+A single signal might be lost
+or only reach a single application endpoint.
 Network elements can apply SCONE advice
 to all QUIC connections that include SCONE packets
 to ensure that advice is received by all application endpoints.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.3-2">The signaled advice applies to the flow of packets
-on the same UDP address tuple for the duration of
+on the same address tuple for the duration of
 the current monitoring period, unless it is updated
 earlier or the flow ends; see <a href="#time" class="auto internal xref">Section 5.2</a> for details on
 the monitoring period.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
@@ -1978,7 +1981,7 @@ but only if the peer has sent the transport parameter; see <a href="#tp" class="
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-network-deployment" class="section-name selfRef">Network Deployment</a>
       </h2>
 <p id="section-7-1">QUIC endpoints can enable the use of the SCONE protocol
-by sending SCONE packets <a href="#packet" class="auto internal xref">Section 5</a>.
+by sending SCONE packets (<a href="#packet" class="auto internal xref">Section 5</a>).
 Network elements can then use SCONE and replace
 the Rate Signal field (<a href="#apply" class="auto internal xref">Section 7.1</a>)
 according to their policies.<a href="#section-7-1" class="pilcrow">¶</a></p>
