@@ -372,7 +372,8 @@ value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
 The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
-({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty.
+({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty
+and the Source Connection ID Length field is set to 0.
 
 SCONE packets MUST be included as the first packet in a datagram.
 This is primarily to simplify the process of updating throughput advice
@@ -552,8 +553,17 @@ transport parameters, and frame types registries established in {{Sections 22.2,
 
 All new flows that are initiated by a client that supports SCONE
 MUST include bytes with values 0xc8 and 0x13
-as the last two bytes of datagrams
-that commence a new flow if the protocol permits it.
+as the last two bytes of the payload of the UDP datagrams
+that commence a new flow, if the protocol permits it.
+
+For example, in QUIC version 1,
+these datagrams contain QUIC packets with a long header ({{Section 17.2 of QUIC}}).
+The UDP datagrams sent by a client can contain:
+one or more QUIC version 1 Initial packets,
+zero or more 0-RTT packets,
+padding or other data that is discarded on receipt,
+and the indication bytes (0xc8, 0x13) as the final bytes of the UDP payload.
+
 This indication MUST be sent in every datagram
 until the client receives any datagram from the server,
 at which point the client can be confident that the indication was received.
@@ -655,7 +665,7 @@ Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram.
 
 To avoid throughput advice expiring,
-a network element needs to ensure that it sends updated rate signals
+a network element needs to ensure that it updates throughput advice in SCONE packets
 with no more than a monitoring period ({{time}}) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
@@ -686,9 +696,9 @@ but one might be added in future.
 
 ## Monitoring Flows {#monitoring}
 
-Sending throughput advice is optional for any network.
-A network that sends throughput advice might, also optionally,
-choose to monitor flows
+Providing throughput advice is optional for any network.
+A network that updates SCONE packets to provide throughput advice might,
+also optionally, choose to monitor flows
 to determine whether applications are following advice.
 
 This section outlines a method
@@ -707,8 +717,8 @@ than the monitoring period (67s)
 or using a higher rate than is signaled,
 has no risk of incorrect classification.
 
-When a network changes the value
-it intends to signal,
+When a network changes the throughput advice
+it intends to provide,
 applications need time to adjust their sending behavior.
 As a result, any monitoring needs to allow time
 for SCONE packets to be updated,
