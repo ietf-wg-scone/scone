@@ -1258,9 +1258,6 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
                 <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-feedback-to-sender-about-si" class="internal xref">Feedback To Sender About Signals</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-interactions-with-congestio" class="internal xref">Interactions with Congestion Control</a></p>
-</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
@@ -1450,30 +1447,34 @@ strictly advisory.<a href="#section-3-3" class="pilcrow">¶</a></p>
         <h3 id="name-independent-of-congestion-s">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-independent-of-congestion-s" class="section-name selfRef">Independent of Congestion Signals</a>
         </h3>
-<p id="section-3.1-1">Throughput advice signals are not a substitute for congestion feedback or congestion control.
+<p id="section-3.1-1">SCONE throughput advice is not a substitute for congestion feedback or congestion control.
+They are complementary.
 Congestion signals,
 such as acknowledgments or ECN markings <span>[<a href="#ECN" class="cite xref">ECN</a>]</span><span>[<a href="#WHY-ECN" class="cite xref">WHY-ECN</a>]</span>,
 provide information on loss and delay
-that indicate the real-time condition of a network path.
-Congestion signals might indicate a throughput limit
-that is different from the signaled throughput advice.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">Endpoints cannot assume that the rate indicated in throughput advice is achievable if congestion
+that indicate the real-time condition of a network path,
+whereas SCONE throughput advice operates over a much longer period.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">A congestion controller needs to detect changed conditions
+and change sending behavior more quickly than SCONE allows for.
+Congestion signals can indicate a throughput limit
+that is different from the signaled throughput advice.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">Endpoints cannot assume that the rate indicated in throughput advice is achievable if congestion
 signals indicate otherwise.  Congestion could be experienced at a different
 point on the network path than the network element that signals throughput advice.
 Therefore, endpoints need to respect the send rate constraints that are set by a
-congestion controller.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.1-3">Networks can use SCONE to communicate throughput advice
+congestion controller.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">Networks can use SCONE to communicate throughput advice
 for reasons other than rate limiting policies.
 For example, a network element in an access network
 could provide reduced throughput advice
 to guide application use of network capacity
-during periods of unusually high usage.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">In addition to rate limiting policies,
+during periods of unusually high usage.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">In addition to rate limiting policies,
 throughput advice can indicate temporary increases in available capacity
 or temporarily reduced capacity.
 This includes persistent overuse, equipment faults, or other transient issues.
 Providing advice is applicable if increases or reductions
-are expected to last for more than one monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+are expected to last for more than one monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="unspecified-scope">
@@ -2214,29 +2215,6 @@ might better indicate what has been received and acted upon.<a href="#section-8.
 reliably detected.  This could result in a sender falsely believing that no
 network element applied throughput advice.
 Senders will therefore proceed as though there was no advice.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="interactions-with-congestion-control">
-<section id="section-8.3">
-        <h3 id="name-interactions-with-congestio">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-interactions-with-congestio" class="section-name selfRef">Interactions with Congestion Control</a>
-        </h3>
-<p id="section-8.3-1">SCONE and congestion control both provide the application with estimates
-of a path capacity. They are complementary. Congestion control algorithms
-are typically designed to quickly detect and react to congestion, i.e., to
-the "minimum" capacity of a path. SCONE informs the endpoint
-of the maximum capacity of a path based on network rate limit policy,
-network conditions, or a combination of the two.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">Consider for example a path in which the bottleneck router implements
-some form of Explicit Congestion Notification <span>[<a href="#ECN" class="cite xref">ECN</a>]</span>.
-If the path capacity diminishes, queues will build up and the router
-will immediately start increasing the rate at which packets are marked
-as "Congestion Experienced". The receiving endpoint will notice these marks,
-and inform its peer. The incoming congestion will be detected in
-1 round trip time (RTT). This scenario will play out whatever the reason
-for the change in capacity, whether due to increased competition between
-multiple applications or, for example, to a change in capacity of a wireless
-channel.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
