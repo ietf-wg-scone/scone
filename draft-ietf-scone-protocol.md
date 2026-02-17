@@ -72,7 +72,7 @@ throughput might be for QUIC flows.
 
 Many networks have known, concrete rate limits, or apply these limits
 by policy to constrain data rates.
-This is often done without any indication to applications.
+This is often done without any ability to indicate rate limits to applications.
 The result can be that application performance is degraded,
 as the manner in which rate limits are enforced can be incompatible with the
 rate estimation or congestion control algorithms used at endpoints.
@@ -89,8 +89,8 @@ or throughput advice,
 associated with the flows of UDP datagrams that QUIC exchanges.
 
 Any network function that is able to update the content of UDP datagrams
-qualifies as a network element that can participate in SCONE
-and provide throughput advice to QUIC endpoints.
+qualifies as a network element that can use SCONE packets
+to provide throughput advice to QUIC endpoints.
 
 Networks with rate limiting policies can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
@@ -303,7 +303,7 @@ There are no guarantees that updated advice will be sent at such events.
 
 ## Application Use of Advice
 
-Applications that chose to follow throughput advice
+Applications that choose to follow throughput advice
 do so in the way that best suits their needs.
 
 The most obvious way to follow throughput advice is to
