@@ -228,14 +228,17 @@ to be split between multiple active flows.
 
 ## Per-Flow Signal
 
-The same UDP address tuple might be used for multiple QUIC connections.  A
-single signal might be lost or only reach a single application endpoint.
+The same address tuple
+(IP version, source and destination IP addresses and UDP ports)
+might be used for multiple QUIC connections.
+A single signal might be lost
+or only reach a single application endpoint.
 Network elements can apply SCONE advice
 to all QUIC connections that include SCONE packets
 to ensure that advice is received by all application endpoints.
 
 The signaled advice applies to the flow of packets
-on the same UDP address tuple for the duration of
+on the same address tuple for the duration of
 the current monitoring period, unless it is updated
 earlier or the flow ends; see {{time}} for details on
 the monitoring period.
@@ -625,7 +628,7 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 # Network Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol
-by sending SCONE packets {{packet}}.
+by sending SCONE packets ({{packet}}).
 Network elements can then use SCONE and replace
 the Rate Signal field ({{apply}})
 according to their policies.
