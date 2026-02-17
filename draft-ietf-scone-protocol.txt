@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 10 August 2026                             Private Octopus Inc.
+Expires: 21 August 2026                             Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         6 February 2026
+                                                        17 February 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 August 2026.
+   This Internet-Draft will expire on 21 August 2026.
 
 Copyright Notice
 
@@ -406,7 +406,8 @@ Table of Contents
    ID field of any packet that follows.  If the next packet in the
    datagram does not have a Source Connection ID field, which is the
    case for packets with a short header (Section 5.2 of [INVARIANTS]),
-   the Source Connection ID field is empty.
+   the Source Connection ID field is empty and the Source Connection ID
+   Length field is set to 0.
 
    SCONE packets MUST be included as the first packet in a datagram.
    This is primarily to simplify the process of updating throughput
@@ -590,11 +591,20 @@ Table of Contents
 6.1.  Indicating Support on New Flows
 
    All new flows that are initiated by a client that supports SCONE MUST
-   include bytes with values 0xc8 and 0x13 as the last two bytes of
-   datagrams that commence a new flow if the protocol permits it.  This
-   indication MUST be sent in every datagram until the client receives
-   any datagram from the server, at which point the client can be
-   confident that the indication was received.
+   include bytes with values 0xc8 and 0x13 as the last two bytes of the
+   payload of the UDP datagrams that commence a new flow, if the
+   protocol permits it.
+
+   For example, in QUIC version 1, these datagrams contain QUIC packets
+   with a long header (Section 17.2 of [QUIC]).  The UDP datagrams sent
+   by a client can contain: one or more QUIC version 1 Initial packets,
+   zero or more 0-RTT packets, padding or other data that is discarded
+   on receipt, and the indication bytes (0xc8, 0x13) as the final bytes
+   of the UDP payload.
+
+   This indication MUST be sent in every datagram until the client
+   receives any datagram from the server, at which point the client can
+   be confident that the indication was received.
 
    A client that uses a QUIC version that sends length-delimited packets
    during the handshake, which includes QUIC versions 1 [QUIC] and 2
@@ -680,13 +690,13 @@ Table of Contents
    the UDP checksum for the datagram.
 
    To avoid throughput advice expiring, a network element needs to
-   ensure that it sends updated rate signals with no more than a
-   monitoring period (Section 5.2) between each update.  Because this
-   depends on the availability of SCONE packets and packet loss can
-   cause signals to be missed, network elements might need to update
-   more often.  Ideally, network elements update advice in SCONE packets
-   at least twice per monitoring period, to match endpoint behavior (see
-   Section 8.1).
+   ensure that it updates throughput advice in SCONE packets with no
+   more than a monitoring period (Section 5.2) between each update.
+   Because this depends on the availability of SCONE packets and packet
+   loss can cause signals to be missed, network elements might need to
+   update more often.  Ideally, network elements update advice in SCONE
+   packets at least twice per monitoring period, to match endpoint
+   behavior (see Section 8.1).
 
    At the start of a flow, network elements are encouraged to update the
    rate signal of the first few SCONE packets it observes so that
@@ -707,9 +717,10 @@ Table of Contents
 
 7.2.  Monitoring Flows
 
-   Sending throughput advice is optional for any network.  A network
-   that sends throughput advice might, also optionally, choose to
-   monitor flows to determine whether applications are following advice.
+   Providing throughput advice is optional for any network.  A network
+   that updates SCONE packets to provide throughput advice might, also
+   optionally, choose to monitor flows to determine whether applications
+   are following advice.
 
    This section outlines a method that a network element could use to
    determine whether advice is being followed.  Network deployments that
@@ -723,11 +734,11 @@ Table of Contents
    than the monitoring period (67s) or using a higher rate than is
    signaled, has no risk of incorrect classification.
 
-   When a network changes the value it intends to signal, applications
-   need time to adjust their sending behavior.  As a result, any
-   monitoring needs to allow time for SCONE packets to be updated, for
-   those packets to be received by endpoints, and for applications to
-   adapt.
+   When a network changes the throughput advice it intends to provide,
+   applications need time to adjust their sending behavior.  As a
+   result, any monitoring needs to allow time for SCONE packets to be
+   updated, for those packets to be received by endpoints, and for
+   applications to adapt.
 
    A network element can then monitor affected flows to determine
    whether the throughput advice it provided was followed.

@@ -172,7 +172,7 @@ throughput might be for QUIC flows.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
   font-family: 'Oxygen Mono';
@@ -180,7 +180,8 @@ throughput might be for QUIC flows.
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 }
 
 @font-face {
@@ -1055,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 10 August 2026</td>
+<td class="center">Expires 21 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-06" class="published">6 February 2026</time>
+<time datetime="2026-02-17" class="published">17 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-10">10 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-21">21 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1143,7 @@ throughput might be for QUIC flows.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1663,7 +1664,8 @@ value as other packets in the same datagram; see <span><a href="https://rfc-edit
 <p id="section-5-8">The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
-(<span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.2" class="relref">Section 5.2</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>), the Source Connection ID field is empty.<a href="#section-5-8" class="pilcrow">¶</a></p>
+(<span><a href="https://rfc-editor.org/rfc/rfc8999#section-5.2" class="relref">Section 5.2</a> of [<a href="#INVARIANTS" class="cite xref">INVARIANTS</a>]</span>), the Source Connection ID field is empty
+and the Source Connection ID Length field is set to 0.<a href="#section-5-8" class="pilcrow">¶</a></p>
 <p id="section-5-9">SCONE packets <span class="bcp14">MUST</span> be included as the first packet in a datagram.
 This is primarily to simplify the process of updating throughput advice
 in network elements.
@@ -1905,18 +1907,25 @@ transport parameters, and frame types registries established in Sections <a href
         </h3>
 <p id="section-6.1-1">All new flows that are initiated by a client that supports SCONE
 <span class="bcp14">MUST</span> include bytes with values 0xc8 and 0x13
-as the last two bytes of datagrams
-that commence a new flow if the protocol permits it.
-This indication <span class="bcp14">MUST</span> be sent in every datagram
+as the last two bytes of the payload of the UDP datagrams
+that commence a new flow, if the protocol permits it.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">For example, in QUIC version 1,
+these datagrams contain QUIC packets with a long header (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-17.2" class="relref">Section 17.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>).
+The UDP datagrams sent by a client can contain:
+one or more QUIC version 1 Initial packets,
+zero or more 0-RTT packets,
+padding or other data that is discarded on receipt,
+and the indication bytes (0xc8, 0x13) as the final bytes of the UDP payload.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">This indication <span class="bcp14">MUST</span> be sent in every datagram
 until the client receives any datagram from the server,
-at which point the client can be confident that the indication was received.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">A client that uses a QUIC version that sends length-delimited packets during the handshake,
+at which point the client can be confident that the indication was received.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">A client that uses a QUIC version that sends length-delimited packets during the handshake,
 which includes QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2 <span>[<a href="#QUICv2" class="cite xref">QUICv2</a>]</span>,
 can include an indicator of SCONE support
 outside of the QUIC packets at the end of datagrams that start a flow.
 The handshakes of these protocols ensures that
 the indication can be included in every datagram the client sends
-until it receives a response -- of any kind -- from the server.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+until it receives a response -- of any kind -- from the server.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="limitations-of-indication">
@@ -2006,7 +2015,7 @@ if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
 <p id="section-7.1-6">Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <p id="section-7.1-7">To avoid throughput advice expiring,
-a network element needs to ensure that it sends updated rate signals
+a network element needs to ensure that it updates throughput advice in SCONE packets
 with no more than a monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>) between each update.
 Because this depends on the availability of SCONE packets
 and packet loss can cause signals to be missed,
@@ -2037,9 +2046,9 @@ but one might be added in future.<a href="#section-7.1-10" class="pilcrow">¶</a
         <h3 id="name-monitoring-flows">
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-monitoring-flows" class="section-name selfRef">Monitoring Flows</a>
         </h3>
-<p id="section-7.2-1">Sending throughput advice is optional for any network.
-A network that sends throughput advice might, also optionally,
-choose to monitor flows
+<p id="section-7.2-1">Providing throughput advice is optional for any network.
+A network that updates SCONE packets to provide throughput advice might,
+also optionally, choose to monitor flows
 to determine whether applications are following advice.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2-2">This section outlines a method
 that a network element could use
@@ -2055,8 +2064,8 @@ such as monitoring over a longer time window
 than the monitoring period (67s)
 or using a higher rate than is signaled,
 has no risk of incorrect classification.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.2-4">When a network changes the value
-it intends to signal,
+<p id="section-7.2-4">When a network changes the throughput advice
+it intends to provide,
 applications need time to adjust their sending behavior.
 As a result, any monitoring needs to allow time
 for SCONE packets to be updated,
