@@ -165,12 +165,17 @@ strictly advisory.
 
 ## Independent of Congestion Signals {#not-cc}
 
-Throughput advice signals are not a substitute for congestion feedback or congestion control.
+SCONE throughput advice is not a substitute for congestion feedback or congestion control.
+They are complementary.
 Congestion signals,
 such as acknowledgments or ECN markings {{?ECN=RFC3168}}{{?WHY-ECN=RFC8087}},
 provide information on loss and delay
-that indicate the real-time condition of a network path.
-Congestion signals might indicate a throughput limit
+that indicate the real-time condition of a network path,
+whereas SCONE throughput advice operates over a much longer period.
+
+A congestion controller needs to detect changed conditions
+and change sending behavior more quickly than SCONE allows for.
+Congestion signals can indicate a throughput limit
 that is different from the signaled throughput advice.
 
 Endpoints cannot assume that the rate indicated in throughput advice is achievable if congestion
@@ -870,25 +875,6 @@ reliably detected.  This could result in a sender falsely believing that no
 network element applied throughput advice.
 Senders will therefore proceed as though there was no advice.
 
-## Interactions with Congestion Control
-
-SCONE and congestion control both provide the application with estimates
-of a path capacity. They are complementary. Congestion control algorithms
-are typically designed to quickly detect and react to congestion, i.e., to
-the "minimum" capacity of a path. SCONE informs the endpoint
-of the maximum capacity of a path based on network rate limit policy,
-network conditions, or a combination of the two.
-
-Consider for example a path in which the bottleneck router implements
-some form of Explicit Congestion Notification {{?ECN=RFC3168}}.
-If the path capacity diminishes, queues will build up and the router
-will immediately start increasing the rate at which packets are marked
-as "Congestion Experienced". The receiving endpoint will notice these marks,
-and inform its peer. The incoming congestion will be detected in
-1 round trip time (RTT). This scenario will play out whatever the reason
-for the change in capacity, whether due to increased competition between
-multiple applications or, for example, to a change in capacity of a wireless
-channel.
 
 # Security Considerations {#security}
 
