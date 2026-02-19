@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-08T02:42:55.095403+00:00",
+  "timestamp": "2026-02-19T02:25:41.469603+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -11690,21 +11690,21 @@
       "id": "PR_kwDON1dwo866ZOiX",
       "title": "WGLC Nits",
       "url": "https://github.com/ietf-wg-scone/scone/pull/117",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "A few nits I found in WGLC review.",
       "createdAt": "2025-12-23T21:32:04Z",
-      "updatedAt": "2026-01-11T20:42:07Z",
+      "updatedAt": "2026-02-17T22:59:06Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cc9f4595b35d309a069acaa9c81a959c3b4112d8",
       "headRepository": "martinduke/scone",
       "headRefName": "patch-1",
       "headRefOid": "d680498f8b7bd2d28076e76e675636dde4973ed1",
-      "closedAt": null,
+      "closedAt": "2026-02-17T22:59:06Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -12475,24 +12475,26 @@
       "id": "PR_kwDON1dwo86802oo",
       "title": "Address tuple is more complicated",
       "url": "https://github.com/ietf-wg-scone/scone/pull/125",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Takes Christian's suggestions and makes the change clearer.\r\n\r\nCloses #117.\r\n\r\n@martinduke, @huitema, better?",
       "createdAt": "2026-01-13T02:39:17Z",
-      "updatedAt": "2026-01-14T20:48:46Z",
+      "updatedAt": "2026-02-17T22:59:05Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "9d89955522be341919ba17c37be9c44a3e2943d9",
+      "baseRefOid": "d3fb14d3f9671a442a95b8e0e2723df176943b1e",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "pr117",
-      "headRefOid": "f5bda0eb65dbcb0c7ad7ca2ced5352feb317c2ee",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "c2bec08b43e7468fb46c1119ea4b64e050f82657",
+      "closedAt": "2026-02-17T22:59:05Z",
+      "mergedAt": "2026-02-17T22:59:05Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "5a5055bf6a521978e334545f5aba5d418f3e41de"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12726,24 +12728,26 @@
       "id": "PR_kwDON1dwo87BXcTq",
       "title": "Trim out redundant congestion control text",
       "url": "https://github.com/ietf-wg-scone/scone/pull/128",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "I've taken a couple of tiny things for the introductory material, but mostly this was just redundant.",
       "createdAt": "2026-02-04T04:49:05Z",
-      "updatedAt": "2026-02-05T01:30:38Z",
+      "updatedAt": "2026-02-17T22:59:14Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "cc-collapse",
       "headRefOid": "3a44e3035264658e029b1b23ce7a40c679361368",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-02-17T22:59:14Z",
+      "mergedAt": "2026-02-17T22:59:14Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "ada920e7558c16727dbd512e1ef1ab00a8fe182f"
+      },
       "comments": [
         {
           "author": "martinthomson",
@@ -12792,6 +12796,19 @@
           "createdAt": "2026-02-04T20:18:08Z",
           "updatedAt": "2026-02-04T20:18:08Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87jUbUz",
+          "commit": {
+            "abbreviatedOid": "3a44e30"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-17T12:47:37Z",
+          "updatedAt": "2026-02-17T12:47:37Z",
+          "comments": []
         }
       ]
     },
@@ -12800,24 +12817,26 @@
       "id": "PR_kwDON1dwo87BXp3S",
       "title": "Some minor edits from Sanjay's review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/129",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-02-04T05:06:39Z",
-      "updatedAt": "2026-02-04T20:20:12Z",
+      "updatedAt": "2026-02-17T22:59:28Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
-      "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
+      "baseRefOid": "44239fb12d74fdc85cb1fdee82cb31daf1510aaf",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "sanjay",
-      "headRefOid": "e2302d307ba097427b15eb96c3629b8f7ad82936",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "8b18d4b3213a0c449dce54f9e2f0ab8ca8bea385",
+      "closedAt": "2026-02-17T22:59:28Z",
+      "mergedAt": "2026-02-17T22:59:28Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "a8a868f4e02eab799b5c3e7ec060f38d663ae5fb"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12858,6 +12877,19 @@
           "createdAt": "2026-02-04T20:20:12Z",
           "updatedAt": "2026-02-04T20:20:12Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87jUZuM",
+          "commit": {
+            "abbreviatedOid": "8b18d4b"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-17T12:45:55Z",
+          "updatedAt": "2026-02-17T12:45:55Z",
+          "comments": []
         }
       ]
     },
@@ -12866,24 +12898,26 @@
       "id": "PR_kwDON1dwo87BX3qI",
       "title": "Magnus' Review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/130",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-02-04T05:24:18Z",
-      "updatedAt": "2026-02-05T01:29:08Z",
+      "updatedAt": "2026-02-17T22:57:56Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e2a51a91f6c786f4ca67e28b8c33084fb3ad254a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "magnus",
       "headRefOid": "7868a745bcf2d4c65639b5deaa87c11db26ab29c",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-02-17T22:57:56Z",
+      "mergedAt": "2026-02-17T22:57:56Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "d3fb14d3f9671a442a95b8e0e2723df176943b1e"
+      },
       "comments": [],
       "reviews": [
         {
@@ -12931,6 +12965,19 @@
               "updatedAt": "2026-02-04T20:26:18Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87jUOsS",
+          "commit": {
+            "abbreviatedOid": "7868a74"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-02-17T12:34:37Z",
+          "updatedAt": "2026-02-17T12:34:37Z",
+          "comments": []
         }
       ]
     },
