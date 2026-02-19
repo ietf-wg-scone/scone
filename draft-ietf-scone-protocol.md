@@ -786,11 +786,11 @@ between 100 Kbps and 199.5 Gbps.
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
 
-Endpoints that wish to offer network elements the option to add throughput advice
+Endpoints that wish to offer network elements the option to provide throughput advice
 signals can send SCONE packets at any time.  This is a decision that a sender
 makes when constructing datagrams.
 
-When sending SCONE packets, endpoints MUST include the SCONE packet as the first
+As specified in {{packet}}, when sending SCONE packets, endpoints include the SCONE packet as the first
 packet in a datagram, coalesced with additional packets.
 
 Upon confirmation that the peer is willing to receive SCONE packets, an endpoint
@@ -830,7 +830,7 @@ that fetches video segments that are 5 seconds in length
 might send SCONE packets on a similar cadence.
 A real-time conferencing application might send more often.
 In either case, the length of the monitoring period ({{time}})
-limits how fast any application can react.
+limits how fast any application needs to react.
 
 Though sending SCONE packets more than once each round trip time
 might help reduce exposure to packet loss,
@@ -847,13 +847,13 @@ next SCONE packet in the desired direction; see {{apply}}.
 
 ## Feedback To Sender About Signals {#feedback}
 
-Information about throughout advice is intended for the sending application.  Any
-signal from network elements can be propagated to the receiving application
+Information about the throughput advice is intended for the sending application.  Any
+signal from network elements can be propagated from the receiving application
 using an implementation-defined mechanism.
 
-This document does not define a means for indicating what was received.
-That is, the expectation is that any signal is propagated to the application
-for handling, not handled automatically by the transport layer.
+This document does not define a mean for indicating what was received.
+The expectation is that any signal is propagated to the application
+for handling, and not handled automatically by the transport layer.
 How a receiving application communicates throughput advice to a
 sending application will depend on the application in use.
 
