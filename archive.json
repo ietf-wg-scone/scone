@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-19T02:25:41.469603+00:00",
+  "timestamp": "2026-02-22T02:25:56.567581+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2947,6 +2947,22 @@
       "createdAt": "2025-12-23T02:13:21Z",
       "updatedAt": "2026-01-06T06:17:04Z",
       "closedAt": "2026-01-06T06:17:04Z",
+      "comments": []
+    },
+    {
+      "number": 134,
+      "id": "I_kwDON1dwo87sUFDR",
+      "title": "disabling scone or ECN is not a defence",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/134",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I just did a full review of the document (sorry for being so late) and I think this sentence in the security considerations section is not correct:\n\n```\nA VPN or proxy could defend against this style of attack by removing SCONE (and\nECN) signals.\n```\n\nDisabling scone and ECN is not a defence because you can run the same attack by dropping a packet and observing the congestion response. I propose to remove this sentence.",
+      "createdAt": "2026-02-19T19:29:42Z",
+      "updatedAt": "2026-02-19T19:29:42Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -13020,6 +13036,305 @@
           "createdAt": "2026-02-06T06:45:57Z",
           "updatedAt": "2026-02-06T06:45:57Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 132,
+      "id": "PR_kwDON1dwo87E9yd7",
+      "title": "more review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/132",
+      "state": "CLOSED",
+      "author": "mirjak",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-19T19:12:08Z",
+      "updatedAt": "2026-02-19T19:18:23Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "a8a868f4e02eab799b5c3e7ec060f38d663ae5fb",
+      "headRepository": "mirjak/scone",
+      "headRefName": "patch-2",
+      "headRefOid": "e839831138a7ee455e54841b406992cd3597cbbf",
+      "closedAt": "2026-02-19T19:18:22Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "body": "duplicate because I moved this into the other PR. Sorry for the confusion..",
+          "createdAt": "2026-02-19T19:18:22Z",
+          "updatedAt": "2026-02-19T19:18:22Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 133,
+      "id": "PR_kwDON1dwo87E90x4",
+      "title": "editorial review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/133",
+      "state": "OPEN",
+      "author": "mirjak",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-02-19T19:14:20Z",
+      "updatedAt": "2026-02-20T09:25:14Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "a8a868f4e02eab799b5c3e7ec060f38d663ae5fb",
+      "headRepository": "mirjak/scone",
+      "headRefName": "patch-1",
+      "headRefOid": "eb8f60cd5adb6ec4730cf66c54252adefc440096",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "body": "> There are a few good changes here, but it's a bit of a challenge picking them out from the rest. Would it be too much to ask for more targeted changes?\r\n\r\nI happy to do something else but you need to tell me what. However, you are the authors, so please feel free to edit this PR directly in anyway you want. I see these changes (except the one about use of QUIC; however, the original sentence was/is unclear to me) as editorial, so I don't have any strong opinions here. Just trying to help as I was reviewing the draft yesterday.",
+          "createdAt": "2026-02-20T09:25:14Z",
+          "updatedAt": "2026-02-20T09:25:14Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87kK-Md",
+          "commit": {
+            "abbreviatedOid": "a10a79e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-19T19:31:13Z",
+          "updatedAt": "2026-02-19T19:31:13Z",
+          "comments": [
+            {
+              "originalPosition": 309,
+              "body": "I highly recommend to specify things normatively only once in the doc. Note didn't didn't double-check all the other MUSTs and SHOULDs.",
+              "createdAt": "2026-02-19T19:31:13Z",
+              "updatedAt": "2026-02-19T19:31:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kK-qD",
+          "commit": {
+            "abbreviatedOid": "a10a79e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-19T19:31:44Z",
+          "updatedAt": "2026-02-19T19:31:45Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Not sure this change is correct but otherwise this sentence didn't make really sense to me...",
+              "createdAt": "2026-02-19T19:31:45Z",
+              "updatedAt": "2026-02-19T19:31:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kK_eM",
+          "commit": {
+            "abbreviatedOid": "a10a79e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-19T19:32:28Z",
+          "updatedAt": "2026-02-19T19:32:29Z",
+          "comments": [
+            {
+              "originalPosition": 346,
+              "body": "```suggestion\nThe recipient of the throughput advice therefore cannot guarantee that\n```",
+              "createdAt": "2026-02-19T19:32:28Z",
+              "updatedAt": "2026-02-19T19:32:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kLBMn",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-19T19:34:01Z",
+          "updatedAt": "2026-02-19T19:34:01Z",
+          "comments": [
+            {
+              "originalPosition": 127,
+              "body": "I added this here because this is mentioned later but it seems important to already make this clear here.",
+              "createdAt": "2026-02-19T19:34:01Z",
+              "updatedAt": "2026-02-19T19:34:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kOm1y",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "There are a few good changes here, but it's a bit of a challenge picking them out from the rest.  Would it be too much to ask for more targeted changes?",
+          "createdAt": "2026-02-19T23:23:38Z",
+          "updatedAt": "2026-02-19T23:29:45Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "\"advice\" is an uncountable noun and so it doesn't require the use of an article like \"the\" unless the text in question is referring to a specific piece of advice.  The changes you've suggested throughout do not fit that pattern.\n\nIn this specific case, you might use \"the\", but you don't have to.  To use \"the\", it might be better to say \"... cannot assume that the throughput advice received for a specific network path applies to any other path.\"  That's more words and no more correct.\n\n\n```suggestion\ncannot assume that throughput advice from one path applies to other paths.\n```",
+              "createdAt": "2026-02-19T23:23:38Z",
+              "updatedAt": "2026-02-19T23:29:45Z"
+            },
+            {
+              "originalPosition": 12,
+              "body": "\"see fit\" is perhaps a little bit idiomatic, but it is correct.\n\nThis would be a grammatically correct alternative.\n\n```suggestion\nof each path as they choose.\n```",
+              "createdAt": "2026-02-19T23:24:22Z",
+              "updatedAt": "2026-02-19T23:29:45Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "The original was more correct.  That is, it is not sufficient to just use QUIC (or QUIC invariants), nor is it sufficient to negotiate SCONE, you have to send SCONE packets if you want anything to happen.",
+              "createdAt": "2026-02-19T23:25:33Z",
+              "updatedAt": "2026-02-19T23:29:45Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "The change is correct in a sense, but you are changing the meaning of the statement.  The statement was to note the general capability that is expected to be present, it is not a description of how SCONE functions.",
+              "createdAt": "2026-02-19T23:26:42Z",
+              "updatedAt": "2026-02-19T23:29:45Z"
+            },
+            {
+              "originalPosition": 146,
+              "body": "This is a change in meaning that changes the semantics of the protocol.  Limiting data set over **a** specific monitoring period is not sufficient to meet the protocol requirements.",
+              "createdAt": "2026-02-19T23:28:11Z",
+              "updatedAt": "2026-02-19T23:29:45Z"
+            },
+            {
+              "originalPosition": 152,
+              "body": "Lots of unnecessary articles added, see above regarding the uncountable noun.",
+              "createdAt": "2026-02-19T23:28:40Z",
+              "updatedAt": "2026-02-19T23:29:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kVu9O",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T09:14:24Z",
+          "updatedAt": "2026-02-20T09:14:24Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "I think in most cases it does actually does refer to a specific piece of advice - the advice received through SCONE. However, the article is not used uniformly currently. I actually found that at least in some of the cases it does improve readability to use the article because I at leats had to read some (long) sentences twice. However, might be a matter of taste; feel free to do whatever you want.",
+              "createdAt": "2026-02-20T09:14:24Z",
+              "updatedAt": "2026-02-20T09:14:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kVvpH",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T09:14:57Z",
+          "updatedAt": "2026-02-20T09:14:57Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Yes, it's correct but I was again trying to improve readability.",
+              "createdAt": "2026-02-20T09:14:57Z",
+              "updatedAt": "2026-02-20T09:14:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kVzJO",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T09:18:10Z",
+          "updatedAt": "2026-02-20T09:18:11Z",
+          "comments": [
+            {
+              "originalPosition": 21,
+              "body": "Ah, maybe then actually say that?\n\n\"The protocol requires a network element to be able to modify passing packets...\"",
+              "createdAt": "2026-02-20T09:18:10Z",
+              "updatedAt": "2026-02-20T09:18:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kV18D",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T09:20:42Z",
+          "updatedAt": "2026-02-20T09:20:42Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "The point is that just saying in order to use a protocol you have to use the respective packets seems meaningless to me. So I wasn't sure what this sentence is suppose to tell me. However, the fact that you can use SCONE only together with an e2e quic connection should be stated clearly and right at the beginning of a applicability section and is actually missing as an explicit statement throughout the whole document.",
+              "createdAt": "2026-02-20T09:20:42Z",
+              "updatedAt": "2026-02-20T09:20:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87kV39O",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-20T09:22:16Z",
+          "updatedAt": "2026-02-20T09:22:16Z",
+          "comments": [
+            {
+              "originalPosition": 146,
+              "body": "Ah. I had a bit a hard time reading this long sentence and thought that would help. However, maybe \"each\" is more correct hier?",
+              "createdAt": "2026-02-20T09:22:16Z",
+              "updatedAt": "2026-02-20T09:22:16Z"
+            }
+          ]
         }
       ]
     }
