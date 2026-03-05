@@ -556,6 +556,11 @@ This transport parameter is valid for QUIC versions 1 {{QUIC}} and 2
 transport parameters, and frame types registries established in {{Sections 22.2,
 22.3, and 22.4 of QUIC}}.
 
+Endpoints MUST NOT remember whether the scone_supported transport parameter was present
+on the previous connection when using 0-RTT.
+That is, SCONE packets cannot be sent on a connection
+until the transport parameter is received.
+
 
 ## Indicating Support on New Flows {#indication}
 
