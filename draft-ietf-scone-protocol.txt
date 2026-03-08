@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 21 August 2026                             Private Octopus Inc.
+Expires: 9 September 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        17 February 2026
+                                                            8 March 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 August 2026.
+   This Internet-Draft will expire on 9 September 2026.
 
 Copyright Notice
 
@@ -592,6 +592,11 @@ Table of Contents
    [QUICv2] and any other version that recognizes the versions,
    transport parameters, and frame types registries established in
    Sections 22.2, 22.3, and 22.4 of [QUIC].
+
+   Endpoints MUST NOT remember whether the scone_supported transport
+   parameter was present on the previous connection when using 0-RTT.
+   That is, SCONE packets cannot be sent on a connection until the
+   transport parameter is received.
 
 6.1.  Indicating Support on New Flows
 
@@ -1175,9 +1180,9 @@ Table of Contents
    [QUIC-MP]  Liu, Y., Ma, Y., De Coninck, Q., Bonaventure, O., Huitema,
               C., and M. Kühlewind, "Managing multiple paths for a QUIC
               connection", Work in Progress, Internet-Draft, draft-ietf-
-              quic-multipath-19, 12 January 2026,
+              quic-multipath-20, 20 February 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
-              multipath-19>.
+              multipath-20>.
 
    [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
               Translation (NAT) Behavioral Requirements for Unicast
