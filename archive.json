@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-02-22T02:25:56.567581+00:00",
+  "timestamp": "2026-03-10T02:10:01.612899+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2963,6 +2963,22 @@
       "createdAt": "2026-02-19T19:29:42Z",
       "updatedAt": "2026-02-19T19:29:42Z",
       "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 135,
+      "id": "I_kwDON1dwo87v6M4h",
+      "title": "Is the scone_supported transport parameter storeable?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/135",
+      "state": "CLOSED",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "RFC 9000 Sec 7.4.1 says:\n\n> The definition of a new transport parameter ([Section 7.4.2](https://www.rfc-editor.org/rfc/rfc9000.html#new-transport-parameters)) MUST specify whether storing the transport parameter for 0-RTT is mandatory, optional, or prohibited. A client need not store a transport parameter it cannot process.\n\nI've searched for a few keywords in the SCONE draft and haven't seen anything that fulfills this requirement. It's possible I've missed it.\n\nI don't feel strongly about which one to pick, but I'd probably choose \"prohibited\" to be simpler. If it can be stored, then a client could send a SCONE packet with its first flight, so I don't think it can be optional.",
+      "createdAt": "2026-03-05T00:54:52Z",
+      "updatedAt": "2026-03-08T21:37:42Z",
+      "closedAt": "2026-03-08T21:37:42Z",
       "comments": []
     }
   ],
@@ -13085,13 +13101,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-02-19T19:14:20Z",
-      "updatedAt": "2026-02-20T09:25:14Z",
+      "updatedAt": "2026-03-02T17:35:56Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "a8a868f4e02eab799b5c3e7ec060f38d663ae5fb",
       "headRepository": "mirjak/scone",
       "headRefName": "patch-1",
-      "headRefOid": "eb8f60cd5adb6ec4730cf66c54252adefc440096",
+      "headRefOid": "9730311b7db284cb88789e970b96312b3cb02f8b",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -13335,6 +13351,198 @@
               "updatedAt": "2026-02-20T09:22:16Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87k4rzH",
+          "commit": {
+            "abbreviatedOid": "eb8f60c"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-02-23T09:52:36Z",
+          "updatedAt": "2026-02-23T09:52:37Z",
+          "comments": [
+            {
+              "originalPosition": 355,
+              "body": "```suggestion\nare not in their interests. However, endpoints are free to ignore limits.\n```",
+              "createdAt": "2026-02-23T09:52:37Z",
+              "updatedAt": "2026-02-23T09:52:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87m80hw",
+          "commit": {
+            "abbreviatedOid": "9730311"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "A number of good changes here, some that could do with a bit of tweaking. \nBut agree with @martinthomson that the changes from indefinite to definite articles are not really improving readability. ",
+          "createdAt": "2026-03-02T08:22:10Z",
+          "updatedAt": "2026-03-02T11:53:11Z",
+          "comments": [
+            {
+              "originalPosition": 274,
+              "body": "```suggestion\nin different network elements than the ones that signal throughput advice.\nHowever, network elements MUST NOT enforce throughput based on throughput advice\nobserved in SCONE packets received from other entities, because unlike endpoints,\n```\nObserved is a good word, but suggest we reduce 'wordiness' a bit.  ",
+              "createdAt": "2026-03-02T08:22:10Z",
+              "updatedAt": "2026-03-02T11:53:11Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "I'd suggest that we merge these.\n```suggestion\nThis protocol only works for QUIC flows where endpoints send SCONE packets ({{packet}}).\n```",
+              "createdAt": "2026-03-02T11:07:49Z",
+              "updatedAt": "2026-03-02T11:53:11Z"
+            },
+            {
+              "originalPosition": 58,
+              "body": "That's an improvement, but I think it can be tweaked a bit for easier reading. \n\n```suggestion\nWhen throughput advice is applied to a flow that provides an\nencrypted tunnel for an encapsulated flow\n(such as {{?CONNECT-UDP=RFC9298}}),\nnetwork elements only apply the advice to the outermost flow.\n```",
+              "createdAt": "2026-03-02T11:38:56Z",
+              "updatedAt": "2026-03-02T11:53:11Z"
+            },
+            {
+              "originalPosition": 152,
+              "body": "+1",
+              "createdAt": "2026-03-02T11:45:39Z",
+              "updatedAt": "2026-03-02T11:53:11Z"
+            },
+            {
+              "originalPosition": 265,
+              "body": "There's a typo introduced here. I believe the original sentence was correct and concise already. ",
+              "createdAt": "2026-03-02T11:49:36Z",
+              "updatedAt": "2026-03-02T11:53:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87nBYlJ",
+          "commit": {
+            "abbreviatedOid": "9730311"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-02T12:25:41Z",
+          "updatedAt": "2026-03-02T12:25:42Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Maybe a few more words would be more clear here?\n```suggestion\nThis protocol can only be used together with QUIC {{QUIC}} flows where both endpoints indicated willing to send SCONE packets (see also {{packet}}).\n```",
+              "createdAt": "2026-03-02T12:25:41Z",
+              "updatedAt": "2026-03-02T12:25:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87nG0kW",
+          "commit": {
+            "abbreviatedOid": "a10a79e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-02T16:42:20Z",
+          "updatedAt": "2026-03-02T16:42:20Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "@ihlar's version was correct.  Yours isn't.  Indicating a willingness to send SCONE packets doesn't make the protocol usable.  Especially if you interpret that as meaning the indication in the client's Initial-carrying datagrams.",
+              "createdAt": "2026-03-02T16:42:20Z",
+              "updatedAt": "2026-03-02T16:42:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87nIHQU",
+          "commit": {
+            "abbreviatedOid": "a10a79e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-02T17:35:56Z",
+          "updatedAt": "2026-03-02T17:35:56Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Again I don't understand what the original sentence is meant to tell me and I don't understand what you mean by \"making the protocol usable\". It seems you have something in your mind that you want to say with this but I think you need to explain that further to make it more understandable.",
+              "createdAt": "2026-03-02T17:35:56Z",
+              "updatedAt": "2026-03-02T17:35:56Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 136,
+      "id": "PR_kwDON1dwo87IJh_r",
+      "title": "Transport parameter and 0-RTT",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/136",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As recommended, prohibit remembering this one.  That makes the most sense.\r\n\r\nCloses #135.",
+      "createdAt": "2026-03-05T10:11:09Z",
+      "updatedAt": "2026-03-08T21:37:50Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "30f32a529b529b55fcf23a5848c8c67b379700fe",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "zero-rtt-memory",
+      "headRefOid": "5601d19e27e72d7e6aa38fb34324e7ba5274aa0b",
+      "closedAt": "2026-03-08T21:37:42Z",
+      "mergedAt": "2026-03-08T21:37:42Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "1859c7223674d2dd155bf00bba934e90881e00b7"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87oOMCs",
+          "commit": {
+            "abbreviatedOid": "5601d19"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-05T12:07:05Z",
+          "updatedAt": "2026-03-05T12:07:05Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87oQAAx",
+          "commit": {
+            "abbreviatedOid": "5601d19"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-05T13:30:46Z",
+          "updatedAt": "2026-03-05T13:30:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87oYLBX",
+          "commit": {
+            "abbreviatedOid": "5601d19"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-05T18:10:47Z",
+          "updatedAt": "2026-03-05T18:10:47Z",
+          "comments": []
         }
       ]
     }
