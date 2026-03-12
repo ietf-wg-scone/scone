@@ -1089,14 +1089,14 @@ Table of Contents
    Specification:  This document
    Change Controller:  IETF (iesg@ietf.org)
    Contact:  QUIC Working Group (quic@ietf.org)
-   Notes:  SCONE Protocol - Low Range
+   Notes:  SCONE Protocol - Even Signal Values
 
    Value:  0xef7dc0fd
    Status:  permanent
    Specification:  This document
    Change Controller:  IETF (iesg@ietf.org)
    Contact:  QUIC Working Group (quic@ietf.org)
-   Notes:  SCONE Protocol - High Range
+   Notes:  SCONE Protocol - Odd Signal Values
 
 11.2.  scone_supported Transport Parameter
 
