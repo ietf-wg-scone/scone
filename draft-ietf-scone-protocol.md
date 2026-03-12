@@ -1060,16 +1060,20 @@ the attacker to link the altered flow to the client.
                   \
                Observe change
 ~~~
+{: #f-vpn title="Client identification attack on VPN or proxy"}
 
-An attacker that can manipulate SCONE headers can also simulate
-congestion signals by dropping packets or by setting the ECN CE bit.
-That will also likely result in changes in the congestion response by
-the affected client.
+An attacker that can manipulate SCONE headers might
+cause an observable change in sending behavior; see {{f-vpn}}.
+Though clients that use a VPN or proxy might choose to disable SCONE,
+removing SCONE signals is of little help against this form of attack.
+Lost or marked packets are likely to produce a congestion control response,
+which are alternative methods available to an attacker
+seeking to match flows.
 
-A VPN or proxy could defend against this style of attack by removing SCONE (and
-ECN) signals. There are few reasons to provide per-flow throughput advice in
-that situation.  Endpoints might also either disable this feature or ignore any
-signals when they are aware of the use of a VPN or proxy.
+An effective, but wasteful, defense is to provide cover traffic
+between the client and intermediary
+to mask changes in sending rate on tunneled flows.
+
 
 # IANA Considerations {#iana}
 
