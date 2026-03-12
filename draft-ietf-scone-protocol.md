@@ -404,7 +404,7 @@ network element(s) on the path.
 
 Throughput advice follows a logarithmic scale defined as:
 
-* Base rate (b_min) = 100 Kbps (100,000 bits per second)
+* Base rate (b_min) = 100 kbit/s (100,000 bits per second)
 * Bitrate at value n = b_min * 10^(n/20)
 
 where n is an integer between 0 and 126 represented by the Rate Signal.
@@ -414,23 +414,23 @@ and the corresponding bitrate for each.
 
 | Bitrate     | Rate Signal |
 |:------------|:------------|
-| 100 Kbps    | 0           |
-| 112 Kbps    | 1           |
-| 126 Kbps    | 2           |
-| 141 Kbps    | 3           |
-| 1 Mbps      | 20          |
-| 1.12 Mbps   | 21          |
-| 10 Mbps     | 40          |
-| 11.2 Mbps   | 41          |
-| 100 Mbps    | 60          |
-| 112 Mbps    | 61          |
-| 1 Gbps      | 80          |
-| 1.12 Gbps   | 81          |
-| 10 Gbps     | 100         |
-| 11.2 Gbps   | 101         |
-| 100 Gbps    | 120         |
-| 112 Gbps    | 121         |
-| 199.5 Gbps  | 126         |
+| 100 kbit/s    | 0           |
+| 112 kbit/s    | 1           |
+| 126 kbit/s    | 2           |
+| 141 kbit/s    | 3           |
+| 1 Mbit/s      | 20          |
+| 1.12 Mbit/s   | 21          |
+| 10 Mbit/s     | 40          |
+| 11.2 Mbit/s   | 41          |
+| 100 Mbit/s    | 60          |
+| 112 Mbit/s    | 61          |
+| 1 Gbit/s      | 80          |
+| 1.12 Gbit/s   | 81          |
+| 10 Gbit/s     | 100         |
+| 11.2 Gbit/s   | 101         |
+| 100 Gbit/s    | 120         |
+| 112 Gbit/s    | 121         |
+| 199.5 Gbit/s  | 126         |
 | Unknown     | 127         |
 {: #ex-rates title="Examples of SCONE signals and corresponding rates"}
 
@@ -786,7 +786,7 @@ that throughput advice is not being respected.
 
 The SCONE protocol defines two versions (0x6f7dc0fd and 0xef7dc0fd)
 that combined carry throughput advice that covers a range of bitrates
-between 100 Kbps and 199.5 Gbps.
+between 100 kbit/s and 199.5 Gbit/s.
 
 
 ## Providing Opportunities to Apply Throughput Advice Signals {#extra-packets}
