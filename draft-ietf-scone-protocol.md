@@ -514,7 +514,7 @@ After a monitoring period ({{time}})
 without receiving any throughput advice,
 the previous advice expires.
 Endpoints can remove any constraints
-placed on throughput based on received throughput advice.
+that resulted from the expired throughput advice.
 This does not mean that there are no limits,
 either in policy or due to network conditions,
 only that these limits are now unknown.
