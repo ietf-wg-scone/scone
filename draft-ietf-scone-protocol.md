@@ -404,7 +404,7 @@ network element(s) on the path.
 
 Throughput advice follows a logarithmic scale defined as:
 
-* Base rate (b_min) = 100 Kbps (100,000 bits per second)
+* Base rate (b_min) = 100 kbps (100,000 bits per second)
 * Bitrate at value n = b_min * 10^(n/20)
 
 where n is an integer between 0 and 126 represented by the Rate Signal.
@@ -414,10 +414,10 @@ and the corresponding bitrate for each.
 
 | Bitrate     | Rate Signal |
 |:------------|:------------|
-| 100 Kbps    | 0           |
-| 112 Kbps    | 1           |
-| 126 Kbps    | 2           |
-| 141 Kbps    | 3           |
+| 100 kbps    | 0           |
+| 112 kbps    | 1           |
+| 126 kbps    | 2           |
+| 141 kbps    | 3           |
 | 1 Mbps      | 20          |
 | 1.12 Mbps   | 21          |
 | 10 Mbps     | 40          |
