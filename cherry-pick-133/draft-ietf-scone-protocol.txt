@@ -914,10 +914,10 @@ Table of Contents
 
    The throughput advice is not authenticated.  Throughput advice might
    be incorrectly set in order to encourage endpoints to behave in ways
-   that are not in their interests.  Endpoints can ignore limits.  The
-   congestion controller employed by a sender provides real-time
-   information about the rate at which the network path is delivering
-   data.
+   that are not in their interests.  Endpoints can ignore limits, though
+   that can have consequences; see Section 7.3.  The congestion
+   controller employed by a sender provides real-time information about
+   the rate at which the network path is delivering data.
 
    Similarly, if there is a strong need to ensure that throughput advice
    is respected, network elements cannot assume that the signaled advice
