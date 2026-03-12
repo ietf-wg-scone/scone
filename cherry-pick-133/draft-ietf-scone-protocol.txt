@@ -288,11 +288,12 @@ Table of Contents
    subscription, but endpoints cannot assume that this is the case.  A
    separate signal can be sent for each flow.
 
-   When throughput advice is applied to a QUIC flow that encapsulates
-   tunneled flows (such as [CONNECT-UDP]) network elements can only
-   apply the advice to the outermost flow.  Advice can be applied to
-   packets in flows that are subsequently encapsulated, but following
-   that advice can have security implications; see Section 10.2.
+   When network elements provide throughput advice to a QUIC flow that
+   encapsulates tunneled flows (such as [CONNECT-UDP]) they can only
+   provide the advice to the outermost flow.  Endpoints can apply the
+   throughput advice to packets in flows that are subsequently
+   encapsulated, but following that advice can have security
+   implications; see Section 10.2.
 
 3.4.  Unidirectional Signal
 

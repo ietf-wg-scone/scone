@@ -1532,10 +1532,10 @@ the monitoring period.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.3-3">Rate limiting policies often apply on the level of a device or subscription,
 but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
-<p id="section-3.3-4">When throughput advice is applied to a QUIC flow
+<p id="section-3.3-4">When network elements provide throughput advice to a QUIC flow
 that encapsulates tunneled flows (such as <span>[<a href="#CONNECT-UDP" class="cite xref">CONNECT-UDP</a>]</span>)
-network elements can only apply the advice to the outermost flow.
-Advice can be applied to packets in flows
+they can only provide the advice to the outermost flow.
+Endpoints can apply the throughput advice to packets in flows
 that are subsequently encapsulated,
 but following that advice can have security implications;
 see <a href="#active-attacks" class="auto internal xref">Section 10.2</a>.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
