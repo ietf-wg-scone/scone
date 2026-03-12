@@ -1099,7 +1099,7 @@ Contact:
 : QUIC Working Group (quic@ietf.org)
 
 Notes:
-: SCONE Protocol - Low Range
+: SCONE Protocol - Even Signal Values
 {: spacing="compact"}
 
 Value:
@@ -1118,7 +1118,7 @@ Contact:
 : QUIC Working Group (quic@ietf.org)
 
 Notes:
-: SCONE Protocol - High Range
+: SCONE Protocol - Odd Signal Values
 {: spacing="compact"}
 
 
