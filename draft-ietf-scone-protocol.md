@@ -254,10 +254,10 @@ Rate limiting policies often apply on the level of a device or subscription,
 but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.
 
-When throughput advice is applied to a QUIC flow
+When network elements provide throughput advice to a QUIC flow
 that encapsulates tunneled flows (such as {{?CONNECT-UDP=RFC9298}})
-network elements can only apply the advice to the outermost flow.
-Advice can be applied to packets in flows
+they can only provide the advice to the outermost flow.
+Endpoints can apply the throughput advice to packets in flows
 that are subsequently encapsulated,
 but following that advice can have security implications;
 see {{active-attacks}}.
@@ -914,7 +914,8 @@ similar to those of on path elements.
 
 The throughput advice is not authenticated.  Throughput advice
 might be incorrectly set in order to encourage endpoints to behave in ways that
-are not in their interests.  Endpoints can ignore limits.
+are not in their interests.  Endpoints can ignore limits,
+though that can have consequences; see {{policing}}.
 The congestion controller employed by a sender provides
 real-time information about the rate at which the network path is delivering
 data.
