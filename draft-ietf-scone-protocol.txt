@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 14 September 2026                          Private Octopus Inc.
+Expires: 16 September 2026                          Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                           13 March 2026
+                                                           15 March 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 September 2026.
+   This Internet-Draft will expire on 16 September 2026.
 
 Copyright Notice
 
@@ -1065,16 +1065,19 @@ Table of Contents
                      \
                   Observe change
 
-   An attacker that can manipulate SCONE headers can also simulate
-   congestion signals by dropping packets or by setting the ECN CE bit.
-   That will also likely result in changes in the congestion response by
-   the affected client.
+           Figure 3: Client identification attack on VPN or proxy
 
-   A VPN or proxy could defend against this style of attack by removing
-   SCONE (and ECN) signals.  There are few reasons to provide per-flow
-   throughput advice in that situation.  Endpoints might also either
-   disable this feature or ignore any signals when they are aware of the
-   use of a VPN or proxy.
+   An attacker that can manipulate SCONE headers might cause an
+   observable change in sending behavior; see Figure 3.  Though clients
+   that use a VPN or proxy might choose to disable SCONE, removing SCONE
+   signals is of little help against this form of attack.  Lost or ECN-
+   marked packets are likely to produce a congestion control response,
+   which are alternative methods available to an attacker seeking to
+   match flows.
+
+   An effective, but wasteful, defense is to provide cover traffic
+   between the client and intermediary to mask changes in sending rate
+   on tunneled flows.
 
 11.  IANA Considerations
 
