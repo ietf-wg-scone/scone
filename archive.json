@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-10T02:10:01.612899+00:00",
+  "timestamp": "2026-03-15T02:37:17.258301+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -13094,21 +13094,21 @@
       "id": "PR_kwDON1dwo87E90x4",
       "title": "editorial review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/133",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mirjak",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-02-19T19:14:20Z",
-      "updatedAt": "2026-03-02T17:35:56Z",
+      "updatedAt": "2026-03-13T00:36:43Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "a8a868f4e02eab799b5c3e7ec060f38d663ae5fb",
       "headRepository": "mirjak/scone",
       "headRefName": "patch-1",
       "headRefOid": "9730311b7db284cb88789e970b96312b3cb02f8b",
-      "closedAt": null,
+      "closedAt": "2026-03-13T00:36:43Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -13542,6 +13542,381 @@
           "body": "",
           "createdAt": "2026-03-05T18:10:47Z",
           "updatedAt": "2026-03-05T18:10:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 137,
+      "id": "PR_kwDON1dwo87J6ggS",
+      "title": "Clarify the value of b_min",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/137",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Some people might ask about Kibibits or even Kilobytes.  Might as well spell it out.",
+      "createdAt": "2026-03-12T05:34:36Z",
+      "updatedAt": "2026-03-12T06:18:29Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "1859c7223674d2dd155bf00bba934e90881e00b7",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "bps",
+      "headRefOid": "31c485c0d1f17cef277d9e9b4acabc3c20ff8978",
+      "closedAt": "2026-03-12T05:58:01Z",
+      "mergedAt": "2026-03-12T05:58:01Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "6a20b07ddcc9da6257f97778193862ff682826ee"
+      },
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Damn, you merged that when I was writing my comment!",
+          "createdAt": "2026-03-12T06:18:29Z",
+          "updatedAt": "2026-03-12T06:18:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87qfdLZ",
+          "commit": {
+            "abbreviatedOid": "31c485c"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-12T05:48:05Z",
+          "updatedAt": "2026-03-12T05:48:05Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87qfzRJ",
+          "commit": {
+            "abbreviatedOid": "31c485c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "OK. Because I am a bit pedantic, I checked whether Kbps is by any chance listed as a known abbreviation in the RFC editor's wiki. It is not.  Then I checked whether we should use Kb/s instead (which is what I would have used). That got be to the Wikipedia page on [Data Rate units](https://en.wikipedia.org/wiki/Data-rate_units), which filled my heart with the usual emotions, not to mention some rolling of the eyes. Kikibits, really? (Kiki, in French, is the child-language version of penis.) In any case, they use Kbps as the standard. I then tried to find guidelines at the ACM, could not, but found [Microsoft guidelines for documentation](https://learn.microsoft.com/en-us/style-guide/a-z-word-list-term-collections/k/kilobits-per-second). They too go for Kbps.\n\nThe main source of confusion is with KB/s, which is defined as 8000 bps, except for the fanatics of kikibits, for which it is 8096 bps. One way to avoid that confusion would be to use a lower case k, as in 100 kbps. That would definitely be in line with the way the metric system is abbreviated in French: kilom\u00e8tre is abbreviated km, definitely not Km, and not KM either unless the sentence is in all caps. Indeed, in the French version Wikipedia title [D\u00e9bit binaire](https://fr.wikipedia.org/wiki/D%C3%A9bit_binaire), the \"k\" in kilobit is in lower case; Mega and Giga get an upper case. On the other hand, the recommended abbreviations are \"kbit/s\" or \"kb/s\".\n\nSo, what is right? The variant kbit/s with a lower k is definitely in line with the [International system of Units](https://en.wikipedia.org/wiki/International_System_of_Units), which codifies lower case k as the abbreviation of \"kilo\" for all international metrics. I am sure that people familiar with the Imperial System find K more kingly and would feel richer with 1K$ than with 1k$, but as far as the metric system is concerned, they are wrong.",
+          "createdAt": "2026-03-12T06:16:00Z",
+          "updatedAt": "2026-03-12T06:16:21Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\nBase rate (b_min) = 100 kbit/s\n```",
+              "createdAt": "2026-03-12T06:16:00Z",
+              "updatedAt": "2026-03-12T06:16:21Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 138,
+      "id": "PR_kwDON1dwo87J7eRF",
+      "title": "Cherry pick some of the good stuff from #133",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/138",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There are plenty of good changes, but also a few things that could be better.\r\n\r\nCloses #133.",
+      "createdAt": "2026-03-12T06:46:21Z",
+      "updatedAt": "2026-03-13T00:36:42Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "05fafd757b42175ef757f8b2a8a81550f7199fef",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "cherry-pick-133",
+      "headRefOid": "01b80fa25b065fbf4d346abc83135d5cd339bd27",
+      "closedAt": "2026-03-13T00:36:42Z",
+      "mergedAt": "2026-03-13T00:36:42Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "9e0795141713f170491daccf89d3acf6cdfb5930"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87qge8d",
+          "commit": {
+            "abbreviatedOid": "d924a85"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I generally like the update but I have a few comments. ",
+          "createdAt": "2026-03-12T06:58:51Z",
+          "updatedAt": "2026-03-12T07:03:53Z",
+          "comments": [
+            {
+              "originalPosition": 117,
+              "body": "The change is fine, but the paragraph is a bit weird. We want to say that after the advice expires, the endpoint can loosen the brakes. That's fine, but there is no linkage between the two sentences. Should there be?",
+              "createdAt": "2026-03-12T06:58:51Z",
+              "updatedAt": "2026-03-12T07:03:53Z"
+            },
+            {
+              "originalPosition": 209,
+              "body": "If endpoints can ignore limits, what is the point of SCONE? I think we want to say that endpoint can apply their judgement and ignore limits that appear unreasonable. But \"can ignore limit\" is bit severe!",
+              "createdAt": "2026-03-12T07:02:52Z",
+              "updatedAt": "2026-03-12T07:03:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87qglXl",
+          "commit": {
+            "abbreviatedOid": "d924a85"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-12T07:05:25Z",
+          "updatedAt": "2026-03-12T07:05:25Z",
+          "comments": [
+            {
+              "originalPosition": 117,
+              "body": "```suggestion\r\nthat resulted from the expired throughput advice.\r\n```",
+              "createdAt": "2026-03-12T07:05:25Z",
+              "updatedAt": "2026-03-12T07:05:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87qjp-O",
+          "commit": {
+            "abbreviatedOid": "d924a85"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-12T09:45:52Z",
+          "updatedAt": "2026-03-12T09:45:52Z",
+          "comments": [
+            {
+              "originalPosition": 209,
+              "body": "I'll inform the protocol police.",
+              "createdAt": "2026-03-12T09:45:52Z",
+              "updatedAt": "2026-03-12T09:45:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87qjtiD",
+          "commit": {
+            "abbreviatedOid": "4308d94"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LG overall.",
+          "createdAt": "2026-03-12T09:48:27Z",
+          "updatedAt": "2026-03-12T09:51:30Z",
+          "comments": [
+            {
+              "originalPosition": 56,
+              "body": "Subject of the 1st sentence is network elements, while that of the 2nd is endpoints. To highlight the contrast, it'd be better to make that explicit and use different verbs.\r\n\r\n```suggestion\r\nWhen network elements provide throughput advice to a QUIC flow\r\nthat encapsulates tunneled flows (such as {{?CONNECT-UDP=RFC9298}})\r\nthey can only provide the advice to the outermost flow.\r\nEndpoints can apply the throughput advice to packets in flows\r\n```",
+              "createdAt": "2026-03-12T09:48:27Z",
+              "updatedAt": "2026-03-12T09:52:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87qj_IE",
+          "commit": {
+            "abbreviatedOid": "4308d94"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-12T09:58:51Z",
+          "updatedAt": "2026-03-12T09:58:51Z",
+          "comments": [
+            {
+              "originalPosition": 209,
+              "body": "@martinthomson \n> I'll inform the protocol police.\n\nI'm certain you are talking about Section 7.3 (policing) \ud83e\udd29\n\nI mean, what we need to write down here is that endpoints can ignore limits _but that might have consequences as stated in section 7.3_.",
+              "createdAt": "2026-03-12T09:58:51Z",
+              "updatedAt": "2026-03-12T09:58:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87q3QoM",
+          "commit": {
+            "abbreviatedOid": "01b80fa"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-12T23:00:54Z",
+          "updatedAt": "2026-03-12T23:00:54Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 139,
+      "id": "PR_kwDON1dwo87J9me-",
+      "title": "k is lowercase in kilo-whatever",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/139",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "And use bit/s rather than bps...\r\n\r\nFollowing up on #137 comments.",
+      "createdAt": "2026-03-12T09:11:22Z",
+      "updatedAt": "2026-03-12T22:06:41Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "6a20b07ddcc9da6257f97778193862ff682826ee",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "kbps",
+      "headRefOid": "c78fec05d3d3c993aef44f7958c3ccc6fc178f5b",
+      "closedAt": "2026-03-12T22:06:41Z",
+      "mergedAt": "2026-03-12T22:06:41Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "38350b4a9596fb78699166292abd4a9fe43e9481"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87qjnJo",
+          "commit": {
+            "abbreviatedOid": "c78fec0"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-12T09:43:46Z",
+          "updatedAt": "2026-03-12T09:43:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87qvF2C",
+          "commit": {
+            "abbreviatedOid": "c78fec0"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "International units for the win! Bravo!",
+          "createdAt": "2026-03-12T16:53:00Z",
+          "updatedAt": "2026-03-12T16:53:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 140,
+      "id": "PR_kwDON1dwo87J-Lwd",
+      "title": "Correct the IANA considerations",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/140",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-03-12T09:44:09Z",
+      "updatedAt": "2026-03-12T22:06:55Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "6a20b07ddcc9da6257f97778193862ff682826ee",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "no-ranges",
+      "headRefOid": "3a8c3ee34d238d5eb2d4659fbd1dac36de34879e",
+      "closedAt": "2026-03-12T22:06:54Z",
+      "mergedAt": "2026-03-12T22:06:54Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "05fafd757b42175ef757f8b2a8a81550f7199fef"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87qvI4O",
+          "commit": {
+            "abbreviatedOid": "3a8c3ee"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-12T16:54:46Z",
+          "updatedAt": "2026-03-12T16:54:46Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 141,
+      "id": "PR_kwDON1dwo87KNc4W",
+      "title": "Rework defense text on VPN/Proxy privacy",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/141",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As noted by Mirja, if the attacker can drop/CE-mark packets, there isn't much point in suggesting that SCONE be disabled. Any attacker that can tweak SCONE is almost certainly able to drop packets or apply ECN markings.\r\n\r\nThe best defense here is wasteful: if congestion/SCONE causes the rate to drop on the e2e connection, then take any reduction and send dummy traffic between the proxy and client.  There are challenges (in the server-to-client direction, this is something the proxy needs to do, but how does it know to do that?) but we don't need to get into that.\r\n\r\nCloses #134.",
+      "createdAt": "2026-03-13T00:38:45Z",
+      "updatedAt": "2026-03-13T03:37:38Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "9e0795141713f170491daccf89d3acf6cdfb5930",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "remove-not-helpful",
+      "headRefOid": "01227415a12c4fef81029eb33d18e2663b7a941d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87q69Fe",
+          "commit": {
+            "abbreviatedOid": "b3b1119"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": ":+1:",
+          "createdAt": "2026-03-13T03:05:23Z",
+          "updatedAt": "2026-03-13T03:05:39Z",
+          "comments": [
+            {
+              "originalPosition": 285,
+              "body": "I do not mind either ways but this would be easier for me to understand.\n```suggestion\nLost or ECN-marked packets are likely to produce a congestion control response,\n```",
+              "createdAt": "2026-03-13T03:05:23Z",
+              "updatedAt": "2026-03-13T03:05:39Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87q7XCi",
+          "commit": {
+            "abbreviatedOid": "0122741"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "The horse is not dead, but it is well beaten.",
+          "createdAt": "2026-03-13T03:37:38Z",
+          "updatedAt": "2026-03-13T03:37:38Z",
           "comments": []
         }
       ]
