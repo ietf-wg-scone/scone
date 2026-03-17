@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-15T02:37:17.258301+00:00",
+  "timestamp": "2026-03-17T02:23:01.351935+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2954,15 +2954,15 @@
       "id": "I_kwDON1dwo87sUFDR",
       "title": "disabling scone or ECN is not a defence",
       "url": "https://github.com/ietf-wg-scone/scone/issues/134",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mirjak",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I just did a full review of the document (sorry for being so late) and I think this sentence in the security considerations section is not correct:\n\n```\nA VPN or proxy could defend against this style of attack by removing SCONE (and\nECN) signals.\n```\n\nDisabling scone and ECN is not a defence because you can run the same attack by dropping a packet and observing the congestion response. I propose to remove this sentence.",
       "createdAt": "2026-02-19T19:29:42Z",
-      "updatedAt": "2026-02-19T19:29:42Z",
-      "closedAt": null,
+      "updatedAt": "2026-03-15T23:48:47Z",
+      "closedAt": "2026-03-15T23:48:47Z",
       "comments": []
     },
     {
@@ -2979,6 +2979,22 @@
       "createdAt": "2026-03-05T00:54:52Z",
       "updatedAt": "2026-03-08T21:37:42Z",
       "closedAt": "2026-03-08T21:37:42Z",
+      "comments": []
+    },
+    {
+      "number": 143,
+      "id": "I_kwDON1dwo87zQj7t",
+      "title": "Can we limit to one SCONE packet?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/143",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There is no reason to include more than one SCONE packet, so can we prohibit the inclusion of more than one?  This came up during implementation.  We had an implementation bug as a result of accepting many SCONE packets (I'd implemented using recursion and a large packet full of SCONE was blowing the stack).  Given that there is no need for more than one SCONE packet, can we make that a requirement?",
+      "createdAt": "2026-03-16T09:13:57Z",
+      "updatedAt": "2026-03-16T09:13:57Z",
+      "closedAt": null,
       "comments": []
     }
   ],
@@ -13866,24 +13882,26 @@
       "id": "PR_kwDON1dwo87KNc4W",
       "title": "Rework defense text on VPN/Proxy privacy",
       "url": "https://github.com/ietf-wg-scone/scone/pull/141",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As noted by Mirja, if the attacker can drop/CE-mark packets, there isn't much point in suggesting that SCONE be disabled. Any attacker that can tweak SCONE is almost certainly able to drop packets or apply ECN markings.\r\n\r\nThe best defense here is wasteful: if congestion/SCONE causes the rate to drop on the e2e connection, then take any reduction and send dummy traffic between the proxy and client.  There are challenges (in the server-to-client direction, this is something the proxy needs to do, but how does it know to do that?) but we don't need to get into that.\r\n\r\nCloses #134.",
       "createdAt": "2026-03-13T00:38:45Z",
-      "updatedAt": "2026-03-13T03:37:38Z",
+      "updatedAt": "2026-03-15T23:48:45Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9e0795141713f170491daccf89d3acf6cdfb5930",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "remove-not-helpful",
       "headRefOid": "01227415a12c4fef81029eb33d18e2663b7a941d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-03-15T23:48:45Z",
+      "mergedAt": "2026-03-15T23:48:45Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "f0c5a3f64ca425c9318988b9211b328d3346a842"
+      },
       "comments": [],
       "reviews": [
         {
@@ -13917,6 +13935,113 @@
           "body": "The horse is not dead, but it is well beaten.",
           "createdAt": "2026-03-13T03:37:38Z",
           "updatedAt": "2026-03-13T03:37:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87rasFa",
+          "commit": {
+            "abbreviatedOid": "0122741"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-15T03:23:22Z",
+          "updatedAt": "2026-03-15T03:23:22Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 142,
+      "id": "PR_kwDON1dwo87KxY1H",
+      "title": "streamlining \"achievable\" and \"sustainable\"",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/142",
+      "state": "OPEN",
+      "author": "zaheduzzaman",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "We are using both of the terms, changes sustainable to be inline with the abstract",
+      "createdAt": "2026-03-15T23:48:57Z",
+      "updatedAt": "2026-03-16T06:22:13Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "f0c5a3f64ca425c9318988b9211b328d3346a842",
+      "headRepository": "zaheduzzaman/scone",
+      "headRefName": "patch-2",
+      "headRefOid": "50918a924e3dae3e1e9da5d21b8c7a9aff051c59",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> We are using both of the terms, changes sustainable to be inline with the abstract\r\n\r\nNice catch. I think the right fix is to change \"achievable\" in the abstract to \"sustainable\".\r\n\r\nIn the body, after we introduce the monitoring period, using \"achievable\" can be fine in context. But in the abstract, \"achievable\" without that context could suggest the throughput of short bursts, whereas SCONE advice is intended to describe a rate that is sustainable over the monitoring period.\r\n\r\nUsing \"sustainable\" in the abstract avoids that ambiguity and is more consistent with the introduction.",
+          "createdAt": "2026-03-16T01:29:34Z",
+          "updatedAt": "2026-03-16T01:29:34Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "What you really want to say here is that the \"throughout advice\" is a achievable rate by the endpoints during the monitoring period that the network *thinks* it can sustained or based on a policy for that particular UDP flow. \r\n\r\nWith that I think sustainable is over used in the document as the network may not/can not guarantee the advice, it just gives its best estimation. I would say we don't use the \"maximum sustainable throughput\" in the document, rather say \"maximum achievable throughput by the endpoints that the network could sustain for the {time} period\".   \r\n\r\nWill that work?",
+          "createdAt": "2026-03-16T01:51:12Z",
+          "updatedAt": "2026-03-16T01:51:12Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "While neither term is perfect, I think \"sustainable\" is the right one to use here. As others have mentioned, \"achievable\" can be interpreted in a way that limits instantaneous burst rates, which would be an unfortunate consequence, in my opinion.",
+          "createdAt": "2026-03-16T06:12:33Z",
+          "updatedAt": "2026-03-16T06:12:33Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87rgW2C",
+          "commit": {
+            "abbreviatedOid": "50918a9"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "I don't think that PR is need or particularly useful. In any case, no, saying \"achievable\" instead of \"sustainable\" is not a clarification.",
+          "createdAt": "2026-03-16T02:21:08Z",
+          "updatedAt": "2026-03-16T02:22:44Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I think achievable does not capture what SCONE does. If clients want to find out what is achievable, they can do that by just testing various rates until they get congestion feedback. The goal really is to have a duration element, and I think sustainable is a better word for that.",
+              "createdAt": "2026-03-16T02:21:08Z",
+              "updatedAt": "2026-03-16T02:22:44Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "I don't think that's right. If you want to be pedantic, you could say:\n\n```suggestion\nassociated with the flows of UDP datagrams that the endpoints exchange using QUIC.\n```\n\nBut I don't think that's needed.",
+              "createdAt": "2026-03-16T02:21:11Z",
+              "updatedAt": "2026-03-16T02:22:44Z"
+            },
+            {
+              "originalPosition": 17,
+              "body": "Please don't make that change.",
+              "createdAt": "2026-03-16T02:21:38Z",
+              "updatedAt": "2026-03-16T02:22:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87rieY-",
+          "commit": {
+            "abbreviatedOid": "50918a9"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "My feelings on this are not as strong as @huitema's, but I'm not seeing a distinct improvement.\n\nThere is a point of tension between the expectations regarding the word sustainable (which has now picked up connotations that are unhelpful in this context) and the word achievable.  What is nice about the existing text is that \"sustainable throughput\" can be read to mean \"achievable, sustained throughput\".  That is, in the sense that flows are expected to be able to reach the target throughput and stay there.\n\nNot including some mention of sustained throughput is going to lead to the sorts of problems Christian mentions.",
+          "createdAt": "2026-03-16T06:22:13Z",
+          "updatedAt": "2026-03-16T06:22:13Z",
           "comments": []
         }
       ]
