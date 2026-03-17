@@ -86,7 +86,7 @@ is negotiated by QUIC endpoints.
 SCONE provides a means for a network to signal its present best estimate
 for maximum achievable throughput,
 or throughput advice,
-associated with the flows of UDP datagrams that QUIC exchanges by the endpoits.
+associated with the flows of UDP datagrams that the endpoints exchange using QUIC.
 
 Any network function that is able to update the content of UDP datagrams
 qualifies as a network element that can use SCONE packets
