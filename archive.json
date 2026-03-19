@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-17T02:23:01.351935+00:00",
+  "timestamp": "2026-03-19T02:28:48.580357+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -13964,13 +13964,13 @@
       "labels": [],
       "body": "We are using both of the terms, changes sustainable to be inline with the abstract",
       "createdAt": "2026-03-15T23:48:57Z",
-      "updatedAt": "2026-03-16T06:22:13Z",
+      "updatedAt": "2026-03-17T03:45:54Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "f0c5a3f64ca425c9318988b9211b328d3346a842",
       "headRepository": "zaheduzzaman/scone",
       "headRefName": "patch-2",
-      "headRefOid": "50918a924e3dae3e1e9da5d21b8c7a9aff051c59",
+      "headRefOid": "41223a04a2e543cda3489852977f6ba8c7798eb1",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -13996,6 +13996,13 @@
           "body": "While neither term is perfect, I think \"sustainable\" is the right one to use here. As others have mentioned, \"achievable\" can be interpreted in a way that limits instantaneous burst rates, which would be an unfortunate consequence, in my opinion.",
           "createdAt": "2026-03-16T06:12:33Z",
           "updatedAt": "2026-03-16T06:12:33Z"
+        },
+        {
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "body": "I can agree both sustainable and acheivable is not doing their job to explain the expectations. We are having this discussion now couple of times. \r\n\r\nI would then suggest what I had suggested before, lets describe what we mean by maximum sustainable throuput and move on with it. Something like this would be helpful I think - \"maximum achievable throughput by the endpoints that the network could sustain for the {time} period\". And update the abstract to use \"sustainable\".",
+          "createdAt": "2026-03-17T03:45:54Z",
+          "updatedAt": "2026-03-17T03:45:54Z"
         }
       ],
       "reviews": [
@@ -14043,6 +14050,26 @@
           "createdAt": "2026-03-16T06:22:13Z",
           "updatedAt": "2026-03-16T06:22:13Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87r6kUA",
+          "commit": {
+            "abbreviatedOid": "50918a9"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-03-17T03:41:42Z",
+          "updatedAt": "2026-03-17T03:41:42Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "OK. This is inline with what I wrote - \"maximum achievable throughput by the endpoints that the network could sustain for the {time} period\".",
+              "createdAt": "2026-03-17T03:41:42Z",
+              "updatedAt": "2026-03-17T03:41:42Z"
+            }
+          ]
         }
       ]
     }
