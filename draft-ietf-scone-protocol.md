@@ -394,6 +394,8 @@ in network elements.
 This is also necessary in many cases for QUIC versions 1 and 2
 because packets with a short header cannot precede any other packets.
 
+A sender MUST NOT include more than one SCONE packet in a datagram.
+
 
 ## Rate Signals {#rate-signal}
 
@@ -484,6 +486,8 @@ of the first byte with the most significant bit of the version field. A SCONE
 packet MAY be discarded, along with any packets that come after it in the same
 datagram, if the Source Connection ID is not consistent with those coalesced
 packets, as specified in {{packet}}.
+
+A receiver MAY discard a datagram that contains more than one SCONE packet.
 
 A SCONE packet is discarded if the rate signal is unknown (127).
 
