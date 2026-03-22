@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-19T02:28:48.580357+00:00",
+  "timestamp": "2026-03-22T02:29:36.004801+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2993,9 +2993,52 @@
       "labels": [],
       "body": "There is no reason to include more than one SCONE packet, so can we prohibit the inclusion of more than one?  This came up during implementation.  We had an implementation bug as a result of accepting many SCONE packets (I'd implemented using recursion and a large packet full of SCONE was blowing the stack).  Given that there is no need for more than one SCONE packet, can we make that a requirement?",
       "createdAt": "2026-03-16T09:13:57Z",
-      "updatedAt": "2026-03-16T09:13:57Z",
+      "updatedAt": "2026-03-20T04:49:54Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think prohibiting at the sender-side is fine, though I'm not sure what we should recommend on the receiver-side.\n\nConsidering that an on-path attacker can prepend arbitrary SCONE packets in front, I do not thing there is a strong reason to prohibit processing the non-SCONE packets being coalesced.",
+          "createdAt": "2026-03-19T09:09:13Z",
+          "updatedAt": "2026-03-19T09:09:13Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I was thinking that the receiver might not have any obligation to keep parsing past the first one.  Damage of that sort would then be akin to flipping AEAD-protected bits.",
+          "createdAt": "2026-03-19T09:35:51Z",
+          "updatedAt": "2026-03-19T09:35:51Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Looks like a good reason for mandating \"MUST NOT have more than one Scone packet per datagram\". Plus stating that receivers SHOULD discard the entire datagram if that happens -- by opposition to thrashing the connection, because the infringing Scone packet might have been inserted by an on-path attacker.",
+          "createdAt": "2026-03-19T17:17:42Z",
+          "updatedAt": "2026-03-19T17:17:42Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "To be clear, I wouldn't mind implementations discarding such packets. But I do not see why we need to *require* implementations to discard, when the general rule of handling coalesced packets in RFC 9000 is: process them individually.",
+          "createdAt": "2026-03-20T01:29:10Z",
+          "updatedAt": "2026-03-20T01:29:10Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I was thinking: MUST NOT add multiple, MAY discard datagrams that contain multiple.",
+          "createdAt": "2026-03-20T02:32:38Z",
+          "updatedAt": "2026-03-20T02:32:38Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "What Martin said. Generally, the handling of a broken MUST is \"detect a protocol violation and terminate the connection.\" We don't want to do that here, because it would provide attackers with a mean to break connections. Thus, having the MAY is important.",
+          "createdAt": "2026-03-20T04:49:54Z",
+          "updatedAt": "2026-03-20T04:49:54Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -14070,6 +14113,80 @@
               "updatedAt": "2026-03-17T03:41:42Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 144,
+      "id": "PR_kwDON1dwo87MDXre",
+      "title": "Only allow one SCONE packet per datagram",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/144",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "But the receiver behavior is only discarding.\r\n\r\nCloses #143.",
+      "createdAt": "2026-03-20T05:56:29Z",
+      "updatedAt": "2026-03-20T10:12:43Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "f0c5a3f64ca425c9318988b9211b328d3346a842",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "one-scone-only",
+      "headRefOid": "6afa18cc202c5c7d6a22b23ee05a56b46a568510",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "britram",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "this makes sense to me, and i'm surprised this wasn't already here. ship it (as individual)",
+          "createdAt": "2026-03-20T06:08:44Z",
+          "updatedAt": "2026-03-20T06:08:44Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87tN4Es",
+          "commit": {
+            "abbreviatedOid": "6afa18c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes, that's what we agreed.",
+          "createdAt": "2026-03-20T07:01:44Z",
+          "updatedAt": "2026-03-20T07:01:44Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87tOFye",
+          "commit": {
+            "abbreviatedOid": "6afa18c"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-20T07:16:15Z",
+          "updatedAt": "2026-03-20T07:16:15Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87tQ2XC",
+          "commit": {
+            "abbreviatedOid": "6afa18c"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-20T10:12:43Z",
+          "updatedAt": "2026-03-20T10:12:43Z",
+          "comments": []
         }
       ]
     }
