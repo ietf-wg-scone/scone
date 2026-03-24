@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-22T02:29:36.004801+00:00",
+  "timestamp": "2026-03-24T02:22:26.985249+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -2986,15 +2986,15 @@
       "id": "I_kwDON1dwo87zQj7t",
       "title": "Can we limit to one SCONE packet?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/143",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "There is no reason to include more than one SCONE packet, so can we prohibit the inclusion of more than one?  This came up during implementation.  We had an implementation bug as a result of accepting many SCONE packets (I'd implemented using recursion and a large packet full of SCONE was blowing the stack).  Given that there is no need for more than one SCONE packet, can we make that a requirement?",
       "createdAt": "2026-03-16T09:13:57Z",
-      "updatedAt": "2026-03-20T04:49:54Z",
-      "closedAt": null,
+      "updatedAt": "2026-03-22T23:59:00Z",
+      "closedAt": "2026-03-22T23:59:00Z",
       "comments": [
         {
           "author": "kazuho",
@@ -3039,6 +3039,22 @@
           "updatedAt": "2026-03-20T04:49:54Z"
         }
       ]
+    },
+    {
+      "number": 145,
+      "id": "I_kwDON1dwo871WvJJ",
+      "title": "Section 7.3 of Spec: Monitoring Throughput Advice",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/145",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 7.3 of the Protocol Spec appears to be important for network operators. Does this section belong in the applicability-manageability document? ... or could this be unpacked further there to explain the operational implication?\n\n",
+      "createdAt": "2026-03-22T15:49:54Z",
+      "updatedAt": "2026-03-22T15:49:54Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -14121,24 +14137,26 @@
       "id": "PR_kwDON1dwo87MDXre",
       "title": "Only allow one SCONE packet per datagram",
       "url": "https://github.com/ietf-wg-scone/scone/pull/144",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "But the receiver behavior is only discarding.\r\n\r\nCloses #143.",
       "createdAt": "2026-03-20T05:56:29Z",
-      "updatedAt": "2026-03-20T10:12:43Z",
+      "updatedAt": "2026-03-22T23:58:59Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "f0c5a3f64ca425c9318988b9211b328d3346a842",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "one-scone-only",
       "headRefOid": "6afa18cc202c5c7d6a22b23ee05a56b46a568510",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-03-22T23:58:59Z",
+      "mergedAt": "2026-03-22T23:58:59Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd"
+      },
       "comments": [
         {
           "author": "britram",
