@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-24T02:22:26.985249+00:00",
+  "timestamp": "2026-03-31T02:35:35.149583+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3055,6 +3055,51 @@
       "updatedAt": "2026-03-22T15:49:54Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 146,
+      "id": "I_kwDON1dwo874xbn_",
+      "title": "Should SCONE mention the Spin Bit?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/146",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The spin bit is only on 1-RTT packets, so there isn't actually a conflict between the bit and the fields in SCONE.\n\nBut, whatever is watching the spin bit has to either ignore a SCONE packet or parse ahead to the 1-RTT header. I imagine they'll do the former, but I wonder if we should add some text about this.\n\nI have not implemented a spin bit observer; I imagine they just ignore long-header datagrams, so maybe this flows naturally?",
+      "createdAt": "2026-03-30T20:01:24Z",
+      "updatedAt": "2026-03-31T01:27:31Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Don't we all love the spin bit? \n\nSeriously, a spin-bit observer is looking at 1 RTT packets per flow. It observes changes in the spin-bit value, and measures the time delay between these changes. Yes, it might want to not miss a bit and observe the first 1RTT packet in a coalesced datagram. If it ignores them and if the first \"spinning\" packet happens to be the scone-coalesced packet, the RTT estimate will be too large by one packet transmission time. This is not great, but probably also not atrocious -- the estimate will also be too large if the spin happens during a low transmission time, e.g., between two video frames.\n\nThe bit spins on one side just after it sees a spin from the other side, so the \"head of spin\" condition is known before starting to format the UDP datagram. Implementations might try to be gentle and not coalesce the Scone packet with an \"head of spin\" packet.",
+          "createdAt": "2026-03-31T00:40:49Z",
+          "updatedAt": "2026-03-31T00:40:49Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I don't think we need text on this in the main spec. Potentially something to mention in the app-man doc though (or here if they get merged). ",
+          "createdAt": "2026-03-31T00:48:30Z",
+          "updatedAt": "2026-03-31T00:48:30Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Given how easy the analysis is, this seems an OK inclusion for the draft.  I consider the app-man doc to be a place for those managing networks, not those doing implementations, and that suggestion really needs to be carried out by endpoint implementers.",
+          "createdAt": "2026-03-31T00:58:06Z",
+          "updatedAt": "2026-03-31T00:58:06Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I do not mind either ways, as this is not a new problem. QUIC v1 explicitly allows endpoints to coalesce long header packets with 1-RTT packets after the handshake ([Section 14.4.1 of RFC 9000](https://datatracker.ietf.org/doc/html/rfc9000#name-pmtu-probes-containing-sour)).\n\nThat said, the PR looks fine and I appreciate the effort.",
+          "createdAt": "2026-03-31T01:27:31Z",
+          "updatedAt": "2026-03-31T01:27:31Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -14204,6 +14249,46 @@
           "body": "",
           "createdAt": "2026-03-20T10:12:43Z",
           "updatedAt": "2026-03-20T10:12:43Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 147,
+      "id": "PR_kwDON1dwo87Oy3D_",
+      "title": "Ah, the spin bit",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/147",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Follow through on Christian's suggestion\r\n\r\nCloses #146.",
+      "createdAt": "2026-03-31T00:57:12Z",
+      "updatedAt": "2026-03-31T01:25:12Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "spin-a-bit",
+      "headRefOid": "963a89e3371913d742ed7edd137b8688c9dc31bc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo87wc2JO",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-03-31T01:25:12Z",
+          "updatedAt": "2026-03-31T01:25:12Z",
           "comments": []
         }
       ]
