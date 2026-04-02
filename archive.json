@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-03-31T02:35:35.149583+00:00",
+  "timestamp": "2026-04-02T02:31:56.200205+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3100,6 +3100,46 @@
           "updatedAt": "2026-03-31T01:27:31Z"
         }
       ]
+    },
+    {
+      "number": 148,
+      "id": "I_kwDON1dwo875u68V",
+      "title": "Editorial: Should SCONE endpoints send VN on new connections?",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/148",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "If I'm a scone capable server, but an INITIAL arrives with SCONE prior to me sending the transport parameter, should I send a VN packet?\n\nA close reading of RFC9000 says I should, I believe, as initiating packets aren't allowed to carry SCONE. But it might be useful to make it explicit.",
+      "createdAt": "2026-04-01T20:54:41Z",
+      "updatedAt": "2026-04-02T00:19:58Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If the server supports the version, and it does, then there is no need to send Version Negotiation.  The operative part is in RFC 8999:\n\n> A QUIC endpoint that receives a packet with a long header and a version it either does not understand or does not support might send a Version Negotiation packet in response. \n\n-- https://datatracker.ietf.org/doc/html/rfc8999#section-6-1\n\nI don't think that we need to worry about that one.  Once you support SCONE, you don't need to have negotiated the protocol to understand it.\n\nFWIW, we discussed disabling SCONE parsing when SCONE was disabled in our stack.  I'm of the view that checking the config item is almost more work than just parsing out the SCONE packet.  After all, if you don't parse SCONE, you are forced to throw out whatever follows and that serves no good purpose.",
+          "createdAt": "2026-04-02T00:19:58Z",
+          "updatedAt": "2026-04-02T00:19:58Z"
+        }
+      ]
+    },
+    {
+      "number": 149,
+      "id": "I_kwDON1dwo875y4pW",
+      "title": "SCONE vs. stateless resets",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/149",
+      "state": "OPEN",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "QUIC version 1 allows endpoints send stateless resets in response to packets for which corresponding state cannot be found.\n\nHowever, [Section 5.3 of SCONE](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.3-5) currently states only that _a SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint._\n\nTo allow endpoints generate stateless resets in response to datagrams that coalesce a SCONE packet and a short header packet, do we want to explicitly specify that the endpoints MAY process the packets that follow the SCONE packet, even when the Destination Connection ID does not match one recognized by the endpoint?",
+      "createdAt": "2026-04-02T01:36:49Z",
+      "updatedAt": "2026-04-02T01:37:27Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -14265,7 +14305,7 @@
       "labels": [],
       "body": "Follow through on Christian's suggestion\r\n\r\nCloses #146.",
       "createdAt": "2026-03-31T00:57:12Z",
-      "updatedAt": "2026-03-31T01:25:12Z",
+      "updatedAt": "2026-03-31T04:06:16Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
@@ -14289,6 +14329,19 @@
           "body": "",
           "createdAt": "2026-03-31T01:25:12Z",
           "updatedAt": "2026-03-31T01:25:12Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo87wejCy",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "That works, of course. The only question is whether we really need to say something about the spin bit, but, why not?",
+          "createdAt": "2026-03-31T04:06:16Z",
+          "updatedAt": "2026-03-31T04:06:16Z",
           "comments": []
         }
       ]
