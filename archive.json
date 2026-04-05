@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-02T02:31:56.200205+00:00",
+  "timestamp": "2026-04-05T02:41:33.597212+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3137,9 +3137,59 @@
       "labels": [],
       "body": "QUIC version 1 allows endpoints send stateless resets in response to packets for which corresponding state cannot be found.\n\nHowever, [Section 5.3 of SCONE](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.3-5) currently states only that _a SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint._\n\nTo allow endpoints generate stateless resets in response to datagrams that coalesce a SCONE packet and a short header packet, do we want to explicitly specify that the endpoints MAY process the packets that follow the SCONE packet, even when the Destination Connection ID does not match one recognized by the endpoint?",
       "createdAt": "2026-04-02T01:36:49Z",
-      "updatedAt": "2026-04-02T01:37:27Z",
+      "updatedAt": "2026-04-03T05:22:57Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think that's a very marginal case. If the endpoint only marks some packets using SCONE, the next non-scone packet will trigger the stateless reset, and there will not be any problem. The issue that you raise only happen if all the UDP datagrams sent by the endpoint start with a SCONE packet. That's rather unlikely.",
+          "createdAt": "2026-04-03T00:43:58Z",
+          "updatedAt": "2026-04-03T00:43:58Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I think that's a very marginal case.\n\nI'm not sure if I agree.\n\nConsider the case when a client sends a small HTTP request after quiescence. It could be a single datagram. It makes sense for the client to have SCONE attached to the datagram, because it is sent after quiescence. We want the server to respond with a stateless reset, if the server has lost state.\n\nThis would be a typical traffic pattern _if_ peers agree to use SCONE in the client -> server direction. But why not? I can think two reasons to do so:\n* Clients could have the incentive to use SCONE for uploading video traffic (or for P2P), however they might not have the capability to determine how a connection is going to be used when establishing one. If that is the case, clients would try to use SCONE in the client -> server direction for all connections that they establish.\n* As discussed everywhere, using SCONE on every connection is better for preserving privacy.",
+          "createdAt": "2026-04-03T02:19:04Z",
+          "updatedAt": "2026-04-03T02:19:04Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "In your scenario, the server has disappeared during the quiescence. The client will send a PTO a short time later, then another, etc. All that at much shorter intervals than 67 seconds. There is no reason for the client to prepend scone to all these packets. If one of them makes it, the client will get a stateless reset.",
+          "createdAt": "2026-04-03T03:03:46Z",
+          "updatedAt": "2026-04-03T03:03:46Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> In your scenario, the server has disappeared during the quiescence. The client will send a PTO a short time later, then another, etc. All that at much shorter intervals than 67 seconds.\n\nYes, the peer would be able to notice a reset within 1 PTO + 1 RTT. That is much shorter than 67 seconds. However, it is still much longer than 1 RTT.\n\nIn this type of scenario, TCP clients notice resets in 1 RTT and can recover. That is also the case for QUIC clients not using SCONE. I think my concern is that the performance metrics might become worse due to the additional 1 PTO delay.",
+          "createdAt": "2026-04-03T03:35:22Z",
+          "updatedAt": "2026-04-03T03:35:22Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Then just do not use SCONE when coming out of quiescence? If there was no traffic for X seconds, let the first packet through without adding SCONE. You can always add SCONE to the next packet after that.",
+          "createdAt": "2026-04-03T04:03:26Z",
+          "updatedAt": "2026-04-03T04:03:26Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Then just do not use SCONE when coming out of quiescence? If there was no traffic for X seconds, let the first packet through without adding SCONE. You can always add SCONE to the next packet after that.\n\nCould you clarify why that is a better outcome than having a clarification that endpoints can generate stateless resets in response to QUIC packets even if they were attached to a SCONE packet?\n\nFWIW, all I'm looking for a change like below, in which the bold part is the one I want to see added:\n> A SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint. **Endpoints MAY still process the coalesced QUIC packet; e.g., to generate stateless resets (Section 10.3 of [QUIC]).**\n\nAt least for h2o and quicly, it is natural to implement this way: You decode the SCONE packet as you split an UDP datagram into multiple QUIC version 1 packets. Then, pass each QUIC version 1 packet to the packet handler with a reference to SCONE signal.\n\nI do not know about other stacks, but they could be the same. Then, why not embrace such implementations and call it a day?",
+          "createdAt": "2026-04-03T04:42:15Z",
+          "updatedAt": "2026-04-03T04:42:15Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I am looking at a bit too much work, so I have not implemented SCONE yet, and I cannot tell you whether this is natural. It seems that the logical process should be:\n\n1) If the first packet is a SCONE packet, parse it but do not process it yet.\n2) If the second packet does not have a matching CID, drop the datagram.\n3) If the second packet verifies correctly, process the SCONE packet, consider it valid.\n    - if it did not, drop the SCONE packet.\n4) Process the reminder of the datagram.\n\nIf I do that, then there is nothing special to do in case of \"too old\" CID: the second packet will be processed, it will generate the stateless reset, and the SCONE packet will be naturally ignore. \n\nThere is a bit of a condition if the second packet is an Initial packet and the CID is not known.",
+          "createdAt": "2026-04-03T05:22:57Z",
+          "updatedAt": "2026-04-03T05:22:57Z"
+        }
+      ]
     }
   ],
   "pulls": [
