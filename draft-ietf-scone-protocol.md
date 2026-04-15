@@ -290,8 +290,8 @@ Endpoints that receive this signal therefore need to treat the information as ad
 The fact that an endpoint requests throughput advice does not necessarily mean
 that it will adhere to advice; in some cases, the endpoint cannot. For
 example, a flow could initially be used to serve video chunks, with the client
-selecting appropriate chunks based on received advice, but later switch to a
-bulk download for which bitrate adaptation that cannot be similarly controlled. Composite flows
+selecting chunks of different bitrates based on received advice, but later switch to a
+bulk download that cannot be similarly controlled. Composite flows
 from multiple applications, such as tunneled flows, might only have a subset of
 the involved applications that are capable of handling SCONE signals. Therefore,
 when a network element detects that throughput exceeds the advertised throughput advice,
