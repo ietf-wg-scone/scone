@@ -892,6 +892,27 @@ network element applied throughput advice.
 Senders will therefore proceed as though there was no advice.
 
 
+## Interactions With The Latency Spin Bit {#spin}
+
+Endpoints that observe the recommendations for setting the latency spin bit,
+as defined in {{Section 17.4 of QUIC}},
+generate two competing signals for elements on the network path.
+
+A QUIC packet that is coalesced with a SCONE packet
+might make it harder for network elements to detect the latency spin bit,
+because the SCONE packet moves the bit from the first byte of the datagram
+to after the SCONE packet.
+
+Network elements that ignore datagrams with a SCONE packet
+could miss changes in the spin bit.
+This could introduce measurement error
+that inflates round-trip time estimates.
+
+Endpoints that enable the spin bit can avoid this issue
+by deferring the inclusion of SCONE packets
+when a spin bit edge is being communicated in a QUIC packet.
+
+
 # Security Considerations {#security}
 
 The modification of packets provides endpoints proof that a network element is
