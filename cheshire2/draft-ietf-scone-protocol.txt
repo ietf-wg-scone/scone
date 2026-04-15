@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 14 October 2026                            Private Octopus Inc.
+Expires: 17 October 2026                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                           12 April 2026
+                                                           15 April 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 October 2026.
+   This Internet-Draft will expire on 17 October 2026.
 
 Copyright Notice
 
@@ -321,13 +321,14 @@ Table of Contents
    The fact that an endpoint requests throughput advice does not
    necessarily mean that it will adhere to advice; in some cases, the
    endpoint cannot.  For example, a flow could initially be used to
-   serve video chunks, with the client selecting appropriate chunks
-   based on received advice, but later switch to a bulk download that
-   cannot be similarly controlled.  Composite flows from multiple
-   applications, such as tunneled flows, might only have a subset of the
-   involved applications that are capable of handling SCONE signals.
-   Therefore, when a network element detects that throughput exceeds the
-   advertised throughput advice, it might apply rate limiting.
+   serve video chunks, with the client selecting chunks of different
+   bitrates based on received advice, but later switch to a bulk
+   download that cannot be similarly controlled.  Composite flows from
+   multiple applications, such as tunneled flows, might only have a
+   subset of the involved applications that are capable of handling
+   SCONE signals.  Therefore, when a network element detects that
+   throughput exceeds the advertised throughput advice, it might apply
+   rate limiting.
 
    Network conditions and rate-limit policies can change in ways that
    make previously signaled advice obsolete.  For example, routing
