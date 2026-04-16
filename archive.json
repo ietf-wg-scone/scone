@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-14T02:45:22.170172+00:00",
+  "timestamp": "2026-04-16T02:50:22.044810+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3137,7 +3137,7 @@
       "labels": [],
       "body": "QUIC version 1 allows endpoints send stateless resets in response to packets for which corresponding state cannot be found.\n\nHowever, [Section 5.3 of SCONE](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.3-5) currently states only that _a SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint._\n\nTo allow endpoints generate stateless resets in response to datagrams that coalesce a SCONE packet and a short header packet, do we want to explicitly specify that the endpoints MAY process the packets that follow the SCONE packet, even when the Destination Connection ID does not match one recognized by the endpoint?",
       "createdAt": "2026-04-02T01:36:49Z",
-      "updatedAt": "2026-04-03T05:22:57Z",
+      "updatedAt": "2026-04-16T01:43:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -3188,6 +3188,20 @@
           "body": "I am looking at a bit too much work, so I have not implemented SCONE yet, and I cannot tell you whether this is natural. It seems that the logical process should be:\n\n1) If the first packet is a SCONE packet, parse it but do not process it yet.\n2) If the second packet does not have a matching CID, drop the datagram.\n3) If the second packet verifies correctly, process the SCONE packet, consider it valid.\n    - if it did not, drop the SCONE packet.\n4) Process the reminder of the datagram.\n\nIf I do that, then there is nothing special to do in case of \"too old\" CID: the second packet will be processed, it will generate the stateless reset, and the SCONE packet will be naturally ignore. \n\nThere is a bit of a condition if the second packet is an Initial packet and the CID is not known.",
           "createdAt": "2026-04-03T05:22:57Z",
           "updatedAt": "2026-04-03T05:22:57Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Why would a recipient not be able to process the SCONE packet to generate a stateless reset?  Alternatively, if you follow @huitema's proposed processing order, which matches my implementation pretty closely, why would you need to do anything special?\n\nI think that we're OK without saying anything about this.",
+          "createdAt": "2026-04-15T14:31:05Z",
+          "updatedAt": "2026-04-15T14:31:05Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson I agree that it is straightforward and preferable for endpoints to generate stateless resets.\n\nHowever, the point is that, by stating only that _SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint (section 5.3)_, readers might have the impression that they are forbidden from generating stateless resets.\n\nThough, if the authors think the text as-is allows sending of stateless resets under these circumstances, then I would not mind closing the issue without a change.",
+          "createdAt": "2026-04-16T01:43:09Z",
+          "updatedAt": "2026-04-16T01:43:09Z"
         }
       ]
     }
@@ -14355,7 +14369,7 @@
       "labels": [],
       "body": "Follow through on Christian's suggestion\r\n\r\nCloses #146.",
       "createdAt": "2026-03-31T00:57:12Z",
-      "updatedAt": "2026-04-07T10:16:52Z",
+      "updatedAt": "2026-04-15T17:04:29Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
@@ -14413,6 +14427,86 @@
               "updatedAt": "2026-04-07T10:17:06Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo871PWvF",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-15T14:34:02Z",
+          "updatedAt": "2026-04-15T14:34:02Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "I don't think we need to address that.  It's also possible that the non-SCONE-bearing datagram could be reordered ahead of the SCONE-bearing datagram.   (I also question that assertion about \"small\", because we don't know when the next datagram will have been sent.)",
+              "createdAt": "2026-04-15T14:34:02Z",
+              "updatedAt": "2026-04-15T14:34:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo871PdPN",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-15T14:37:41Z",
+          "updatedAt": "2026-04-15T14:37:41Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Actually I don't know if we really need this at all. This is no different than losing the packet that changes the spin bit.",
+              "createdAt": "2026-04-15T14:37:41Z",
+              "updatedAt": "2026-04-15T14:37:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo871QqcA",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-15T15:23:01Z",
+          "updatedAt": "2026-04-15T15:23:01Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "It is different: in some implementations, it would be reasonable to expect the first packet after a period of quiescence to include SCONE, which also interferes with the spin bit.  If you would prefer we not say anything about the spin bit, I can understand that; we can close this pull request without merging.  But this also seems harmless.",
+              "createdAt": "2026-04-15T15:23:01Z",
+              "updatedAt": "2026-04-15T15:23:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo871TARD",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-15T17:04:28Z",
+          "updatedAt": "2026-04-15T17:04:29Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "We may well be better off by not mentioning the spin bit at all. Do we have actual deployment of network management tools relying on the spin bit? Do we know how hard it would be for such tools to just jump over the SCONE header?",
+              "createdAt": "2026-04-15T17:04:29Z",
+              "updatedAt": "2026-04-15T17:04:29Z"
+            }
+          ]
         }
       ]
     },
@@ -14421,24 +14515,26 @@
       "id": "PR_kwDON1dwo87RxtQp",
       "title": "Grammatical error",
       "url": "https://github.com/ietf-wg-scone/scone/pull/150",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Stuart pointed at this text and it doesn't read well.\r\n\r\nThis does nothing to address the concern raised in that email, but I thought it worth getting the language fixed anyway.",
       "createdAt": "2026-04-12T13:53:06Z",
-      "updatedAt": "2026-04-13T00:41:08Z",
+      "updatedAt": "2026-04-15T15:07:56Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "cheshire2",
-      "headRefOid": "0dd1b2dbd0d0166b6683b442eb3b3f4f3c800d0d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "107d12d85ea9907a17c1982c641d763797718532",
+      "closedAt": "2026-04-15T15:07:42Z",
+      "mergedAt": "2026-04-15T15:07:42Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "bcf288e0aec8cf8efa2f91e25ad04406fce5f181"
+      },
       "comments": [],
       "reviews": [
         {
