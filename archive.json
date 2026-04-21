@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-16T02:50:22.044810+00:00",
+  "timestamp": "2026-04-21T02:46:44.866525+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3137,7 +3137,7 @@
       "labels": [],
       "body": "QUIC version 1 allows endpoints send stateless resets in response to packets for which corresponding state cannot be found.\n\nHowever, [Section 5.3 of SCONE](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.3-5) currently states only that _a SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint._\n\nTo allow endpoints generate stateless resets in response to datagrams that coalesce a SCONE packet and a short header packet, do we want to explicitly specify that the endpoints MAY process the packets that follow the SCONE packet, even when the Destination Connection ID does not match one recognized by the endpoint?",
       "createdAt": "2026-04-02T01:36:49Z",
-      "updatedAt": "2026-04-16T01:43:09Z",
+      "updatedAt": "2026-04-20T19:03:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -3202,6 +3202,13 @@
           "body": "@martinthomson I agree that it is straightforward and preferable for endpoints to generate stateless resets.\n\nHowever, the point is that, by stating only that _SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint (section 5.3)_, readers might have the impression that they are forbidden from generating stateless resets.\n\nThough, if the authors think the text as-is allows sending of stateless resets under these circumstances, then I would not mind closing the issue without a change.",
           "createdAt": "2026-04-16T01:43:09Z",
           "updatedAt": "2026-04-16T01:43:09Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "A parenthetical to add to the text you cited might even be a better way to address this:\n\n> [...] (with the exception of a stateless reset; see {{Section XX of QUIC}})",
+          "createdAt": "2026-04-20T19:03:32Z",
+          "updatedAt": "2026-04-20T19:03:32Z"
         }
       ]
     }
@@ -14369,7 +14376,7 @@
       "labels": [],
       "body": "Follow through on Christian's suggestion\r\n\r\nCloses #146.",
       "createdAt": "2026-03-31T00:57:12Z",
-      "updatedAt": "2026-04-15T17:04:29Z",
+      "updatedAt": "2026-04-20T19:05:13Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
@@ -14505,6 +14512,46 @@
               "body": "We may well be better off by not mentioning the spin bit at all. Do we have actual deployment of network management tools relying on the spin bit? Do we know how hard it would be for such tools to just jump over the SCONE header?",
               "createdAt": "2026-04-15T17:04:29Z",
               "updatedAt": "2026-04-15T17:04:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8727C15",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-20T19:00:40Z",
+          "updatedAt": "2026-04-20T19:00:40Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Hmm, given where we are, it might pay to just poll the working group.  If anyone cares, we can add this text.  If they don't, we close the PR.  Then it becomes a chair problem and that's the sort of problem I like (any problem not mine, that is).",
+              "createdAt": "2026-04-20T19:00:40Z",
+              "updatedAt": "2026-04-20T19:00:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo8727KsY",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-20T19:05:13Z",
+          "updatedAt": "2026-04-20T19:05:13Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "+1.",
+              "createdAt": "2026-04-20T19:05:13Z",
+              "updatedAt": "2026-04-20T19:05:13Z"
             }
           ]
         }
