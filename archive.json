@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-21T02:46:44.866525+00:00",
+  "timestamp": "2026-04-23T02:48:31.466977+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -14376,7 +14376,7 @@
       "labels": [],
       "body": "Follow through on Christian's suggestion\r\n\r\nCloses #146.",
       "createdAt": "2026-03-31T00:57:12Z",
-      "updatedAt": "2026-04-20T19:05:13Z",
+      "updatedAt": "2026-04-21T07:11:04Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
@@ -14552,6 +14552,26 @@
               "body": "+1.",
               "createdAt": "2026-04-20T19:05:13Z",
               "updatedAt": "2026-04-20T19:05:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo873G4Pd",
+          "commit": {
+            "abbreviatedOid": "963a89e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-04-21T07:11:03Z",
+          "updatedAt": "2026-04-21T07:11:04Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Even if after an idle time the spin bit changes and there is a scone packet, I don't think this is a real issue as the next packet will have the spin bit. I agree that maybe there is not much special to say here as there can be may reason for missing packet with the bit change and you anyway have to account for that in your measurement. In the end you can only measure, what you can measure...",
+              "createdAt": "2026-04-21T07:11:03Z",
+              "updatedAt": "2026-04-21T07:11:05Z"
             }
           ]
         }
