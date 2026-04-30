@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-23T02:48:31.466977+00:00",
+  "timestamp": "2026-04-30T03:26:11.676855+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3209,6 +3209,37 @@
           "body": "A parenthetical to add to the text you cited might even be a better way to address this:\n\n> [...] (with the exception of a stateless reset; see {{Section XX of QUIC}})",
           "createdAt": "2026-04-20T19:03:32Z",
           "updatedAt": "2026-04-20T19:03:32Z"
+        }
+      ]
+    },
+    {
+      "number": 151,
+      "id": "I_kwDON1dwo88AAAABA40Mnw",
+      "title": "Prevent the SCONE indicator from being an ossification vector",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/151",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Interpreted literally, I believe the only logic the network element needs for the SCONE Indicator is:\n\n`if (udp.payload.length >= 2 && last_two_bytes() == kSconeIndicator)\n      FivetupleIsScone(fivetuple)`\n\nIn some conversations, I'm hearing that the network elements might be doing a little more than this. This is a potential ossification vector; for example, if it's parsing long headers to get packet lengths and find where the indicator should be, a QUICv1 parser will fail on v2 because the long header type codepoints are different. Even if they implement both versions, if we roll out QUICv3, then it will be hard to deploy because \"you can't get SCONE with it\".\n\nIt would be a good idea to specifically point network elements to [INVARIANTS]. If they must apply filters beyond the code snippet above, they could sensibly look for the long header bit and at least 9 bytes. This is not in the invariants, but it would also be reasonable to screen out datagrams < 1200 bytes, as I have trouble imagining that future versions of QUIC will not have these sorts of anti-amplification measures.\n\nElements might also ignore any packet after the first in the 5-tuple, if they want.\n\nI would prefer MUST NOTs here, but at the very least it would be helpful to show how to avoid accidental ossification.\n",
+      "createdAt": "2026-04-30T00:37:39Z",
+      "updatedAt": "2026-04-30T03:23:09Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "One could also say \"if the element does not know how to parse the version, it should just check the last two bytes\" or something to that effect.",
+          "createdAt": "2026-04-30T00:40:31Z",
+          "updatedAt": "2026-04-30T00:40:31Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Friendly amendment:\n\n```\nif (udp.payload.length >= 2 && last_two_bytes() == kSconeIndicator) FiveTupleMightBeScone(fivetuple)\n```\n\nThe indication would seem to be the first step in a graduated response.  My imagined reaction was that this indication would result in engaging monitoring and SCONE packet modifications.  On a timer so that if SCONE isn't used you can flip back to policing or what have you.\n\nObviously, if a network element wants stronger assurances, I don't know what is stronger than seeing a SCONE packet, but I can also see some product managers being uncomfortable with the simplicity of the above check or the time that it might take to see a SCONE packet (despite our recommendation to send one as soon as possible).\n\nI agree that this does engage ossification concerns.\n\nHowever, I don't see there being much we can do about people who choose to take that view.  But I'd be curious about how you might solve it.  So, my request to you would be: Pull Request?",
+          "createdAt": "2026-04-30T03:23:09Z",
+          "updatedAt": "2026-04-30T03:23:09Z"
         }
       ]
     }
