@@ -623,6 +623,30 @@ Despite these limitations,
 having an indication might allow network elements to change their starting posture
 with respect to their enforcement of their rate limit policies.
 
+## Avoiding Ossification When Reading the Indicator
+
+A network element could classify all 5-tuples where the first observed UDP
+datagram ends in the indicator bytes as potential SCONE. A network element MAY
+apply further criteria to further reduce this set and minimize false positives.
+However, it SHOULD NOT apply criteria that reduce the ability of new QUIC
+versions to employ SCONE. In particular, such criteria should consult the QUIC
+version invariants in {{INVARIANTS}}.
+
+For example, a network element could observe that the packet has the signature
+of a QUIC version 1 or 2 packet, including use of a long header, and if so,
+check that it meets the first-flight minimum datagram length of 1200 bytes for
+that version. However, if the datagram matches a QUIC long header with an
+unknown version, and has the indicator, it SHOULD treat it as a potential SCONE
+flow.
+
+In principle, a new QUIC version could have length-delimited short header
+packets and allow them in the first flight of a connection. However, these
+packets would not contain an explicit QUIC version number. Furthermore, short
+headers can be the first packets in a QUICv1 or QUICv2 5-tuple after an address
+or port migration, and these cannot contain the indicator. Therefore, network
+elements MAY ignore short header packets even though it is theoretically
+possible for future QUIC versions to support the SCONE indicator in a short
+header.
 
 ## Indications for Migrated Flows
 
