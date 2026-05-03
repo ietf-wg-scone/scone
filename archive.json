@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-04-30T03:26:11.676855+00:00",
+  "timestamp": "2026-05-03T03:27:35.874118+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3224,7 +3224,7 @@
       "labels": [],
       "body": "Interpreted literally, I believe the only logic the network element needs for the SCONE Indicator is:\n\n`if (udp.payload.length >= 2 && last_two_bytes() == kSconeIndicator)\n      FivetupleIsScone(fivetuple)`\n\nIn some conversations, I'm hearing that the network elements might be doing a little more than this. This is a potential ossification vector; for example, if it's parsing long headers to get packet lengths and find where the indicator should be, a QUICv1 parser will fail on v2 because the long header type codepoints are different. Even if they implement both versions, if we roll out QUICv3, then it will be hard to deploy because \"you can't get SCONE with it\".\n\nIt would be a good idea to specifically point network elements to [INVARIANTS]. If they must apply filters beyond the code snippet above, they could sensibly look for the long header bit and at least 9 bytes. This is not in the invariants, but it would also be reasonable to screen out datagrams < 1200 bytes, as I have trouble imagining that future versions of QUIC will not have these sorts of anti-amplification measures.\n\nElements might also ignore any packet after the first in the 5-tuple, if they want.\n\nI would prefer MUST NOTs here, but at the very least it would be helpful to show how to avoid accidental ossification.\n",
       "createdAt": "2026-04-30T00:37:39Z",
-      "updatedAt": "2026-04-30T03:23:09Z",
+      "updatedAt": "2026-04-30T03:29:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -3240,6 +3240,13 @@
           "body": "Friendly amendment:\n\n```\nif (udp.payload.length >= 2 && last_two_bytes() == kSconeIndicator) FiveTupleMightBeScone(fivetuple)\n```\n\nThe indication would seem to be the first step in a graduated response.  My imagined reaction was that this indication would result in engaging monitoring and SCONE packet modifications.  On a timer so that if SCONE isn't used you can flip back to policing or what have you.\n\nObviously, if a network element wants stronger assurances, I don't know what is stronger than seeing a SCONE packet, but I can also see some product managers being uncomfortable with the simplicity of the above check or the time that it might take to see a SCONE packet (despite our recommendation to send one as soon as possible).\n\nI agree that this does engage ossification concerns.\n\nHowever, I don't see there being much we can do about people who choose to take that view.  But I'd be curious about how you might solve it.  So, my request to you would be: Pull Request?",
           "createdAt": "2026-04-30T03:23:09Z",
           "updatedAt": "2026-04-30T03:23:09Z"
+        },
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'll give it a shot, though not before the interim.",
+          "createdAt": "2026-04-30T03:29:30Z",
+          "updatedAt": "2026-04-30T03:29:30Z"
         }
       ]
     }
@@ -14652,6 +14659,79 @@
               "body": "It could make sense to talk about adaptive bitrate selection while we describe video.\n\n```suggestion\nselecting chunks of different bitrates based on received advice, but later switch to a\n```",
               "createdAt": "2026-04-13T00:39:17Z",
               "updatedAt": "2026-04-13T00:41:08Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 152,
+      "id": "PR_kwDON1dwo87XJaqj",
+      "title": "Avoid Indicator Ossification",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/152",
+      "state": "OPEN",
+      "author": "martinduke",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #151 \r\n\r\nI'm unsure about the details and am happy to entertain improvements.",
+      "createdAt": "2026-04-30T14:46:08Z",
+      "updatedAt": "2026-05-02T05:39:29Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "bcf288e0aec8cf8efa2f91e25ad04406fce5f181",
+      "headRepository": "martinduke/scone",
+      "headRefName": "ossify",
+      "headRefOid": "f21bb5a277aa5e572d6271b0ada2fc1ad440ca78",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo877MjBk",
+          "commit": {
+            "abbreviatedOid": "f21bb5a"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-02T04:07:18Z",
+          "updatedAt": "2026-05-02T04:08:14Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Why not stop here?",
+              "createdAt": "2026-05-02T04:07:18Z",
+              "updatedAt": "2026-05-02T04:08:14Z"
+            },
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\nversions to employ SCONE. SCONE operates independently of any\nspecific QUIC version, so any criteria needs to fit within the QUIC\n```",
+              "createdAt": "2026-05-02T04:08:10Z",
+              "updatedAt": "2026-05-02T04:08:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo877NJKt",
+          "commit": {
+            "abbreviatedOid": "f21bb5a"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I think we should keep the text short.",
+          "createdAt": "2026-05-02T05:38:26Z",
+          "updatedAt": "2026-05-02T05:39:29Z",
+          "comments": [
+            {
+              "originalPosition": 36,
+              "body": "I agree with Martin T. We can do without these last 2 paragraphs. \n\nIf we really want to belabor the point, it would be simpler to add a single sentence ad the end of the first paragraph, after `version invariants in {{INVARIANTS}}.` Something like, \"In particular, the version number in the first observed packet will not always match QUICv1, and the length of the that packet could be lower than the minimal value set by QUICv1.\" But I don't think that's necessary.",
+              "createdAt": "2026-05-02T05:38:26Z",
+              "updatedAt": "2026-05-02T05:39:29Z"
             }
           ]
         }
