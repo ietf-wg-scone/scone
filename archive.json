@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-03T03:27:35.874118+00:00",
+  "timestamp": "2026-05-12T03:28:59.860526+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -14676,18 +14676,26 @@
       "labels": [],
       "body": "Fixes #151 \r\n\r\nI'm unsure about the details and am happy to entertain improvements.",
       "createdAt": "2026-04-30T14:46:08Z",
-      "updatedAt": "2026-05-02T05:39:29Z",
+      "updatedAt": "2026-05-12T02:07:45Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "bcf288e0aec8cf8efa2f91e25ad04406fce5f181",
       "headRepository": "martinduke/scone",
       "headRefName": "ossify",
-      "headRefOid": "f21bb5a277aa5e572d6271b0ada2fc1ad440ca78",
+      "headRefOid": "112aa5070469dac1116bdcb799e8d411c2832f46",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I chopped the last 2 Paras, take a look.",
+          "createdAt": "2026-05-11T22:37:13Z",
+          "updatedAt": "2026-05-11T22:37:13Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo877MjBk",
@@ -14732,6 +14740,46 @@
               "body": "I agree with Martin T. We can do without these last 2 paragraphs. \n\nIf we really want to belabor the point, it would be simpler to add a single sentence ad the end of the first paragraph, after `version invariants in {{INVARIANTS}}.` Something like, \"In particular, the version number in the first observed packet will not always match QUICv1, and the length of the that packet could be lower than the minimal value set by QUICv1.\" But I don't think that's necessary.",
               "createdAt": "2026-05-02T05:38:26Z",
               "updatedAt": "2026-05-02T05:39:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87-YvTx",
+          "commit": {
+            "abbreviatedOid": "f21bb5a"
+          },
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-11T22:36:49Z",
+          "updatedAt": "2026-05-11T22:36:49Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "Done",
+              "createdAt": "2026-05-11T22:36:49Z",
+              "updatedAt": "2026-05-11T22:36:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87-bt9A",
+          "commit": {
+            "abbreviatedOid": "112aa50"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good, except for a typo.",
+          "createdAt": "2026-05-12T02:07:18Z",
+          "updatedAt": "2026-05-12T02:07:45Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "```suggestion\nversions to employ SCONE. SCONE operates independently of any specific QUIC\n```\nFix the typo.",
+              "createdAt": "2026-05-12T02:07:18Z",
+              "updatedAt": "2026-05-12T02:07:45Z"
             }
           ]
         }
