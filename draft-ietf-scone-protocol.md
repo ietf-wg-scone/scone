@@ -648,7 +648,7 @@ A network element could classify all 5-tuples where the first observed UDP
 datagram ends in the indicator bytes as potential SCONE. A network element MAY
 apply further criteria to further reduce this set and minimize false positives.
 However, it SHOULD NOT apply criteria that reduce the ability of new QUIC
-versions to employ SCONE. SCONE operated independently of any specific QUIC
+versions to employ SCONE. SCONE operates independently of any specific QUIC
 version, so any criteria should consult the QUIC version invariants in
 {{INVARIANTS}}.
 
