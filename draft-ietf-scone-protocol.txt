@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 17 October 2026                            Private Octopus Inc.
+Expires: 15 November 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                           15 April 2026
+                                                             14 May 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 October 2026.
+   This Internet-Draft will expire on 15 November 2026.
 
 Copyright Notice
 
@@ -93,6 +93,7 @@ Table of Contents
      6.1.  Indicating Support on New Flows
      6.2.  Limitations of Indication
      6.3.  Indications for Migrated Flows
+     6.4.  Avoiding Ossification When Reading the Indicator
    7.  Network Deployment
      7.1.  Applying Throughput Advice Signals
      7.2.  Monitoring Flows
@@ -666,6 +667,18 @@ Table of Contents
    send a QUIC PATH_CHALLENGE or PATH_RESPONSE frame.  This applies to
    both client and server endpoints, but only if the peer has sent the
    transport parameter; see Section 6.
+
+6.4.  Avoiding Ossification When Reading the Indicator
+
+   A network element could classify all 5-tuples where the first
+   observed UDP datagram ends in the indicator bytes as potential SCONE.
+   A network element MAY apply further criteria to further reduce the
+   set of flows that are identifeid as potentially supporting SCONE,
+   reducing the likelihood of false positives.  However, it SHOULD NOT
+   apply criteria that reduce the ability of new QUIC versions to employ
+   SCONE.  SCONE operates independently of any specific QUIC version, so
+   any criteria should consult the QUIC version invariants in
+   [INVARIANTS].
 
 7.  Network Deployment
 
