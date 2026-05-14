@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-12T03:28:59.860526+00:00",
+  "timestamp": "2026-05-14T03:35:57.285977+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -14676,13 +14676,13 @@
       "labels": [],
       "body": "Fixes #151 \r\n\r\nI'm unsure about the details and am happy to entertain improvements.",
       "createdAt": "2026-04-30T14:46:08Z",
-      "updatedAt": "2026-05-12T02:07:45Z",
+      "updatedAt": "2026-05-13T17:14:12Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "bcf288e0aec8cf8efa2f91e25ad04406fce5f181",
       "headRepository": "martinduke/scone",
       "headRefName": "ossify",
-      "headRefOid": "112aa5070469dac1116bdcb799e8d411c2832f46",
+      "headRefOid": "9587db76b08b6088007f8c96bdde7dca0b729446",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -14780,6 +14780,86 @@
               "body": "```suggestion\nversions to employ SCONE. SCONE operates independently of any specific QUIC\n```\nFix the typo.",
               "createdAt": "2026-05-12T02:07:18Z",
               "updatedAt": "2026-05-12T02:07:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87_NI5s",
+          "commit": {
+            "abbreviatedOid": "dd4f618"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "\"this set\" wasn't quite direct enough, but this is fine either way.",
+          "createdAt": "2026-05-13T12:35:42Z",
+          "updatedAt": "2026-05-13T12:36:20Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\napply further criteria to further reduce the set of flows that are SCONE candidates and minimize false positives.\n```",
+              "createdAt": "2026-05-13T12:35:42Z",
+              "updatedAt": "2026-05-13T12:36:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87_NZ1W",
+          "commit": {
+            "abbreviatedOid": "dd4f618"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-13T12:43:06Z",
+          "updatedAt": "2026-05-13T12:43:06Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "\"SCONE candidates\" seems to be something new and not defined,  and to avoid two \"further\"\r\n\r\nI would rewrite as\r\n\r\nApply additional criteria to further reduce the set of flows that support SCONE and minimize the false positives.  ",
+              "createdAt": "2026-05-13T12:43:06Z",
+              "updatedAt": "2026-05-13T12:43:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87_Sv5j",
+          "commit": {
+            "abbreviatedOid": "dd4f618"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-13T15:31:09Z",
+          "updatedAt": "2026-05-13T15:31:09Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "Like so, I guess...\r\n<img width=\"56\" height=\"56\" alt=\"image\" src=\"https://github.com/user-attachments/assets/60a5c6d6-89c6-4c8f-823a-063ce3e59a3b\" />\r\n\r\n\r\n```suggestion\r\napply additional criteria to further reduce the set flows that are identified\r\nas potentially supporting SCONE, reducing the likelihood of false positives.\r\n```",
+              "createdAt": "2026-05-13T15:31:09Z",
+              "updatedAt": "2026-05-13T15:31:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo87_T34h",
+          "commit": {
+            "abbreviatedOid": "dd4f618"
+          },
+          "author": "zaheduzzaman",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-05-13T16:09:40Z",
+          "updatedAt": "2026-05-13T16:09:40Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "yap!! much better.",
+              "createdAt": "2026-05-13T16:09:40Z",
+              "updatedAt": "2026-05-13T16:09:40Z"
             }
           ]
         }
