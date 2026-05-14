@@ -623,7 +623,6 @@ Despite these limitations,
 having an indication might allow network elements to change their starting posture
 with respect to their enforcement of their rate limit policies.
 
-
 ## Indications for Migrated Flows
 
 Applications MAY decide to indicate support for SCONE on new flows,
@@ -643,6 +642,16 @@ any time they send a QUIC PATH_CHALLENGE or PATH_RESPONSE frame.
 This applies to both client and server endpoints,
 but only if the peer has sent the transport parameter; see {{tp}}.
 
+## Avoiding Ossification When Reading the Indicator
+
+A network element could classify all 5-tuples where the first observed UDP
+datagram ends in the indicator bytes as potential SCONE. A network element MAY
+apply further criteria to further reduce the set of flows that are identifeid
+as potentially supporting SCONE, reducing the likelihood of false positives.
+However, it SHOULD NOT apply criteria that reduce the ability of new QUIC
+versions to employ SCONE. SCONE operates independently of any specific QUIC
+version, so any criteria should consult the QUIC version invariants in
+{{INVARIANTS}}.
 
 # Network Deployment
 
