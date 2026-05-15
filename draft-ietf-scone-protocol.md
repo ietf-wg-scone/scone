@@ -1188,4 +1188,5 @@ Notes:
 specification that forms the basis for a large part of this document.
 The following people also contributed significantly
 to the development of the protocol: {{{Alan Frindell}}},
-{{{Gorry Fairhurst}}}, {{{Kevin Smith}}}, and {{{Zaheduzzaman Sarker}}}.
+{{{Gorry Fairhurst}}}, {{{Kevin Smith}}}, {{{Martin Duke}}},
+and {{{Zaheduzzaman Sarker}}}.
