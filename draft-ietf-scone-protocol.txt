@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 15 November 2026                           Private Octopus Inc.
+Expires: 16 November 2026                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                             14 May 2026
+                                                             15 May 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -56,7 +56,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 November 2026.
+   This Internet-Draft will expire on 16 November 2026.
 
 Copyright Notice
 
@@ -1225,7 +1225,7 @@ Acknowledgments
    specification that forms the basis for a large part of this document.
    The following people also contributed significantly to the
    development of the protocol: Alan Frindell, Gorry Fairhurst, Kevin
-   Smith, and Zaheduzzaman Sarker.
+   Smith, Martin Duke, and Zaheduzzaman Sarker.
 
 Authors' Addresses
 
