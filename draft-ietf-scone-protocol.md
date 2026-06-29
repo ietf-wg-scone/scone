@@ -483,16 +483,16 @@ A SCONE packet is defined by the use of the long header bit (0x80 in the first
 byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
 bytes). The 7-bit Rate Signal can be extracted by combining the low 6 bits
 of the first byte with the most significant bit of the version field. A SCONE
-packet MAY be discarded, along with any packets that come after it in the same
-datagram, if the Source Connection ID is not consistent with those coalesced
-packets, as specified in {{packet}}.
+packet MUST be discarded if the Destination Connection ID is not consistent with
+those coalesced packets, as specified in {{packet}}. Similarly, if the Source
+Connection ID is inconsistent, the SCONE packet MAY be discarded.
+
+When discarding a SCONE packet due to inconsistent Connection IDs, endpoints MAY
+also discard the QUIC packets that were coalesced into the same datagram.
 
 A receiver MAY discard a datagram that contains more than one SCONE packet.
 
 A SCONE packet is discarded if the rate signal is unknown (127).
-
-A SCONE packet MUST be discarded if the Destination Connection ID does not match
-one recognized by the receiving endpoint.
 
 If a connection uses multiple DSCP markings {{!RFC2474}},
 the throughput advice that is received on datagrams with one marking
