@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-17T03:38:08.854714+00:00",
+  "timestamp": "2026-06-30T03:50:42.073879+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3130,15 +3130,15 @@
       "id": "I_kwDON1dwo875y4pW",
       "title": "SCONE vs. stateless resets",
       "url": "https://github.com/ietf-wg-scone/scone/issues/149",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "kazuho",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "QUIC version 1 allows endpoints send stateless resets in response to packets for which corresponding state cannot be found.\n\nHowever, [Section 5.3 of SCONE](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#section-5.3-5) currently states only that _a SCONE packet MUST be discarded if the Destination Connection ID does not match one recognized by the receiving endpoint._\n\nTo allow endpoints generate stateless resets in response to datagrams that coalesce a SCONE packet and a short header packet, do we want to explicitly specify that the endpoints MAY process the packets that follow the SCONE packet, even when the Destination Connection ID does not match one recognized by the endpoint?",
       "createdAt": "2026-04-02T01:36:49Z",
-      "updatedAt": "2026-04-20T19:03:32Z",
-      "closedAt": null,
+      "updatedAt": "2026-06-30T01:11:11Z",
+      "closedAt": "2026-06-30T01:11:11Z",
       "comments": [
         {
           "author": "huitema",
@@ -3209,6 +3209,13 @@
           "body": "A parenthetical to add to the text you cited might even be a better way to address this:\n\n> [...] (with the exception of a stateless reset; see {{Section XX of QUIC}})",
           "createdAt": "2026-04-20T19:03:32Z",
           "updatedAt": "2026-04-20T19:03:32Z"
+        },
+        {
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@martinthomson Thanks, that kind of works, though I saw two issues:\n* Adding such exception to a statement that defines handling of SCONE packets might sound as if endpoints could generate stateless resets in response to SCONE packets (of course they should not; endpoints can only send stateless resets in response to the 1-RTT packet coalesced with the SCONE packet).\n* Stateless reset is a concept specific to QUIC version 1, so the fact that we need to refer to it seems suspicious when SCONE is meant to be version-agnostic; maybe the issue is how we specify this today?\n\nRereading the paragraph, I noticed a difference between how we define the handling of SCID and DCID. For SCID we only have a consistency check, and that is fine because we already state in a different paragraph that throughput advice must beignored unless a coalesced packet is successfully processed.\n\nIn light of that, it now seems to me that the problem is us not framing DCID handling as a consistency check. It is only because we tried to combine the consistency check and the ignore-unless-processed rule into one sentence that we had to talk about the recognition of CIDs, which led to the confusion.\n\n@martinthomson @huitema This is a long way to ask for your review of #155. PTAL.",
+          "createdAt": "2026-06-29T03:18:37Z",
+          "updatedAt": "2026-06-29T03:18:37Z"
         }
       ]
     },
@@ -14248,7 +14255,7 @@
       "labels": [],
       "body": "We are using both of the terms, changes sustainable to be inline with the abstract",
       "createdAt": "2026-03-15T23:48:57Z",
-      "updatedAt": "2026-03-17T03:45:54Z",
+      "updatedAt": "2026-06-29T10:29:30Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "f0c5a3f64ca425c9318988b9211b328d3346a842",
@@ -14287,6 +14294,13 @@
           "body": "I can agree both sustainable and acheivable is not doing their job to explain the expectations. We are having this discussion now couple of times. \r\n\r\nI would then suggest what I had suggested before, lets describe what we mean by maximum sustainable throuput and move on with it. Something like this would be helpful I think - \"maximum achievable throughput by the endpoints that the network could sustain for the {time} period\". And update the abstract to use \"sustainable\".",
           "createdAt": "2026-03-17T03:45:54Z",
           "updatedAt": "2026-03-17T03:45:54Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I would then suggest what I had suggested before, lets describe what we mean by maximum sustainable throuput and move on with it. Something like this would be helpful I think - \"maximum achievable throughput by the endpoints that the network could sustain for the {time} period\". And update the abstract to use \"sustainable\".\r\n\r\nI think the best explanation is simply: an upper bound on throughput, averaged over at least one monitoring period. ",
+          "createdAt": "2026-06-29T10:29:30Z",
+          "updatedAt": "2026-06-29T10:29:30Z"
         }
       ],
       "reviews": [
@@ -14943,6 +14957,74 @@
           "body": "",
           "createdAt": "2026-05-14T23:53:07Z",
           "updatedAt": "2026-05-14T23:53:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 155,
+      "id": "PR_kwDON1dwo87rmcDg",
+      "title": "Eliminate ambiguity around SCONE packets and stateless resets",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/155",
+      "state": "MERGED",
+      "author": "kazuho",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 5.3 currently states that a SCONE packet MUST be ignored unless another packet in the same datagram is successfully processed (1st paragraph), then goes on to say:\r\n* If the Source Connection ID is inconsistent among the packets within a datagram, the SCONE packet MAY be discarded, along with the other coalesced packets.\r\n* If the Destination Connection ID does not match one recognized by the receiving endpoint, the SCONE packet MUST be discarded.\r\n\r\nThese were not written in parallel. The SCID rule is a consistency check against the coalesced packets orthogonal to the ignore-unless-processed rule. In contrast, the DCID rule was framed around recognition of the connection, trying to combine the consistency check and the ignore-unless-processed rule into a single sentence. That recognition-based wording is what caused the confusion in #149 about whether a stateless reset may be generated in response to a 1-RTT packet coalesced with a SCONE packet.\r\n\r\nThis PR reframes the Destination Connection ID handling as a consistency check, parallel to the Source Connection ID, the only difference being MUST (DCID) vs. MAY (SCID). The case the old text covered (i.e., a consistent DCID that the endpoint does not currently recognize) remains handled by the 1st paragraph. The confusion around stateless resets is resolved, because handling of the coalesced packets is no longer tied to the recognition of DCID, and is instead left to ordinary QUIC processing.\r\n\r\nCloses #149.",
+      "createdAt": "2026-06-29T03:04:09Z",
+      "updatedAt": "2026-06-30T01:11:10Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "c4673a9e1277ac90e432e75691514de168e19059",
+      "headRepository": "kazuho/i-d-trone",
+      "headRefName": "kazuho/stateless-resets",
+      "headRefOid": "476adcd22c1d5de0ab692dab88b7e7d4693b7268",
+      "closedAt": "2026-06-30T01:11:10Z",
+      "mergedAt": "2026-06-30T01:11:10Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "e0002096e5d1b72a999f4911d0efdee95fa145df"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABEYgqoA",
+          "commit": {
+            "abbreviatedOid": "476adcd"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I think this is the correct behavior.",
+          "createdAt": "2026-06-29T05:25:52Z",
+          "updatedAt": "2026-06-29T05:25:52Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABEbOSJA",
+          "commit": {
+            "abbreviatedOid": "476adcd"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-29T12:48:21Z",
+          "updatedAt": "2026-06-29T12:48:21Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABEfkFiA",
+          "commit": {
+            "abbreviatedOid": "476adcd"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-30T01:10:06Z",
+          "updatedAt": "2026-06-30T01:10:06Z",
           "comments": []
         }
       ]
