@@ -62,8 +62,10 @@ informative:
 --- abstract
 
 This document describes a protocol where on-path network elements
-can give endpoints their perspective on what the maximum achievable
-throughput might be for QUIC flows.
+can communicate their perspective on the maximum sustainable throughput
+for QUIC flows to endpoints. This throughput advice represents an
+upper bound on long-term average throughput, independent of and
+complementary to real-time congestion control signals.
 
 
 --- middle
