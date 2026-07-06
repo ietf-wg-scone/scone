@@ -63,7 +63,7 @@ informative:
 
 This document describes a protocol where on-path network elements
 can communicate their perspective on the maximum sustainable throughput
-for QUIC flows to endpoints. This throughput advice represents an
+for QUIC flows to endpoints. This throughput advice suggests an
 upper bound on long-term average throughput, independent of and
 complementary to real-time congestion control signals.
 
