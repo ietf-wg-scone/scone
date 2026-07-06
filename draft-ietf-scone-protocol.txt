@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Informational                                C. Huitema
-Expires: 1 January 2027                             Private Octopus Inc.
+Expires: 7 January 2027                             Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                            30 June 2026
+                                                             6 July 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -21,8 +21,10 @@ Expires: 1 January 2027                             Private Octopus Inc.
 Abstract
 
    This document describes a protocol where on-path network elements can
-   give endpoints their perspective on what the maximum achievable
-   throughput might be for QUIC flows.
+   communicate their perspective on the maximum sustainable throughput
+   for QUIC flows to endpoints.  This throughput advice suggests an
+   upper bound on long-term average throughput, independent of and
+   complementary to real-time congestion control signals.
 
 About This Document
 
@@ -56,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 January 2027.
+   This Internet-Draft will expire on 7 January 2027.
 
 Copyright Notice
 
