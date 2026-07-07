@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-30T03:50:42.073879+00:00",
+  "timestamp": "2026-07-07T03:34:18.679525+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -14248,21 +14248,21 @@
       "id": "PR_kwDON1dwo87KxY1H",
       "title": "streamlining \"achievable\" and \"sustainable\"",
       "url": "https://github.com/ietf-wg-scone/scone/pull/142",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "zaheduzzaman",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "We are using both of the terms, changes sustainable to be inline with the abstract",
       "createdAt": "2026-03-15T23:48:57Z",
-      "updatedAt": "2026-06-29T10:29:30Z",
+      "updatedAt": "2026-07-06T22:30:39Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "f0c5a3f64ca425c9318988b9211b328d3346a842",
       "headRepository": "zaheduzzaman/scone",
       "headRefName": "patch-2",
       "headRefOid": "41223a04a2e543cda3489852977f6ba8c7798eb1",
-      "closedAt": null,
+      "closedAt": "2026-07-06T22:30:39Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -14301,6 +14301,13 @@
           "body": "> I would then suggest what I had suggested before, lets describe what we mean by maximum sustainable throuput and move on with it. Something like this would be helpful I think - \"maximum achievable throughput by the endpoints that the network could sustain for the {time} period\". And update the abstract to use \"sustainable\".\r\n\r\nI think the best explanation is simply: an upper bound on throughput, averaged over at least one monitoring period. ",
           "createdAt": "2026-06-29T10:29:30Z",
           "updatedAt": "2026-06-29T10:29:30Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I submitted #156 based on the discussions here, @zaheduzzaman does it address your concerns?",
+          "createdAt": "2026-07-06T09:15:27Z",
+          "updatedAt": "2026-07-06T09:15:27Z"
         }
       ],
       "reviews": [
@@ -15025,6 +15032,68 @@
           "body": "",
           "createdAt": "2026-06-30T01:10:06Z",
           "updatedAt": "2026-06-30T01:10:06Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 156,
+      "id": "PR_kwDON1dwo87uRFRO",
+      "title": "Update abstract",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/156",
+      "state": "MERGED",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Clearer terminology and purpose in abstract based on discussions in #142 ",
+      "createdAt": "2026-07-06T09:10:33Z",
+      "updatedAt": "2026-07-06T22:30:10Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "e0002096e5d1b72a999f4911d0efdee95fa145df",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "abstract",
+      "headRefOid": "0803685ac553b4efbfd13509d13ec00f718c2a98",
+      "closedAt": "2026-07-06T22:30:10Z",
+      "mergedAt": "2026-07-06T22:30:10Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "01abe6bc8b86e8ec08b6fe4ef94317ee294d55f7"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABFEDAgw",
+          "commit": {
+            "abbreviatedOid": "6480cde"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Either way, this is good.",
+          "createdAt": "2026-07-06T09:59:12Z",
+          "updatedAt": "2026-07-06T09:59:18Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\nfor QUIC flows to endpoints. This throughput advice suggests an\n```\n?",
+              "createdAt": "2026-07-06T09:59:12Z",
+              "updatedAt": "2026-07-06T09:59:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABFET-kg",
+          "commit": {
+            "abbreviatedOid": "0803685"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-07-06T10:39:00Z",
+          "updatedAt": "2026-07-06T10:39:00Z",
           "comments": []
         }
       ]
