@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-07T03:34:18.679525+00:00",
+  "timestamp": "2026-07-26T02:54:54.582677+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3285,6 +3285,44 @@
           "body": "Agreed. Closing.",
           "createdAt": "2026-05-14T20:05:39Z",
           "updatedAt": "2026-05-14T20:05:39Z"
+        }
+      ]
+    },
+    {
+      "number": 157,
+      "id": "I_kwDON1dwo88AAAABJ6UDlg",
+      "title": "SCONE indicator deployment issues",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/157",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "During the side meeting discussing deploying more QUIC, we heard from Mozilla about one incident. They had shipped a test implementation of the SCONE indicator, and had to roll it back because it was causing errors in some network -- IIRC a firewall mistaking the presence of the indicator as an error.\n\nI correlate that with [an issue found by picoquic](https://github.com/private-octopus/picoquic/issues/2164) during interop tests with NGINX. The handshake succeeds, but not without spewing alarming warnings in the NGINX logs:\n\n- quic fixed bit is not set while parsing quic packet, client: 1.2.3.4, server: 0.0.0.0:443\n- quic packet dcid is too long while parsing quic packet, client: 1.2.3.4, server: 0.0.0.0:443\n- quic no app keys, ignoring packet while decrypting packet, client: 1.2.3.4, server: 0.0.0.0:443\n\nTo be fair, these warnings are due to picoquic padding Initial QUIC packets with random numbers. Two of these warnings could be avoided. The first random padding byte had the Quic bit not set (50% chance); the fifth padding byte was larger than 20. The third one is inherent with padding that looks like a packet and is not.\n\nA QUIC poll showed that there are 3 common ways to do Initial padding:\n\n* pad the Initial packet before encryption (or pad a coalesced 0RTT or handshake packet before encryption)\n* pad with bytes set to zero,\n* pad with random bytes.\n\nThe first one generally does not create any noise in the logs, but is not compatible with the requirement to add the SCONE indicator. We are implicitly asking the stacks to not do that, and add at least two bytes  after the encrypted packet. These two bytes will most probably create noise in the logs, which will sometimes push developers to remove SCONE support.\n\nBetween the two other options, it seems that padding with zeros generates fewer noise in the logs. But then, 0xc8 and 0x13 are not zeroes. \n\nIn short, we have a mild deployment blocker for the indicator. How do we fix that?\n\n",
+      "createdAt": "2026-07-23T14:57:48Z",
+      "updatedAt": "2026-07-24T18:57:08Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If log spam is the worst problem you have, that's not so bad.  Implementations should avoid spamming logs in response to unauthenticated junk from the network anyway.\n\nThe concrete bug you mention Mozilla discovered was in three parts.  In the first, our indicator (which truly does signal what it is supposed to, that we understand SCONE and that we might negotiate it) was being interpreted as a willingness to receive SCONE packets by the server.  The server then sent us SCONE packets, which was perfectly fine in many cases.  This then interacted with a bug in an antivirus product, which was intercepting QUIC.  That implementation was not able to handle the SCONE packets and so decided to stop forwarding packets.  The final part was a failure in our client stack that meant that we didn't properly act to repair a broken connection after the handshake completed.",
+          "createdAt": "2026-07-24T09:49:33Z",
+          "updatedAt": "2026-07-24T09:49:33Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I agree that log spam is a low priority issue. It is merely annoying, and it is not entirely a SCONE issue. We may want to have a discussion in QUIC, since many implementations do the \"pad with random\" or \"pad with zeroes\" that you pioneered in neqo. We would avoid the log spam if there was a simple way for apps to distinguish between padding and coalescing gone wrong.\n\nThe issue that you describe is more concerning. Is QUIC already ossified, to the point that middle boxes react badly to unrecognized version? That might become a deployment blocker for SCONE in general!",
+          "createdAt": "2026-07-24T18:44:21Z",
+          "updatedAt": "2026-07-24T18:44:21Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I can see workarounds, such as disable SCONE for a connection if we suspect that packets carrying SCONE were lost, or maybe the client doing SCONE compatibility tests before enabling SCONE on an interface. But that's not great.",
+          "createdAt": "2026-07-24T18:57:08Z",
+          "updatedAt": "2026-07-24T18:57:08Z"
         }
       ]
     }
