@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-26T02:54:54.582677+00:00",
+  "timestamp": "2026-07-28T02:38:27.057365+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3325,6 +3325,22 @@
           "updatedAt": "2026-07-24T18:57:08Z"
         }
       ]
+    },
+    {
+      "number": 158,
+      "id": "I_kwDON1dwo88AAAABKPooxQ",
+      "title": "Indicator implementation issue when padding not needed",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/158",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 6.1 of the spec says: _All new flows that are initiated by a client that supports SCONE MUST include bytes with values 0xc8 and 0x13 as the last two bytes of the payload of the UDP datagrams that commence a new flow, if the protocol permits it._\n\nIs it OK to understand this as \"if the datagram that starts a new flow does not require padding, then the implementation does not need to include the indicator?\"\n\nThere are at least two such examples:\n\n1. The new flow had negotiated zero RTT. The first datagram contains an Initial packet, and then a zero RTT packet that is long enough to make the UDP packet larger than the required minimum length.\n\n2. The new flow is using a key exchange algorithm (e.g., post Quantum) or some other options that makes the first client flight larger than 1200 bytes.\n\nIn both cases, it would be possible to add a bit of complexity in the packetization of the first client flight, say fill only 1198 bytes per packet if one must make space for the indicator. But is that really needed?\n\n\n\n",
+      "createdAt": "2026-07-26T20:44:27Z",
+      "updatedAt": "2026-07-27T04:18:26Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
