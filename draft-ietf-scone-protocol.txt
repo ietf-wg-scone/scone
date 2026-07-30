@@ -4,15 +4,15 @@
 
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
-Intended status: Informational                                C. Huitema
-Expires: 7 January 2027                             Private Octopus Inc.
+Intended status: Standards Track                              C. Huitema
+Expires: 31 January 2027                            Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                             6 July 2026
+                                                            30 July 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 January 2027.
+   This Internet-Draft will expire on 31 January 2027.
 
 Copyright Notice
 
