@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-28T02:38:27.057365+00:00",
+  "timestamp": "2026-07-30T02:30:27.146370+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3338,9 +3338,31 @@
       "labels": [],
       "body": "Section 6.1 of the spec says: _All new flows that are initiated by a client that supports SCONE MUST include bytes with values 0xc8 and 0x13 as the last two bytes of the payload of the UDP datagrams that commence a new flow, if the protocol permits it._\n\nIs it OK to understand this as \"if the datagram that starts a new flow does not require padding, then the implementation does not need to include the indicator?\"\n\nThere are at least two such examples:\n\n1. The new flow had negotiated zero RTT. The first datagram contains an Initial packet, and then a zero RTT packet that is long enough to make the UDP packet larger than the required minimum length.\n\n2. The new flow is using a key exchange algorithm (e.g., post Quantum) or some other options that makes the first client flight larger than 1200 bytes.\n\nIn both cases, it would be possible to add a bit of complexity in the packetization of the first client flight, say fill only 1198 bytes per packet if one must make space for the indicator. But is that really needed?\n\n\n\n",
       "createdAt": "2026-07-26T20:44:27Z",
-      "updatedAt": "2026-07-27T04:18:26Z",
+      "updatedAt": "2026-07-29T23:56:07Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Is it OK to understand this as \"if the datagram that starts a new flow does not require padding, then the implementation does not need to include the indicator?\"\n\nNot quite.  It says that all UDP datagrams that commence a flow need to include those bytes.  Unless that is impossible. For example, it is impossible to include specific bytes at the tail of a QUIC packet with a short header (1-RTT), because it relies on the UDP datagram for framing.  And 1-RTT packets can start a new flow when migrating paths.\n\n> a zero RTT packet that is long enough to make the UDP packet larger than the required minimum length\n\nWhen constructing a 0-RTT packet it is possible (as our implementation does) to ensure that there are spare bytes left over in the datagram.  0-RTT packets have an explicit length, so the 1-RTT packet problem doesn't apply there.\n\n> makes the first client flight larger than 1200 bytes\n\nIn that case, you have to put some bytes in another packet/datagram, so you can shift two more over to make space for the 0xc813.\n\nI did not find this particularly difficult to accomplish.  A SCONE flag in packet construction and a two byte reservation was enough.  That adds to the 16 byte reservation for the AEAD expansion, which was already a necessary adjustment.",
+          "createdAt": "2026-07-29T05:14:45Z",
+          "updatedAt": "2026-07-29T05:14:45Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, makes sense. I was only looking at handling SCONE as part of packet padding, but reserving two bytes before formatting the packet also works.\n\nThe next tension is the exact meaning of \"packets that commence a flow\". I am a bit spooked by your bug report, a firewall noticing a strange padding and blocking it. Thus, I want to not include the indicator if Initial packets need to be repeated.",
+          "createdAt": "2026-07-29T18:03:08Z",
+          "updatedAt": "2026-07-29T18:03:08Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The problem was that the firewall detected a full-blown SCONE packet and choked.  The indicator passed fine.  I think we're mostly past the point where padding causes real issues (other than log spam, that is).",
+          "createdAt": "2026-07-29T23:56:07Z",
+          "updatedAt": "2026-07-29T23:56:07Z"
+        }
+      ]
     }
   ],
   "pulls": [
