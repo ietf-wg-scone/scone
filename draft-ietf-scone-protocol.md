@@ -1,7 +1,7 @@
 ---
 title: "Standard Communication with Network Elements (SCONE) Protocol"
 abbrev: "SCONE Protocol"
-category: info
+category: std
 
 docname: draft-ietf-scone-protocol-latest
 submissiontype: IETF
