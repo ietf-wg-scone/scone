@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-07-30T02:30:27.146370+00:00",
+  "timestamp": "2026-08-02T02:54:00.723188+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3045,31 +3045,39 @@
       "id": "I_kwDON1dwo871WvJJ",
       "title": "Section 7.3 of Spec: Monitoring Throughput Advice",
       "url": "https://github.com/ietf-wg-scone/scone/issues/145",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Section 7.3 of the Protocol Spec appears to be important for network operators. Does this section belong in the applicability-manageability document? ... or could this be unpacked further there to explain the operational implication?\n\n",
       "createdAt": "2026-03-22T15:49:54Z",
-      "updatedAt": "2026-03-22T15:49:54Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2026-07-30T06:46:42Z",
+      "closedAt": "2026-07-30T06:46:42Z",
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "My sense is that, with the great bounds that the appman draft has made of late, we've struck a pretty good balance between the documents.  There is naturally some overlap, but each stands well enough on its own.",
+          "createdAt": "2026-07-30T06:46:42Z",
+          "updatedAt": "2026-07-30T06:46:42Z"
+        }
+      ]
     },
     {
       "number": 146,
       "id": "I_kwDON1dwo874xbn_",
       "title": "Should SCONE mention the Spin Bit?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/146",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The spin bit is only on 1-RTT packets, so there isn't actually a conflict between the bit and the fields in SCONE.\n\nBut, whatever is watching the spin bit has to either ignore a SCONE packet or parse ahead to the 1-RTT header. I imagine they'll do the former, but I wonder if we should add some text about this.\n\nI have not implemented a spin bit observer; I imagine they just ignore long-header datagrams, so maybe this flows naturally?",
       "createdAt": "2026-03-30T20:01:24Z",
-      "updatedAt": "2026-03-31T01:27:31Z",
-      "closedAt": null,
+      "updatedAt": "2026-07-30T06:43:16Z",
+      "closedAt": "2026-07-30T06:43:16Z",
       "comments": [
         {
           "author": "huitema",
@@ -3098,6 +3106,13 @@
           "body": "I do not mind either ways, as this is not a new problem. QUIC v1 explicitly allows endpoints to coalesce long header packets with 1-RTT packets after the handshake ([Section 14.4.1 of RFC 9000](https://datatracker.ietf.org/doc/html/rfc9000#name-pmtu-probes-containing-sour)).\n\nThat said, the PR looks fine and I appreciate the effort.",
           "createdAt": "2026-03-31T01:27:31Z",
           "updatedAt": "2026-03-31T01:27:31Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Discussion here and in #147 seems to have settled on not mentioning this interaction.  Thanks for a constructive discussion.",
+          "createdAt": "2026-07-30T06:43:16Z",
+          "updatedAt": "2026-07-30T06:43:16Z"
         }
       ]
     },
@@ -3106,15 +3121,15 @@
       "id": "I_kwDON1dwo875u68V",
       "title": "Editorial: Should SCONE endpoints send VN on new connections?",
       "url": "https://github.com/ietf-wg-scone/scone/issues/148",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinduke",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "If I'm a scone capable server, but an INITIAL arrives with SCONE prior to me sending the transport parameter, should I send a VN packet?\n\nA close reading of RFC9000 says I should, I believe, as initiating packets aren't allowed to carry SCONE. But it might be useful to make it explicit.",
       "createdAt": "2026-04-01T20:54:41Z",
-      "updatedAt": "2026-04-02T00:19:58Z",
-      "closedAt": null,
+      "updatedAt": "2026-07-30T06:47:10Z",
+      "closedAt": "2026-07-30T06:47:10Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -3293,15 +3308,15 @@
       "id": "I_kwDON1dwo88AAAABJ6UDlg",
       "title": "SCONE indicator deployment issues",
       "url": "https://github.com/ietf-wg-scone/scone/issues/157",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "During the side meeting discussing deploying more QUIC, we heard from Mozilla about one incident. They had shipped a test implementation of the SCONE indicator, and had to roll it back because it was causing errors in some network -- IIRC a firewall mistaking the presence of the indicator as an error.\n\nI correlate that with [an issue found by picoquic](https://github.com/private-octopus/picoquic/issues/2164) during interop tests with NGINX. The handshake succeeds, but not without spewing alarming warnings in the NGINX logs:\n\n- quic fixed bit is not set while parsing quic packet, client: 1.2.3.4, server: 0.0.0.0:443\n- quic packet dcid is too long while parsing quic packet, client: 1.2.3.4, server: 0.0.0.0:443\n- quic no app keys, ignoring packet while decrypting packet, client: 1.2.3.4, server: 0.0.0.0:443\n\nTo be fair, these warnings are due to picoquic padding Initial QUIC packets with random numbers. Two of these warnings could be avoided. The first random padding byte had the Quic bit not set (50% chance); the fifth padding byte was larger than 20. The third one is inherent with padding that looks like a packet and is not.\n\nA QUIC poll showed that there are 3 common ways to do Initial padding:\n\n* pad the Initial packet before encryption (or pad a coalesced 0RTT or handshake packet before encryption)\n* pad with bytes set to zero,\n* pad with random bytes.\n\nThe first one generally does not create any noise in the logs, but is not compatible with the requirement to add the SCONE indicator. We are implicitly asking the stacks to not do that, and add at least two bytes  after the encrypted packet. These two bytes will most probably create noise in the logs, which will sometimes push developers to remove SCONE support.\n\nBetween the two other options, it seems that padding with zeros generates fewer noise in the logs. But then, 0xc8 and 0x13 are not zeroes. \n\nIn short, we have a mild deployment blocker for the indicator. How do we fix that?\n\n",
       "createdAt": "2026-07-23T14:57:48Z",
-      "updatedAt": "2026-07-24T18:57:08Z",
-      "closedAt": null,
+      "updatedAt": "2026-07-30T06:44:55Z",
+      "closedAt": "2026-07-30T06:44:55Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -3323,6 +3338,13 @@
           "body": "I can see workarounds, such as disable SCONE for a connection if we suspect that packets carrying SCONE were lost, or maybe the client doing SCONE compatibility tests before enabling SCONE on an interface. But that's not great.",
           "createdAt": "2026-07-24T18:57:08Z",
           "updatedAt": "2026-07-24T18:57:08Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think that this one can be chalked up to a straightforward bug (and several of them), plus the usual headaches we get with anti-virus.  No fixing that last one, unfortunately.  Nothing to see here, though the discussion is (I hope) helpful to future implementers.",
+          "createdAt": "2026-07-30T06:44:55Z",
+          "updatedAt": "2026-07-30T06:44:55Z"
         }
       ]
     },
@@ -3331,15 +3353,15 @@
       "id": "I_kwDON1dwo88AAAABKPooxQ",
       "title": "Indicator implementation issue when padding not needed",
       "url": "https://github.com/ietf-wg-scone/scone/issues/158",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Section 6.1 of the spec says: _All new flows that are initiated by a client that supports SCONE MUST include bytes with values 0xc8 and 0x13 as the last two bytes of the payload of the UDP datagrams that commence a new flow, if the protocol permits it._\n\nIs it OK to understand this as \"if the datagram that starts a new flow does not require padding, then the implementation does not need to include the indicator?\"\n\nThere are at least two such examples:\n\n1. The new flow had negotiated zero RTT. The first datagram contains an Initial packet, and then a zero RTT packet that is long enough to make the UDP packet larger than the required minimum length.\n\n2. The new flow is using a key exchange algorithm (e.g., post Quantum) or some other options that makes the first client flight larger than 1200 bytes.\n\nIn both cases, it would be possible to add a bit of complexity in the packetization of the first client flight, say fill only 1198 bytes per packet if one must make space for the indicator. But is that really needed?\n\n\n\n",
       "createdAt": "2026-07-26T20:44:27Z",
-      "updatedAt": "2026-07-29T23:56:07Z",
-      "closedAt": null,
+      "updatedAt": "2026-07-30T06:45:32Z",
+      "closedAt": "2026-07-30T06:45:32Z",
       "comments": [
         {
           "author": "martinthomson",
@@ -3361,6 +3383,13 @@
           "body": "The problem was that the firewall detected a full-blown SCONE packet and choked.  The indicator passed fine.  I think we're mostly past the point where padding causes real issues (other than log spam, that is).",
           "createdAt": "2026-07-29T23:56:07Z",
           "updatedAt": "2026-07-29T23:56:07Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Good discussion, but it doesn't seem like there is a concrete action proposed.",
+          "createdAt": "2026-07-30T06:45:32Z",
+          "updatedAt": "2026-07-30T06:45:32Z"
         }
       ]
     }
@@ -14535,25 +14564,33 @@
       "id": "PR_kwDON1dwo87Oy3D_",
       "title": "Ah, the spin bit",
       "url": "https://github.com/ietf-wg-scone/scone/pull/147",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Follow through on Christian's suggestion\r\n\r\nCloses #146.",
       "createdAt": "2026-03-31T00:57:12Z",
-      "updatedAt": "2026-04-21T07:11:04Z",
+      "updatedAt": "2026-07-30T06:42:17Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "9a97b4e16d2532dfb34da1f70a6fa63c1ca6bffd",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "spin-a-bit",
       "headRefOid": "963a89e3371913d742ed7edd137b8688c9dc31bc",
-      "closedAt": null,
+      "closedAt": "2026-07-30T06:42:17Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We converged here on no action.  Thanks everyone!",
+          "createdAt": "2026-07-30T06:42:17Z",
+          "updatedAt": "2026-07-30T06:42:17Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo87wc2JO",
