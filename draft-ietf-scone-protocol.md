@@ -621,9 +621,10 @@ and either endpoint might choose not to send SCONE packets.
 Finally, applications might be unable to apply throughput advice
 or choose to ignore it.
 
-This indication being just two bytes
-means that there is a non-negligible risk of collision with other protocols
+There is a non-negligible risk of collision with other protocols
 or even QUIC usage without SCONE indications.
+The indicator is just two bytes,
+which could be sent by chance on non-SCONE flows.
 This means that the indication alone is not sufficient to indicate
 that a flow is QUIC with the potential for SCONE support.
 
