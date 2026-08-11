@@ -959,7 +959,7 @@ An off-path attacker can generate throughput advice
 that will be accepted by an endpoint
 if it has the ability to damage packets
 in a way that could be able to affect throughput capacity of the flow.
-The one exception is where an off-path attacker
+The one exception is an off-path attacker
 that is only capable of generating spoofed copies of packets
 with modified throughput rates
 that reach endpoints ahead of the original.
