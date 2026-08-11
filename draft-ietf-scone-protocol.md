@@ -655,18 +655,19 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 
 A network element could classify all 5-tuples where the first observed UDP
 datagram ends in the indicator bytes as potential SCONE. A network element MAY
-apply further criteria to further reduce the set of flows that are identifeid
+apply further criteria to further reduce the set of flows that are identified
 as potentially supporting SCONE, reducing the likelihood of false positives.
 However, it SHOULD NOT apply criteria that reduce the ability of new QUIC
 versions to employ SCONE. SCONE operates independently of any specific QUIC
 version, so any criteria should consult the QUIC version invariants in
 {{INVARIANTS}}.
 
+
 # Network Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol
 by sending SCONE packets ({{packet}}).
-Network elements can then use SCONE and replace
+Network elements can then update
 the Rate Signal field ({{apply}})
 according to their policies.
 
@@ -702,7 +703,8 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
 ~~~
 
 Once the throughput advice is updated,
-the network element updates the UDP checksum for the datagram.
+the network element updates the UDP checksum for the datagram;
+see {{?RFC1141}}.
 
 To avoid throughput advice expiring,
 a network element needs to ensure that it updates throughput advice in SCONE packets
