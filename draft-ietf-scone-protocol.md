@@ -167,6 +167,10 @@ The throughput advice that this protocol carries is independent of congestion
 signals, limited to a single path and UDP packet flow, unidirectional, and
 strictly advisory.
 
+A companion document {{?SCONE-MAN=I-D.ietf-scone-applicability-manageability}}
+addresses applicability, operational, and deployment considerations in more detail.
+
+
 ## Independent of Congestion Signals {#not-cc}
 
 SCONE throughput advice is not a substitute for congestion feedback or congestion control.
