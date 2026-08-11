@@ -116,8 +116,9 @@ QUIC endpoints can negotiate the use of SCONE by including a transport parameter
 ({{tp}}) in the QUIC handshake.  Endpoints then occasionally send SCONE packets,
 which are always coalesced with ordinary QUIC packets that they send.
 
-Networks that have rate limiting policies can detect flows that include
-SCONE packets.  The network, via an on-path network element, can indicate a maximum
+Networks that have rate limiting policies, or known throughput constraints,
+can detect flows that include SCONE packets.
+The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.
 
