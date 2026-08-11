@@ -745,11 +745,14 @@ to determine whether applications are following advice.
 
 This section outlines a method
 that a network element could use
-to determine whether advice is being followed.
+to determine whether a flow exceeds the value from provided throughput advice.
 Network deployments that choose to monitor
 are free to follow any monitoring regime that suits their needs.
 
-This monitoring algorithm is guidance only.
+The approach to monitoring that is documented here
+is largely illustrative;
+there is no interoperability impact
+from choosing an alternative approach.
 However, monitoring any more strictly than the following
 could mean that an application
 might be incorrectly classified as not following advice.
@@ -774,11 +777,11 @@ was followed.
 A network element SHOULD base its monitoring
 on the maximum value that was configured to apply
 during the preceding two monitoring periods.
+This allows applications time to receive advice
+and adapt their sending rate.
 If the network element cannot update the throughput advice in every SCONE packet
 (or can do so only infrequently), a longer period might be used
 to account for the possibility that the updated SCONE packets are lost.
-This allows applications time to receive advice
-and adapt their sending rate.
 
 Any monitoring and policy enforcement could be implemented
 in different network elements than the ones that signal throughput advice.
@@ -796,9 +799,10 @@ A network could deploy policy enforcement that drops or delays packets
 to ensure that applications do not exceed throughput limits set in policy.
 
 SCONE allows networks to provide advice to applications,
-so that there is less need to apply throughput limits on flows.
-Implementing strict throughput limits can be inefficient
-and lead to worse application performance.
+so that there is less need to enforce throughput limits on flows.
+Strict enforcement through dropping or delaying packets
+can be inefficient
+and lead to poor application performance.
 
 Some applications will not support SCONE.
 Other applications either will not
