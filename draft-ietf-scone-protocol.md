@@ -594,7 +594,7 @@ zero or more 0-RTT packets,
 padding or other data that is discarded on receipt,
 and the indication bytes (0xc8, 0x13) as the final bytes of the UDP payload.
 
-This indication MUST be sent in every datagram
+The SCONE indication bytes MUST be sent in every datagram
 until the client receives any datagram from the server,
 at which point the client can be confident that the indication was received.
 
