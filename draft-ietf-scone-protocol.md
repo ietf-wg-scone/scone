@@ -544,6 +544,7 @@ risks endpoints discarding throughput advice
 if no SCONE packet is available for providing updated advice ({{apply}}),
 or packets carrying advice are lost.
 Sending the signal multiple times
+per monitoring period
 increases the likelihood that the signal is received.
 
 
