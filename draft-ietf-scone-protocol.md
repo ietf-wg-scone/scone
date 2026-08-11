@@ -572,7 +572,8 @@ transport parameters, and frame types registries established in {{Sections 22.2,
 22.3, and 22.4 of QUIC}}.
 
 Endpoints MUST NOT remember whether the scone_supported transport parameter was present
-on the previous connection when using 0-RTT.
+on the previous connection when using 0-RTT;
+see {{Section 7.4.1 of QUIC}}.
 That is, SCONE packets cannot be sent on a connection
 until the transport parameter is received.
 
@@ -582,7 +583,8 @@ until the transport parameter is received.
 All new flows that are initiated by a client that supports SCONE
 MUST include bytes with values 0xc8 and 0x13
 as the last two bytes of the payload of the UDP datagrams
-that commence a new flow, if the protocol permits it.
+that commence a new flow,
+if the protocol permits the inclusion of data after packets.
 
 For example, in QUIC version 1,
 these datagrams contain QUIC packets with a long header ({{Section 17.2 of QUIC}}).
