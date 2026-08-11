@@ -847,7 +847,7 @@ Sending SCONE packets more often might be necessary to:
 Avoid missing advice:
 : If SCONE packets are not sent, updated, and received
   for an entire monitoring period,
-  an application might incorrectly assume that no advice is being provided.
+  an application might assume that no throughput advice is being provided.
 
 Reduce latency:
 : The time between SCONE packets determines the maximum delay
