@@ -76,10 +76,10 @@ Many networks have known, concrete rate limits, or apply these limits
 by policy to constrain data rates.
 This is often done without any ability to indicate rate limits to applications.
 The result can be that application performance is degraded,
-as the manner in which rate limits are enforced can be incompatible with the
+because throughput limits can manifest in ways that are incompatible with the
 rate estimation or congestion control algorithms used at endpoints.
 
-Having the network indicate what its rate limiting policy is, in a way that is
+Having the network indicate what throughput limits apply, in a way that is
 accessible to endpoints, allows applications to use this information when
 adapting their send rate.
 
@@ -94,7 +94,7 @@ Any network function that is able to update the content of UDP datagrams
 qualifies as a network element that can use SCONE packets
 to provide throughput advice to QUIC endpoints.
 
-Networks with rate limiting policies can use SCONE to send throughput advice
+Networks with rate limits can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals -- such as ECN, delays and loss --
 operate on a time scale of a round trip time,
@@ -196,8 +196,7 @@ could provide reduced throughput advice
 to guide application use of network capacity
 during periods of unusually high usage.
 
-In addition to rate limiting policies,
-throughput advice can indicate temporary increases in available capacity
+Throughput advice can indicate temporary increases in available capacity
 or temporarily reduced capacity.
 This includes persistent overuse, equipment faults, or other transient issues.
 Providing advice is applicable if increases or reductions
