@@ -205,8 +205,11 @@ are expected to last for more than one monitoring period; see {{time}}.
 
 ## Unspecified Scope
 
-Modifying a packet does not prove that the throughput that is indicated
-would be achievable.
+Modifying a packet is not proof that the indicated throughput is achievable.
+Nor is it a commitment to providing that throughput.
+It is a hint that exceeding that rate is unlikely to be successful,
+from the perspective of a specific network element.
+
 A signal that is sent for a specific flow
 could apply to a collection of flows,
 rather than a single flow.
@@ -242,7 +245,7 @@ The same address tuple
 might be used for multiple QUIC connections.
 A single signal might be lost
 or only reach a single application endpoint.
-Network elements can apply SCONE advice
+Network elements can apply SCONE throughput advice
 to all QUIC connections that include SCONE packets
 to ensure that advice is received by all application endpoints.
 
