@@ -179,7 +179,7 @@ for a network path,
 whereas SCONE throughput advice operates over a much longer period.
 
 A congestion controller needs to detect changed conditions
-and change sending behavior more quickly than SCONE allows for.
+and change sending behavior more quickly than SCONE allows.
 Congestion signals can indicate a throughput limit
 that is different from the signaled throughput advice.
 
