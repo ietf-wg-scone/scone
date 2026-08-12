@@ -222,9 +222,9 @@ Table of Contents
    throughput advice operates over a much longer period.
 
    A congestion controller needs to detect changed conditions and change
-   sending behavior more quickly than SCONE allows for.  Congestion
-   signals can indicate a throughput limit that is different from the
-   signaled throughput advice.
+   sending behavior more quickly than SCONE allows.  Congestion signals
+   can indicate a throughput limit that is different from the signaled
+   throughput advice.
 
    Endpoints cannot assume that the rate indicated in throughput advice
    is achievable if congestion signals indicate otherwise.  Congestion
