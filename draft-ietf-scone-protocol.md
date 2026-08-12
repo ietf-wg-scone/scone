@@ -391,7 +391,7 @@ Source Connection ID field, which is the case for packets with a short header
 ({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty
 and the Source Connection ID Length field is set to 0.
 
-SCONE packets are always coalesced with other QUIC packets
+SCONE packets MUST be coalesced with other QUIC packets
 (see {{Section 12.2 of QUIC}})
 and MUST be included as the first packet in a datagram.
 This is primarily to simplify the process of updating throughput advice
