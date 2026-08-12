@@ -2120,14 +2120,17 @@ and for applications to adapt.<a href="#section-7.2-4" class="pilcrow">¶</a></p
 <p id="section-7.2-5">A network element can then monitor affected flows
 to determine whether the provided throughput advice
 was followed.<a href="#section-7.2-5" class="pilcrow">¶</a></p>
-<p id="section-7.2-6">A network element <span class="bcp14">SHOULD</span> base its monitoring
+<p id="section-7.2-6">The simplest monitoring approach bases monitoring
 on the maximum value that was configured to apply
 during the preceding two monitoring periods.
-This allows applications time to receive advice
-and adapt their sending rate.
+This allows an additional monitoring period
+to allow for senders providing SCONE packets
+that carry updated throughput advice to receivers reliably.
+Relative to an additional monitoring period,
+other delays in propagating throughput advice
+are expected to be negligible.
 If the network element cannot update the throughput advice in every SCONE packet
-(or can do so only infrequently), a longer period might be used
-to account for the possibility that the updated SCONE packets are lost.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
+(or can only do so periodically), a longer period might be used.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
 <p id="section-7.2-7">Any monitoring and policy enforcement could be implemented
 in different network elements than the ones that signal throughput advice.
 However, network elements <span class="bcp14">MUST NOT</span> enforce throughput limits

@@ -784,13 +784,15 @@ Table of Contents
    A network element can then monitor affected flows to determine
    whether the provided throughput advice was followed.
 
-   A network element SHOULD base its monitoring on the maximum value
-   that was configured to apply during the preceding two monitoring
-   periods.  This allows applications time to receive advice and adapt
-   their sending rate.  If the network element cannot update the
-   throughput advice in every SCONE packet (or can do so only
-   infrequently), a longer period might be used to account for the
-   possibility that the updated SCONE packets are lost.
+   The simplest monitoring approach bases monitoring on the maximum
+   value that was configured to apply during the preceding two
+   monitoring periods.  This allows an additional monitoring period to
+   allow for senders providing SCONE packets that carry updated
+   throughput advice to receivers reliably.  Relative to an additional
+   monitoring period, other delays in propagating throughput advice are
+   expected to be negligible.  If the network element cannot update the
+   throughput advice in every SCONE packet (or can only do so
+   periodically), a longer period might be used.
 
    Any monitoring and policy enforcement could be implemented in
    different network elements than the ones that signal throughput
