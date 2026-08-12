@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 12 February 2027                           Private Octopus Inc.
+Expires: 13 February 2027                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          11 August 2026
+                                                          12 August 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 February 2027.
+   This Internet-Draft will expire on 13 February 2027.
 
 Copyright Notice
 
@@ -422,7 +422,7 @@ Table of Contents
    the Source Connection ID field is empty and the Source Connection ID
    Length field is set to 0.
 
-   SCONE packets are always coalesced with other QUIC packets (see
+   SCONE packets MUST be coalesced with other QUIC packets (see
    Section 12.2 of [QUIC]) and MUST be included as the first packet in a
    datagram.  This is primarily to simplify the process of updating
    throughput advice in network elements.  This is also necessary in
