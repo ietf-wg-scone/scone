@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-02T02:54:00.723188+00:00",
+  "timestamp": "2026-08-13T02:05:02.456026+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15207,6 +15207,292 @@
           "body": "",
           "createdAt": "2026-07-06T10:39:00Z",
           "updatedAt": "2026-07-06T10:39:00Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 159,
+      "id": "PR_kwDON1dwo879VtAF",
+      "title": "Gorry's AD review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/159",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The thing is, any document at any stage, when subject to additional scrutiny, can be improved.  Hopefully, these are all improvements and not just shuffling things around.\r\n\r\nNothing more than editorial changes here, by my reckoning.",
+      "createdAt": "2026-08-11T05:01:43Z",
+      "updatedAt": "2026-08-12T08:51:33Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "cd00ddf27023b736906c167c09215c530b0dabca",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "gorry-ad",
+      "headRefOid": "a77534e0eeaa94956ea6da49c0d8f1db3e9c23aa",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Thanks for these changes, they all look like improvements to me. ",
+          "createdAt": "2026-08-11T10:56:47Z",
+          "updatedAt": "2026-08-11T10:56:47Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABJEY6ZA",
+          "commit": {
+            "abbreviatedOid": "0d9d813"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Looks good, except for one nit. I agree that these are editorial comments. I also agree that the reminder of Gorry's review requires more discussion.",
+          "createdAt": "2026-08-11T06:36:05Z",
+          "updatedAt": "2026-08-11T06:37:35Z",
+          "comments": [
+            {
+              "originalPosition": 247,
+              "body": "~~~suggestion\nThe one exception is an off-path attacker\n~~~\n\nI think adding \"where\" at this point in the sentence is awkward. ",
+              "createdAt": "2026-08-11T06:36:05Z",
+              "updatedAt": "2026-08-11T06:37:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJGNz_A",
+          "commit": {
+            "abbreviatedOid": "54a497a"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-08-11T10:57:05Z",
+          "updatedAt": "2026-08-11T10:57:05Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJG7Xpw",
+          "commit": {
+            "abbreviatedOid": "54a497a"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "This is very close to what I was hoping for.\nPlease see suggestions in this github review and also consider the following two topics:\n---\n1) I added a proposal to change make a normative requirement to coalesce the SCONE packet (see proposed change).\n---\n2) From previous email thread:\n/A network element SHOULD base its monitoring on the maximum value that was configured to apply during the preceding two monitoring periods/\n- I am unsure why this couldn\u2019t be: //A network element performing monitoring  MUST use a monitoring  period at least\u2026.\u201d\n- If it needs to be kept as a SHOULD then I think we ought to explain why, and what are the implications of lower and higher, which it might already perhaps?\nThis is a SHOULD and it is already explained: This allows applications time to receive advice and adapt their sending rate. A tighter duration is possible if there is better information available.  For instance, if SCONE signals are sent often enough that you can be sure that advice reaches the application within a shorter period than one cycle, you could apply tighter timings once you account for the possibility of loss and so forth.  The algorithm here is, as mentioned, illustrative.\n>> Sorry, I was not clear and alas, I still do not understand.\nI think question is: can the the value be less than the\u00a0maximum value that was configured to apply during the preceding monitoring period?\n- My reading was it cannot be less, but I wanted to see if the text can explain this.",
+          "createdAt": "2026-08-11T12:31:47Z",
+          "updatedAt": "2026-08-11T13:00:56Z",
+          "comments": [
+            {
+              "originalPosition": 50,
+              "body": " I struggled to slowly read that and work out what it said. Could this even be something like:\n\"The ability to modify a SCONE packet as it transits a network element does not prove that a flow could achieve the indicated throughput\"?",
+              "createdAt": "2026-08-11T12:31:47Z",
+              "updatedAt": "2026-08-11T13:00:56Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\nand change sending behavior more quickly than SCONE allows.\n```",
+              "createdAt": "2026-08-11T12:45:48Z",
+              "updatedAt": "2026-08-11T13:00:56Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\nSCONE packets MUST be coalesced with other QUIC packets\n```",
+              "createdAt": "2026-08-11T12:55:58Z",
+              "updatedAt": "2026-08-11T13:00:57Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "The text says: \u201cSCONE packets are always coalesced with other QUIC packets (see Section 12.2 of [QUIC]) and MUST be included as the first packet in a datagram\u201d, which of course is true, and although this says coalescing is needed, and explain how to, I could not find place where this says \u201cMUST be Coalesced\u201d. Can this text be changed to:\n\u201cSCONE packets MUST be coalesced with other QUIC packets (see Section 12.2 of [QUIC]) and MUST be included as the first packet in a datagram\u201d",
+              "createdAt": "2026-08-11T12:56:18Z",
+              "updatedAt": "2026-08-11T13:00:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJMg4IA",
+          "commit": {
+            "abbreviatedOid": "2998d21"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-12T00:57:54Z",
+          "updatedAt": "2026-08-12T01:03:04Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "Edit: nevermind, the weird rendering caught me out.  I thought that this was suggesting a removal of the text.",
+              "createdAt": "2026-08-12T00:57:54Z",
+              "updatedAt": "2026-08-12T01:04:29Z"
+            },
+            {
+              "originalPosition": 50,
+              "body": "How about:\n\n```suggestion\nJust because a network element can set throughput advice,\nthat does not prove that the flow can achieve that rate.\n```",
+              "createdAt": "2026-08-12T00:59:03Z",
+              "updatedAt": "2026-08-12T01:03:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJM0n1Q",
+          "commit": {
+            "abbreviatedOid": "a77534e"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Reading Martin's proposal. I think that removing the SHOULD is great. It clearly signals that this section is only advisory. After all, one of the most frequent policy is to add a rate limiter to a broadband connection. If an ISP does that, then having a way to tell the limit to the clients using SCONE is great, but the ISP does not need to bother implementing any kind of per flow limitation.\n\nThe text contains the right kind of advice.",
+          "createdAt": "2026-08-12T02:18:51Z",
+          "updatedAt": "2026-08-12T02:18:51Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJO5Cag",
+          "commit": {
+            "abbreviatedOid": "a77534e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-12T08:35:48Z",
+          "updatedAt": "2026-08-12T08:35:48Z",
+          "comments": [
+            {
+              "originalPosition": 190,
+              "body": "Configure where to do what?",
+              "createdAt": "2026-08-12T08:35:48Z",
+              "updatedAt": "2026-08-12T08:35:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJPAdDA",
+          "commit": {
+            "abbreviatedOid": "a77534e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-12T08:50:48Z",
+          "updatedAt": "2026-08-12T08:50:48Z",
+          "comments": [
+            {
+              "originalPosition": 194,
+              "body": "I find this new wording a bit confusing. Maybe having even something more high-level is better:\n\n\n```suggestion\nThis allows an additional monitoring period\nto compensate for additional delays\nas SCONE packets are not delivered reliably.\n```",
+              "createdAt": "2026-08-12T08:50:48Z",
+              "updatedAt": "2026-08-12T08:50:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJPAyqw",
+          "commit": {
+            "abbreviatedOid": "a77534e"
+          },
+          "author": "mirjak",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-12T08:51:32Z",
+          "updatedAt": "2026-08-12T08:51:33Z",
+          "comments": [
+            {
+              "originalPosition": 194,
+              "body": "Any maybe this would be a good place to add a reference to the manageability draft directly?",
+              "createdAt": "2026-08-12T08:51:32Z",
+              "updatedAt": "2026-08-12T08:51:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJWuNLw",
+          "commit": {
+            "abbreviatedOid": "a77534e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-13T02:04:59Z",
+          "updatedAt": "2026-08-13T02:05:00Z",
+          "comments": [
+            {
+              "originalPosition": 190,
+              "body": "```suggestion\non the maximum value\nthat the network element was configured to apply to SCONE packets\n```",
+              "createdAt": "2026-08-13T02:04:59Z",
+              "updatedAt": "2026-08-13T02:05:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 160,
+      "id": "PR_kwDON1dwo879VwXk",
+      "title": "Cite appman draft",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/160",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-08-11T05:04:32Z",
+      "updatedAt": "2026-08-12T09:11:10Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "cd00ddf27023b736906c167c09215c530b0dabca",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "cite-manangnaganansdaa",
+      "headRefOid": "f92cdcc1366a874e913779a22a06d728f66b5e8f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Note that this is something that we might choose not to do if we are concerned about delays with the publication of the other document.",
+          "createdAt": "2026-08-11T05:04:58Z",
+          "updatedAt": "2026-08-11T05:04:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABJFQ_mA",
+          "commit": {
+            "abbreviatedOid": "f92cdcc"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": " For me, this captures what is missing!",
+          "createdAt": "2026-08-11T08:50:19Z",
+          "updatedAt": "2026-08-11T08:50:19Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJPKexg",
+          "commit": {
+            "abbreviatedOid": "f92cdcc"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "I think this is a useful improvement, for little cost.",
+          "createdAt": "2026-08-12T09:11:10Z",
+          "updatedAt": "2026-08-12T09:11:10Z",
           "comments": []
         }
       ]
