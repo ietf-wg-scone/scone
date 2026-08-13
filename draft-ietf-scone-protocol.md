@@ -775,11 +775,12 @@ to determine whether the provided throughput advice
 was followed.
 
 The simplest monitoring approach bases monitoring
-on the maximum value that was configured to apply
+on the maximum value
+that the network element was configured to apply to SCONE packets
 during the preceding two monitoring periods.
 This allows an additional monitoring period
-to allow for senders providing SCONE packets
-that carry updated throughput advice to receivers reliably.
+to compensate for additional delays
+as SCONE packets are not delivered reliably.
 Relative to an additional monitoring period,
 other delays in propagating throughput advice
 are expected to be negligible.
