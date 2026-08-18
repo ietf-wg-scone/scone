@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-16T01:22:32.332020+00:00",
+  "timestamp": "2026-08-18T01:17:02.716544+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15223,7 +15223,7 @@
       "labels": [],
       "body": "The thing is, any document at any stage, when subject to additional scrutiny, can be improved.  Hopefully, these are all improvements and not just shuffling things around.\r\n\r\nNothing more than editorial changes here, by my reckoning.",
       "createdAt": "2026-08-11T05:01:43Z",
-      "updatedAt": "2026-08-13T02:05:27Z",
+      "updatedAt": "2026-08-17T07:13:56Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cd00ddf27023b736906c167c09215c530b0dabca",
@@ -15431,6 +15431,26 @@
               "body": "```suggestion\non the maximum value\nthat the network element was configured to apply to SCONE packets\n```",
               "createdAt": "2026-08-13T02:04:59Z",
               "updatedAt": "2026-08-13T02:05:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABJv70IQ",
+          "commit": {
+            "abbreviatedOid": "d187ba5"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-08-17T07:10:08Z",
+          "updatedAt": "2026-08-17T07:13:56Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "```suggestion\nThis documented approach to monitoring that is largely illustrative;\n```\nI think we might have a grammatical error here?",
+              "createdAt": "2026-08-17T07:10:09Z",
+              "updatedAt": "2026-08-17T07:13:56Z"
             }
           ]
         }
