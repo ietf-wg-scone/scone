@@ -749,8 +749,7 @@ to determine whether a flow exceeds the value from provided throughput advice.
 Network deployments that choose to monitor
 are free to follow any monitoring regime that suits their needs.
 
-The approach to monitoring that is documented here
-is largely illustrative;
+This documented approach to monitoring is largely illustrative;
 there is no interoperability impact
 from choosing an alternative approach.
 However, monitoring any more strictly than the following
