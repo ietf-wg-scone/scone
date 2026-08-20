@@ -76,10 +76,10 @@ Many networks have known, concrete rate limits, or apply these limits
 by policy to constrain data rates.
 This is often done without any ability to indicate rate limits to applications.
 The result can be that application performance is degraded,
-as the manner in which rate limits are enforced can be incompatible with the
+because throughput limits can manifest in ways that are incompatible with the
 rate estimation or congestion control algorithms used at endpoints.
 
-Having the network indicate what its rate limiting policy is, in a way that is
+Having the network indicate what throughput limits apply, in a way that is
 accessible to endpoints, allows applications to use this information when
 adapting their send rate.
 
@@ -94,7 +94,7 @@ Any network function that is able to update the content of UDP datagrams
 qualifies as a network element that can use SCONE packets
 to provide throughput advice to QUIC endpoints.
 
-Networks with rate limiting policies can use SCONE to send throughput advice
+Networks with rate limits can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals -- such as ECN, delays and loss --
 operate on a time scale of a round trip time,
@@ -116,8 +116,9 @@ QUIC endpoints can negotiate the use of SCONE by including a transport parameter
 ({{tp}}) in the QUIC handshake.  Endpoints then occasionally send SCONE packets,
 which are always coalesced with ordinary QUIC packets that they send.
 
-Networks that have rate limiting policies can detect flows that include
-SCONE packets.  The network, via an on-path network element, can indicate a maximum
+Networks that have rate limiting policies, or known throughput constraints,
+can detect flows that include SCONE packets.
+The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.
 
@@ -178,7 +179,7 @@ for a network path,
 whereas SCONE throughput advice operates over a much longer period.
 
 A congestion controller needs to detect changed conditions
-and change sending behavior more quickly than SCONE allows for.
+and change sending behavior more quickly than SCONE allows.
 Congestion signals can indicate a throughput limit
 that is different from the signaled throughput advice.
 
@@ -195,8 +196,7 @@ could provide reduced throughput advice
 to guide application use of network capacity
 during periods of unusually high usage.
 
-In addition to rate limiting policies,
-throughput advice can indicate temporary increases in available capacity
+Throughput advice can indicate temporary increases in available capacity
 or temporarily reduced capacity.
 This includes persistent overuse, equipment faults, or other transient issues.
 Providing advice is applicable if increases or reductions
@@ -205,8 +205,12 @@ are expected to last for more than one monitoring period; see {{time}}.
 
 ## Unspecified Scope
 
-Modifying a packet does not prove that the throughput that is indicated
-would be achievable.
+Just because a network element can set throughput advice,
+that does not prove that the flow can achieve that rate.
+Nor is it a commitment to providing that throughput.
+It is a hint that exceeding that rate is unlikely to be successful,
+from the perspective of a specific network element.
+
 A signal that is sent for a specific flow
 could apply to a collection of flows,
 rather than a single flow.
@@ -242,7 +246,7 @@ The same address tuple
 might be used for multiple QUIC connections.
 A single signal might be lost
 or only reach a single application endpoint.
-Network elements can apply SCONE advice
+Network elements can apply SCONE throughput advice
 to all QUIC connections that include SCONE packets
 to ensure that advice is received by all application endpoints.
 
@@ -388,7 +392,7 @@ Source Connection ID field, which is the case for packets with a short header
 ({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty
 and the Source Connection ID Length field is set to 0.
 
-SCONE packets are always coalesced with other QUIC packets
+SCONE packets MUST be coalesced with other QUIC packets
 (see {{Section 12.2 of QUIC}})
 and MUST be included as the first packet in a datagram.
 This is primarily to simplify the process of updating throughput advice
@@ -541,6 +545,7 @@ risks endpoints discarding throughput advice
 if no SCONE packet is available for providing updated advice ({{apply}}),
 or packets carrying advice are lost.
 Sending the signal multiple times
+per monitoring period
 increases the likelihood that the signal is received.
 
 
@@ -568,7 +573,8 @@ transport parameters, and frame types registries established in {{Sections 22.2,
 22.3, and 22.4 of QUIC}}.
 
 Endpoints MUST NOT remember whether the scone_supported transport parameter was present
-on the previous connection when using 0-RTT.
+on the previous connection when using 0-RTT;
+see {{Section 7.4.1 of QUIC}}.
 That is, SCONE packets cannot be sent on a connection
 until the transport parameter is received.
 
@@ -578,7 +584,8 @@ until the transport parameter is received.
 All new flows that are initiated by a client that supports SCONE
 MUST include bytes with values 0xc8 and 0x13
 as the last two bytes of the payload of the UDP datagrams
-that commence a new flow, if the protocol permits it.
+that commence a new flow,
+if the protocol permits the inclusion of data after packets.
 
 For example, in QUIC version 1,
 these datagrams contain QUIC packets with a long header ({{Section 17.2 of QUIC}}).
@@ -588,7 +595,7 @@ zero or more 0-RTT packets,
 padding or other data that is discarded on receipt,
 and the indication bytes (0xc8, 0x13) as the final bytes of the UDP payload.
 
-This indication MUST be sent in every datagram
+The SCONE indication bytes MUST be sent in every datagram
 until the client receives any datagram from the server,
 at which point the client can be confident that the indication was received.
 
@@ -615,9 +622,10 @@ and either endpoint might choose not to send SCONE packets.
 Finally, applications might be unable to apply throughput advice
 or choose to ignore it.
 
-This indication being just two bytes
-means that there is a non-negligible risk of collision with other protocols
+There is a non-negligible risk of collision with other protocols
 or even QUIC usage without SCONE indications.
+The indicator is just two bytes,
+which could be sent by chance on non-SCONE flows.
 This means that the indication alone is not sufficient to indicate
 that a flow is QUIC with the potential for SCONE support.
 
@@ -648,18 +656,19 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 
 A network element could classify all 5-tuples where the first observed UDP
 datagram ends in the indicator bytes as potential SCONE. A network element MAY
-apply further criteria to further reduce the set of flows that are identifeid
+apply further criteria to further reduce the set of flows that are identified
 as potentially supporting SCONE, reducing the likelihood of false positives.
 However, it SHOULD NOT apply criteria that reduce the ability of new QUIC
 versions to employ SCONE. SCONE operates independently of any specific QUIC
 version, so any criteria should consult the QUIC version invariants in
 {{INVARIANTS}}.
 
+
 # Network Deployment
 
 QUIC endpoints can enable the use of the SCONE protocol
 by sending SCONE packets ({{packet}}).
-Network elements can then use SCONE and replace
+Network elements can then update
 the Rate Signal field ({{apply}})
 according to their policies.
 
@@ -695,7 +704,8 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
 ~~~
 
 Once the throughput advice is updated,
-the network element updates the UDP checksum for the datagram.
+the network element updates the UDP checksum for the datagram;
+see {{?RFC1141}}.
 
 To avoid throughput advice expiring,
 a network element needs to ensure that it updates throughput advice in SCONE packets
@@ -736,11 +746,13 @@ to determine whether applications are following advice.
 
 This section outlines a method
 that a network element could use
-to determine whether advice is being followed.
+to determine whether a flow exceeds the value from provided throughput advice.
 Network deployments that choose to monitor
 are free to follow any monitoring regime that suits their needs.
 
-This monitoring algorithm is guidance only.
+This documented approach to monitoring is largely illustrative;
+there is no interoperability impact
+from choosing an alternative approach.
 However, monitoring any more strictly than the following
 could mean that an application
 might be incorrectly classified as not following advice.
@@ -762,14 +774,18 @@ A network element can then monitor affected flows
 to determine whether the provided throughput advice
 was followed.
 
-A network element SHOULD base its monitoring
-on the maximum value that was configured to apply
+The simplest monitoring approach bases monitoring
+on the maximum value
+that the network element was configured to apply to SCONE packets
 during the preceding two monitoring periods.
+This allows an additional monitoring period
+to compensate for additional delays
+as SCONE packets are not delivered reliably.
+Relative to an additional monitoring period,
+other delays in propagating throughput advice
+are expected to be negligible.
 If the network element cannot update the throughput advice in every SCONE packet
-(or can do so only infrequently), a longer period might be used
-to account for the possibility that the updated SCONE packets are lost.
-This allows applications time to receive advice
-and adapt their sending rate.
+(or can only do so periodically), a longer period might be used.
 
 Any monitoring and policy enforcement could be implemented
 in different network elements than the ones that signal throughput advice.
@@ -787,9 +803,10 @@ A network could deploy policy enforcement that drops or delays packets
 to ensure that applications do not exceed throughput limits set in policy.
 
 SCONE allows networks to provide advice to applications,
-so that there is less need to apply throughput limits on flows.
-Implementing strict throughput limits can be inefficient
-and lead to worse application performance.
+so that there is less need to enforce throughput limits on flows.
+Strict enforcement through dropping or delaying packets
+can be inefficient
+and lead to poor application performance.
 
 Some applications will not support SCONE.
 Other applications either will not
@@ -834,7 +851,7 @@ Sending SCONE packets more often might be necessary to:
 Avoid missing advice:
 : If SCONE packets are not sent, updated, and received
   for an entire monitoring period,
-  an application might incorrectly assume that no advice is being provided.
+  an application might assume that no throughput advice is being provided.
 
 Reduce latency:
 : The time between SCONE packets determines the maximum delay
@@ -905,6 +922,21 @@ Senders will therefore proceed as though there was no advice.
 
 # Security Considerations {#security}
 
+SCONE throughput advice is not authenticated.  Throughput advice
+might be incorrectly set in order to encourage endpoints to behave in ways that
+are not in their interests.  Endpoints can ignore limits,
+though that can have consequences; see {{policing}}.
+The congestion controller employed by a sender provides
+real-time information about the rate at which the network path is delivering
+data.
+
+Similarly, if there is a strong need to ensure that throughput advice is respected,
+network elements cannot assume that the signaled advice will be respected by
+endpoints.
+
+
+## Off-Path Adversaries {#off-path}
+
 The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and could apply a rate limit policy.
 {{extra-packets}} states that endpoints only accept signals if the datagram
@@ -923,21 +955,19 @@ the peer, with the result being that the endpoint receives a false
 or misleading rate limit.
 
 The recipient of throughput advice therefore cannot guarantee that
-the signal was generated by an on-path network element. However,
-the capabilities required of an off-path attacker are substantially
+the signal was not generated by an on-path network element.
+
+The capabilities required of an off-path attacker are substantially
 similar to those of on path elements.
+An off-path attacker can generate throughput advice
+that will be accepted by an endpoint
+if it has the ability to damage packets
+in a way that could be able to affect throughput capacity of the flow.
+The one exception is an off-path attacker
+that is only capable of generating spoofed copies of packets
+with modified throughput rates
+that reach endpoints ahead of the original.
 
-The throughput advice is not authenticated.  Throughput advice
-might be incorrectly set in order to encourage endpoints to behave in ways that
-are not in their interests.  Endpoints can ignore limits,
-though that can have consequences; see {{policing}}.
-The congestion controller employed by a sender provides
-real-time information about the rate at which the network path is delivering
-data.
-
-Similarly, if there is a strong need to ensure that throughput advice is respected,
-network elements cannot assume that the signaled advice will be respected by
-endpoints.
 
 ## Fake SCONE Packets {#fake-packets}
 
