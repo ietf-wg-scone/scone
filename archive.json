@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-18T01:17:02.716544+00:00",
+  "timestamp": "2026-08-20T01:17:50.303772+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15223,7 +15223,7 @@
       "labels": [],
       "body": "The thing is, any document at any stage, when subject to additional scrutiny, can be improved.  Hopefully, these are all improvements and not just shuffling things around.\r\n\r\nNothing more than editorial changes here, by my reckoning.",
       "createdAt": "2026-08-11T05:01:43Z",
-      "updatedAt": "2026-08-17T07:13:56Z",
+      "updatedAt": "2026-08-19T14:47:09Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cd00ddf27023b736906c167c09215c530b0dabca",
@@ -15241,6 +15241,13 @@
           "body": "Thanks for these changes, they all look like improvements to me. ",
           "createdAt": "2026-08-11T10:56:47Z",
           "updatedAt": "2026-08-11T10:56:47Z"
+        },
+        {
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "body": "Is this ready to merge?",
+          "createdAt": "2026-08-19T14:47:09Z",
+          "updatedAt": "2026-08-19T14:47:09Z"
         }
       ],
       "reviews": [
@@ -15451,6 +15458,46 @@
               "body": "```suggestion\nThis documented approach to monitoring that is largely illustrative;\n```\nI think we might have a grammatical error here?",
               "createdAt": "2026-08-17T07:10:09Z",
               "updatedAt": "2026-08-17T07:13:56Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABKCTRzA",
+          "commit": {
+            "abbreviatedOid": "d187ba5"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-19T04:41:59Z",
+          "updatedAt": "2026-08-19T04:41:59Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "I think your version adds a grammatical error.  The \"that\" can be removed.",
+              "createdAt": "2026-08-19T04:41:59Z",
+              "updatedAt": "2026-08-19T04:41:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABKHCbfw",
+          "commit": {
+            "abbreviatedOid": "d187ba5"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-19T14:46:28Z",
+          "updatedAt": "2026-08-19T14:46:28Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "I'd be happy with: \"This documented approach to monitoring is largely illustrative;\"",
+              "createdAt": "2026-08-19T14:46:28Z",
+              "updatedAt": "2026-08-19T14:46:28Z"
             }
           ]
         }
