@@ -205,7 +205,8 @@ are expected to last for more than one monitoring period; see {{time}}.
 
 ## Unspecified Scope
 
-Modifying a packet is not proof that the indicated throughput is achievable.
+Just because a network element can set throughput advice,
+that does not prove that the flow can achieve that rate.
 Nor is it a commitment to providing that throughput.
 It is a hint that exceeding that rate is unlikely to be successful,
 from the perspective of a specific network element.
