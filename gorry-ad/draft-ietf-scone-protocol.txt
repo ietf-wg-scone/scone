@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 14 February 2027                           Private Octopus Inc.
+Expires: 21 February 2027                           Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          13 August 2026
+                                                          20 August 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 February 2027.
+   This Internet-Draft will expire on 21 February 2027.
 
 Copyright Notice
 
@@ -766,14 +766,13 @@ Table of Contents
    advice.  Network deployments that choose to monitor are free to
    follow any monitoring regime that suits their needs.
 
-   The approach to monitoring that is documented here is largely
-   illustrative; there is no interoperability impact from choosing an
-   alternative approach.  However, monitoring any more strictly than the
-   following could mean that an application might be incorrectly
-   classified as not following advice.  A looser monitoring approach,
-   such as monitoring over a longer time window than the monitoring
-   period (67s) or using a higher rate than is signaled, has no risk of
-   incorrect classification.
+   This documented approach to monitoring is largely illustrative; there
+   is no interoperability impact from choosing an alternative approach.
+   However, monitoring any more strictly than the following could mean
+   that an application might be incorrectly classified as not following
+   advice.  A looser monitoring approach, such as monitoring over a
+   longer time window than the monitoring period (67s) or using a higher
+   rate than is signaled, has no risk of incorrect classification.
 
    When a network changes the throughput advice it intends to provide,
    applications need time to adjust their sending behavior.  As a
