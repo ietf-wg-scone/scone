@@ -247,10 +247,11 @@ Table of Contents
 
 3.2.  Unspecified Scope
 
-   Modifying a packet is not proof that the indicated throughput is
-   achievable.  Nor is it a commitment to providing that throughput.  It
-   is a hint that exceeding that rate is unlikely to be successful, from
-   the perspective of a specific network element.
+   Just because a network element can set throughput advice, that does
+   not prove that the flow can achieve that rate.  Nor is it a
+   commitment to providing that throughput.  It is a hint that exceeding
+   that rate is unlikely to be successful, from the perspective of a
+   specific network element.
 
    A signal that is sent for a specific flow could apply to a collection
    of flows, rather than a single flow.  The scope of the flows that are
