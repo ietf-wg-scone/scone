@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-20T01:17:50.303772+00:00",
+  "timestamp": "2026-08-23T01:24:13.066246+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15216,24 +15216,26 @@
       "id": "PR_kwDON1dwo879VtAF",
       "title": "Gorry's AD review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/159",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The thing is, any document at any stage, when subject to additional scrutiny, can be improved.  Hopefully, these are all improvements and not just shuffling things around.\r\n\r\nNothing more than editorial changes here, by my reckoning.",
       "createdAt": "2026-08-11T05:01:43Z",
-      "updatedAt": "2026-08-19T14:47:09Z",
+      "updatedAt": "2026-08-20T07:52:23Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cd00ddf27023b736906c167c09215c530b0dabca",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "gorry-ad",
-      "headRefOid": "d187ba5fab12e3f07c88d25ae2b2ffd7c8a04401",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "747d82a9c5c0774771304f563f6b0a62e3fcd2ad",
+      "closedAt": "2026-08-20T07:52:23Z",
+      "mergedAt": "2026-08-20T07:52:23Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "900de15bdc81ba8fb382a2034cedbbfee3036689"
+      },
       "comments": [
         {
           "author": "ihlar",
@@ -15244,7 +15246,7 @@
         },
         {
           "author": "gorryfair",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Is this ready to merge?",
           "createdAt": "2026-08-19T14:47:09Z",
           "updatedAt": "2026-08-19T14:47:09Z"
@@ -15290,7 +15292,7 @@
             "abbreviatedOid": "54a497a"
           },
           "author": "gorryfair",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "This is very close to what I was hoping for.\nPlease see suggestions in this github review and also consider the following two topics:\n---\n1) I added a proposal to change make a normative requirement to coalesce the SCONE packet (see proposed change).\n---\n2) From previous email thread:\n/A network element SHOULD base its monitoring on the maximum value that was configured to apply during the preceding two monitoring periods/\n- I am unsure why this couldn\u2019t be: //A network element performing monitoring  MUST use a monitoring  period at least\u2026.\u201d\n- If it needs to be kept as a SHOULD then I think we ought to explain why, and what are the implications of lower and higher, which it might already perhaps?\nThis is a SHOULD and it is already explained: This allows applications time to receive advice and adapt their sending rate. A tighter duration is possible if there is better information available.  For instance, if SCONE signals are sent often enough that you can be sure that advice reaches the application within a shorter period than one cycle, you could apply tighter timings once you account for the possibility of loss and so forth.  The algorithm here is, as mentioned, illustrative.\n>> Sorry, I was not clear and alas, I still do not understand.\nI think question is: can the the value be less than the\u00a0maximum value that was configured to apply during the preceding monitoring period?\n- My reading was it cannot be less, but I wanted to see if the text can explain this.",
           "createdAt": "2026-08-11T12:31:47Z",
@@ -15367,7 +15369,7 @@
             "abbreviatedOid": "a77534e"
           },
           "author": "mirjak",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2026-08-12T08:35:48Z",
@@ -15387,7 +15389,7 @@
             "abbreviatedOid": "a77534e"
           },
           "author": "mirjak",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2026-08-12T08:50:48Z",
@@ -15407,7 +15409,7 @@
             "abbreviatedOid": "a77534e"
           },
           "author": "mirjak",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2026-08-12T08:51:32Z",
@@ -15487,7 +15489,7 @@
             "abbreviatedOid": "d187ba5"
           },
           "author": "gorryfair",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2026-08-19T14:46:28Z",
@@ -15500,6 +15502,26 @@
               "updatedAt": "2026-08-19T14:46:28Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABKNmUTA",
+          "commit": {
+            "abbreviatedOid": "d187ba5"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-20T07:51:54Z",
+          "updatedAt": "2026-08-20T07:51:54Z",
+          "comments": [
+            {
+              "originalPosition": 178,
+              "body": "```suggestion\r\nThis documented approach to monitoring is largely illustrative;\r\n```",
+              "createdAt": "2026-08-20T07:51:54Z",
+              "updatedAt": "2026-08-20T07:51:54Z"
+            }
+          ]
         }
       ]
     },
@@ -15508,24 +15530,26 @@
       "id": "PR_kwDON1dwo879VwXk",
       "title": "Cite appman draft",
       "url": "https://github.com/ietf-wg-scone/scone/pull/160",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-08-11T05:04:32Z",
-      "updatedAt": "2026-08-12T09:11:10Z",
+      "updatedAt": "2026-08-20T07:52:39Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "cd00ddf27023b736906c167c09215c530b0dabca",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "cite-manangnaganansdaa",
       "headRefOid": "f92cdcc1366a874e913779a22a06d728f66b5e8f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-08-20T07:52:38Z",
+      "mergedAt": "2026-08-20T07:52:38Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "a8772eacb311dba0559e1d3ba6c34850499a9c92"
+      },
       "comments": [
         {
           "author": "martinthomson",
@@ -15542,7 +15566,7 @@
             "abbreviatedOid": "f92cdcc"
           },
           "author": "gorryfair",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "APPROVED",
           "body": " For me, this captures what is missing!",
           "createdAt": "2026-08-11T08:50:19Z",
@@ -15555,7 +15579,7 @@
             "abbreviatedOid": "f92cdcc"
           },
           "author": "gorryfair",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "state": "APPROVED",
           "body": "I think this is a useful improvement, for little cost.",
           "createdAt": "2026-08-12T09:11:10Z",
