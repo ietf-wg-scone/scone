@@ -345,6 +345,18 @@ and could avoid potential enforcement action by the network; see {{policing}}.
 
 {::boilerplate bcp14-tagged-bcp}
 
+In SCONE:
+
+* a "network element" is any device in the network
+  that can produce throughput advice.
+
+* "Throughput advice" refers the information communicated
+  to endpoints by network elements
+  in the form of a rate signal; see {{rate-signal}}.
+
+* A "monitoring period" is the time over which rate signals
+  apply; see {{time}}.
+
 
 # SCONE Packet {#packet}
 
@@ -704,7 +716,7 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
   packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
   if target_signal < packet_signal:
     packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)
-    packet[1] = (packet[1] & 0x7f) | (target_signal << 7)
+    packet[1] = (packet[1] & 0x7f) | (target_signal << 7) & 0xff
 ~~~
 
 Once the throughput advice is updated,
