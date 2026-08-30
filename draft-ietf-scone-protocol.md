@@ -716,7 +716,7 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
   packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
   if target_signal < packet_signal:
     packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)
-    packet[1] = (packet[1] & 0x7f) | (target_signal << 7) & 0xff
+    packet[1] = (packet[1] & 0x7f) | ((target_signal & 1) << 7)
 ~~~
 
 Once the throughput advice is updated,
