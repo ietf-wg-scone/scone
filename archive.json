@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-08-30T04:13:01.137314+00:00",
+  "timestamp": "2026-09-01T04:03:23.142567+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15593,24 +15593,26 @@
       "id": "PR_kwDON1dwo88AAAABBVOhjQ",
       "title": "Address Thomas Fossati's nits",
       "url": "https://github.com/ietf-wg-scone/scone/pull/161",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2026-08-28T11:32:22Z",
-      "updatedAt": "2026-08-29T18:30:38Z",
+      "updatedAt": "2026-08-30T14:33:48Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "a8772eacb311dba0559e1d3ba6c34850499a9c92",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "thomas",
-      "headRefOid": "c5a536623f8dc94615cc3a9522071626a24f5ae3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "5729973da0aec24e0fe94f4c4945d416cc4e72ba",
+      "closedAt": "2026-08-30T06:25:01Z",
+      "mergedAt": "2026-08-30T06:25:01Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "348cb618cfc3abeb53b4cf286145d09840b445a8"
+      },
       "comments": [],
       "reviews": [
         {
@@ -15656,6 +15658,26 @@
               "body": "```suggestion\npacket[1] = (packet[1] & 0x7f) | ((target_signal&1)<<7)\n```\nJust as pedantic, but probably a better way to express that we want only one bit.\n\nIn practice, I would cast the whole expression as `uint8_t` to avoid warnings from pedantic compilers, but that would be language dependent, so let's not do that.",
               "createdAt": "2026-08-29T18:23:54Z",
               "updatedAt": "2026-08-29T18:30:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABLZstyQ",
+          "commit": {
+            "abbreviatedOid": "c5a5366"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-08-30T06:23:23Z",
+          "updatedAt": "2026-08-30T06:23:23Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "OK, fine; my original had 0x01 and that was more characters, but this works:\r\n\r\n```suggestion\r\n    packet[1] = (packet[1] & 0x7f) | ((target_signal & 1) << 7)\r\n```",
+              "createdAt": "2026-08-30T06:23:23Z",
+              "updatedAt": "2026-08-30T06:23:39Z"
             }
           ]
         }
