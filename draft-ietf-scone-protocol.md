@@ -179,14 +179,18 @@ They are complementary.
 Congestion signals,
 such as acknowledgments or ECN markings {{?ECN=RFC3168}}{{?WHY-ECN=RFC8087}},
 provide real-time information on loss and delay
-for a network path,
-whereas SCONE throughput advice operates over a much longer period.
-
+for a network path.
 A congestion controller needs to detect changed conditions
 and change sending behavior more quickly than SCONE allows.
+
+In comparison, SCONE throughput advice operates over a much longer period.
+SCONE provides an explicit signal
+regarding potential throughput constraints on a path.
+This allows applications to set throughput targets quickly,
+without waiting for congestion signals to resolve the achievable throughput.
+
 Congestion signals can indicate a throughput limit
 that is different from the signaled throughput advice.
-
 Endpoints cannot assume that the rate indicated in throughput advice is achievable if congestion
 signals indicate otherwise.  Congestion could be experienced at a different
 point on the network path than the network element that signals throughput advice.
