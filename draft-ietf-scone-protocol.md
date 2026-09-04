@@ -651,15 +651,15 @@ with respect to their enforcement of their rate limit policies.
 
 ## Indications for Migrated Flows
 
-Applications MAY decide to indicate support for SCONE on new flows,
-including when migrating to a new path (see {{Section 9 of QUIC}}).
 In QUIC version 1 and 2,
-the two byte indicator cannot be used on migration.
+the two byte indicator ({{indication}})
+cannot be used on migration to a new path.
 
 Sending a SCONE packet for the first few packets on a new path
 gives network elements on that path the ability
-to recognize the flow as being able to receive throughput advice
-and also gives the network element an opportunity to provide that throughput advice.
+to recognize the flow as being able to receive throughput advice.
+The SCONE packet also gives the network element an opportunity
+to provide throughput advice for the new flow.
 
 To enable this indication,
 even if an endpoint would not otherwise send SCONE packets,
