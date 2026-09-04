@@ -270,7 +270,7 @@ that encapsulates tunneled flows (such as {{?CONNECT-UDP=RFC9298}})
 they can only provide the advice to the outermost flow.
 Endpoints can apply the throughput advice to packets in flows
 that are subsequently encapsulated,
-but following that advice can have security implications;
+but following that advice can have privacy implications;
 see {{active-attacks}}.
 
 
