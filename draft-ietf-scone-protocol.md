@@ -96,7 +96,8 @@ to provide throughput advice to QUIC endpoints.
 
 Networks with rate limits can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
-Where congestion control signals -- such as ECN, delays and loss --
+Where congestion control signals --
+such as Explicit Congestion Notification (ECN) {{?ECN=RFC3168}}, delays and loss --
 operate on a time scale of a round trip time,
 throughput advice operates over a much longer period.
 
@@ -328,7 +329,8 @@ Some applications offer options for rate control
 that can offer improved performance when following advice.
 For instance, real-time and streaming video applications
 can often dynamically adapt their network usage.
-Typical HTTP Live Streaming {{?HLS=RFC8216}} or DASH {{DASH}}
+Typical HTTP Live Streaming {{?HLS=RFC8216}}
+or Dynamic Adaptive Streaming over HTTP {{DASH}}
 clients are provided with manifests that allow them to
 adjust the bitrate and quality of media segments
 based on available network capacity.
@@ -489,7 +491,8 @@ The choice of 67 seconds, as a prime number,
 also helps avoid synchronization with other periodic
 effects that are commonly measured in whole seconds.
 This includes segment length or key frame intervals in video applications,
-but also includes timers for NAT devices; see {{Section 4.3 of ?RFC4787}}.
+but also includes timers for Network Address Translation (NAT) devices;
+see {{Section 4.3 of ?RFC4787}}.
 Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
@@ -516,7 +519,7 @@ A receiver MAY discard a datagram that contains more than one SCONE packet.
 
 A SCONE packet is discarded if the rate signal is unknown (127).
 
-If a connection uses multiple DSCP markings {{!RFC2474}},
+If a connection uses multiple Differentiated Services Code Point (DSCP) markings {{!RFC2474}},
 the throughput advice that is received on datagrams with one marking
 might not apply to datagrams that have different markings.
 
