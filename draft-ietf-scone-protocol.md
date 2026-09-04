@@ -752,6 +752,16 @@ can be detected by applications and could be ignored.
 This document does not define a mechanism to support detection,
 but one might be added in future.
 
+Network elements MUST only update the content of datagrams
+on a given address tuple
+a few times each monitoring period.
+Network elements MAY update more often
+immediately after a change in their throughput advice,
+to reduce the reaction time from senders.
+If too many datagrams are altered,
+that could interfere with UDP protocols that are not QUIC;
+see {{other-protocols}}.
+
 
 ## Monitoring Flows {#monitoring}
 
@@ -1015,7 +1025,7 @@ a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
 with an implementation that fully conforms to the specification of {{packet}}.
 
-## Damage to Other Protocols
+## Damage to Other Protocols {#other-protocols}
 
 Network elements that update SCONE packet fields might do that for datagrams
 exchanged in other protocols.
@@ -1029,12 +1039,8 @@ and is subsequently modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
-To that end, network elements MUST only update the content of datagrams
-on a given address tuple
-a few times each monitoring period.
-Network elements MAY update more often
-immediately after a change in their throughput advice,
-to reduce the reaction time from senders.
+Network elements only update a limited number of datagrams
+in each monitoring period; see {{apply}}.
 
 In addition, some heuristics might be used
 to detect SCONE-compatible QUIC flows.
