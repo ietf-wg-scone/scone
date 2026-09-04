@@ -122,20 +122,21 @@ The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.
 
-The propagation of SCONE packets, including the throughput advice that is added,
+The propagation of SCONE packets,
+including the throughput advice that is update by a network element,
 is shown in {{f-scone}}.
 
 ~~~ aasvg
-+--------+    +---------+     +----------+
-|  QUIC  |    | Network |     |   QUIC   |
-| Sender |    | Element |     | Receiver |
-+---+----+    +----+----+     +----+-----+
-    |              |               |
-    +--- SCONE --->|  SCONE+advice |
-    |    +QUIC     +---- +QUIC --->|
-    |              |               |  Validate QUIC packet
-    |              |               |  and record advice
-    |              |               |
++--------+       +---------+      +----------+
+|  QUIC  |       | Network |      |   QUIC   |
+| Sender |       | Element |      | Receiver |
++---+----+       +----+----+      +----+-----+
+    |                 |                |
+    +--- SCONE(?) --->|  SCONE(advice) |
+    |    +QUIC        +---- +QUIC ---->|
+    |                 |                |  Validate QUIC packet
+    |                 |                |  and record advice
+    |                 |                |
 ~~~
 {: #f-scone title="Propagation of SCONE signal"}
 
@@ -269,7 +270,7 @@ that encapsulates tunneled flows (such as {{?CONNECT-UDP=RFC9298}})
 they can only provide the advice to the outermost flow.
 Endpoints can apply the throughput advice to packets in flows
 that are subsequently encapsulated,
-but following that advice can have security implications;
+but following that advice can have privacy implications;
 see {{active-attacks}}.
 
 
@@ -405,8 +406,8 @@ value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
 The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
-({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty
-and the Source Connection ID Length field is set to 0.
+({{Section 5.2 of INVARIANTS}}), the Source Connection ID field MUST be empty
+and the Source Connection ID Length field MUST be 0.
 
 SCONE packets MUST be coalesced with other QUIC packets
 (see {{Section 12.2 of QUIC}})
@@ -513,8 +514,7 @@ When discarding a SCONE packet due to inconsistent Connection IDs, endpoints MAY
 also discard the QUIC packets that were coalesced into the same datagram.
 
 A receiver MAY discard a datagram that contains more than one SCONE packet.
-
-A SCONE packet is discarded if the rate signal is unknown (127).
+A receiver MUST discard a SCONE packet if the rate signal is unknown (127).
 
 If a connection uses multiple DSCP markings {{!RFC2474}},
 the throughput advice that is received on datagrams with one marking
@@ -613,7 +613,7 @@ and the indication bytes (0xc8, 0x13) as the final bytes of the UDP payload.
 
 The SCONE indication bytes MUST be sent in every datagram
 until the client receives any datagram from the server,
-at which point the client can be confident that the indication was received.
+at which point the client can reasonably expect that the indication was received.
 
 <!--
 This indicator is derived from the first two bytes of:
@@ -651,15 +651,15 @@ with respect to their enforcement of their rate limit policies.
 
 ## Indications for Migrated Flows
 
-Applications MAY decide to indicate support for SCONE on new flows,
-including when migrating to a new path (see {{Section 9 of QUIC}}).
 In QUIC version 1 and 2,
-the two byte indicator cannot be used on migration.
+the two byte indicator ({{indication}})
+cannot be used on migration to a new path.
 
 Sending a SCONE packet for the first few packets on a new path
 gives network elements on that path the ability
-to recognize the flow as being able to receive throughput advice
-and also gives the network element an opportunity to provide that throughput advice.
+to recognize the flow as being able to receive throughput advice.
+The SCONE packet also gives the network element an opportunity
+to provide throughput advice for the new flow.
 
 To enable this indication,
 even if an endpoint would not otherwise send SCONE packets,
@@ -751,6 +751,16 @@ even if they do not exceed the path MTU as a result,
 can be detected by applications and could be ignored.
 This document does not define a mechanism to support detection,
 but one might be added in future.
+
+Network elements MUST only update the content of datagrams
+on a given address tuple
+a few times each monitoring period.
+Network elements MAY update more often
+immediately after a change in their throughput advice,
+to reduce the reaction time from senders.
+If too many datagrams are altered,
+that could interfere with UDP protocols that are not QUIC;
+see {{other-protocols}}.
 
 
 ## Monitoring Flows {#monitoring}
@@ -1015,7 +1025,7 @@ a processing error at network elements. For example, they might pick connection
 identifiers of arbitrary length. Network elements can mitigate these attacks
 with an implementation that fully conforms to the specification of {{packet}}.
 
-## Damage to Other Protocols
+## Damage to Other Protocols {#other-protocols}
 
 Network elements that update SCONE packet fields might do that for datagrams
 exchanged in other protocols.
@@ -1029,12 +1039,9 @@ and is subsequently modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
-To that end, network elements MUST only update the content of datagrams
-on a given address tuple
-a few times each monitoring period.
-Network elements MAY update more often
-immediately after a change in their throughput advice,
-to reduce the reaction time from senders.
+To avoid unrecoverable damage to non-QUIC protocols,
+network elements only update a limited number of datagrams
+in each monitoring period; see {{apply}}.
 
 In addition, some heuristics might be used
 to detect SCONE-compatible QUIC flows.
