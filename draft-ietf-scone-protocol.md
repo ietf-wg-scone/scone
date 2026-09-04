@@ -122,20 +122,21 @@ The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.
 
-The propagation of SCONE packets, including the throughput advice that is added,
+The propagation of SCONE packets,
+including the throughput advice that is update by a network element,
 is shown in {{f-scone}}.
 
 ~~~ aasvg
-+--------+    +---------+     +----------+
-|  QUIC  |    | Network |     |   QUIC   |
-| Sender |    | Element |     | Receiver |
-+---+----+    +----+----+     +----+-----+
-    |              |               |
-    +--- SCONE --->|  SCONE+advice |
-    |    +QUIC     +---- +QUIC --->|
-    |              |               |  Validate QUIC packet
-    |              |               |  and record advice
-    |              |               |
++--------+       +---------+      +----------+
+|  QUIC  |       | Network |      |   QUIC   |
+| Sender |       | Element |      | Receiver |
++---+----+       +----+----+      +----+-----+
+    |                 |                |
+    +--- SCONE(?) --->|  SCONE(advice) |
+    |    +QUIC        +---- +QUIC ---->|
+    |                 |                |  Validate QUIC packet
+    |                 |                |  and record advice
+    |                 |                |
 ~~~
 {: #f-scone title="Propagation of SCONE signal"}
 
