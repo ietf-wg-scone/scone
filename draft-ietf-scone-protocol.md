@@ -406,8 +406,8 @@ value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
 The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
 Source Connection ID field, which is the case for packets with a short header
-({{Section 5.2 of INVARIANTS}}), the Source Connection ID field is empty
-and the Source Connection ID Length field is set to 0.
+({{Section 5.2 of INVARIANTS}}), the Source Connection ID field MUST be empty
+and the Source Connection ID Length field MUST be 0.
 
 SCONE packets MUST be coalesced with other QUIC packets
 (see {{Section 12.2 of QUIC}})
@@ -514,8 +514,7 @@ When discarding a SCONE packet due to inconsistent Connection IDs, endpoints MAY
 also discard the QUIC packets that were coalesced into the same datagram.
 
 A receiver MAY discard a datagram that contains more than one SCONE packet.
-
-A SCONE packet is discarded if the rate signal is unknown (127).
+A receiver MUST discard a SCONE packet if the rate signal is unknown (127).
 
 If a connection uses multiple DSCP markings {{!RFC2474}},
 the throughput advice that is received on datagrams with one marking
