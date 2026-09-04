@@ -1039,7 +1039,8 @@ and is subsequently modified,
 because that could mean that the protocol is
 effectively unable to operate end-to-end.
 
-Network elements only update a limited number of datagrams
+To avoid unrecoverable damage to non-QUIC protocols,
+network elements only update a limited number of datagrams
 in each monitoring period; see {{apply}}.
 
 In addition, some heuristics might be used
