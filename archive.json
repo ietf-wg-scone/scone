@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-01T04:03:23.142567+00:00",
+  "timestamp": "2026-09-06T03:27:17.106166+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15680,6 +15680,179 @@
               "updatedAt": "2026-08-30T06:23:39Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 162,
+      "id": "PR_kwDON1dwo88AAAABCLs1Mw",
+      "title": "Ionu\u021b's feedback",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/162",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is all pretty small editorial changes, but it makes the document much better.",
+      "createdAt": "2026-09-04T10:20:39Z",
+      "updatedAt": "2026-09-04T17:33:56Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "ionu\u021b",
+      "headRefOid": "b50b75c57fdb7e2954c16333206cf5a7458cf064",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABMMpVbA",
+          "commit": {
+            "abbreviatedOid": "b50b75c"
+          },
+          "author": "ionut-arm",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Thank you! :)",
+          "createdAt": "2026-09-04T13:30:38Z",
+          "updatedAt": "2026-09-04T13:30:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABMPFTVg",
+          "commit": {
+            "abbreviatedOid": "b50b75c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "My only problem with this change is that the \"apply\" section now contains a mix of normative advice and implementation guidance. This PR does not create the problem -- there is already a statement in the previous paragraph that the network element MUST NOT create fake SCONE packet. But I cannot help wondering whether the document would be better if we separate the mandates from the advice. Maybe move the advice to a subsection of \"apply\"?",
+          "createdAt": "2026-09-04T17:33:56Z",
+          "updatedAt": "2026-09-04T17:33:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 163,
+      "id": "PR_kwDON1dwo88AAAABCLxEpg",
+      "title": "Throughput enforcement needs to be authorized",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/163",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This came up from a reading by Claude.  It was a misunderstanding, but not an entirely unreasonable one.  The two statements here are separable, but it doesn't seem like that.  Adding a few more words makes the two things distinct:\r\n\r\n1. The deployment flexibility that SCONE allows: you can enforce at one point in the network and mark at another.\r\n2. That enforcement should not be informed by unauthenticated network signals.  Now, this should be obvious, we don't take consequential actions based on random unauthenticated gunk on the Internet, but it is worth being crisp.",
+      "createdAt": "2026-09-04T10:30:58Z",
+      "updatedAt": "2026-09-04T17:39:31Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "admin-unauth",
+      "headRefOid": "8d8dccdf0e9a8e18efe28e460c2c19e0875781e3",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABMPIEbA",
+          "commit": {
+            "abbreviatedOid": "8d8dccd"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "Same comment as in PR #162, mixing mandates and friendly advice. That makes the case for a clear separation of the mandate parts from the example parts.",
+          "createdAt": "2026-09-04T17:39:31Z",
+          "updatedAt": "2026-09-04T17:39:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 164,
+      "id": "PR_kwDON1dwo88AAAABCL586w",
+      "title": "Explicit/early comparison with congestion",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/164",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In discussion about the difference between SCONE and L4S, the main point of distinction was that SCONE provides an early signal that is explicit about throughput.  This was seen as a key advantage.  Highlighting that seems worthwhile.",
+      "createdAt": "2026-09-04T10:50:13Z",
+      "updatedAt": "2026-09-04T17:40:25Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "early-indication",
+      "headRefOid": "508090c4b3ea4983cf11f82aa737979e2b3cd5d1",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABMPIeng",
+          "commit": {
+            "abbreviatedOid": "508090c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes.",
+          "createdAt": "2026-09-04T17:40:25Z",
+          "updatedAt": "2026-09-04T17:40:25Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 165,
+      "id": "PR_kwDON1dwo88AAAABCL-Viw",
+      "title": "Expand some acronyms on first use",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/165",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Some of these aren't necessary, but it doesn't hurt to be explicit.",
+      "createdAt": "2026-09-04T10:59:24Z",
+      "updatedAt": "2026-09-04T17:41:18Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "eofu",
+      "headRefOid": "6acd11c50ee081cce3643b5ccf1c2874ed78e895",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABMPI4YQ",
+          "commit": {
+            "abbreviatedOid": "6acd11c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes.",
+          "createdAt": "2026-09-04T17:41:18Z",
+          "updatedAt": "2026-09-04T17:41:18Z",
+          "comments": []
         }
       ]
     }
