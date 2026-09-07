@@ -723,6 +723,30 @@ Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram;
 see {{?RFC1141}}.
 
+
+### When To Avoid Updating Throughput Advice
+
+A network element MUST NOT alter datagrams to add SCONE packets
+or synthesize datagrams that contain SCONE packets.
+The latter will not be accepted and the former,
+even if they do not exceed the path MTU as a result,
+can be detected by applications and could be ignored.
+This document does not define a mechanism to support detection,
+but one might be added in future.
+
+Network elements MUST only update the content of datagrams
+on a given address tuple
+a few times each monitoring period.
+Network elements MAY update more often
+immediately after a change in their throughput advice,
+to reduce the reaction time from senders.
+If too many datagrams are altered,
+that could interfere with UDP protocols that are not QUIC;
+see {{other-protocols}}.
+
+
+### Ensuring Throughput Advice Availability
+
 To avoid throughput advice expiring,
 a network element needs to ensure that it updates throughput advice in SCONE packets
 with no more than a monitoring period ({{time}}) between each update.
@@ -744,23 +768,6 @@ To reduce the risk of synchronization across multiple senders,
 which could cause network elements to miss updates,
 senders can include a small random delay.
 
-A network element MUST NOT alter datagrams to add SCONE packets
-or synthesize datagrams that contain SCONE packets.
-The latter will not be accepted and the former,
-even if they do not exceed the path MTU as a result,
-can be detected by applications and could be ignored.
-This document does not define a mechanism to support detection,
-but one might be added in future.
-
-Network elements MUST only update the content of datagrams
-on a given address tuple
-a few times each monitoring period.
-Network elements MAY update more often
-immediately after a change in their throughput advice,
-to reduce the reaction time from senders.
-If too many datagrams are altered,
-that could interfere with UDP protocols that are not QUIC;
-see {{other-protocols}}.
 
 
 ## Monitoring Flows {#monitoring}
