@@ -803,6 +803,9 @@ are expected to be negligible.
 If the network element cannot update the throughput advice in every SCONE packet
 (or can only do so periodically), a longer period might be used.
 
+
+### Deployment of Monitoring Functions
+
 Any monitoring and policy enforcement could be implemented
 in different network elements than the ones that signal throughput advice.
 This enables more flexible allocation of responsibilities
@@ -822,7 +825,7 @@ network elements do not have the capability to validate other QUIC packets
 contained in the same datagram; see {{fake-packets}}.
 
 
-## Flows That Exceed Throughput Advice {#policing}
+### Flows That Exceed Throughput Advice {#policing}
 
 A network could deploy policy enforcement that drops or delays packets
 to ensure that applications do not exceed throughput limits set in policy.
