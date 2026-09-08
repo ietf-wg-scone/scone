@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 3 March 2027                               Private Octopus Inc.
+Expires: 12 March 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                          30 August 2026
+                                                        8 September 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 March 2027.
+   This Internet-Draft will expire on 12 March 2027.
 
 Copyright Notice
 
@@ -98,6 +98,8 @@ Table of Contents
      6.4.  Avoiding Ossification When Reading the Indicator
    7.  Network Deployment
      7.1.  Applying Throughput Advice Signals
+       7.1.1.  When To Avoid Updating Throughput Advice
+       7.1.2.  Ensuring Throughput Advice Availability
      7.2.  Monitoring Flows
      7.3.  Flows That Exceed Throughput Advice
    8.  Endpoint Usage
@@ -170,18 +172,18 @@ Table of Contents
    the network element.
 
    The propagation of SCONE packets, including the throughput advice
-   that is added, is shown in Figure 1.
+   that is update by a network element, is shown in Figure 1.
 
-   +--------+    +---------+     +----------+
-   |  QUIC  |    | Network |     |   QUIC   |
-   | Sender |    | Element |     | Receiver |
-   +---+----+    +----+----+     +----+-----+
-       |              |               |
-       +--- SCONE --->|  SCONE+advice |
-       |    +QUIC     +---- +QUIC --->|
-       |              |               |  Validate QUIC packet
-       |              |               |  and record advice
-       |              |               |
+   +--------+       +---------+      +----------+
+   |  QUIC  |       | Network |      |   QUIC   |
+   | Sender |       | Element |      | Receiver |
+   +---+----+       +----+----+      +----+-----+
+       |                 |                |
+       +--- SCONE(?) --->|  SCONE(advice) |
+       |    +QUIC        +---- +QUIC ---->|
+       |                 |                |  Validate QUIC packet
+       |                 |                |  and record advice
+       |                 |                |
 
                    Figure 1: Propagation of SCONE signal
 
@@ -303,7 +305,7 @@ Table of Contents
    encapsulates tunneled flows (such as [CONNECT-UDP]) they can only
    provide the advice to the outermost flow.  Endpoints can apply the
    throughput advice to packets in flows that are subsequently
-   encapsulated, but following that advice can have security
+   encapsulated, but following that advice can have privacy
    implications; see Section 10.2.
 
 3.4.  Unidirectional Signal
@@ -435,8 +437,8 @@ Table of Contents
    ID field of any packet that follows.  If the next packet in the
    datagram does not have a Source Connection ID field, which is the
    case for packets with a short header (Section 5.2 of [INVARIANTS]),
-   the Source Connection ID field is empty and the Source Connection ID
-   Length field is set to 0.
+   the Source Connection ID field MUST be empty and the Source
+   Connection ID Length field MUST be 0.
 
    SCONE packets MUST be coalesced with other QUIC packets (see
    Section 12.2 of [QUIC]) and MUST be included as the first packet in a
@@ -563,9 +565,8 @@ Table of Contents
    the same datagram.
 
    A receiver MAY discard a datagram that contains more than one SCONE
-   packet.
-
-   A SCONE packet is discarded if the rate signal is unknown (127).
+   packet.  A receiver MUST discard a SCONE packet if the rate signal is
+   unknown (127).
 
    If a connection uses multiple DSCP markings [RFC2474], the throughput
    advice that is received on datagrams with one marking might not apply
@@ -647,7 +648,7 @@ Table of Contents
 
    The SCONE indication bytes MUST be sent in every datagram until the
    client receives any datagram from the server, at which point the
-   client can be confident that the indication was received.
+   client can reasonably expect that the indication was received.
 
    A client that uses a QUIC version that sends length-delimited packets
    during the handshake, which includes QUIC versions 1 [QUIC] and 2
@@ -677,15 +678,14 @@ Table of Contents
 
 6.3.  Indications for Migrated Flows
 
-   Applications MAY decide to indicate support for SCONE on new flows,
-   including when migrating to a new path (see Section 9 of [QUIC]).  In
-   QUIC version 1 and 2, the two byte indicator cannot be used on
-   migration.
+   In QUIC version 1 and 2, the two byte indicator (Section 6.1) cannot
+   be used on migration to a new path.
 
    Sending a SCONE packet for the first few packets on a new path gives
    network elements on that path the ability to recognize the flow as
-   being able to receive throughput advice and also gives the network
-   element an opportunity to provide that throughput advice.
+   being able to receive throughput advice.  The SCONE packet also gives
+   the network element an opportunity to provide throughput advice for
+   the new flow.
 
    To enable this indication, even if an endpoint would not otherwise
    send SCONE packets, endpoints can send a SCONE packet any time they
@@ -744,6 +744,24 @@ Table of Contents
    Once the throughput advice is updated, the network element updates
    the UDP checksum for the datagram; see [RFC1141].
 
+7.1.1.  When To Avoid Updating Throughput Advice
+
+   A network element MUST NOT alter datagrams to add SCONE packets or
+   synthesize datagrams that contain SCONE packets.  The latter will not
+   be accepted and the former, even if they do not exceed the path MTU
+   as a result, can be detected by applications and could be ignored.
+   This document does not define a mechanism to support detection, but
+   one might be added in future.
+
+   Network elements MUST only update the content of datagrams on a given
+   address tuple a few times each monitoring period.  Network elements
+   MAY update more often immediately after a change in their throughput
+   advice, to reduce the reaction time from senders.  If too many
+   datagrams are altered, that could interfere with UDP protocols that
+   are not QUIC; see Section 9.3.
+
+7.1.2.  Ensuring Throughput Advice Availability
+
    To avoid throughput advice expiring, a network element needs to
    ensure that it updates throughput advice in SCONE packets with no
    more than a monitoring period (Section 5.2) between each update.
@@ -762,13 +780,6 @@ Table of Contents
    that throughput advice is not lost.  To reduce the risk of
    synchronization across multiple senders, which could cause network
    elements to miss updates, senders can include a small random delay.
-
-   A network element MUST NOT alter datagrams to add SCONE packets or
-   synthesize datagrams that contain SCONE packets.  The latter will not
-   be accepted and the former, even if they do not exceed the path MTU
-   as a result, can be detected by applications and could be ignored.
-   This document does not define a mechanism to support detection, but
-   one might be added in future.
 
 7.2.  Monitoring Flows
 
@@ -1021,11 +1032,9 @@ Table of Contents
    subsequently modified, because that could mean that the protocol is
    effectively unable to operate end-to-end.
 
-   To that end, network elements MUST only update the content of
-   datagrams on a given address tuple a few times each monitoring
-   period.  Network elements MAY update more often immediately after a
-   change in their throughput advice, to reduce the reaction time from
-   senders.
+   To avoid unrecoverable damage to non-QUIC protocols, network elements
+   only update a limited number of datagrams in each monitoring period;
+   see Section 7.1.
 
    In addition, some heuristics might be used to detect SCONE-compatible
    QUIC flows.  This includes identification of a QUIC handshake on the
