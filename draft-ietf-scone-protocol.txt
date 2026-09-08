@@ -101,7 +101,8 @@ Table of Contents
        7.1.1.  When To Avoid Updating Throughput Advice
        7.1.2.  Ensuring Throughput Advice Availability
      7.2.  Monitoring Flows
-     7.3.  Flows That Exceed Throughput Advice
+       7.2.1.  Deployment of Monitoring Functions
+       7.2.2.  Flows That Exceed Throughput Advice
    8.  Endpoint Usage
      8.1.  Providing Opportunities to Apply Throughput Advice Signals
      8.2.  Feedback To Sender About Signals
@@ -271,7 +272,7 @@ Table of Contents
    indication of expected throughput.  In addition to endpoints
    respecting congestion signals (see Section 3.1), networks might need
    to monitor and enforce policies, even where applications attempt to
-   follow advice (see Section 7.3).
+   follow advice (see Section 7.2.2).
 
    The advised throughput will likely only be achievable when the
    application is the only entity consuming bandwidth in the scope that
@@ -371,7 +372,7 @@ Table of Contents
    Following throughput advice could reduce the impact of an application
    on other network users, reserves capacity for high-priority
    activities, and could avoid potential enforcement action by the
-   network; see Section 7.3.
+   network; see Section 7.2.2.
 
 4.  Conventions and Definitions
 
@@ -820,15 +821,24 @@ Table of Contents
    throughput advice in every SCONE packet (or can only do so
    periodically), a longer period might be used.
 
+7.2.1.  Deployment of Monitoring Functions
+
    Any monitoring and policy enforcement could be implemented in
    different network elements than the ones that signal throughput
-   advice.  However, network elements MUST NOT enforce throughput limits
-   based on throughput advice that are observed in SCONE packets
-   received from other entities.  Unlike endpoints, network elements do
-   not have the capability to validate other QUIC packets contained in
-   the same datagram; see Section 9.2.
+   advice.  This enables more flexible allocation of responsibilities
+   between nodes in the same administrative domain.
 
-7.3.  Flows That Exceed Throughput Advice
+   SCONE packets can cross administrative boundaries, which means that
+   network elements might observe throughput advice on SCONE packets
+   that have transited other networks.  A network element MUST NOT
+   enforce throughput limits based on throughput advice that is observed
+   in SCONE packets received from other entities.  Any enforcement
+   action needs to be the result of configuration or other authorized
+   administrative action, not unauthenticated network signals.  Unlike
+   endpoints, network elements do not have the capability to validate
+   other QUIC packets contained in the same datagram; see Section 9.2.
+
+7.2.2.  Flows That Exceed Throughput Advice
 
    A network could deploy policy enforcement that drops or delays
    packets to ensure that applications do not exceed throughput limits
@@ -949,7 +959,7 @@ Table of Contents
    SCONE throughput advice is not authenticated.  Throughput advice
    might be incorrectly set in order to encourage endpoints to behave in
    ways that are not in their interests.  Endpoints can ignore limits,
-   though that can have consequences; see Section 7.3.  The congestion
+   though that can have consequences; see Section 7.2.2.  The congestion
    controller employed by a sender provides real-time information about
    the rate at which the network path is delivering data.
 
