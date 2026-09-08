@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-06T03:27:17.106166+00:00",
+  "timestamp": "2026-09-08T03:32:39.147969+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15688,24 +15688,26 @@
       "id": "PR_kwDON1dwo88AAAABCLs1Mw",
       "title": "Ionu\u021b's feedback",
       "url": "https://github.com/ietf-wg-scone/scone/pull/162",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This is all pretty small editorial changes, but it makes the document much better.",
       "createdAt": "2026-09-04T10:20:39Z",
-      "updatedAt": "2026-09-04T17:33:56Z",
+      "updatedAt": "2026-09-08T00:47:35Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "ionu\u021b",
       "headRefOid": "b50b75c57fdb7e2954c16333206cf5a7458cf064",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-08T00:47:35Z",
+      "mergedAt": "2026-09-08T00:47:35Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "36bd151a335dca886a71e0551160d732516926fd"
+      },
       "comments": [],
       "reviews": [
         {
@@ -15741,25 +15743,35 @@
       "id": "PR_kwDON1dwo88AAAABCLxEpg",
       "title": "Throughput enforcement needs to be authorized",
       "url": "https://github.com/ietf-wg-scone/scone/pull/163",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This came up from a reading by Claude.  It was a misunderstanding, but not an entirely unreasonable one.  The two statements here are separable, but it doesn't seem like that.  Adding a few more words makes the two things distinct:\r\n\r\n1. The deployment flexibility that SCONE allows: you can enforce at one point in the network and mark at another.\r\n2. That enforcement should not be informed by unauthenticated network signals.  Now, this should be obvious, we don't take consequential actions based on random unauthenticated gunk on the Internet, but it is worth being crisp.",
       "createdAt": "2026-09-04T10:30:58Z",
-      "updatedAt": "2026-09-04T17:39:31Z",
+      "updatedAt": "2026-09-08T01:31:17Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "admin-unauth",
       "headRefOid": "8d8dccdf0e9a8e18efe28e460c2c19e0875781e3",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2026-09-08T01:31:17Z",
+      "mergedAt": "2026-09-08T01:31:17Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "f67bad1de46f3e6e6e587a929c094d63b0b01d88"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fair.  These sections are getting long.  I've created a PR stack that makes a subsection for this deployment-related stuff.",
+          "createdAt": "2026-09-07T02:34:06Z",
+          "updatedAt": "2026-09-07T02:34:06Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo88AAAABMPIEbA",
@@ -15852,6 +15864,90 @@
           "body": "Yes.",
           "createdAt": "2026-09-04T17:41:18Z",
           "updatedAt": "2026-09-04T17:41:18Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 166,
+      "id": "PR_kwDON1dwo88AAAABCc-jIQ",
+      "title": "Add subheadings to apply section",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/166",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This breaks out two subsections and reorders those.\r\n\r\nNo text changes.",
+      "createdAt": "2026-09-07T02:24:29Z",
+      "updatedAt": "2026-09-08T01:30:56Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "ionu\u021b",
+      "baseRefOid": "b50b75c57fdb7e2954c16333206cf5a7458cf064",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "apply-split",
+      "headRefOid": "c1188c9b6acb48bcec0048af63fd31b54601611b",
+      "closedAt": "2026-09-08T00:47:36Z",
+      "mergedAt": "2026-09-08T00:47:36Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "36bd151a335dca886a71e0551160d732516926fd"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABMbL6-Q",
+          "commit": {
+            "abbreviatedOid": "c1188c9"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks for separating that text.",
+          "createdAt": "2026-09-07T06:41:33Z",
+          "updatedAt": "2026-09-07T06:41:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 168,
+      "id": "PR_kwDON1dwo88AAAABCdA5SA",
+      "title": "Change monitoring section layout",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/168",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This moves some of the text from the monitoring section into a subsection. It also moves the policing text to a subsection.  No new text, other than a title.",
+      "createdAt": "2026-09-07T02:33:05Z",
+      "updatedAt": "2026-09-08T01:31:18Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "admin-unauth",
+      "baseRefOid": "8d8dccdf0e9a8e18efe28e460c2c19e0875781e3",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "monitoring-split",
+      "headRefOid": "bc74ebc1261fece70cbea6fd29a16240f67ec297",
+      "closedAt": "2026-09-08T01:31:18Z",
+      "mergedAt": "2026-09-08T01:31:18Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "f67bad1de46f3e6e6e587a929c094d63b0b01d88"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABMbLUKw",
+          "commit": {
+            "abbreviatedOid": "bc74ebc"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK.",
+          "createdAt": "2026-09-07T06:40:08Z",
+          "updatedAt": "2026-09-07T06:40:08Z",
           "comments": []
         }
       ]
