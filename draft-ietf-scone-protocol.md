@@ -820,17 +820,29 @@ are expected to be negligible.
 If the network element cannot update the throughput advice in every SCONE packet
 (or can only do so periodically), a longer period might be used.
 
+
+### Deployment of Monitoring Functions
+
 Any monitoring and policy enforcement could be implemented
 in different network elements than the ones that signal throughput advice.
-However, network elements MUST NOT enforce throughput limits
-based on throughput advice that are observed in SCONE packets
+This enables more flexible allocation of responsibilities
+between nodes in the same administrative domain.
+
+SCONE packets can cross administrative boundaries,
+which means that network elements might observe throughput advice
+on SCONE packets that have transited other networks.
+A network element MUST NOT enforce throughput limits
+based on throughput advice that is observed in SCONE packets
 received from other entities.
+Any enforcement action needs to be the result of configuration
+or other authorized administrative action,
+not unauthenticated network signals.
 Unlike endpoints,
 network elements do not have the capability to validate other QUIC packets
 contained in the same datagram; see {{fake-packets}}.
 
 
-## Flows That Exceed Throughput Advice {#policing}
+### Flows That Exceed Throughput Advice {#policing}
 
 A network could deploy policy enforcement that drops or delays packets
 to ensure that applications do not exceed throughput limits set in policy.
