@@ -1054,7 +1054,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 12 March 2027</td>
+<td class="center">Expires 13 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-08" class="published">8 September 2026</time>
+<time datetime="2026-09-09" class="published">9 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-12">12 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-13">13 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ complementary to real-time congestion control signals.<a href="#section-abstract
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1358,7 +1358,8 @@ qualifies as a network element that can use SCONE packets
 to provide throughput advice to QUIC endpoints.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">Networks with rate limits can use SCONE to send throughput advice
 to cooperating endpoints to limit overall network usage.
-Where congestion control signals -- such as ECN, delays and loss --
+Where congestion control signals --
+such as Explicit Congestion Notification (ECN) <span>[<a href="#ECN" class="cite xref">ECN</a>]</span>, delays and loss --
 operate on a time scale of a round trip time,
 throughput advice operates over a much longer period.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This has benefits in some networks
@@ -1626,7 +1627,8 @@ might adapt their use of network capacity in response to advice.<a href="#sectio
 that can offer improved performance when following advice.
 For instance, real-time and streaming video applications
 can often dynamically adapt their network usage.
-Typical HTTP Live Streaming <span>[<a href="#HLS" class="cite xref">HLS</a>]</span> or DASH <span>[<a href="#DASH" class="cite xref">DASH</a>]</span>
+Typical HTTP Live Streaming <span>[<a href="#HLS" class="cite xref">HLS</a>]</span>
+or Dynamic Adaptive Streaming over HTTP <span>[<a href="#DASH" class="cite xref">DASH</a>]</span>
 clients are provided with manifests that allow them to
 adjust the bitrate and quality of media segments
 based on available network capacity.
@@ -1861,7 +1863,8 @@ when rates increase.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 also helps avoid synchronization with other periodic
 effects that are commonly measured in whole seconds.
 This includes segment length or key frame intervals in video applications,
-but also includes timers for NAT devices; see <span><a href="https://rfc-editor.org/rfc/rfc4787#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC4787" class="cite xref">RFC4787</a>]</span>.
+but also includes timers for Network Address Translation (NAT) devices;
+see <span><a href="https://rfc-editor.org/rfc/rfc4787#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC4787" class="cite xref">RFC4787</a>]</span>.
 Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
@@ -1886,7 +1889,7 @@ Connection ID is inconsistent, the SCONE packet <span class="bcp14">MAY</span> b
 also discard the QUIC packets that were coalesced into the same datagram.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 <p id="section-5.3-4">A receiver <span class="bcp14">MAY</span> discard a datagram that contains more than one SCONE packet.
 A receiver <span class="bcp14">MUST</span> discard a SCONE packet if the rate signal is unknown (127).<a href="#section-5.3-4" class="pilcrow">¶</a></p>
-<p id="section-5.3-5">If a connection uses multiple DSCP markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
+<p id="section-5.3-5">If a connection uses multiple Differentiated Services Code Point (DSCP) markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
 the throughput advice that is received on datagrams with one marking
 might not apply to datagrams that have different markings.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
 </section>

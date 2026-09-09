@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 12 March 2027                              Private Octopus Inc.
+Expires: 13 March 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        8 September 2026
+                                                        9 September 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 March 2027.
+   This Internet-Draft will expire on 13 March 2027.
 
 Copyright Notice
 
@@ -147,9 +147,10 @@ Table of Contents
 
    Networks with rate limits can use SCONE to send throughput advice to
    cooperating endpoints to limit overall network usage.  Where
-   congestion control signals -- such as ECN, delays and loss -- operate
-   on a time scale of a round trip time, throughput advice operates over
-   a much longer period.
+   congestion control signals -- such as Explicit Congestion
+   Notification (ECN) [ECN], delays and loss -- operate on a time scale
+   of a round trip time, throughput advice operates over a much longer
+   period.
 
    This has benefits in some networks as endpoints can adapt network
    usage to better suit network conditions.  For example, radio networks
@@ -363,11 +364,12 @@ Table of Contents
    Some applications offer options for rate control that can offer
    improved performance when following advice.  For instance, real-time
    and streaming video applications can often dynamically adapt their
-   network usage.  Typical HTTP Live Streaming [HLS] or DASH [DASH]
-   clients are provided with manifests that allow them to adjust the
-   bitrate and quality of media segments based on available network
-   capacity.  Low priority bulk transfer applications, such as software
-   updates, might also choose to follow advice.
+   network usage.  Typical HTTP Live Streaming [HLS] or Dynamic Adaptive
+   Streaming over HTTP [DASH] clients are provided with manifests that
+   allow them to adjust the bitrate and quality of media segments based
+   on available network capacity.  Low priority bulk transfer
+   applications, such as software updates, might also choose to follow
+   advice.
 
    Following throughput advice could reduce the impact of an application
    on other network users, reserves capacity for high-priority
@@ -538,10 +540,10 @@ Table of Contents
    The choice of 67 seconds, as a prime number, also helps avoid
    synchronization with other periodic effects that are commonly
    measured in whole seconds.  This includes segment length or key frame
-   intervals in video applications, but also includes timers for NAT
-   devices; see Section 4.3 of [RFC4787].  Any repeating phenomenon at a
-   67 second interval is therefore unlikely to be due to other periodic
-   effects.
+   intervals in video applications, but also includes timers for Network
+   Address Translation (NAT) devices; see Section 4.3 of [RFC4787].  Any
+   repeating phenomenon at a 67 second interval is therefore unlikely to
+   be due to other periodic effects.
 
 5.3.  Endpoint Processing of SCONE Packets
 
@@ -569,9 +571,10 @@ Table of Contents
    packet.  A receiver MUST discard a SCONE packet if the rate signal is
    unknown (127).
 
-   If a connection uses multiple DSCP markings [RFC2474], the throughput
-   advice that is received on datagrams with one marking might not apply
-   to datagrams that have different markings.
+   If a connection uses multiple Differentiated Services Code Point
+   (DSCP) markings [RFC2474], the throughput advice that is received on
+   datagrams with one marking might not apply to datagrams that have
+   different markings.
 
 5.4.  Following Throughput Advice
 
