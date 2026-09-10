@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-08T03:32:39.147969+00:00",
+  "timestamp": "2026-09-10T03:34:36.024388+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3390,6 +3390,30 @@
           "body": "Good discussion, but it doesn't seem like there is a concrete action proposed.",
           "createdAt": "2026-07-30T06:45:32Z",
           "updatedAt": "2026-07-30T06:45:32Z"
+        }
+      ]
+    },
+    {
+      "number": 170,
+      "id": "I_kwDON1dwo88AAAABQd1cYQ",
+      "title": "Moved text seems to need a cross ref to explain itself",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/170",
+      "state": "OPEN",
+      "author": "gorryfair",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This text was previously in the section on damaging other protocols: \"Network elements MUST only update the content of datagrams on a given address tuple a few times each monitoring period\", please can we add a cross reference to that section, so a read knows \"why\" this is important.",
+      "createdAt": "2026-09-09T13:21:42Z",
+      "updatedAt": "2026-09-10T01:04:28Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "That paragraph ends with exactly that xref, and a precis of the reasoning:\n\n> If too many datagrams are altered,\n> that could interfere with UDP protocols that are not QUIC;\n> see {{other-protocols}}.",
+          "createdAt": "2026-09-10T01:04:28Z",
+          "updatedAt": "2026-09-10T01:04:28Z"
         }
       ]
     }
@@ -15793,24 +15817,26 @@
       "id": "PR_kwDON1dwo88AAAABCL586w",
       "title": "Explicit/early comparison with congestion",
       "url": "https://github.com/ietf-wg-scone/scone/pull/164",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "In discussion about the difference between SCONE and L4S, the main point of distinction was that SCONE provides an early signal that is explicit about throughput.  This was seen as a key advantage.  Highlighting that seems worthwhile.",
       "createdAt": "2026-09-04T10:50:13Z",
-      "updatedAt": "2026-09-04T17:40:25Z",
+      "updatedAt": "2026-09-10T00:30:29Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "early-indication",
       "headRefOid": "508090c4b3ea4983cf11f82aa737979e2b3cd5d1",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-10T00:30:29Z",
+      "mergedAt": "2026-09-10T00:30:29Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "70c293a1f090427f4317368bcbbed5e48dbedf3a"
+      },
       "comments": [],
       "reviews": [
         {
@@ -15833,24 +15859,26 @@
       "id": "PR_kwDON1dwo88AAAABCL-Viw",
       "title": "Expand some acronyms on first use",
       "url": "https://github.com/ietf-wg-scone/scone/pull/165",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Some of these aren't necessary, but it doesn't hurt to be explicit.",
       "createdAt": "2026-09-04T10:59:24Z",
-      "updatedAt": "2026-09-04T17:41:18Z",
+      "updatedAt": "2026-09-09T02:17:06Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "348cb618cfc3abeb53b4cf286145d09840b445a8",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "eofu",
       "headRefOid": "6acd11c50ee081cce3643b5ccf1c2874ed78e895",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-09T02:17:06Z",
+      "mergedAt": "2026-09-09T02:17:06Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "76edb54abce86886765b1911a56224e92e7fd4fa"
+      },
       "comments": [],
       "reviews": [
         {
