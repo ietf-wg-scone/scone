@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 13 March 2027                              Private Octopus Inc.
+Expires: 14 March 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        9 September 2026
+                                                       10 September 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 March 2027.
+   This Internet-Draft will expire on 14 March 2027.
 
 Copyright Notice
 
@@ -225,20 +225,23 @@ Table of Contents
    SCONE throughput advice is not a substitute for congestion feedback
    or congestion control.  They are complementary.  Congestion signals,
    such as acknowledgments or ECN markings [ECN][WHY-ECN], provide real-
-   time information on loss and delay for a network path, whereas SCONE
-   throughput advice operates over a much longer period.
+   time information on loss and delay for a network path.  A congestion
+   controller needs to detect changed conditions and change sending
+   behavior more quickly than SCONE allows.
 
-   A congestion controller needs to detect changed conditions and change
-   sending behavior more quickly than SCONE allows.  Congestion signals
-   can indicate a throughput limit that is different from the signaled
-   throughput advice.
+   In comparison, SCONE throughput advice operates over a much longer
+   period.  SCONE provides an explicit signal regarding potential
+   throughput constraints on a path.  This allows applications to set
+   throughput targets quickly, without waiting for congestion signals to
+   resolve the achievable throughput.
 
-   Endpoints cannot assume that the rate indicated in throughput advice
-   is achievable if congestion signals indicate otherwise.  Congestion
-   could be experienced at a different point on the network path than
-   the network element that signals throughput advice.  Therefore,
-   endpoints need to respect the send rate constraints that are set by a
-   congestion controller.
+   Congestion signals can indicate a throughput limit that is different
+   from the signaled throughput advice.  Endpoints cannot assume that
+   the rate indicated in throughput advice is achievable if congestion
+   signals indicate otherwise.  Congestion could be experienced at a
+   different point on the network path than the network element that
+   signals throughput advice.  Therefore, endpoints need to respect the
+   send rate constraints that are set by a congestion controller.
 
    Networks can use SCONE to communicate throughput advice for reasons
    other than rate limiting policies.  For example, a network element in
