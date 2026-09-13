@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-10T03:34:36.024388+00:00",
+  "timestamp": "2026-09-13T03:44:38.934552+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3398,15 +3398,15 @@
       "id": "I_kwDON1dwo88AAAABQd1cYQ",
       "title": "Moved text seems to need a cross ref to explain itself",
       "url": "https://github.com/ietf-wg-scone/scone/issues/170",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gorryfair",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This text was previously in the section on damaging other protocols: \"Network elements MUST only update the content of datagrams on a given address tuple a few times each monitoring period\", please can we add a cross reference to that section, so a read knows \"why\" this is important.",
       "createdAt": "2026-09-09T13:21:42Z",
-      "updatedAt": "2026-09-10T01:04:28Z",
-      "closedAt": null,
+      "updatedAt": "2026-09-10T06:55:36Z",
+      "closedAt": "2026-09-10T06:55:36Z",
       "comments": [
         {
           "author": "martinthomson",
