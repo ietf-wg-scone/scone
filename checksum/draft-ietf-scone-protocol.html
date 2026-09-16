@@ -2099,10 +2099,11 @@ that the UDP checksum field remains valid for the modified datagram.
 A non-zero checksum can either be recomputed over the complete UDP
 datagram or updated incrementally. When performing an incremental
 checksum update, the method described in <span>[<a href="#RFC1624" class="cite xref">RFC1624</a>]</span> can be used.
-An incremental update <span class="bcp14">MUST NOT</span> be applied to a UDP checksum whose
-value is zero. When checksum computation results in a value of zero,
+When checksum computation results in a value of zero,
 the value 0xffff is placed in the UDP checksum field,
-as specified by <span>[<a href="#RFC768" class="cite xref">RFC768</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8200#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+as specified by <span>[<a href="#RFC768" class="cite xref">RFC768</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8200#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span>.
+An incremental update <span class="bcp14">MUST NOT</span> be applied to a UDP checksum whose
+value is zero.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <div id="when-to-avoid-updating-throughput-advice">
 <section id="section-7.1.1">
           <h4 id="name-when-to-avoid-updating-thro">
