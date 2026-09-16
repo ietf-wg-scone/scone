@@ -726,10 +726,15 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
     packet[1] = (packet[1] & 0x7f) | ((target_signal & 1) << 7)
 ~~~
 
-Once the throughput advice is updated,
-the network element updates the UDP checksum for the datagram;
-see {{?RFC1141}}.
-
+Once the throughput advice is updated, the network element MUST ensure
+that the UDP checksum field remains valid for the modified datagram.
+A non-zero checksum can either be recomputed over the complete UDP
+datagram or updated incrementally. When performing an incremental
+checksum update, the method described in {{?RFC1624}} can be used.
+An incremental update MUST NOT be applied to a UDP checksum whose
+value is zero. When checksum computation results in a value of zero,
+the value 0xffff is placed in the UDP checksum field,
+as specified by {{!RFC768}} and {{Section 8.1 of !RFC8200}}.
 
 ### When To Avoid Updating Throughput Advice
 
