@@ -731,10 +731,11 @@ that the UDP checksum field remains valid for the modified datagram.
 A non-zero checksum can either be recomputed over the complete UDP
 datagram or updated incrementally. When performing an incremental
 checksum update, the method described in {{?RFC1624}} can be used.
-An incremental update MUST NOT be applied to a UDP checksum whose
-value is zero. When checksum computation results in a value of zero,
+When checksum computation results in a value of zero,
 the value 0xffff is placed in the UDP checksum field,
 as specified by {{!RFC768}} and {{Section 8.1 of !RFC8200}}.
+An incremental update MUST NOT be applied to a UDP checksum whose
+value is zero.
 
 ### When To Avoid Updating Throughput Advice
 
