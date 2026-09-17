@@ -502,7 +502,7 @@ Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
 
-## Endpoint Processing of SCONE Packets
+## Endpoint Processing of SCONE Packets {#recv-advice}
 
 Processing a SCONE packet involves reading the value from the Rate Signal field.
 However, throughput advice MUST be ignored unless another packet from the same
@@ -1003,7 +1003,7 @@ endpoints.
 
 The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and could apply a rate limit policy.
-{{extra-packets}} states that endpoints only accept signals if the datagram
+{{recv-advice}} states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
 spurious throughput advice.
 
