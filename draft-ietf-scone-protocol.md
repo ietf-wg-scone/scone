@@ -937,6 +937,13 @@ The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
 for application data.
 
+A sender MUST NOT send a SCONE packet
+unless a QUIC packet is needed for other reasons.
+It is safe to allow throughput advice to lapse
+if the connection is otherwise idle,
+whereas induced activity wastes resources
+by keeping connections alive unnecessarily.
+
 A network element that wishes to signal updated throughput advice waits for the
 next SCONE packet in the desired direction; see {{apply}}.
 
