@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-13T03:44:38.934552+00:00",
+  "timestamp": "2026-09-17T03:55:09.815731+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15977,6 +15977,133 @@
           "createdAt": "2026-09-07T06:40:08Z",
           "updatedAt": "2026-09-07T06:40:08Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 171,
+      "id": "PR_kwDON1dwo88AAAABDzGz2A",
+      "title": "Expanded checksum text",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/171",
+      "state": "OPEN",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Based on int-dir review comment from Andrew Yourtchenko.",
+      "createdAt": "2026-09-16T16:34:13Z",
+      "updatedAt": "2026-09-17T01:49:57Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "checksum",
+      "headRefOid": "48a70084a72c1141c1a234d95cb58e24aeb054e5",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABN39Xjw",
+          "commit": {
+            "abbreviatedOid": "8890eb9"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-16T17:29:15Z",
+          "updatedAt": "2026-09-16T17:29:15Z",
+          "comments": [
+            {
+              "originalPosition": 14,
+              "body": "If we need to warn of the need to replace a resulting zero checksum with 0xffff, then this needs to be moved one sentence back to the discussion of updating, and not here.",
+              "createdAt": "2026-09-16T17:29:15Z",
+              "updatedAt": "2026-09-16T17:29:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABN42iMQ",
+          "commit": {
+            "abbreviatedOid": "48a7008"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I think we are stating the obvious. I can see that we want to do that, but we probably don't need a 10 lines paragraph to belabor the point.",
+          "createdAt": "2026-09-16T18:51:55Z",
+          "updatedAt": "2026-09-16T18:52:49Z",
+          "comments": [
+            {
+              "originalPosition": 18,
+              "body": "I would just keep the first 2 lines of this paragraph, maybe with a reference to RFC1624.",
+              "createdAt": "2026-09-16T18:51:55Z",
+              "updatedAt": "2026-09-16T18:52:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABN72YEw",
+          "commit": {
+            "abbreviatedOid": "48a7008"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I had no idea that this was as messy as all this when I added a reference.  I see how zero is impossible and so this can use the non-zero logic, but it's better if we leave this to citations rather than detail the process again (and risk getting it wrong).  See #172 for my preferred solution to this one.",
+          "createdAt": "2026-09-17T01:49:56Z",
+          "updatedAt": "2026-09-17T01:49:56Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 172,
+      "id": "PR_kwDON1dwo88AAAABD2tzqA",
+      "title": "Andrew's feedback",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/172",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The most substantial piece here was the UDP checksum piece, for which I also see @ihlar has a proposed changes in #171.\r\n\r\nI think that I prefer the lighter option; rather than document the process, explain that implementers will need to go off and do their homework.",
+      "createdAt": "2026-09-17T01:29:20Z",
+      "updatedAt": "2026-09-17T01:48:24Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "andrew",
+      "headRefOid": "0a003e652ccb35167ba2eb1423e26bc688da3035",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABN7zzsw",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Looks good, with the proper references for the UDP checksum.\n\nI was going to comment on the \"non-negligible risk of collision\". I had to update my Scone unit tests because of that -- 1/2^16 is not that small, and negative tests (do not send the indicator) were occasionally failing. The first obvious test is to check that the top bit of the first byte of the UDP payload is 1, indicating a QUIC long header packet. That will rule out collisions with QUIC 1rtt packets. But maybe we don't need to say that.",
+          "createdAt": "2026-09-17T01:42:49Z",
+          "updatedAt": "2026-09-17T01:48:24Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Yes, that's in improvement.",
+              "createdAt": "2026-09-17T01:42:49Z",
+              "updatedAt": "2026-09-17T01:48:24Z"
+            }
+          ]
         }
       ]
     }
