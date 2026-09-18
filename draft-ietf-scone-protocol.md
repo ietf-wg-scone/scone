@@ -731,9 +731,8 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
 Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram.
 This can be a complex process
-that needs to account for special values of 0x0000 and 0xffff;
-see {{?RFC1141}}, {{?RFC1624}}, {{?RFC6936}}, and {{Section 8.1 of ?RFC8200}}
-for details.
+that needs to account for the special values 0x0000 and 0xffff;
+see {{?RFC1141}} and {{Section 8.1 of ?RFC8200}} for details.
 
 
 ### When To Avoid Updating Throughput Advice
@@ -943,7 +942,7 @@ is the reduction in available space in datagrams
 for application data.
 
 A sender MUST NOT send a SCONE packet
-unless a QUIC packet is needed for other reasons.
+unless a QUIC packet needs to be sent for other reasons.
 It is safe to allow throughput advice to lapse
 if the connection is otherwise idle,
 whereas induced activity wastes resources
