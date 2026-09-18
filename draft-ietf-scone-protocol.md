@@ -502,7 +502,7 @@ Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.
 
 
-## Endpoint Processing of SCONE Packets
+## Endpoint Processing of SCONE Packets {#recv-advice}
 
 Processing a SCONE packet involves reading the value from the Rate Signal field.
 However, throughput advice MUST be ignored unless another packet from the same
@@ -636,7 +636,7 @@ the indication can be included in every datagram the client sends
 until it receives a response -- of any kind -- from the server.
 
 
-## Limitations of Indication
+## Limitations of Indication {#indicator-limits}
 
 This indication does not mean that SCONE signals will be respected,
 only that the client is able to negotiate SCONE.
@@ -678,9 +678,11 @@ but only if the peer has sent the transport parameter; see {{tp}}.
 ## Avoiding Ossification When Reading the Indicator
 
 A network element could classify all 5-tuples where the first observed UDP
-datagram ends in the indicator bytes as potential SCONE. A network element MAY
+datagram ends in the indicator bytes as potential SCONE.
+However, this is not a strong indicator (see {{indicator-limits}}),
+so network elements are encouraged to
 apply further criteria to further reduce the set of flows that are identified
-as potentially supporting SCONE, reducing the likelihood of false positives.
+as potentially supporting SCONE to reduce the likelihood of false positives.
 However, it SHOULD NOT apply criteria that reduce the ability of new QUIC
 versions to employ SCONE. SCONE operates independently of any specific QUIC
 version, so any criteria should consult the QUIC version invariants in
@@ -727,8 +729,10 @@ if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
 ~~~
 
 Once the throughput advice is updated,
-the network element updates the UDP checksum for the datagram;
-see {{?RFC1141}}.
+the network element updates the UDP checksum for the datagram.
+This can be a complex process
+that needs to account for the special values 0x0000 and 0xffff;
+see {{?RFC1141}} and {{Section 8.1 of ?RFC8200}} for details.
 
 
 ### When To Avoid Updating Throughput Advice
@@ -937,6 +941,13 @@ The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
 for application data.
 
+A sender MUST NOT send a SCONE packet
+unless a QUIC packet needs to be sent for other reasons.
+It is safe to allow throughput advice to lapse
+if the connection is otherwise idle,
+whereas induced activity wastes resources
+by keeping connections alive unnecessarily.
+
 A network element that wishes to signal updated throughput advice waits for the
 next SCONE packet in the desired direction; see {{apply}}.
 
@@ -991,7 +1002,7 @@ endpoints.
 
 The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and could apply a rate limit policy.
-{{extra-packets}} states that endpoints only accept signals if the datagram
+{{recv-advice}} states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
 spurious throughput advice.
 
@@ -1269,5 +1280,5 @@ Notes:
 specification that forms the basis for a large part of this document.
 The following people also contributed significantly
 to the development of the protocol: {{{Alan Frindell}}},
-{{{Gorry Fairhurst}}}, {{{Kevin Smith}}}, {{{Martin Duke}}},
-and {{{Zaheduzzaman Sarker}}}.
+{{{Andrew Yourtchenko}}}, {{{Gorry Fairhurst}}}, {{{Ionuț Mihalcea}}},
+{{{Kevin Smith}}}, {{{Martin Duke}}}, and {{{Zaheduzzaman Sarker}}}.
