@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 21 March 2027                              Private Octopus Inc.
+Expires: 22 March 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       17 September 2026
+                                                       18 September 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 March 2027.
+   This Internet-Draft will expire on 22 March 2027.
 
 Copyright Notice
 
@@ -751,9 +751,8 @@ Table of Contents
 
    Once the throughput advice is updated, the network element updates
    the UDP checksum for the datagram.  This can be a complex process
-   that needs to account for special values of 0x0000 and 0xffff; see
-   [RFC1141], [RFC1624], [RFC6936], and Section 8.1 of [RFC8200] for
-   details.
+   that needs to account for the special values 0x0000 and 0xffff; see
+   [RFC1141] and Section 8.1 of [RFC8200] for details.
 
 7.1.1.  When To Avoid Updating Throughput Advice
 
@@ -928,10 +927,10 @@ Table of Contents
    The main cost associated with sending SCONE packets is the reduction
    in available space in datagrams for application data.
 
-   A sender MUST NOT send a SCONE packet unless a QUIC packet is needed
-   for other reasons.  It is safe to allow throughput advice to lapse if
-   the connection is otherwise idle, whereas induced activity wastes
-   resources by keeping connections alive unnecessarily.
+   A sender MUST NOT send a SCONE packet unless a QUIC packet needs to
+   be sent for other reasons.  It is safe to allow throughput advice to
+   lapse if the connection is otherwise idle, whereas induced activity
+   wastes resources by keeping connections alive unnecessarily.
 
    A network element that wishes to signal updated throughput advice
    waits for the next SCONE packet in the desired direction; see
@@ -1283,20 +1282,10 @@ Table of Contents
               Internet checksum", RFC 1141, DOI 10.17487/RFC1141,
               January 1990, <https://www.rfc-editor.org/rfc/rfc1141>.
 
-   [RFC1624]  Rijsinghani, A., Ed., "Computation of the Internet
-              Checksum via Incremental Update", RFC 1624,
-              DOI 10.17487/RFC1624, May 1994,
-              <https://www.rfc-editor.org/rfc/rfc1624>.
-
    [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
               Translation (NAT) Behavioral Requirements for Unicast
               UDP", BCP 127, RFC 4787, DOI 10.17487/RFC4787, January
               2007, <https://www.rfc-editor.org/rfc/rfc4787>.
-
-   [RFC6936]  Fairhurst, G. and M. Westerlund, "Applicability Statement
-              for the Use of IPv6 UDP Datagrams with Zero Checksums",
-              RFC 6936, DOI 10.17487/RFC6936, April 2013,
-              <https://www.rfc-editor.org/rfc/rfc6936>.
 
    [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
               (IPv6) Specification", STD 86, RFC 8200,
