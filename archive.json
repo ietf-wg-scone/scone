@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-17T03:55:09.815731+00:00",
+  "timestamp": "2026-09-20T03:54:45.506652+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -15985,25 +15985,40 @@
       "id": "PR_kwDON1dwo88AAAABDzGz2A",
       "title": "Expanded checksum text",
       "url": "https://github.com/ietf-wg-scone/scone/pull/171",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "ihlar",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Based on int-dir review comment from Andrew Yourtchenko.",
       "createdAt": "2026-09-16T16:34:13Z",
-      "updatedAt": "2026-09-17T01:49:57Z",
+      "updatedAt": "2026-09-17T09:29:39Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "checksum",
       "headRefOid": "48a70084a72c1141c1a234d95cb58e24aeb054e5",
-      "closedAt": null,
+      "closedAt": "2026-09-17T09:29:39Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "LGTM - The first two sentences are important, the last two provide detail that I wouldn't be against (it's bad to get this wrong - but then this might be already obvious).\r\n\r\n... On the other hand: Intermittent middlebox implementation bugs are not easy to diagnose and are often less easy to fix operationally, so maybe it is wiser to just spell-out what is needed?",
+          "createdAt": "2026-09-17T06:49:56Z",
+          "updatedAt": "2026-09-17T07:31:42Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I had no idea that this was as messy as all this when I added a reference. I see how zero is impossible and so this can use the non-zero logic, but it's better if we leave this to citations rather than detail the process again (and risk getting it wrong). See #172 for my preferred solution to this one.\r\n\r\nYeah that approach is better, thanks. I'll close this PR. ",
+          "createdAt": "2026-09-17T09:29:39Z",
+          "updatedAt": "2026-09-17T09:29:39Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo88AAAABN39Xjw",
@@ -16072,13 +16087,13 @@
       "labels": [],
       "body": "The most substantial piece here was the UDP checksum piece, for which I also see @ihlar has a proposed changes in #171.\r\n\r\nI think that I prefer the lighter option; rather than document the process, explain that implementers will need to go off and do their homework.",
       "createdAt": "2026-09-17T01:29:20Z",
-      "updatedAt": "2026-09-17T01:48:24Z",
+      "updatedAt": "2026-09-18T15:22:23Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "andrew",
-      "headRefOid": "0a003e652ccb35167ba2eb1423e26bc688da3035",
+      "headRefOid": "e4d32bf3a89d09d80abfa86d8d3fbc7a186aa599",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16102,6 +16117,299 @@
               "body": "Yes, that's in improvement.",
               "createdAt": "2026-09-17T01:42:49Z",
               "updatedAt": "2026-09-17T01:48:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABN_O7nw",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T09:28:22Z",
+          "updatedAt": "2026-09-17T09:28:23Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Yeah, this is better than describing the whole process.\r\nBut I think the 1141 reference could be dropped when 1624 is there. ",
+              "createdAt": "2026-09-17T09:28:22Z",
+              "updatedAt": "2026-09-17T09:28:23Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOABa-Q",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T10:46:17Z",
+          "updatedAt": "2026-09-17T10:46:17Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "I agree: RFC 1141 isn't needed. I'd mention the name of the technique as: \"incremental UDP checksum update\" !! Given the potential grief if this is done wrong, I'd much prefer clarity here. ",
+              "createdAt": "2026-09-17T10:46:17Z",
+              "updatedAt": "2026-09-17T10:46:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOABjxQ",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T10:46:30Z",
+          "updatedAt": "2026-09-17T10:46:30Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "RFC 6936 shouldn't be included - for a network element you either see a zero checksum or not (I think the rules for when a protocol design can set a zero checksum for tunnels are not relevant.)",
+              "createdAt": "2026-09-17T10:46:30Z",
+              "updatedAt": "2026-09-17T10:46:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOADOjA",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T10:48:53Z",
+          "updatedAt": "2026-09-17T10:48:53Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "I don't understand what the other reasons really means. How can this be? Maybe I miss something - the SCONE Packet is coalesced with another packet, what is this saying if there is no other packet?",
+              "createdAt": "2026-09-17T10:48:53Z",
+              "updatedAt": "2026-09-17T10:48:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOA03OA",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T12:04:16Z",
+          "updatedAt": "2026-09-17T12:04:16Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Then the question is if there is some appropriate reference to a statement of \"Don't incrementally update a zero-checksum\", or if that simply falls into the category of \"stating the obvious\". ",
+              "createdAt": "2026-09-17T12:04:16Z",
+              "updatedAt": "2026-09-17T12:04:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOBEOAA",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T12:28:26Z",
+          "updatedAt": "2026-09-17T12:28:26Z",
+          "comments": [
+            {
+              "originalPosition": 40,
+              "body": "```suggestion\nthat needs to account for the special values 0x0000 and 0xffff;\n```\nmicro-nit, but reads a bit clearer perhaps..\n",
+              "createdAt": "2026-09-17T12:28:26Z",
+              "updatedAt": "2026-09-17T12:28:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOBYIaA",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T12:59:00Z",
+          "updatedAt": "2026-09-17T12:59:00Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "ah ... could this be /needed/needs to be sent/",
+              "createdAt": "2026-09-17T12:59:00Z",
+              "updatedAt": "2026-09-17T12:59:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOBZiCQ",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-17T13:01:09Z",
+          "updatedAt": "2026-09-17T13:01:10Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "Why not just say \"A Datagram with a UDP zero checksum is not updated.\"?",
+              "createdAt": "2026-09-17T13:01:10Z",
+              "updatedAt": "2026-09-17T13:01:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOJNavQ",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-18T04:06:06Z",
+          "updatedAt": "2026-09-18T04:06:06Z",
+          "comments": [
+            {
+              "originalPosition": 42,
+              "body": "```suggestion\nsee {{?RFC1141}} and {{Section 8.1 of ?RFC8200}} for details.\n```",
+              "createdAt": "2026-09-18T04:06:06Z",
+              "updatedAt": "2026-09-18T04:06:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOJNjPw",
+          "commit": {
+            "abbreviatedOid": "0a003e6"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-18T04:06:25Z",
+          "updatedAt": "2026-09-18T04:06:25Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "```suggestion\nunless a QUIC packet needs to be sent for other reasons.\n```",
+              "createdAt": "2026-09-18T04:06:25Z",
+              "updatedAt": "2026-09-18T04:06:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOKFY7w",
+          "commit": {
+            "abbreviatedOid": "e4d32bf"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-18T06:54:19Z",
+          "updatedAt": "2026-09-18T06:54:20Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "It's not really complex!!! - many items of hardware do this for you, and code is commonly available. ",
+              "createdAt": "2026-09-18T06:54:20Z",
+              "updatedAt": "2026-09-18T06:54:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOKT7Jw",
+          "commit": {
+            "abbreviatedOid": "e4d32bf"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thank you, looks good (I share the view with Gorry that updating the UDP checksum is not that complicated).",
+          "createdAt": "2026-09-18T07:26:38Z",
+          "updatedAt": "2026-09-18T07:26:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABONWJ4A",
+          "commit": {
+            "abbreviatedOid": "e4d32bf"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-18T13:48:29Z",
+          "updatedAt": "2026-09-18T13:48:29Z",
+          "comments": [
+            {
+              "originalPosition": 41,
+              "body": "If we keep one reference to incremental checksum update it ought to be 1624 imo.\n```suggestion\nsee {{?RFC1624}} and {{Section 8.1 of ?RFC8200}} for details.\n```",
+              "createdAt": "2026-09-18T13:48:29Z",
+              "updatedAt": "2026-09-18T13:48:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOOSFQA",
+          "commit": {
+            "abbreviatedOid": "e4d32bf"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-18T15:21:53Z",
+          "updatedAt": "2026-09-18T15:21:53Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "It's not really complex!!! - many items of hardware do this for you, and code is commonly available. \n```suggestion\nThis process\n```",
+              "createdAt": "2026-09-18T15:21:53Z",
+              "updatedAt": "2026-09-18T15:21:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOOSXEw",
+          "commit": {
+            "abbreviatedOid": "e4d32bf"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-09-18T15:22:22Z",
+          "updatedAt": "2026-09-18T15:22:23Z",
+          "comments": [
+            {
+              "originalPosition": 40,
+              "body": "```suggestion\nneeds to account for the special values 0x0000 and 0xffff;\n```",
+              "createdAt": "2026-09-18T15:22:22Z",
+              "updatedAt": "2026-09-18T15:22:23Z"
             }
           ]
         }
