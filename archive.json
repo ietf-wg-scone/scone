@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-20T03:54:45.506652+00:00",
+  "timestamp": "2026-09-22T03:49:08.999922+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -16087,13 +16087,13 @@
       "labels": [],
       "body": "The most substantial piece here was the UDP checksum piece, for which I also see @ihlar has a proposed changes in #171.\r\n\r\nI think that I prefer the lighter option; rather than document the process, explain that implementers will need to go off and do their homework.",
       "createdAt": "2026-09-17T01:29:20Z",
-      "updatedAt": "2026-09-18T15:22:23Z",
+      "updatedAt": "2026-09-22T00:09:22Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "andrew",
-      "headRefOid": "e4d32bf3a89d09d80abfa86d8d3fbc7a186aa599",
+      "headRefOid": "1ebe2ef997b344db3ad6cba93daccf332d754517",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16414,6 +16414,32 @@
           ]
         }
       ]
+    },
+    {
+      "number": 173,
+      "id": "PR_kwDON1dwo88AAAABEgRTAw",
+      "title": "Tidy up pseudocode",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/173",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Avoiding undefined stuff mostly.  Including operator precedence, which is always fraught.\r\n\r\nFrom Roman's review.",
+      "createdAt": "2026-09-22T00:06:03Z",
+      "updatedAt": "2026-09-22T00:06:04Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "roman",
+      "headRefOid": "c5eb322d3580bd7610743032aeb15157dc92bc88",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
