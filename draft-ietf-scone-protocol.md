@@ -124,7 +124,7 @@ sustainable throughput by modifying the SCONE packet as it transits the
 network element.
 
 The propagation of SCONE packets,
-including the throughput advice that is update by a network element,
+including the throughput advice that is updated by a network element,
 is shown in {{f-scone}}.
 
 ~~~ aasvg
