@@ -174,7 +174,7 @@ Table of Contents
    the network element.
 
    The propagation of SCONE packets, including the throughput advice
-   that is update by a network element, is shown in Figure 1.
+   that is updated by a network element, is shown in Figure 1.
 
    +--------+       +---------+      +----------+
    |  QUIC  |       | Network |      |   QUIC   |
