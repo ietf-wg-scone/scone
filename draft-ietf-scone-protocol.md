@@ -717,9 +717,9 @@ signal (`target_signal`) that encodes the throughput advice of this network
 element.
 
 ~~~ pseudocode
-is_long = packet[0] & 0x80 == 0x80
-packet_version = ntohl(packet[1..5])
-if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
+is_long = (packet[0] & 0x80) == 0x80
+packet_version = ntohl(packet[1:5])  # convert network to host endian
+if is_long and ((packet_version & 0x7fffffff) == 0x6f7dc0fd):
   packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
   if target_signal < packet_signal:
     packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)
