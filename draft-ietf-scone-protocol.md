@@ -953,7 +953,7 @@ next SCONE packet in the desired direction; see {{apply}}.
 
 ## Feedback To Sender About Signals {#feedback}
 
-Information about throughout advice is intended for the sending application.  Any
+Information about throughput advice is intended for the sending application.  Any
 signal from network elements can be propagated to the receiving application
 using an implementation-defined mechanism.
 
