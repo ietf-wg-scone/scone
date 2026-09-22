@@ -17,24 +17,24 @@ for QUIC flows to endpoints. This throughput advice suggests an
 upper bound on long-term average throughput, independent of and
 complementary to real-time congestion control signals. 
     " name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="locomotive" name="keyword">
 <meta content="pastry" name="keyword">
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
+  xml2rfc 3.34.1
     Python 3.14.7
-    ConfigArgParse 1.7.5
+    ConfigArgParse 1.7.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.7
+    platformdirs 4.11.10
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.3
+    wcwidth 0.8.4
 -->
 <link href="draft-ietf-scone-protocol.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1054,7 +1054,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 22 March 2027</td>
+<td class="center">Expires 26 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-18" class="published">18 September 2026</time>
+<time datetime="2026-09-22" class="published">22 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-22">22 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-26">26 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ complementary to real-time congestion control signals.<a href="#section-abstract
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 26 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2098,9 +2098,8 @@ if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
 </div>
 <p id="section-7.1-6">Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram.
-This can be a complex process
-that needs to account for the special values 0x0000 and 0xffff;
-see <span>[<a href="#RFC1141" class="cite xref">RFC1141</a>]</span> and <span><a href="https://rfc-editor.org/rfc/rfc8200#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span> for details.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+An incremental update process is described in <span>[<a href="#RFC1624" class="cite xref">RFC1624</a>]</span>
+and <span><a href="https://rfc-editor.org/rfc/rfc8200#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span> includes additional information.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <div id="when-to-avoid-updating-throughput-advice">
 <section id="section-7.1.1">
           <h4 id="name-when-to-avoid-updating-thro">
@@ -2830,9 +2829,9 @@ Transport Parameters" registry maintained at
         <dd>
 <span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Managing multiple paths for a QUIC connection"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-21</span>, <time datetime="2026-03-17" class="refDate">17 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC1141">[RFC1141]</dt>
+<dt id="RFC1624">[RFC1624]</dt>
         <dd>
-<span class="refAuthor">Mallory, T.</span> and <span class="refAuthor">A. Kullberg</span>, <span class="refTitle">"Incremental updating of the Internet checksum"</span>, <span class="seriesInfo">RFC 1141</span>, <span class="seriesInfo">DOI 10.17487/RFC1141</span>, <time datetime="1990-01" class="refDate">January 1990</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1141">https://www.rfc-editor.org/rfc/rfc1141</a>&gt;</span>. </dd>
+<span class="refAuthor">Rijsinghani, A., Ed.</span>, <span class="refTitle">"Computation of the Internet Checksum via Incremental Update"</span>, <span class="seriesInfo">RFC 1624</span>, <span class="seriesInfo">DOI 10.17487/RFC1624</span>, <time datetime="1994-05" class="refDate">May 1994</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1624">https://www.rfc-editor.org/rfc/rfc1624</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4787">[RFC4787]</dt>
         <dd>
