@@ -938,7 +938,7 @@ Table of Contents
 
 8.2.  Feedback To Sender About Signals
 
-   Information about throughout advice is intended for the sending
+   Information about throughput advice is intended for the sending
    application.  Any signal from network elements can be propagated to
    the receiving application using an implementation-defined mechanism.
 
