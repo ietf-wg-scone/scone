@@ -17,24 +17,24 @@ for QUIC flows to endpoints. This throughput advice suggests an
 upper bound on long-term average throughput, independent of and
 complementary to real-time congestion control signals. 
     " name="description">
-<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="xml2rfc 3.34.1" name="generator">
 <meta content="locomotive" name="keyword">
 <meta content="pastry" name="keyword">
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.34.0
+  xml2rfc 3.34.1
     Python 3.14.7
-    ConfigArgParse 1.7.5
+    ConfigArgParse 1.7.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.7
+    platformdirs 4.11.10
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.3
+    wcwidth 0.8.4
 -->
 <link href="draft-ietf-scone-protocol.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1054,7 +1054,7 @@ svg {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 14 March 2027</td>
+<td class="center">Expires 28 March 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-10" class="published">10 September 2026</time>
+<time datetime="2026-09-24" class="published">24 September 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-14">14 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-03-28">28 March 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ complementary to real-time congestion control signals.<a href="#section-abstract
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 28 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1385,7 +1385,7 @@ The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">The propagation of SCONE packets,
-including the throughput advice that is update by a network element,
+including the throughput advice that is updated by a network element,
 is shown in <a href="#f-scone" class="auto internal xref">Figure 1</a>.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <span id="name-propagation-of-scone-signal"></span><div id="f-scone">
 <figure id="figure-1">
@@ -1873,7 +1873,7 @@ Any repeating phenomenon at a 67 second interval is therefore
 unlikely to be due to other periodic effects.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="endpoint-processing-of-scone-packets">
+<div id="recv-advice">
 <section id="section-5.3">
         <h3 id="name-endpoint-processing-of-scon">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-endpoint-processing-of-scon" class="section-name selfRef">Endpoint Processing of SCONE Packets</a>
@@ -1994,7 +1994,7 @@ the indication can be included in every datagram the client sends
 until it receives a response -- of any kind -- from the server.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="limitations-of-indication">
+<div id="indicator-limits">
 <section id="section-6.2">
         <h3 id="name-limitations-of-indication">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-limitations-of-indication" class="section-name selfRef">Limitations of Indication</a>
@@ -2043,9 +2043,11 @@ but only if the peer has sent the transport parameter; see <a href="#tp" class="
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-avoiding-ossification-when-" class="section-name selfRef">Avoiding Ossification When Reading the Indicator</a>
         </h3>
 <p id="section-6.4-1">A network element could classify all 5-tuples where the first observed UDP
-datagram ends in the indicator bytes as potential SCONE. A network element <span class="bcp14">MAY</span>
+datagram ends in the indicator bytes as potential SCONE.
+However, this is not a strong indicator (see <a href="#indicator-limits" class="auto internal xref">Section 6.2</a>),
+so network elements are encouraged to
 apply further criteria to further reduce the set of flows that are identified
-as potentially supporting SCONE, reducing the likelihood of false positives.
+as potentially supporting SCONE to reduce the likelihood of false positives.
 However, it <span class="bcp14">SHOULD NOT</span> apply criteria that reduce the ability of new QUIC
 versions to employ SCONE. SCONE operates independently of any specific QUIC
 version, so any criteria should consult the QUIC version invariants in
@@ -2085,9 +2087,9 @@ signal (<code>target_signal</code>) that encodes the throughput advice of this n
 element.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <div class="lang-pseudocode sourcecode" id="section-7.1-5">
 <pre>
-is_long = packet[0] &amp; 0x80 == 0x80
-packet_version = ntohl(packet[1..5])
-if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
+is_long = (packet[0] &amp; 0x80) == 0x80
+packet_version = ntohl(packet[1:5])  # convert network to host endian
+if is_long and ((packet_version &amp; 0x7fffffff) == 0x6f7dc0fd):
   packet_signal = ((packet[0] &amp; 0x3f) &lt;&lt; 1) | (packet_version &gt;&gt; 31)
   if target_signal &lt; packet_signal:
     packet[0] = (packet[0] &amp; 0xc0) | (target_signal &gt;&gt; 1)
@@ -2095,8 +2097,9 @@ if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
 </pre><a href="#section-7.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-7.1-6">Once the throughput advice is updated,
-the network element updates the UDP checksum for the datagram;
-see <span>[<a href="#RFC1141" class="cite xref">RFC1141</a>]</span>.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+the network element updates the UDP checksum for the datagram.
+An incremental update process is described in <span>[<a href="#RFC1624" class="cite xref">RFC1624</a>]</span>
+and <span><a href="https://rfc-editor.org/rfc/rfc8200#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span> includes additional information.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <div id="when-to-avoid-updating-throughput-advice">
 <section id="section-7.1.1">
           <h4 id="name-when-to-avoid-updating-thro">
@@ -2309,8 +2312,14 @@ rather than to send multiple SCONE packets in less frequent bursts.<a href="#sec
 <p id="section-8.1-11">The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
 for application data.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
-<p id="section-8.1-12">A network element that wishes to signal updated throughput advice waits for the
-next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
+<p id="section-8.1-12">A sender <span class="bcp14">MUST NOT</span> send a SCONE packet
+unless a QUIC packet needs to be sent for other reasons.
+It is safe to allow throughput advice to lapse
+if the connection is otherwise idle,
+whereas induced activity wastes resources
+by keeping connections alive unnecessarily.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
+<p id="section-8.1-13">A network element that wishes to signal updated throughput advice waits for the
+next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback">
@@ -2318,7 +2327,7 @@ next SCONE packet in the desired direction; see <a href="#apply" class="auto int
         <h3 id="name-feedback-to-sender-about-si">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-feedback-to-sender-about-si" class="section-name selfRef">Feedback To Sender About Signals</a>
         </h3>
-<p id="section-8.2-1">Information about throughout advice is intended for the sending application.  Any
+<p id="section-8.2-1">Information about throughput advice is intended for the sending application.  Any
 signal from network elements can be propagated to the receiving application
 using an implementation-defined mechanism.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">This document does not define a means for indicating what was received.
@@ -2367,7 +2376,7 @@ endpoints.<a href="#section-9-2" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-9.1-1">The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and could apply a rate limit policy.
-<a href="#extra-packets" class="auto internal xref">Section 8.1</a> states that endpoints only accept signals if the datagram
+<a href="#recv-advice" class="auto internal xref">Section 5.3</a> states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
 spurious throughput advice.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <p id="section-9.1-2">Some off-path attackers could be able to both
@@ -2820,13 +2829,17 @@ Transport Parameters" registry maintained at
         <dd>
 <span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Managing multiple paths for a QUIC connection"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-21</span>, <time datetime="2026-03-17" class="refDate">17 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC1141">[RFC1141]</dt>
+<dt id="RFC1624">[RFC1624]</dt>
         <dd>
-<span class="refAuthor">Mallory, T.</span> and <span class="refAuthor">A. Kullberg</span>, <span class="refTitle">"Incremental updating of the Internet checksum"</span>, <span class="seriesInfo">RFC 1141</span>, <span class="seriesInfo">DOI 10.17487/RFC1141</span>, <time datetime="1990-01" class="refDate">January 1990</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1141">https://www.rfc-editor.org/rfc/rfc1141</a>&gt;</span>. </dd>
+<span class="refAuthor">Rijsinghani, A., Ed.</span>, <span class="refTitle">"Computation of the Internet Checksum via Incremental Update"</span>, <span class="seriesInfo">RFC 1624</span>, <span class="seriesInfo">DOI 10.17487/RFC1624</span>, <time datetime="1994-05" class="refDate">May 1994</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1624">https://www.rfc-editor.org/rfc/rfc1624</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4787">[RFC4787]</dt>
         <dd>
 <span class="refAuthor">Audet, F., Ed.</span> and <span class="refAuthor">C. Jennings</span>, <span class="refTitle">"Network Address Translation (NAT) Behavioral Requirements for Unicast UDP"</span>, <span class="seriesInfo">BCP 127</span>, <span class="seriesInfo">RFC 4787</span>, <span class="seriesInfo">DOI 10.17487/RFC4787</span>, <time datetime="2007-01" class="refDate">January 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4787">https://www.rfc-editor.org/rfc/rfc4787</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8200">[RFC8200]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCONE-MAN">[SCONE-MAN]</dt>
         <dd>
@@ -2850,8 +2863,8 @@ Transport Parameters" registry maintained at
 specification that forms the basis for a large part of this document.
 The following people also contributed significantly
 to the development of the protocol: <span class="contact-name">Alan Frindell</span>,
-<span class="contact-name">Gorry Fairhurst</span>, <span class="contact-name">Kevin Smith</span>, <span class="contact-name">Martin Duke</span>,
-and <span class="contact-name">Zaheduzzaman Sarker</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<span class="contact-name">Andrew Yourtchenko</span>, <span class="contact-name">Gorry Fairhurst</span>, <span class="contact-name">Ionuț Mihalcea</span>,
+<span class="contact-name">Kevin Smith</span>, <span class="contact-name">Martin Duke</span>, and <span class="contact-name">Zaheduzzaman Sarker</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">

@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 14 March 2027                              Private Octopus Inc.
+Expires: 28 March 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       10 September 2026
+                                                       24 September 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 March 2027.
+   This Internet-Draft will expire on 28 March 2027.
 
 Copyright Notice
 
@@ -174,7 +174,7 @@ Table of Contents
    the network element.
 
    The propagation of SCONE packets, including the throughput advice
-   that is update by a network element, is shown in Figure 1.
+   that is updated by a network element, is shown in Figure 1.
 
    +--------+       +---------+      +----------+
    |  QUIC  |       | Network |      |   QUIC   |
@@ -704,9 +704,10 @@ Table of Contents
 
    A network element could classify all 5-tuples where the first
    observed UDP datagram ends in the indicator bytes as potential SCONE.
-   A network element MAY apply further criteria to further reduce the
-   set of flows that are identified as potentially supporting SCONE,
-   reducing the likelihood of false positives.  However, it SHOULD NOT
+   However, this is not a strong indicator (see Section 6.2), so network
+   elements are encouraged to apply further criteria to further reduce
+   the set of flows that are identified as potentially supporting SCONE
+   to reduce the likelihood of false positives.  However, it SHOULD NOT
    apply criteria that reduce the ability of new QUIC versions to employ
    SCONE.  SCONE operates independently of any specific QUIC version, so
    any criteria should consult the QUIC version invariants in
@@ -740,16 +741,18 @@ Table of Contents
    with a new rate signal (target_signal) that encodes the throughput
    advice of this network element.
 
-   is_long = packet[0] & 0x80 == 0x80
-   packet_version = ntohl(packet[1..5])
-   if is_long and (packet_version & 0x7fffffff) == SCONE_VERSION_BITS:
+   is_long = (packet[0] & 0x80) == 0x80
+   packet_version = ntohl(packet[1:5])  # convert network to host endian
+   if is_long and ((packet_version & 0x7fffffff) == 0x6f7dc0fd):
      packet_signal = ((packet[0] & 0x3f) << 1) | (packet_version >> 31)
      if target_signal < packet_signal:
        packet[0] = (packet[0] & 0xc0) | (target_signal >> 1)
        packet[1] = (packet[1] & 0x7f) | ((target_signal & 1) << 7)
 
    Once the throughput advice is updated, the network element updates
-   the UDP checksum for the datagram; see [RFC1141].
+   the UDP checksum for the datagram.  An incremental update process is
+   described in [RFC1624] and Section 8.1 of [RFC8200] includes
+   additional information.
 
 7.1.1.  When To Avoid Updating Throughput Advice
 
@@ -924,13 +927,18 @@ Table of Contents
    The main cost associated with sending SCONE packets is the reduction
    in available space in datagrams for application data.
 
+   A sender MUST NOT send a SCONE packet unless a QUIC packet needs to
+   be sent for other reasons.  It is safe to allow throughput advice to
+   lapse if the connection is otherwise idle, whereas induced activity
+   wastes resources by keeping connections alive unnecessarily.
+
    A network element that wishes to signal updated throughput advice
    waits for the next SCONE packet in the desired direction; see
    Section 7.1.
 
 8.2.  Feedback To Sender About Signals
 
-   Information about throughout advice is intended for the sending
+   Information about throughput advice is intended for the sending
    application.  Any signal from network elements can be propagated to
    the receiving application using an implementation-defined mechanism.
 
@@ -977,7 +985,7 @@ Table of Contents
 
    The modification of packets provides endpoints proof that a network
    element is in a position to drop datagrams and could apply a rate
-   limit policy.  Section 8.1 states that endpoints only accept signals
+   limit policy.  Section 5.3 states that endpoints only accept signals
    if the datagram contains a packet that it accepts to prevent an off-
    path attacker from inserting spurious throughput advice.
 
@@ -1270,14 +1278,20 @@ Table of Contents
               <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
               multipath-21>.
 
-   [RFC1141]  Mallory, T. and A. Kullberg, "Incremental updating of the
-              Internet checksum", RFC 1141, DOI 10.17487/RFC1141,
-              January 1990, <https://www.rfc-editor.org/rfc/rfc1141>.
+   [RFC1624]  Rijsinghani, A., Ed., "Computation of the Internet
+              Checksum via Incremental Update", RFC 1624,
+              DOI 10.17487/RFC1624, May 1994,
+              <https://www.rfc-editor.org/rfc/rfc1624>.
 
    [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
               Translation (NAT) Behavioral Requirements for Unicast
               UDP", BCP 127, RFC 4787, DOI 10.17487/RFC4787, January
               2007, <https://www.rfc-editor.org/rfc/rfc4787>.
+
+   [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
+              (IPv6) Specification", STD 86, RFC 8200,
+              DOI 10.17487/RFC8200, July 2017,
+              <https://www.rfc-editor.org/rfc/rfc8200>.
 
    [SCONE-MAN]
               Mishra, S., Sarker, Z., Tomar, A., and K. Abbas,
@@ -1297,8 +1311,9 @@ Acknowledgments
    Jana Iyengar made significant contributions to the original TRAIN
    specification that forms the basis for a large part of this document.
    The following people also contributed significantly to the
-   development of the protocol: Alan Frindell, Gorry Fairhurst, Kevin
-   Smith, Martin Duke, and Zaheduzzaman Sarker.
+   development of the protocol: Alan Frindell, Andrew Yourtchenko, Gorry
+   Fairhurst, Ionuț Mihalcea, Kevin Smith, Martin Duke, and Zaheduzzaman
+   Sarker.
 
 Authors' Addresses
 
