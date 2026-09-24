@@ -407,7 +407,7 @@ between these two values is the most significant bit, which also contributes to
 the Rate Signal. All other bits are identical, which facilitates detection and
 modification of SCONE packets.
 
-This Destination Connection ID field MUST be set to the same value
+The Destination Connection ID field MUST be set to the same value
 as the Destination Connection ID field of the other packets in the same datagram;
 see {{Section 12.2 of QUIC}}.
 
@@ -543,7 +543,7 @@ An endpoint that receives throughput advice
 might receive multiple different values.
 Where advice is reported to applications,
 endpoints MUST report the lowest throughput advice
-received during any monitoring period; see {{time}}.
+received during the previous monitoring period; see {{time}}.
 
 After a monitoring period ({{time}})
 without receiving any throughput advice,
