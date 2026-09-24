@@ -608,10 +608,11 @@ All new flows that are initiated by a client that supports SCONE
 MUST include bytes with values 0xc8 and 0x13
 as the last two bytes of the payload of the UDP datagrams
 that commence a new flow,
-if the protocol permits the inclusion of data after packets.
+if the QUIC version in use permits the inclusion of data after packets.
 
 For example, in QUIC version 1,
-these datagrams contain QUIC packets with a long header ({{Section 17.2 of QUIC}}).
+these datagrams contain QUIC packets with a long header,
+including a length prefix ({{Section 17.2 of QUIC}}).
 The UDP datagrams sent by a client can contain:
 one or more QUIC version 1 Initial packets,
 zero or more 0-RTT packets,
