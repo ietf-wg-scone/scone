@@ -369,6 +369,7 @@ In SCONE:
 
 A SCONE packet is a QUIC long header packet that follows the QUIC invariants;
 see {{Section 5.1 of INVARIANTS}}.
+It only includes the header, with no payload.
 
 {{fig-scone-packet}} shows the format of the SCONE packet using the conventions
 from {{Section 4 of INVARIANTS}}.
@@ -406,8 +407,9 @@ between these two values is the most significant bit, which also contributes to
 the Rate Signal. All other bits are identical, which facilitates detection and
 modification of SCONE packets.
 
-This packet includes a Destination Connection ID field that is set to the same
-value as other packets in the same datagram; see {{Section 12.2 of QUIC}}.
+This Destination Connection ID field MUST be set to the same value
+as the Destination Connection ID field of the other packets in the same datagram;
+see {{Section 12.2 of QUIC}}.
 
 The Source Connection ID field is set to match the Source Connection ID field of
 any packet that follows.  If the next packet in the datagram does not have a
@@ -523,7 +525,7 @@ also discard the QUIC packets that were coalesced into the same datagram.
 A receiver MAY discard a datagram that contains more than one SCONE packet.
 A receiver MUST discard a SCONE packet if the rate signal is unknown (127).
 
-If a connection uses multiple Differentiated Services Code Point (DSCP) markings {{!RFC2474}},
+If a connection uses multiple Differentiated Services Code Point (DSCP) markings {{?RFC2474}},
 the throughput advice that is received on datagrams with one marking
 might not apply to datagrams that have different markings.
 
@@ -539,8 +541,8 @@ which might use flow control or changes to request patterns.
 
 An endpoint that receives throughput advice
 might receive multiple different values.
-If advice is applied by applications,
-applications MUST apply the lowest throughput advice
+Where advice is reported to applications,
+endpoints MUST report the lowest throughput advice
 received during any monitoring period; see {{time}}.
 
 After a monitoring period ({{time}})
@@ -1246,9 +1248,6 @@ Status:
 
 Specification:
 : This document
-
-Date:
-: This date
 
 Change Controller:
 : IETF (iesg@ietf.org)
