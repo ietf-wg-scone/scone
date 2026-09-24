@@ -1714,7 +1714,7 @@ this forms the 7-bit Rate Signal. Values for the Rate Signal are described in
 between these two values is the most significant bit, which also contributes to
 the Rate Signal. All other bits are identical, which facilitates detection and
 modification of SCONE packets.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">This Destination Connection ID field <span class="bcp14">MUST</span> be set to the same value
+<p id="section-5-7">The Destination Connection ID field <span class="bcp14">MUST</span> be set to the same value
 as the Destination Connection ID field of the other packets in the same datagram;
 see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-12.2" class="relref">Section 12.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-5-8">The Source Connection ID field is set to match the Source Connection ID field of
@@ -1915,7 +1915,7 @@ which might use flow control or changes to request patterns.<a href="#section-5.
 might receive multiple different values.
 Where advice is reported to applications,
 endpoints <span class="bcp14">MUST</span> report the lowest throughput advice
-received during any monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+received during the previous monitoring period; see <a href="#time" class="auto internal xref">Section 5.2</a>.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
 <p id="section-5.4-3">After a monitoring period (<a href="#time" class="auto internal xref">Section 5.2</a>)
 without receiving any throughput advice,
 the previous advice expires.

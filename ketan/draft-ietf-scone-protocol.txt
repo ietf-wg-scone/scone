@@ -436,7 +436,7 @@ Table of Contents
    identical, which facilitates detection and modification of SCONE
    packets.
 
-   This Destination Connection ID field MUST be set to the same value as
+   The Destination Connection ID field MUST be set to the same value as
    the Destination Connection ID field of the other packets in the same
    datagram; see Section 12.2 of [QUIC].
 
@@ -591,7 +591,7 @@ Table of Contents
    An endpoint that receives throughput advice might receive multiple
    different values.  Where advice is reported to applications,
    endpoints MUST report the lowest throughput advice received during
-   any monitoring period; see Section 5.2.
+   the previous monitoring period; see Section 5.2.
 
    After a monitoring period (Section 5.2) without receiving any
    throughput advice, the previous advice expires.  Endpoints can remove
