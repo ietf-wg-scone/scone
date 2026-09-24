@@ -1881,25 +1881,29 @@ unlikely to be due to other periodic effects.<a href="#section-5.2-4" class="pil
 <p id="section-5.3-1">Processing a SCONE packet involves reading the value from the Rate Signal field.
 However, throughput advice <span class="bcp14">MUST</span> be ignored
 unless another packet from the same datagram is successfully processed.
-What successful processing means depends on
-the QUIC version associated with those packets,
-but a packet that is discarded or ignored by the endpoint does not qualify.
-Therefore, a SCONE packet always needs to be coalesced
-with other QUIC packets.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.3-2">A SCONE packet is defined by the use of the long header bit (0x80 in the first
+A SCONE packet therefore always needs to be coalesced
+with other QUIC packets;
+see <a href="#off-path" class="auto internal xref">Section 9.1</a> for why this is necessary.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">What successful processing means depends on
+the QUIC version associated with the coalesced packets,
+but this minimally includes successfully authenticating the packet as valid.
+SCONE packets <span class="bcp14">MUST</span> be ignored if the QUIC packets that follow
+are discarded or ignored by the endpoint,
+which especially includes packets that are discarded as potential duplicates.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3-3">A SCONE packet is defined by the use of the long header bit (0x80 in the first
 byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
 bytes). The 7-bit Rate Signal can be extracted by combining the low 6 bits
 of the first byte with the most significant bit of the version field. A SCONE
 packet <span class="bcp14">MUST</span> be discarded if the Destination Connection ID is not consistent with
 those coalesced packets, as specified in <a href="#packet" class="auto internal xref">Section 5</a>. Similarly, if the Source
-Connection ID is inconsistent, the SCONE packet <span class="bcp14">MAY</span> be discarded.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
-<p id="section-5.3-3">When discarding a SCONE packet due to inconsistent Connection IDs, endpoints <span class="bcp14">MAY</span>
-also discard the QUIC packets that were coalesced into the same datagram.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
-<p id="section-5.3-4">A receiver <span class="bcp14">MAY</span> discard a datagram that contains more than one SCONE packet.
-A receiver <span class="bcp14">MUST</span> discard a SCONE packet if the rate signal is unknown (127).<a href="#section-5.3-4" class="pilcrow">¶</a></p>
-<p id="section-5.3-5">If a connection uses multiple Differentiated Services Code Point (DSCP) markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
+Connection ID is inconsistent, the SCONE packet <span class="bcp14">MAY</span> be discarded.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3-4">When discarding a SCONE packet due to inconsistent Connection IDs, endpoints <span class="bcp14">MAY</span>
+also discard the QUIC packets that were coalesced into the same datagram.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
+<p id="section-5.3-5">A receiver <span class="bcp14">MAY</span> discard a datagram that contains more than one SCONE packet.
+A receiver <span class="bcp14">MUST</span> discard a SCONE packet if the rate signal is unknown (127).<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<p id="section-5.3-6">If a connection uses multiple Differentiated Services Code Point (DSCP) markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
 the throughput advice that is received on datagrams with one marking
-might not apply to datagrams that have different markings.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+might not apply to datagrams that have different markings.<a href="#section-5.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="algorithm">
