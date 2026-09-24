@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-22T03:49:08.999922+00:00",
+  "timestamp": "2026-09-24T03:39:12.610685+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -16087,13 +16087,13 @@
       "labels": [],
       "body": "The most substantial piece here was the UDP checksum piece, for which I also see @ihlar has a proposed changes in #171.\r\n\r\nI think that I prefer the lighter option; rather than document the process, explain that implementers will need to go off and do their homework.",
       "createdAt": "2026-09-17T01:29:20Z",
-      "updatedAt": "2026-09-22T00:09:22Z",
+      "updatedAt": "2026-09-22T23:59:10Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "andrew",
-      "headRefOid": "1ebe2ef997b344db3ad6cba93daccf332d754517",
+      "headRefOid": "d168eb4155e4587adaf749bd00fa47ff854eb2a0",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16427,13 +16427,66 @@
       "labels": [],
       "body": "Avoiding undefined stuff mostly.  Including operator precedence, which is always fraught.\r\n\r\nFrom Roman's review.",
       "createdAt": "2026-09-22T00:06:03Z",
-      "updatedAt": "2026-09-22T00:06:04Z",
+      "updatedAt": "2026-09-22T20:09:15Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "roman",
       "headRefOid": "c5eb322d3580bd7610743032aeb15157dc92bc88",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABOubqAg",
+          "commit": {
+            "abbreviatedOid": "c5eb322"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "OK. And yes, I can see that the order of operation between & and == is sometimes murky, I have been surprised by it a couple times. The pseudo code looks pythonish, and I don't know what the ordering requirements are in python... As for having a literal value versus the SCONE_VERSION_BITS constant, it probably does not matter now that the version is cast in stone. ",
+          "createdAt": "2026-09-22T20:08:53Z",
+          "updatedAt": "2026-09-22T20:08:53Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABOub3XQ",
+          "commit": {
+            "abbreviatedOid": "c5eb322"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-22T20:09:15Z",
+          "updatedAt": "2026-09-22T20:09:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 174,
+      "id": "PR_kwDON1dwo88AAAABE2qOkw",
+      "title": "Expand on what \"processing\" means",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/174",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This depends on the QUIC version, but we should at least point out that ignored packets don't count.",
+      "createdAt": "2026-09-24T02:12:52Z",
+      "updatedAt": "2026-09-24T02:12:53Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "charles",
+      "headRefOid": "032d7b1d554de9b7b60c2790f44d00ed8269a74e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
