@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 28 March 2027                              Private Octopus Inc.
+Expires: 29 March 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       24 September 2026
+                                                       25 September 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 March 2027.
+   This Internet-Draft will expire on 29 March 2027.
 
 Copyright Notice
 
@@ -402,7 +402,8 @@ Table of Contents
 5.  SCONE Packet
 
    A SCONE packet is a QUIC long header packet that follows the QUIC
-   invariants; see Section 5.1 of [INVARIANTS].
+   invariants; see Section 5.1 of [INVARIANTS].  It only includes the
+   header, with no payload.
 
    Figure 2 shows the format of the SCONE packet using the conventions
    from Section 4 of [INVARIANTS].
@@ -435,9 +436,9 @@ Table of Contents
    identical, which facilitates detection and modification of SCONE
    packets.
 
-   This packet includes a Destination Connection ID field that is set to
-   the same value as other packets in the same datagram; see
-   Section 12.2 of [QUIC].
+   The Destination Connection ID field MUST be set to the same value as
+   the Destination Connection ID field of the other packets in the same
+   datagram; see Section 12.2 of [QUIC].
 
    The Source Connection ID field is set to match the Source Connection
    ID field of any packet that follows.  If the next packet in the
@@ -588,9 +589,9 @@ Table of Contents
    which might use flow control or changes to request patterns.
 
    An endpoint that receives throughput advice might receive multiple
-   different values.  If advice is applied by applications, applications
-   MUST apply the lowest throughput advice received during any
-   monitoring period; see Section 5.2.
+   different values.  Where advice is reported to applications,
+   endpoints MUST report the lowest throughput advice received during
+   the previous monitoring period; see Section 5.2.
 
    After a monitoring period (Section 5.2) without receiving any
    throughput advice, the previous advice expires.  Endpoints can remove
@@ -1204,7 +1205,6 @@ Table of Contents
    Parameter Name:  scone_supported
    Status:  Permanent
    Specification:  This document
-   Date:  This date
    Change Controller:  IETF (iesg@ietf.org)
    Contact:  QUIC Working Group (quic@ietf.org)
    Notes:  (none)
@@ -1244,12 +1244,6 @@ Table of Contents
               DOI 10.17487/RFC9369, May 2023,
               <https://www.rfc-editor.org/rfc/rfc9369>.
 
-   [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
-              "Definition of the Differentiated Services Field (DS
-              Field) in the IPv4 and IPv6 Headers", RFC 2474,
-              DOI 10.17487/RFC2474, December 1998,
-              <https://www.rfc-editor.org/rfc/rfc2474>.
-
 12.2.  Informative References
 
    [CONNECT-UDP]
@@ -1282,6 +1276,12 @@ Table of Contents
               Checksum via Incremental Update", RFC 1624,
               DOI 10.17487/RFC1624, May 1994,
               <https://www.rfc-editor.org/rfc/rfc1624>.
+
+   [RFC2474]  Nichols, K., Blake, S., Baker, F., and D. Black,
+              "Definition of the Differentiated Services Field (DS
+              Field) in the IPv4 and IPv6 Headers", RFC 2474,
+              DOI 10.17487/RFC2474, December 1998,
+              <https://www.rfc-editor.org/rfc/rfc2474>.
 
    [RFC4787]  Audet, F., Ed. and C. Jennings, "Network Address
               Translation (NAT) Behavioral Requirements for Unicast
