@@ -507,9 +507,18 @@ unlikely to be due to other periodic effects.
 ## Endpoint Processing of SCONE Packets {#recv-advice}
 
 Processing a SCONE packet involves reading the value from the Rate Signal field.
-However, throughput advice MUST be ignored unless another packet from the same
-datagram is successfully processed.  Therefore, a SCONE packet always needs to
-be coalesced with other QUIC packets.
+However, throughput advice MUST be ignored
+unless another packet from the same datagram is successfully processed.
+A SCONE packet therefore always needs to be coalesced
+with other QUIC packets;
+see {{off-path}} for why this is necessary.
+
+What successful processing means depends on
+the QUIC version associated with the coalesced packets,
+but this minimally includes successfully authenticating the packet as valid.
+SCONE packets MUST be ignored if the QUIC packets that follow
+are discarded or ignored by the endpoint,
+which especially includes packets that are discarded as potential duplicates.
 
 A SCONE packet is defined by the use of the long header bit (0x80 in the first
 byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
