@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-24T03:39:12.610685+00:00",
+  "timestamp": "2026-09-27T04:13:09.270865+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -16080,24 +16080,26 @@
       "id": "PR_kwDON1dwo88AAAABD2tzqA",
       "title": "Andrew's feedback",
       "url": "https://github.com/ietf-wg-scone/scone/pull/172",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "The most substantial piece here was the UDP checksum piece, for which I also see @ihlar has a proposed changes in #171.\r\n\r\nI think that I prefer the lighter option; rather than document the process, explain that implementers will need to go off and do their homework.",
       "createdAt": "2026-09-17T01:29:20Z",
-      "updatedAt": "2026-09-22T23:59:10Z",
+      "updatedAt": "2026-09-24T23:13:27Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "andrew",
       "headRefOid": "d168eb4155e4587adaf749bd00fa47ff854eb2a0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-24T23:13:27Z",
+      "mergedAt": "2026-09-24T23:13:27Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "8616f2adfdb0f7e6a42822ec5fd2bd0ab3350ef0"
+      },
       "comments": [],
       "reviews": [
         {
@@ -16412,6 +16414,19 @@
               "updatedAt": "2026-09-18T15:22:23Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABO_cQDw",
+          "commit": {
+            "abbreviatedOid": "d168eb4"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-24T07:12:04Z",
+          "updatedAt": "2026-09-24T07:12:04Z",
+          "comments": []
         }
       ]
     },
@@ -16420,24 +16435,26 @@
       "id": "PR_kwDON1dwo88AAAABEgRTAw",
       "title": "Tidy up pseudocode",
       "url": "https://github.com/ietf-wg-scone/scone/pull/173",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Avoiding undefined stuff mostly.  Including operator precedence, which is always fraught.\r\n\r\nFrom Roman's review.",
       "createdAt": "2026-09-22T00:06:03Z",
-      "updatedAt": "2026-09-22T20:09:15Z",
+      "updatedAt": "2026-09-24T23:13:17Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "roman",
       "headRefOid": "c5eb322d3580bd7610743032aeb15157dc92bc88",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-09-24T23:13:16Z",
+      "mergedAt": "2026-09-24T23:13:16Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "4c140c977639f92cf00f636f38eb97c18a98cbd5"
+      },
       "comments": [],
       "reviews": [
         {
@@ -16465,6 +16482,19 @@
           "createdAt": "2026-09-22T20:09:15Z",
           "updatedAt": "2026-09-22T20:09:15Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABO_c69g",
+          "commit": {
+            "abbreviatedOid": "c5eb322"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-24T07:13:13Z",
+          "updatedAt": "2026-09-24T07:13:13Z",
+          "comments": []
         }
       ]
     },
@@ -16473,26 +16503,174 @@
       "id": "PR_kwDON1dwo88AAAABE2qOkw",
       "title": "Expand on what \"processing\" means",
       "url": "https://github.com/ietf-wg-scone/scone/pull/174",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This depends on the QUIC version, but we should at least point out that ignored packets don't count.",
       "createdAt": "2026-09-24T02:12:52Z",
-      "updatedAt": "2026-09-24T02:12:53Z",
+      "updatedAt": "2026-09-25T00:21:40Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "charles",
-      "headRefOid": "032d7b1d554de9b7b60c2790f44d00ed8269a74e",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "642ac9264a83e59ebd54411306335c2b81e71d07",
+      "closedAt": "2026-09-25T00:21:40Z",
+      "mergedAt": "2026-09-25T00:21:40Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "367418040d4073753d5551dce133d39676175a8a"
+      },
+      "comments": [
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I don't want to explain fully, because what is good for QUICv1 or v2 might not apply to another QUIC version.\r\n\r\nThis probably doesn't need to exclude Initial packets.  If it does, then Handshake packets would be on the list.  The exposure you get from accepting SCONE from either of those is so short-lived as to be effectively pointless.  And for someone to forge one successfully, they need to be on-path in ways that are hard to game.\r\n\r\nThen there is those 0-RTT packets that are dropped because 0-RTT is rejected.  It's far too complicated to write all this down.\r\n\r\n(Also, if I were to quibble, your explanation is incorrect.  You reconstruct the packet number first, then check for duplicates, and only then perform decryption.  If you are pass a duplicate into your decryption routine, you create a side channel that might be exploitable.)",
+          "createdAt": "2026-09-24T05:55:10Z",
+          "updatedAt": "2026-09-24T05:55:10Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I think we have to find a middle ground. I get the version dependency, but the core issue remains: when we write \"processed\", we make assumptions about what \"processed\" means: verify that the packet is not a duplicate, because attackers could capture valid packets and replay them with their choice of Scone packet attached; and, verify that the packet actually comes from the expected sender.\r\n\r\nWe are dancing around that assumption in section 9.1, [Off-Path Adversaries](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#name-off-path-adversaries). Here too, we are saying \"successfully processed\", without mentioning \"not a duplicate\" and \"valid\".\r\n\r\nI am looking at the simplest way to fix this. Maybe add a forward reference to 9.1 in [Endpoint Processing of SCONE Packets](https://ietf-wg-scone.github.io/scone/draft-ietf-scone-protocol.html#name-endpoint-processing-of-scon)? Maybe with a elaboration that by processed we meean not a duplicate and valid?",
+          "createdAt": "2026-09-24T18:05:17Z",
+          "updatedAt": "2026-09-24T18:05:17Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Very reasonable.  What do you think of the latest then?",
+          "createdAt": "2026-09-24T23:20:55Z",
+          "updatedAt": "2026-09-24T23:20:55Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABO-csTA",
+          "commit": {
+            "abbreviatedOid": "032d7b1"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "If we are going to explain, we need to explain fully. Processed means two important properties:\r\n\r\n1. The recipient verifies that the packet is genuine and comes from the expected sender. For QUIC version 1 or version 2, this means successfully decrypting the packet and verifying the AEAD checksum.\r\n2. The recipient verifies that the packet is not a duplicate. For QUIC version 1 or version 2, this means verifying that the packet number has not been already received.\r\n\r\nNote that the encryption verification assumes that the packet is encrypted and the encryption uses keys that are only known to the sender and recipient. In QUIC version 1 or version 2, this excludes version negotiation packets and Initial packets because they are not encrypted with a key specific to the connection between client and server.",
+          "createdAt": "2026-09-24T04:53:55Z",
+          "updatedAt": "2026-09-24T04:54:25Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABPJtQxw",
+          "commit": {
+            "abbreviatedOid": "642ac92"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "OK. This is certainly clear enough.",
+          "createdAt": "2026-09-25T00:16:54Z",
+          "updatedAt": "2026-09-25T00:16:54Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABPJtevA",
+          "commit": {
+            "abbreviatedOid": "642ac92"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-09-25T00:17:20Z",
+          "updatedAt": "2026-09-25T00:17:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 175,
+      "id": "PR_kwDON1dwo88AAAABFBEzog",
+      "title": "Small edits in response to Ketan's review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/175",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Nothing major here, just a few tweaks.",
+      "createdAt": "2026-09-24T22:13:58Z",
+      "updatedAt": "2026-09-25T00:14:51Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "ketan",
+      "headRefOid": "e199de29b73f56dfe0d8be891a9e022e7804a3c7",
+      "closedAt": "2026-09-25T00:14:51Z",
+      "mergedAt": "2026-09-25T00:14:51Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "e7ebb2e434601e517a8863369ac0ca23fd71a3b8"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABPJn9xw",
+          "commit": {
+            "abbreviatedOid": "e199de2"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Good editorial comments.",
+          "createdAt": "2026-09-25T00:03:23Z",
+          "updatedAt": "2026-09-25T00:03:23Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 176,
+      "id": "PR_kwDON1dwo88AAAABFBWf2Q",
+      "title": "Mike's feedback",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/176",
+      "state": "MERGED",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Very minor things here, including some changes that match feedback from others.",
+      "createdAt": "2026-09-24T22:52:15Z",
+      "updatedAt": "2026-09-25T00:15:40Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "70c293a1f090427f4317368bcbbed5e48dbedf3a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "mike",
+      "headRefOid": "70a35a24efcf0df38f53bca3340d20ce69982191",
+      "closedAt": "2026-09-25T00:15:40Z",
+      "mergedAt": "2026-09-25T00:15:40Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "271a04f5d9c58703895a67ab72682c8ad525df31"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABPJsJLQ",
+          "commit": {
+            "abbreviatedOid": "70a35a2"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK. Nice set of typos being fixed.",
+          "createdAt": "2026-09-25T00:14:38Z",
+          "updatedAt": "2026-09-25T00:14:38Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
