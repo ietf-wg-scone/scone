@@ -242,8 +242,8 @@ when the application is the only entity consuming bandwidth
 in the scope of the underlying constraint.
 In the presence of multiple flows,
 achievable throughput could be lower
-than what is indicated by the advice,
-with throughput determined by a congestion controller.
+than indicated by the throughput advice,
+with the throughput limited by the congestion controller or application rate control algorithm.
 
 This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
