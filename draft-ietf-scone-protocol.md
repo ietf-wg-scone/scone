@@ -223,7 +223,7 @@ from the perspective of a specific network element.
 
 Throughput advice is signaled for a specific flow, but the underlying throughput
 constraint could apply to a collection of flows, rather than a single flow.
-The scope of such a collection of flows is not carried in the signal.
+The scope of the underlying throughput constraint is not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
 such that multiple flows receive the same signal
