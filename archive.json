@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-09-27T04:13:09.270865+00:00",
+  "timestamp": "2026-10-18T03:31:34.016589+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -16669,6 +16669,245 @@
           "createdAt": "2026-09-25T00:14:38Z",
           "updatedAt": "2026-09-25T00:14:38Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 177,
+      "id": "PR_kwDON1dwo88AAAABI13OQw",
+      "title": "signal and scope clarifications",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/177",
+      "state": "OPEN",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Proposal for editorial update to clarify distinction between a signal and the scope of the underlying throughput constraint.\nBased on AD- and IESG review comments.",
+      "createdAt": "2026-10-16T12:24:15Z",
+      "updatedAt": "2026-10-17T22:10:35Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "367418040d4073753d5551dce133d39676175a8a",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "clarify-scope",
+      "headRefOid": "5eb706e30a6b41a4441875403fadbef2ba3f2d45",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABSrPiVw",
+          "commit": {
+            "abbreviatedOid": "b60c117"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "To me this is heading in a useful direction. Some comments included.",
+          "createdAt": "2026-10-16T13:15:22Z",
+          "updatedAt": "2026-10-16T13:25:51Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\nthan indicated by the throughput advice,\n```",
+              "createdAt": "2026-10-16T13:15:22Z",
+              "updatedAt": "2026-10-16T13:25:51Z"
+            },
+            {
+              "originalPosition": 1,
+              "body": "```suggestion\nwith the throughput limited by the congestion controller or application rate control algorithm.\n```",
+              "createdAt": "2026-10-16T13:17:11Z",
+              "updatedAt": "2026-10-16T13:25:51Z"
+            },
+            {
+              "originalPosition": 20,
+              "body": "I'm unsure that line 238 is correct. I thought enforcement was about limiting the impact of flows that **_exceeded_** their advice. ... In this case the flows conform to their advice, but the path does not have sufficient capacity, and the throughput is limited by another limit  (e.g. CC, ore the rate control algorithm of ABR).",
+              "createdAt": "2026-10-16T13:24:12Z",
+              "updatedAt": "2026-10-16T13:25:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSr4Gww",
+          "commit": {
+            "abbreviatedOid": "b60c117"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-16T14:10:02Z",
+          "updatedAt": "2026-10-16T14:10:02Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "This case could be that the path does not have sufficient capacity due to physical constraints or due to policy enforcement (a maximum bitrate based on subscription for instance). \n",
+              "createdAt": "2026-10-16T14:10:02Z",
+              "updatedAt": "2026-10-16T14:10:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSsJt-Q",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-16T14:33:06Z",
+          "updatedAt": "2026-10-16T14:33:06Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "/apply/ is not yet explained.... Does this mean multiple flows could receive advice, but the total available capacity can be less than the sum of each of the advised throughputs? or does it mean something else?\n",
+              "createdAt": "2026-10-16T14:33:06Z",
+              "updatedAt": "2026-10-16T14:33:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSsM71Q",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-16T14:36:12Z",
+          "updatedAt": "2026-10-16T14:36:12Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Perhaps something like;\nOLD:\"since the combined usage of multiple flows might exceed a shared limit.\"\nNEW:\"since the combined usage of multiple flows might exceed the available capacity (e.g., maximum bit rate of the bottleneck or a limit based on a user subscription).\"",
+              "createdAt": "2026-10-16T14:36:12Z",
+              "updatedAt": "2026-10-16T14:36:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSxTvEg",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-16T23:16:31Z",
+          "updatedAt": "2026-10-16T23:16:31Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I'm uncertain if we want to change this paragraph.\n\nThe added \"since \u2026\" clause gives a different reason for enforcement than {{policing}} does. There, monitoring and enforcement are  needed because some applications don't support SCONE or will not or cannot follow advice. Tying enforcement to shared scope suggests that per-flow advice would remove the need to monitor or enforce, which isn't the case.\n\nThe shared-limit point is already covered by the paragraph that follows, which this PR adjusts to say advice is only achievable when the application is alone \"in the scope of the underlying constraint\", with throughput otherwise limited by the congestion controller or rate control.\n\nI'd suggest reverting L237 to the original sentence.",
+              "createdAt": "2026-10-16T23:16:31Z",
+              "updatedAt": "2026-10-16T23:16:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSyIzSg",
+          "commit": {
+            "abbreviatedOid": "b60c117"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-17T02:09:19Z",
+          "updatedAt": "2026-10-17T02:09:20Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "This happens if the advice is based on the capacity of a path shared by multiple connections, and the sum of these connections rate exceeds the limit. It may also arrive is the advice is outdated, and the new advice has not yet been propagated. In such cases, the rate will have to be reduced in response to congestion signals.",
+              "createdAt": "2026-10-17T02:09:20Z",
+              "updatedAt": "2026-10-17T02:09:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSzLEVQ",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-17T06:10:22Z",
+          "updatedAt": "2026-10-17T06:10:22Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "@huitema \n> This happens if the advice is based on the capacity of a path shared by multiple connections\n\nThe need for monitoring and enforcement exists _regardless_ of whether a path is shared by multiple connections. As {{policing}} points out, applications supporting SCONE might be unwilling or unable to follow throughput advice. The current sentence states that monitoring and enforcement might be needed even where applications attempt to follow advice, and that's fine.\n\nAdding \"since the combined usage of multiple flows might exceed a shared limit\" ties that \"even where\" to sharing, as though sharing were the reason, which would be misleading. In the shared-path case, as you note, the rate is reduced in response to congestion signals. That's covered by the next paragraph, not by policing.",
+              "createdAt": "2026-10-17T06:10:22Z",
+              "updatedAt": "2026-10-17T06:12:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSz1Jww",
+          "commit": {
+            "abbreviatedOid": "b60c117"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-17T09:50:25Z",
+          "updatedAt": "2026-10-17T09:50:25Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "There are many cases, and I'd like to avoid any confusion. I think we can still all agree on text. I have no disagreement with any of the technical points above, but I still say we need unambiguous text.",
+              "createdAt": "2026-10-17T09:50:25Z",
+              "updatedAt": "2026-10-17T09:53:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABSz1m5g",
+          "commit": {
+            "abbreviatedOid": "b60c117"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-17T09:53:30Z",
+          "updatedAt": "2026-10-17T09:53:30Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I'm hoping we can describe these cases: (i) flows that do not react to their throughput indication; (ii) multiple flows with applications that individually react to their own throughput indication - but on aggregate exceed another limit; (iii) that SCONE policing applies to (i) but does not apply to (ii) - however other policing can also apply. In all cases some combination of SCONE throughput guidance + congestion control + rate adaptation (by an application) determines the actual throughput.",
+              "createdAt": "2026-10-17T09:53:30Z",
+              "updatedAt": "2026-10-17T09:53:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABS2vgtQ",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "kazuho",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-17T22:10:35Z",
+          "updatedAt": "2026-10-17T22:10:35Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "Yeah, if we want to talk about scope in this sentence, I'd prefer something like:\n\n```suggestion\nregardless of the scope of the underlying constraint or whether\napplications attempt to follow advice (see {{policing}}).\n```",
+              "createdAt": "2026-10-17T22:10:35Z",
+              "updatedAt": "2026-10-17T22:10:35Z"
+            }
+          ]
         }
       ]
     }
