@@ -222,7 +222,7 @@ It is a hint that exceeding that rate is unlikely to be successful,
 from the perspective of a specific network element.
 
 Throughput advice is signaled for a specific flow, but the underlying throughput
-constraint could apply to a collection of flows, rather than a single flow.
+constraint could pertain to a collection of flows, rather than a single flow.
 The scope of the underlying throughput constraint is not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
