@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 19 April 2027                              Private Octopus Inc.
+Expires: 22 April 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         16 October 2026
+                                                         19 October 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2027.
+   This Internet-Draft will expire on 22 April 2027.
 
 Copyright Notice
 
@@ -264,7 +264,7 @@ Table of Contents
    specific network element.
 
    Throughput advice is signaled for a specific flow, but the underlying
-   throughput constraint could apply to a collection of flows, rather
+   throughput constraint could pertain to a collection of flows, rather
    than a single flow.  The scope of the underlying throughput
    constraint is not carried in the signal.
 
