@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-18T03:31:34.016589+00:00",
+  "timestamp": "2026-10-20T03:53:18.518881+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -16684,13 +16684,13 @@
       "labels": [],
       "body": "Proposal for editorial update to clarify distinction between a signal and the scope of the underlying throughput constraint.\nBased on AD- and IESG review comments.",
       "createdAt": "2026-10-16T12:24:15Z",
-      "updatedAt": "2026-10-17T22:10:35Z",
+      "updatedAt": "2026-10-20T01:17:57Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "367418040d4073753d5551dce133d39676175a8a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "clarify-scope",
-      "headRefOid": "5eb706e30a6b41a4441875403fadbef2ba3f2d45",
+      "headRefOid": "fa94d6a996851cf43698977079599e9249698d06",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -16908,6 +16908,112 @@
               "updatedAt": "2026-10-17T22:10:35Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABS8hMvw",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-19T02:40:49Z",
+          "updatedAt": "2026-10-19T02:40:50Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "would the word \"pertain\" be better?  It's not that there is a process involved whereby a value is *applied* to the flow (or collection of flows), but more that the information is *about* those flows.",
+              "createdAt": "2026-10-19T02:40:49Z",
+              "updatedAt": "2026-10-19T02:40:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABS8ipvw",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-19T02:45:46Z",
+          "updatedAt": "2026-10-19T02:45:46Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "I get the sense that we're discussing angels and pinheads.  @gorryfair's language makes it clear that the \"shared limit\" is either a practical one (that a congestion controller would guide) or a policy one.  The key here is that there are shared limits that SCONE cannot advise on because its granularity doesn't match reality.  For that, I think I'd prefer Gorry's expanded version over @kazuho's.  But only mildly\n\n@kazuho makes another reasonable point (one we make elsewhere, to be clear) about the need to monitor given the risk that endpoints refuse to follow advice, but the point here is to establish that they often *can't*.  That \"can't\" is more relevant here than the \"won't\".",
+              "createdAt": "2026-10-19T02:45:46Z",
+              "updatedAt": "2026-10-19T02:45:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABS8iyUA",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "This is good.  Kazuho's amendment is fine, but I'm leaning toward Gorry's expansion.",
+          "createdAt": "2026-10-19T02:46:15Z",
+          "updatedAt": "2026-10-19T02:46:15Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABS_ZEQQ",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-19T09:22:21Z",
+          "updatedAt": "2026-10-19T09:22:21Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "\"Pertain\" is much better, although it's not my most favourite word.",
+              "createdAt": "2026-10-19T09:22:21Z",
+              "updatedAt": "2026-10-19T09:22:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABTEktUQ",
+          "commit": {
+            "abbreviatedOid": "5eb706e"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-19T16:50:13Z",
+          "updatedAt": "2026-10-19T16:50:13Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "> I get the sense that we're discussing angels and pinheads\n\n:)\n\nAfter re-reading this section along with {{policing}}, I've come to agree with @kazuho's original point about reverting the added clause. The proposed text doesn't add much clarity, and I'm not sure an amended version would either. The preceding and following paragraphs, together with {{policing}}, should sufficiently cover @gorryfair's three points.\n",
+              "createdAt": "2026-10-19T16:50:13Z",
+              "updatedAt": "2026-10-19T16:50:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABTJMEMA",
+          "commit": {
+            "abbreviatedOid": "fa94d6a"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-20T01:17:57Z",
+          "updatedAt": "2026-10-20T01:17:57Z",
+          "comments": []
         }
       ]
     }
