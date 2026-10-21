@@ -221,10 +221,9 @@ Nor is it a commitment to providing that throughput.
 It is a hint that exceeding that rate is unlikely to be successful,
 from the perspective of a specific network element.
 
-A signal that is sent for a specific flow
-could apply to a collection of flows,
-rather than a single flow.
-The scope of the flows that are included is not carried in the signal.
+Throughput advice is signaled for a specific flow, but the underlying throughput
+constraint could pertain to a collection of flows, rather than a single flow.
+The scope of the underlying throughput constraint is not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
 such that multiple flows receive the same signal
@@ -235,15 +234,16 @@ as an indication of the maximum achievable throughput
 than as any indication of expected throughput.
 In addition to endpoints respecting congestion signals (see {{not-cc}}),
 networks might need to monitor and enforce policies,
-even where applications attempt to follow advice (see {{policing}}).
+even where applications attempt to follow advice (see {{policing}}),
+since the combined usage of multiple flows might exceed a shared limit.
 
 The advised throughput will likely only be achievable
 when the application is the only entity consuming bandwidth
-in the scope that the advice applies to.
+in the scope of the underlying constraint.
 In the presence of multiple flows,
 achievable throughput could be lower
-than what is indicated by the advice,
-with throughput determined by a congestion controller.
+than indicated by the throughput advice,
+with the throughput limited by the congestion controller or application rate control algorithm.
 
 This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
