@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 29 March 2027                              Private Octopus Inc.
+Expires: 24 April 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       25 September 2026
+                                                         21 October 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 March 2027.
+   This Internet-Draft will expire on 24 April 2027.
 
 Copyright Notice
 
@@ -263,9 +263,10 @@ Table of Contents
    that rate is unlikely to be successful, from the perspective of a
    specific network element.
 
-   A signal that is sent for a specific flow could apply to a collection
-   of flows, rather than a single flow.  The scope of the flows that are
-   included is not carried in the signal.
+   Throughput advice is signaled for a specific flow, but the underlying
+   throughput constraint could pertain to a collection of flows, rather
+   than a single flow.  The scope of the underlying throughput
+   constraint is not carried in the signal.
 
    For instance, policy limits might apply at a network subscription
    level, such that multiple flows receive the same signal and combined
@@ -276,13 +277,15 @@ Table of Contents
    indication of expected throughput.  In addition to endpoints
    respecting congestion signals (see Section 3.1), networks might need
    to monitor and enforce policies, even where applications attempt to
-   follow advice (see Section 7.2.2).
+   follow advice (see Section 7.2.2), since the combined usage of
+   multiple flows might exceed a shared limit.
 
    The advised throughput will likely only be achievable when the
-   application is the only entity consuming bandwidth in the scope that
-   the advice applies to.  In the presence of multiple flows, achievable
-   throughput could be lower than what is indicated by the advice, with
-   throughput determined by a congestion controller.
+   application is the only entity consuming bandwidth in the scope of
+   the underlying constraint.  In the presence of multiple flows,
+   achievable throughput could be lower than indicated by the throughput
+   advice, with the throughput limited by the congestion controller or
+   application rate control algorithm.
 
    This implies that signals can most usefully be applied to a downlink
    flow in access networks, close to an endpoint.  In that case,
