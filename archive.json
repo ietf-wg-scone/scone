@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-20T03:53:18.518881+00:00",
+  "timestamp": "2026-10-22T03:43:05.999949+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -16677,24 +16677,26 @@
       "id": "PR_kwDON1dwo88AAAABI13OQw",
       "title": "signal and scope clarifications",
       "url": "https://github.com/ietf-wg-scone/scone/pull/177",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ihlar",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Proposal for editorial update to clarify distinction between a signal and the scope of the underlying throughput constraint.\nBased on AD- and IESG review comments.",
       "createdAt": "2026-10-16T12:24:15Z",
-      "updatedAt": "2026-10-20T01:17:57Z",
+      "updatedAt": "2026-10-21T00:16:51Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "367418040d4073753d5551dce133d39676175a8a",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "clarify-scope",
       "headRefOid": "fa94d6a996851cf43698977079599e9249698d06",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-10-21T00:16:51Z",
+      "mergedAt": "2026-10-21T00:16:51Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "af7ff7aec83606f1202d5717919692686699d11f"
+      },
       "comments": [],
       "reviews": [
         {
@@ -17013,6 +17015,19 @@
           "body": "",
           "createdAt": "2026-10-20T01:17:57Z",
           "updatedAt": "2026-10-20T01:17:57Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABTKeH6w",
+          "commit": {
+            "abbreviatedOid": "fa94d6a"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-20T05:14:25Z",
+          "updatedAt": "2026-10-20T05:14:25Z",
           "comments": []
         }
       ]
