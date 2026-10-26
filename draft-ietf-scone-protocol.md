@@ -142,7 +142,7 @@ is shown in {{f-scone}}.
 {: #f-scone title="Propagation of SCONE signal"}
 
 QUIC endpoints that receive SCONE packets observe the indicated
-version, extract the rate signal, process the coalesced QUIC packet, 
+version, extract the rate signal, process the coalesced QUIC packet,
 and then record the throughput advice, if present.
 
 Throughput advice only applies to the direction and path for which it is
