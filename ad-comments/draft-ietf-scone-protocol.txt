@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 29 March 2027                              Private Octopus Inc.
+Expires: 29 April 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                       25 September 2026
+                                                         26 October 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 March 2027.
+   This Internet-Draft will expire on 29 April 2027.
 
 Copyright Notice
 
@@ -124,12 +124,12 @@ Table of Contents
 
 1.  Introduction
 
-   Many networks have known, concrete rate limits, or apply these limits
-   by policy to constrain data rates.  This is often done without any
-   ability to indicate rate limits to applications.  The result can be
-   that application performance is degraded, because throughput limits
-   can manifest in ways that are incompatible with the rate estimation
-   or congestion control algorithms used at endpoints.
+   Many networks have known rate limits or apply these limits by policy
+   to constrain data rates.  This is often done without any ability to
+   indicate rate limits to applications.  The result can be that
+   application performance is degraded, because throughput limits can
+   manifest in ways that are incompatible with the rate estimation or
+   congestion control algorithms used at endpoints.
 
    Having the network indicate what throughput limits apply, in a way
    that is accessible to endpoints, allows applications to use this
@@ -189,9 +189,9 @@ Table of Contents
 
                    Figure 1: Propagation of SCONE signal
 
-   QUIC endpoints that receive modified SCONE packets observe the
-   indicated version, process the QUIC packet, and then record the
-   indicated rate.
+   QUIC endpoints that receive SCONE packets observe the indicated
+   version, extract the rate signal, process the coalesced QUIC packet,
+   and then record the throughput advice, if present.
 
    Throughput advice only applies to the direction and path for which it
    is received.  A connection that migrates or uses multipath [QUIC-MP]
@@ -232,8 +232,8 @@ Table of Contents
    In comparison, SCONE throughput advice operates over a much longer
    period.  SCONE provides an explicit signal regarding potential
    throughput constraints on a path.  This allows applications to set
-   throughput targets quickly, without waiting for congestion signals to
-   resolve the achievable throughput.
+   throughput targets quickly, without waiting to estimate achievable
+   throughput from observed performance.
 
    Congestion signals can indicate a throughput limit that is different
    from the signaled throughput advice.  Endpoints cannot assume that
@@ -263,9 +263,10 @@ Table of Contents
    that rate is unlikely to be successful, from the perspective of a
    specific network element.
 
-   A signal that is sent for a specific flow could apply to a collection
-   of flows, rather than a single flow.  The scope of the flows that are
-   included is not carried in the signal.
+   Throughput advice is signaled for a specific flow, but the underlying
+   throughput constraint could pertain to a collection of flows, rather
+   than a single flow.  The scope of the underlying throughput
+   constraint is not carried in the signal.
 
    For instance, policy limits might apply at a network subscription
    level, such that multiple flows receive the same signal and combined
@@ -276,13 +277,15 @@ Table of Contents
    indication of expected throughput.  In addition to endpoints
    respecting congestion signals (see Section 3.1), networks might need
    to monitor and enforce policies, even where applications attempt to
-   follow advice (see Section 7.2.2).
+   follow advice (see Section 7.2.2), since the combined usage of
+   multiple flows might exceed a shared limit.
 
    The advised throughput will likely only be achievable when the
-   application is the only entity consuming bandwidth in the scope that
-   the advice applies to.  In the presence of multiple flows, achievable
-   throughput could be lower than what is indicated by the advice, with
-   throughput determined by a congestion controller.
+   application is the only entity consuming bandwidth in the scope of
+   the underlying constraint.  In the presence of multiple flows,
+   achievable throughput could be lower than indicated by the throughput
+   advice, with the throughput limited by the congestion controller or
+   application rate control algorithm.
 
    This implies that signals can most usefully be applied to a downlink
    flow in access networks, close to an endpoint.  In that case,
@@ -308,10 +311,10 @@ Table of Contents
 
    When network elements provide throughput advice to a QUIC flow that
    encapsulates tunneled flows (such as [CONNECT-UDP]) they can only
-   provide the advice to the outermost flow.  Endpoints can apply the
-   throughput advice to packets in flows that are subsequently
-   encapsulated, but following that advice can have privacy
-   implications; see Section 10.2.
+   provide the advice to the outermost flow; see [SCONE-MAN] for further
+   considerations.  Endpoints can apply the throughput advice to packets
+   in flows that are subsequently encapsulated, but following that
+   advice can have privacy implications; see Section 10.2.
 
 3.4.  Unidirectional Signal
 
@@ -538,8 +541,9 @@ Table of Contents
    The choice of 67 seconds is a compromise between competing interests.
    Longer periods allow applications more flexibility in terms of how to
    allocate bandwidth over time.  Shorter periods allow networks to
-   administer policies more tightly.  A shorter period also allows
-   applications to increase send rates sooner when rates increase.
+   administer policies more tightly, or react more quickly to changes in
+   their capacity.  A shorter period also allows applications to
+   increase send rates sooner when rates increase.
 
    The choice of 67 seconds, as a prime number, also helps avoid
    synchronization with other periodic effects that are commonly
@@ -725,7 +729,8 @@ Table of Contents
 
    QUIC endpoints can enable the use of the SCONE protocol by sending
    SCONE packets (Section 5).  Network elements can then update the Rate
-   Signal field (Section 7.1) according to their policies.
+   Signal field (Section 7.1) based on network policies or information
+   about available capacity.
 
 7.1.  Applying Throughput Advice Signals
 
@@ -760,7 +765,7 @@ Table of Contents
    Once the throughput advice is updated, the network element updates
    the UDP checksum for the datagram.  An incremental update process is
    described in [RFC1624] and Section 8.1 of [RFC8200] includes
-   additional information.
+   additional information relating to IPv6.
 
 7.1.1.  When To Avoid Updating Throughput Advice
 

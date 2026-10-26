@@ -23,18 +23,18 @@ complementary to real-time congestion control signals.
 <meta content="draft-ietf-scone-protocol-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.34.1
-    Python 3.14.7
-    ConfigArgParse 1.7.7
+    Python 3.14.8
+    ConfigArgParse 1.8.0
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.11.10
+    platformdirs 4.13.4
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
-    wcwidth 0.8.4
+    wcwidth 0.9.2
 -->
 <link href="draft-ietf-scone-protocol.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1050,11 +1050,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SCONE Protocol</td>
-<td class="right">September 2026</td>
+<td class="right">October 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Thomson, et al.</td>
-<td class="center">Expires 28 March 2027</td>
+<td class="center">Expires 29 April 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg {
 <dd class="internet-draft">draft-ietf-scone-protocol-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-09-24" class="published">24 September 2026</time>
+<time datetime="2026-10-26" class="published">26 October 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-03-28">28 March 2027</time></dd>
+<dd class="expires"><time datetime="2027-04-29">29 April 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1143,7 +1143,7 @@ complementary to real-time congestion control signals.<a href="#section-abstract
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 April 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1338,7 +1338,7 @@ complementary to real-time congestion control signals.<a href="#section-abstract
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Many networks have known, concrete rate limits, or apply these limits
+<p id="section-1-1">Many networks have known rate limits or apply these limits
 by policy to constrain data rates.
 This is often done without any ability to indicate rate limits to applications.
 The result can be that application performance is degraded,
@@ -1360,7 +1360,7 @@ to provide throughput advice to QUIC endpoints.<a href="#section-1-4" class="pil
 to cooperating endpoints to limit overall network usage.
 Where congestion control signals --
 such as Explicit Congestion Notification (ECN) <span>[<a href="#ECN" class="cite xref">ECN</a>]</span>, delays and loss --
-operate on a time scale of a round trip time,
+operate on a timescale of a round trip time,
 throughput advice operates over a much longer period.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">This has benefits in some networks
 as endpoints can adapt network usage to better suit network conditions.
@@ -1385,7 +1385,7 @@ The network, via an on-path network element, can indicate a maximum
 sustainable throughput by modifying the SCONE packet as it transits the
 network element.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">The propagation of SCONE packets,
-including the throughput advice that is update by a network element,
+including the throughput advice that is updated by a network element,
 is shown in <a href="#f-scone" class="auto internal xref">Figure 1</a>.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <span id="name-propagation-of-scone-signal"></span><div id="f-scone">
 <figure id="figure-1">
@@ -1438,8 +1438,9 @@ is shown in <a href="#f-scone" class="auto internal xref">Figure 1</a>.<a href="
 <a href="#name-propagation-of-scone-signal" class="selfRef">Propagation of SCONE signal</a>
         </figcaption></figure>
 </div>
-<p id="section-2-5">QUIC endpoints that receive modified SCONE packets observe the indicated
-version, process the QUIC packet, and then record the indicated rate.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-5">QUIC endpoints that receive SCONE packets observe the indicated
+version, extract the rate signal, process the coalesced QUIC packet,
+and then record the throughput advice, if present.<a href="#section-2-5" class="pilcrow">¶</a></p>
 <p id="section-2-6">Throughput advice only applies to the direction and path for which it is
 received.  A connection that migrates or uses multipath
 <span>[<a href="#QUIC-MP" class="cite xref">QUIC-MP</a>]</span>
@@ -1485,7 +1486,7 @@ and change sending behavior more quickly than SCONE allows.<a href="#section-3.1
 SCONE provides an explicit signal
 regarding potential throughput constraints on a path.
 This allows applications to set throughput targets quickly,
-without waiting for congestion signals to resolve the achievable throughput.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+without waiting to estimate achievable throughput from observed performance.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">Congestion signals can indicate a throughput limit
 that is different from the signaled throughput advice.
 Endpoints cannot assume that the rate indicated in throughput advice is achievable if congestion
@@ -1516,10 +1517,9 @@ that does not prove that the flow can achieve that rate.
 Nor is it a commitment to providing that throughput.
 It is a hint that exceeding that rate is unlikely to be successful,
 from the perspective of a specific network element.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">A signal that is sent for a specific flow
-could apply to a collection of flows,
-rather than a single flow.
-The scope of the flows that are included is not carried in the signal.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">Throughput advice is signaled for a specific flow, but the underlying throughput
+constraint could pertain to a collection of flows, rather than a single flow.
+The scope of the underlying throughput constraint is not carried in the signal.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">For instance, policy limits might apply at a network subscription level,
 such that multiple flows receive the same signal
 and combined usage contributes to the shared limit.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
@@ -1528,14 +1528,15 @@ as an indication of the maximum achievable throughput
 than as any indication of expected throughput.
 In addition to endpoints respecting congestion signals (see <a href="#not-cc" class="auto internal xref">Section 3.1</a>),
 networks might need to monitor and enforce policies,
-even where applications attempt to follow advice (see <a href="#policing" class="auto internal xref">Section 7.2.2</a>).<a href="#section-3.2-4" class="pilcrow">¶</a></p>
+even where applications attempt to follow advice (see <a href="#policing" class="auto internal xref">Section 7.2.2</a>),
+since the combined usage of multiple flows might exceed a shared limit.<a href="#section-3.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.2-5">The advised throughput will likely only be achievable
 when the application is the only entity consuming bandwidth
-in the scope that the advice applies to.
+in the scope of the underlying constraint.
 In the presence of multiple flows,
 achievable throughput could be lower
-than what is indicated by the advice,
-with throughput determined by a congestion controller.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+than indicated by the throughput advice,
+with the throughput limited by the congestion controller or application rate control algorithm.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-6">This implies that signals can most usefully be applied to a downlink flow
 in access networks, close to an endpoint. In that case, capacity is less likely
 to be split between multiple active flows.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
@@ -1564,7 +1565,8 @@ but endpoints cannot assume that this is the case.
 A separate signal can be sent for each flow.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">When network elements provide throughput advice to a QUIC flow
 that encapsulates tunneled flows (such as <span>[<a href="#CONNECT-UDP" class="cite xref">CONNECT-UDP</a>]</span>)
-they can only provide the advice to the outermost flow.
+they can only provide the advice to the outermost flow;
+see <span>[<a href="#SCONE-MAN" class="cite xref">SCONE-MAN</a>]</span> for further considerations.
 Endpoints can apply the throughput advice to packets in flows
 that are subsequently encapsulated,
 but following that advice can have privacy implications;
@@ -1861,7 +1863,8 @@ using time period of at least 67 seconds.<a href="#section-5.2-2" class="pilcrow
 <p id="section-5.2-3">The choice of 67 seconds is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
-Shorter periods allow networks to administer policies more tightly.
+Shorter periods allow networks to administer policies more tightly,
+or react more quickly to changes in their capacity.
 A shorter period also allows applications
 to increase send rates sooner
 when rates increase.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
@@ -1871,33 +1874,41 @@ effects that are commonly measured in whole seconds.
 This includes segment length or key frame intervals in video applications,
 but also includes timers for Network Address Translation (NAT) devices;
 see <span><a href="https://rfc-editor.org/rfc/rfc4787#section-4.3" class="relref">Section 4.3</a> of [<a href="#RFC4787" class="cite xref">RFC4787</a>]</span>.
-Any repeating phenomenon at a 67 second interval is therefore
+Any repeating phenomenon at a 67-second interval is therefore
 unlikely to be due to other periodic effects.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="endpoint-processing-of-scone-packets">
+<div id="recv-advice">
 <section id="section-5.3">
         <h3 id="name-endpoint-processing-of-scon">
 <a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-endpoint-processing-of-scon" class="section-name selfRef">Endpoint Processing of SCONE Packets</a>
         </h3>
 <p id="section-5.3-1">Processing a SCONE packet involves reading the value from the Rate Signal field.
-However, throughput advice <span class="bcp14">MUST</span> be ignored unless another packet from the same
-datagram is successfully processed.  Therefore, a SCONE packet always needs to
-be coalesced with other QUIC packets.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.3-2">A SCONE packet is defined by the use of the long header bit (0x80 in the first
+However, throughput advice <span class="bcp14">MUST</span> be ignored
+unless another packet from the same datagram is successfully processed.
+A SCONE packet therefore always needs to be coalesced
+with other QUIC packets;
+see <a href="#off-path" class="auto internal xref">Section 9.1</a> for why this is necessary.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3-2">What successful processing means depends on
+the QUIC version associated with the coalesced packets,
+but this minimally includes successfully authenticating the packet as valid.
+SCONE packets <span class="bcp14">MUST</span> be ignored if the QUIC packets that follow
+are discarded or ignored by the endpoint,
+which especially includes packets that are discarded as potential duplicates.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
+<p id="section-5.3-3">A SCONE packet is defined by the use of the long header bit (0x80 in the first
 byte) and the SCONE protocol version (0x6f7dc0fd or 0xef7dc0fd in the next four
 bytes). The 7-bit Rate Signal can be extracted by combining the low 6 bits
 of the first byte with the most significant bit of the version field. A SCONE
 packet <span class="bcp14">MUST</span> be discarded if the Destination Connection ID is not consistent with
 those coalesced packets, as specified in <a href="#packet" class="auto internal xref">Section 5</a>. Similarly, if the Source
-Connection ID is inconsistent, the SCONE packet <span class="bcp14">MAY</span> be discarded.<a href="#section-5.3-2" class="pilcrow">¶</a></p>
-<p id="section-5.3-3">When discarding a SCONE packet due to inconsistent Connection IDs, endpoints <span class="bcp14">MAY</span>
-also discard the QUIC packets that were coalesced into the same datagram.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
-<p id="section-5.3-4">A receiver <span class="bcp14">MAY</span> discard a datagram that contains more than one SCONE packet.
-A receiver <span class="bcp14">MUST</span> discard a SCONE packet if the rate signal is unknown (127).<a href="#section-5.3-4" class="pilcrow">¶</a></p>
-<p id="section-5.3-5">If a connection uses multiple Differentiated Services Code Point (DSCP) markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
+Connection ID is inconsistent, the SCONE packet <span class="bcp14">MAY</span> be discarded.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3-4">When discarding a SCONE packet due to inconsistent Connection IDs, endpoints <span class="bcp14">MAY</span>
+also discard the QUIC packets that were coalesced into the same datagram.<a href="#section-5.3-4" class="pilcrow">¶</a></p>
+<p id="section-5.3-5">A receiver <span class="bcp14">MAY</span> discard a datagram that contains more than one SCONE packet.
+A receiver <span class="bcp14">MUST</span> discard a SCONE packet if the rate signal is unknown (127).<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<p id="section-5.3-6">If a connection uses multiple Differentiated Services Code Point (DSCP) markings <span>[<a href="#RFC2474" class="cite xref">RFC2474</a>]</span>,
 the throughput advice that is received on datagrams with one marking
-might not apply to datagrams that have different markings.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+might not apply to datagrams that have different markings.<a href="#section-5.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="algorithm">
@@ -1956,7 +1967,7 @@ including the scone_supported transport parameter (0x219e).<a href="#section-6-1
 An endpoint that does not include the scone_supported transport parameter
 can send SCONE packets if their peer includes the transport parameter.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <p id="section-6-3">The scone_supported transport parameter <span class="bcp14">MUST</span> be empty.
-Receiving a non-zero length scone_supported transport parameter <span class="bcp14">MUST</span> be treated
+Receiving a non-zero-length scone_supported transport parameter <span class="bcp14">MUST</span> be treated
 as a connection error of type TRANSPORT_PARAMETER_ERROR;
 see <span><a href="https://rfc-editor.org/rfc/rfc9000#section-20.1" class="relref">Section 20.1</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <p id="section-6-4">This transport parameter is valid for QUIC versions 1 <span>[<a href="#QUIC" class="cite xref">QUIC</a>]</span> and 2
@@ -1976,9 +1987,10 @@ until the transport parameter is received.<a href="#section-6-5" class="pilcrow"
 <span class="bcp14">MUST</span> include bytes with values 0xc8 and 0x13
 as the last two bytes of the payload of the UDP datagrams
 that commence a new flow,
-if the protocol permits the inclusion of data after packets.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+if the QUIC version in use permits the inclusion of data after packets.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">For example, in QUIC version 1,
-these datagrams contain QUIC packets with a long header (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-17.2" class="relref">Section 17.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>).
+these datagrams contain QUIC packets with a long header,
+including a length prefix (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-17.2" class="relref">Section 17.2</a> of [<a href="#QUIC" class="cite xref">QUIC</a>]</span>).
 The UDP datagrams sent by a client can contain:
 one or more QUIC version 1 Initial packets,
 zero or more 0-RTT packets,
@@ -1996,7 +2008,7 @@ the indication can be included in every datagram the client sends
 until it receives a response -- of any kind -- from the server.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="limitations-of-indication">
+<div id="indicator-limits">
 <section id="section-6.2">
         <h3 id="name-limitations-of-indication">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-limitations-of-indication" class="section-name selfRef">Limitations of Indication</a>
@@ -2045,9 +2057,11 @@ but only if the peer has sent the transport parameter; see <a href="#tp" class="
 <a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-avoiding-ossification-when-" class="section-name selfRef">Avoiding Ossification When Reading the Indicator</a>
         </h3>
 <p id="section-6.4-1">A network element could classify all 5-tuples where the first observed UDP
-datagram ends in the indicator bytes as potential SCONE. A network element <span class="bcp14">MAY</span>
+datagram ends in the indicator bytes as potential SCONE.
+However, this is not a strong indicator (see <a href="#indicator-limits" class="auto internal xref">Section 6.2</a>),
+so network elements are encouraged to
 apply further criteria to further reduce the set of flows that are identified
-as potentially supporting SCONE, reducing the likelihood of false positives.
+as potentially supporting SCONE to reduce the likelihood of false positives.
 However, it <span class="bcp14">SHOULD NOT</span> apply criteria that reduce the ability of new QUIC
 versions to employ SCONE. SCONE operates independently of any specific QUIC
 version, so any criteria should consult the QUIC version invariants in
@@ -2065,7 +2079,7 @@ version, so any criteria should consult the QUIC version invariants in
 by sending SCONE packets (<a href="#packet" class="auto internal xref">Section 5</a>).
 Network elements can then update
 the Rate Signal field (<a href="#apply" class="auto internal xref">Section 7.1</a>)
-according to their policies.<a href="#section-7-1" class="pilcrow">¶</a></p>
+based on network policies or information about available capacity.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <div id="apply">
 <section id="section-7.1">
         <h3 id="name-applying-throughput-advice-">
@@ -2087,9 +2101,9 @@ signal (<code>target_signal</code>) that encodes the throughput advice of this n
 element.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
 <div class="lang-pseudocode sourcecode" id="section-7.1-5">
 <pre>
-is_long = packet[0] &amp; 0x80 == 0x80
-packet_version = ntohl(packet[1..5])
-if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
+is_long = (packet[0] &amp; 0x80) == 0x80
+packet_version = ntohl(packet[1:5])  # convert network to host endian
+if is_long and ((packet_version &amp; 0x7fffffff) == 0x6f7dc0fd):
   packet_signal = ((packet[0] &amp; 0x3f) &lt;&lt; 1) | (packet_version &gt;&gt; 31)
   if target_signal &lt; packet_signal:
     packet[0] = (packet[0] &amp; 0xc0) | (target_signal &gt;&gt; 1)
@@ -2097,8 +2111,9 @@ if is_long and (packet_version &amp; 0x7fffffff) == SCONE_VERSION_BITS:
 </pre><a href="#section-7.1-5" class="pilcrow">¶</a>
 </div>
 <p id="section-7.1-6">Once the throughput advice is updated,
-the network element updates the UDP checksum for the datagram;
-see <span>[<a href="#RFC1141" class="cite xref">RFC1141</a>]</span>.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
+the network element updates the UDP checksum for the datagram.
+An incremental update process is described in <span>[<a href="#RFC1624" class="cite xref">RFC1624</a>]</span>
+and <span><a href="https://rfc-editor.org/rfc/rfc8200#section-8.1" class="relref">Section 8.1</a> of [<a href="#RFC8200" class="cite xref">RFC8200</a>]</span> includes additional information relating to IPv6.<a href="#section-7.1-6" class="pilcrow">¶</a></p>
 <div id="when-to-avoid-updating-throughput-advice">
 <section id="section-7.1.1">
           <h4 id="name-when-to-avoid-updating-thro">
@@ -2311,8 +2326,14 @@ rather than to send multiple SCONE packets in less frequent bursts.<a href="#sec
 <p id="section-8.1-11">The main cost associated with sending SCONE packets
 is the reduction in available space in datagrams
 for application data.<a href="#section-8.1-11" class="pilcrow">¶</a></p>
-<p id="section-8.1-12">A network element that wishes to signal updated throughput advice waits for the
-next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
+<p id="section-8.1-12">A sender <span class="bcp14">MUST NOT</span> send a SCONE packet
+unless a QUIC packet needs to be sent for other reasons.
+It is safe to allow throughput advice to lapse
+if the connection is otherwise idle,
+whereas induced activity wastes resources
+by keeping connections alive unnecessarily.<a href="#section-8.1-12" class="pilcrow">¶</a></p>
+<p id="section-8.1-13">A network element that wishes to signal updated throughput advice waits for the
+next SCONE packet in the desired direction; see <a href="#apply" class="auto internal xref">Section 7.1</a>.<a href="#section-8.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="feedback">
@@ -2320,7 +2341,7 @@ next SCONE packet in the desired direction; see <a href="#apply" class="auto int
         <h3 id="name-feedback-to-sender-about-si">
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-feedback-to-sender-about-si" class="section-name selfRef">Feedback To Sender About Signals</a>
         </h3>
-<p id="section-8.2-1">Information about throughout advice is intended for the sending application.  Any
+<p id="section-8.2-1">Information about throughput advice is intended for the sending application.  Any
 signal from network elements can be propagated to the receiving application
 using an implementation-defined mechanism.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">This document does not define a means for indicating what was received.
@@ -2369,7 +2390,7 @@ endpoints.<a href="#section-9-2" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-9.1-1">The modification of packets provides endpoints proof that a network element is
 in a position to drop datagrams and could apply a rate limit policy.
-<a href="#extra-packets" class="auto internal xref">Section 8.1</a> states that endpoints only accept signals if the datagram
+<a href="#recv-advice" class="auto internal xref">Section 5.3</a> states that endpoints only accept signals if the datagram
 contains a packet that it accepts to prevent an off-path attacker from inserting
 spurious throughput advice.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <p id="section-9.1-2">Some off-path attackers could be able to both
@@ -2385,7 +2406,7 @@ or misleading rate limit.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
 <p id="section-9.1-3">The recipient of throughput advice therefore cannot guarantee that
 the signal was not generated by an on-path network element.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
 <p id="section-9.1-4">The capabilities required of an off-path attacker are substantially
-similar to those of on path elements.
+similar to those of on-path elements.
 An off-path attacker can generate throughput advice
 that will be accepted by an endpoint
 if it has the ability to damage packets
@@ -2813,9 +2834,9 @@ Transport Parameters" registry maintained at
         <dd>
 <span class="refAuthor">Liu, Y.</span>, <span class="refAuthor">Ma, Y.</span>, <span class="refAuthor">De Coninck, Q.</span>, <span class="refAuthor">Bonaventure, O.</span>, <span class="refAuthor">Huitema, C.</span>, and <span class="refAuthor">M. Kühlewind</span>, <span class="refTitle">"Managing multiple paths for a QUIC connection"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-quic-multipath-21</span>, <time datetime="2026-03-17" class="refDate">17 March 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21">https://datatracker.ietf.org/doc/html/draft-ietf-quic-multipath-21</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC1141">[RFC1141]</dt>
+<dt id="RFC1624">[RFC1624]</dt>
         <dd>
-<span class="refAuthor">Mallory, T.</span> and <span class="refAuthor">A. Kullberg</span>, <span class="refTitle">"Incremental updating of the Internet checksum"</span>, <span class="seriesInfo">RFC 1141</span>, <span class="seriesInfo">DOI 10.17487/RFC1141</span>, <time datetime="1990-01" class="refDate">January 1990</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1141">https://www.rfc-editor.org/rfc/rfc1141</a>&gt;</span>. </dd>
+<span class="refAuthor">Rijsinghani, A., Ed.</span>, <span class="refTitle">"Computation of the Internet Checksum via Incremental Update"</span>, <span class="seriesInfo">RFC 1624</span>, <span class="seriesInfo">DOI 10.17487/RFC1624</span>, <time datetime="1994-05" class="refDate">May 1994</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1624">https://www.rfc-editor.org/rfc/rfc1624</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2474">[RFC2474]</dt>
         <dd>
@@ -2824,6 +2845,10 @@ Transport Parameters" registry maintained at
 <dt id="RFC4787">[RFC4787]</dt>
         <dd>
 <span class="refAuthor">Audet, F., Ed.</span> and <span class="refAuthor">C. Jennings</span>, <span class="refTitle">"Network Address Translation (NAT) Behavioral Requirements for Unicast UDP"</span>, <span class="seriesInfo">BCP 127</span>, <span class="seriesInfo">RFC 4787</span>, <span class="seriesInfo">DOI 10.17487/RFC4787</span>, <time datetime="2007-01" class="refDate">January 2007</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4787">https://www.rfc-editor.org/rfc/rfc4787</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8200">[RFC8200]</dt>
+        <dd>
+<span class="refAuthor">Deering, S.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Internet Protocol, Version 6 (IPv6) Specification"</span>, <span class="seriesInfo">STD 86</span>, <span class="seriesInfo">RFC 8200</span>, <span class="seriesInfo">DOI 10.17487/RFC8200</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8200">https://www.rfc-editor.org/rfc/rfc8200</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SCONE-MAN">[SCONE-MAN]</dt>
         <dd>
@@ -2847,8 +2872,8 @@ Transport Parameters" registry maintained at
 specification that forms the basis for a large part of this document.
 The following people also contributed significantly
 to the development of the protocol: <span class="contact-name">Alan Frindell</span>,
-<span class="contact-name">Gorry Fairhurst</span>, <span class="contact-name">Kevin Smith</span>, <span class="contact-name">Martin Duke</span>,
-and <span class="contact-name">Zaheduzzaman Sarker</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<span class="contact-name">Andrew Yourtchenko</span>, <span class="contact-name">Gorry Fairhurst</span>, <span class="contact-name">Ionuț Mihalcea</span>,
+<span class="contact-name">Kevin Smith</span>, <span class="contact-name">Martin Duke</span>, and <span class="contact-name">Zaheduzzaman Sarker</span>.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
