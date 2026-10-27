@@ -227,7 +227,7 @@ The scope of the underlying throughput constraint is not carried in the signal.
 
 For instance, policy limits might apply at a network subscription level,
 such that multiple flows receive the same signal
-and combined usage contributes to the shared limit.
+and combined usage contributes to a shared capacity limit.
 
 Endpoints can therefore be more confident in the throughput signal
 as an indication of the maximum achievable throughput
@@ -235,7 +235,7 @@ than as any indication of expected throughput.
 In addition to endpoints respecting congestion signals (see {{not-cc}}),
 networks might need to monitor and enforce policies,
 even where applications attempt to follow advice (see {{policing}}),
-since the combined usage of multiple flows might exceed a shared limit.
+since the combined usage of multiple flows might exceed the shared capacity limit.
 
 The advised throughput will likely only be achievable
 when the application is the only entity consuming bandwidth
