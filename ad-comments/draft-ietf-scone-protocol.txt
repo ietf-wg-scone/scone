@@ -190,9 +190,9 @@ Table of Contents
                    Figure 1: Propagation of SCONE signal
 
    QUIC endpoints that receive SCONE packets observe the indicated
-   version, extract the rate signal.  They record any throughput advice
-   only if the coalesced QUIC packet is successfully processed; see
-   Section 5.3.
+   version and extract the rate signal.  They record any throughput
+   advice only if the coalesced QUIC packet is successfully processed;
+   see Section 5.3.
 
    Throughput advice only applies to the direction and path for which it
    is received.  A connection that migrates or uses multipath [QUIC-MP]
