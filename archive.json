@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-22T03:43:05.999949+00:00",
+  "timestamp": "2026-10-27T04:06:34.108599+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -17029,6 +17029,86 @@
           "createdAt": "2026-10-20T05:14:25Z",
           "updatedAt": "2026-10-20T05:14:25Z",
           "comments": []
+        }
+      ]
+    },
+    {
+      "number": 178,
+      "id": "PR_kwDON1dwo88AAAABKzKrgg",
+      "title": "Editorial suggestions from AD review",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/178",
+      "state": "OPEN",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This PR addresses a number of comments and suggestions made by Gorry. \n\nNote that the SCONE-MAN reference on line 277 depends on landing https://github.com/ietf-wg-scone/appman/pull/37 in appman. ",
+      "createdAt": "2026-10-26T15:04:29Z",
+      "updatedAt": "2026-10-26T19:04:35Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "af7ff7aec83606f1202d5717919692686699d11f",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "ad-comments",
+      "headRefOid": "2d68a1cc22e36eec2bb8296331a40c74b73c5074",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABUTMJgQ",
+          "commit": {
+            "abbreviatedOid": "2d68a1c"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "For me, this resolves all the AD comments in group B, please submit a revised draft when able, to allow these comments to be resolved.\nI expect a separate PR will address the two comments in group A.",
+          "createdAt": "2026-10-26T18:44:22Z",
+          "updatedAt": "2026-10-26T18:44:22Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABUTS6ow",
+          "commit": {
+            "abbreviatedOid": "2d68a1c"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "I think that these edits are editorial by nature, and are OK.\r\n\r\nOn the other hand, if we are to make the overview more precise, I think that we ought to specify that when the endpoints \"_observe the indicated version, extract the rate signal, process the coalesced QUIC packet, and then record the throughput advice, if present_\", the processing of the coalesced packet could fail, and in these cases the advice will be ignored.\r\n\r\nThis is rather important. The \"processing of the coalesced packet\" includes verifying that the packet is valid and has not been already seen. This prevents attacks in which the attacker would replay an old packet with some fake advice.\r\n\r\nOf course we do not want to replicate the content of the {#recv-advice} section in the overview. But I believe that mentioning the \"processing\" can result in the advice being ignored, and having a couple words saying that and a forward pointer to the relevant section would be nice.",
+          "createdAt": "2026-10-26T18:53:03Z",
+          "updatedAt": "2026-10-26T19:04:43Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "Should we include here a forward pointer to \"Endpoint Processing of SCONE Packets {#recv-advice}\"?\n",
+              "createdAt": "2026-10-26T18:53:03Z",
+              "updatedAt": "2026-10-26T19:03:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABUTbb9g",
+          "commit": {
+            "abbreviatedOid": "733a9d5"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-26T19:04:35Z",
+          "updatedAt": "2026-10-26T19:04:35Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": ":-)",
+              "createdAt": "2026-10-26T19:04:35Z",
+              "updatedAt": "2026-10-26T19:04:36Z"
+            }
+          ]
         }
       ]
     }
