@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 29 April 2027                              Private Octopus Inc.
+Expires: 30 April 2027                              Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         26 October 2026
+                                                         27 October 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 April 2027.
+   This Internet-Draft will expire on 30 April 2027.
 
 Copyright Notice
 
@@ -190,8 +190,9 @@ Table of Contents
                    Figure 1: Propagation of SCONE signal
 
    QUIC endpoints that receive SCONE packets observe the indicated
-   version, extract the rate signal, process the coalesced QUIC packet,
-   and then record the throughput advice, if present.
+   version, extract the rate signal.  They record any throughput advice
+   only if the coalesced QUIC packet is successfully processed; see
+   Section 5.3.
 
    Throughput advice only applies to the direction and path for which it
    is received.  A connection that migrates or uses multipath [QUIC-MP]
