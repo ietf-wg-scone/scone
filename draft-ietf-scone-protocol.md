@@ -72,7 +72,7 @@ complementary to real-time congestion control signals.
 
 # Introduction
 
-Many networks have known, concrete rate limits, or apply these limits
+Many networks have known rate limits or apply these limits
 by policy to constrain data rates.
 This is often done without any ability to indicate rate limits to applications.
 The result can be that application performance is degraded,
@@ -141,8 +141,10 @@ is shown in {{f-scone}}.
 ~~~
 {: #f-scone title="Propagation of SCONE signal"}
 
-QUIC endpoints that receive modified SCONE packets observe the indicated
-version, process the QUIC packet, and then record the indicated rate.
+QUIC endpoints that receive SCONE packets observe the indicated
+version and extract the rate signal. They record any throughput advice
+only if the coalesced QUIC packet is successfully processed;
+see {{recv-advice}}.
 
 Throughput advice only applies to the direction and path for which it is
 received.  A connection that migrates or uses multipath
@@ -189,7 +191,7 @@ In comparison, SCONE throughput advice operates over a much longer period.
 SCONE provides an explicit signal
 regarding potential throughput constraints on a path.
 This allows applications to set throughput targets quickly,
-without waiting for congestion signals to resolve the achievable throughput.
+without waiting to estimate achievable throughput from observed performance.
 
 Congestion signals can indicate a throughput limit
 that is different from the signaled throughput advice.
@@ -489,7 +491,8 @@ using time period of at least 67 seconds.
 The choice of 67 seconds is a compromise between competing interests.
 Longer periods allow applications more flexibility
 in terms of how to allocate bandwidth over time.
-Shorter periods allow networks to administer policies more tightly.
+Shorter periods allow networks to administer policies more tightly,
+or react more quickly to changes in their capacity.
 A shorter period also allows applications
 to increase send rates sooner
 when rates increase.
@@ -707,7 +710,7 @@ QUIC endpoints can enable the use of the SCONE protocol
 by sending SCONE packets ({{packet}}).
 Network elements can then update
 the Rate Signal field ({{apply}})
-according to their policies.
+based on network policies or information about available capacity.
 
 
 ## Applying Throughput Advice Signals {#apply}
@@ -743,7 +746,7 @@ if is_long and ((packet_version & 0x7fffffff) == 0x6f7dc0fd):
 Once the throughput advice is updated,
 the network element updates the UDP checksum for the datagram.
 An incremental update process is described in {{?RFC1624}}
-and {{Section 8.1 of ?RFC8200}} includes additional information.
+and {{Section 8.1 of ?RFC8200}} includes additional information relating to IPv6.
 
 
 ### When To Avoid Updating Throughput Advice
