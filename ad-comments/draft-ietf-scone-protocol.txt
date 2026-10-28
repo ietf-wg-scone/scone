@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 30 April 2027                              Private Octopus Inc.
+Expires: 1 May 2027                                 Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         27 October 2026
+                                                         28 October 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 April 2027.
+   This Internet-Draft will expire on 1 May 2027.
 
 Copyright Notice
 
@@ -312,10 +312,10 @@ Table of Contents
 
    When network elements provide throughput advice to a QUIC flow that
    encapsulates tunneled flows (such as [CONNECT-UDP]) they can only
-   provide the advice to the outermost flow; see [SCONE-MAN] for further
-   considerations.  Endpoints can apply the throughput advice to packets
-   in flows that are subsequently encapsulated, but following that
-   advice can have privacy implications; see Section 10.2.
+   provide the advice to the outermost flow.  Endpoints can apply the
+   throughput advice to packets in flows that are subsequently
+   encapsulated, but following that advice can have privacy
+   implications; see Section 10.2.
 
 3.4.  Unidirectional Signal
 
