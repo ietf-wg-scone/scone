@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 24 April 2027                              Private Octopus Inc.
+Expires: 1 May 2027                                 Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         21 October 2026
+                                                         28 October 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2027.
+   This Internet-Draft will expire on 1 May 2027.
 
 Copyright Notice
 
@@ -124,12 +124,12 @@ Table of Contents
 
 1.  Introduction
 
-   Many networks have known, concrete rate limits, or apply these limits
-   by policy to constrain data rates.  This is often done without any
-   ability to indicate rate limits to applications.  The result can be
-   that application performance is degraded, because throughput limits
-   can manifest in ways that are incompatible with the rate estimation
-   or congestion control algorithms used at endpoints.
+   Many networks have known rate limits or apply these limits by policy
+   to constrain data rates.  This is often done without any ability to
+   indicate rate limits to applications.  The result can be that
+   application performance is degraded, because throughput limits can
+   manifest in ways that are incompatible with the rate estimation or
+   congestion control algorithms used at endpoints.
 
    Having the network indicate what throughput limits apply, in a way
    that is accessible to endpoints, allows applications to use this
@@ -189,9 +189,10 @@ Table of Contents
 
                    Figure 1: Propagation of SCONE signal
 
-   QUIC endpoints that receive modified SCONE packets observe the
-   indicated version, process the QUIC packet, and then record the
-   indicated rate.
+   QUIC endpoints that receive SCONE packets observe the indicated
+   version and extract the rate signal.  They record any throughput
+   advice only if the coalesced QUIC packet is successfully processed;
+   see Section 5.3.
 
    Throughput advice only applies to the direction and path for which it
    is received.  A connection that migrates or uses multipath [QUIC-MP]
@@ -232,8 +233,8 @@ Table of Contents
    In comparison, SCONE throughput advice operates over a much longer
    period.  SCONE provides an explicit signal regarding potential
    throughput constraints on a path.  This allows applications to set
-   throughput targets quickly, without waiting for congestion signals to
-   resolve the achievable throughput.
+   throughput targets quickly, without waiting to estimate achievable
+   throughput from observed performance.
 
    Congestion signals can indicate a throughput limit that is different
    from the signaled throughput advice.  Endpoints cannot assume that
@@ -541,8 +542,9 @@ Table of Contents
    The choice of 67 seconds is a compromise between competing interests.
    Longer periods allow applications more flexibility in terms of how to
    allocate bandwidth over time.  Shorter periods allow networks to
-   administer policies more tightly.  A shorter period also allows
-   applications to increase send rates sooner when rates increase.
+   administer policies more tightly, or react more quickly to changes in
+   their capacity.  A shorter period also allows applications to
+   increase send rates sooner when rates increase.
 
    The choice of 67 seconds, as a prime number, also helps avoid
    synchronization with other periodic effects that are commonly
@@ -728,7 +730,8 @@ Table of Contents
 
    QUIC endpoints can enable the use of the SCONE protocol by sending
    SCONE packets (Section 5).  Network elements can then update the Rate
-   Signal field (Section 7.1) according to their policies.
+   Signal field (Section 7.1) based on network policies or information
+   about available capacity.
 
 7.1.  Applying Throughput Advice Signals
 
@@ -763,7 +766,7 @@ Table of Contents
    Once the throughput advice is updated, the network element updates
    the UDP checksum for the datagram.  An incremental update process is
    described in [RFC1624] and Section 8.1 of [RFC8200] includes
-   additional information.
+   additional information relating to IPv6.
 
 7.1.1.  When To Avoid Updating Throughput Advice
 
