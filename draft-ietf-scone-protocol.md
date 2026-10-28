@@ -274,8 +274,7 @@ A separate signal can be sent for each flow.
 
 When network elements provide throughput advice to a QUIC flow
 that encapsulates tunneled flows (such as {{?CONNECT-UDP=RFC9298}})
-they can only provide the advice to the outermost flow;
-see {{SCONE-MAN}} for further considerations.
+they can only provide the advice to the outermost flow.
 Endpoints can apply the throughput advice to packets in flows
 that are subsequently encapsulated,
 but following that advice can have privacy implications;
