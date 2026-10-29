@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-27T04:06:34.108599+00:00",
+  "timestamp": "2026-10-29T04:48:53.767619+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -3414,6 +3414,30 @@
           "body": "That paragraph ends with exactly that xref, and a precis of the reasoning:\n\n> If too many datagrams are altered,\n> that could interfere with UDP protocols that are not QUIC;\n> see {{other-protocols}}.",
           "createdAt": "2026-09-10T01:04:28Z",
           "updatedAt": "2026-09-10T01:04:28Z"
+        }
+      ]
+    },
+    {
+      "number": 179,
+      "id": "I_kwDON1dwo88AAAABaQwNFA",
+      "title": "Tweak explaining a \"shared limit\" in \"Unspecified Scope\"",
+      "url": "https://github.com/ietf-wg-scone/scone/issues/179",
+      "state": "CLOSED",
+      "author": "gorryfair",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I don't disagree with the SCONE Protocol's meaning for a shared limit, I just think this is unclear, and suggest two minor wording tweaks to explain what sort of limit - can se say \"path capacity limit\" or at least \"capacity limit\"? Could we swap the order of \"a\" and \"the\".\n\n/contributes to the shared limit./contributes to a shared capacity limit./\n/exceed a shared limit./exceed the shared capacity limit./\n",
+      "createdAt": "2026-10-27T10:27:04Z",
+      "updatedAt": "2026-10-28T09:24:20Z",
+      "closedAt": "2026-10-28T09:24:20Z",
+      "comments": [
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Fixed in #180 ",
+          "createdAt": "2026-10-28T09:24:20Z",
+          "updatedAt": "2026-10-28T09:24:20Z"
         }
       ]
     }
@@ -17037,25 +17061,42 @@
       "id": "PR_kwDON1dwo88AAAABKzKrgg",
       "title": "Editorial suggestions from AD review",
       "url": "https://github.com/ietf-wg-scone/scone/pull/178",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ihlar",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This PR addresses a number of comments and suggestions made by Gorry. \n\nNote that the SCONE-MAN reference on line 277 depends on landing https://github.com/ietf-wg-scone/appman/pull/37 in appman. ",
       "createdAt": "2026-10-26T15:04:29Z",
-      "updatedAt": "2026-10-26T19:04:35Z",
+      "updatedAt": "2026-10-28T09:21:55Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "af7ff7aec83606f1202d5717919692686699d11f",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "ad-comments",
-      "headRefOid": "2d68a1cc22e36eec2bb8296331a40c74b73c5074",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "headRefOid": "356825460c6e4ff0b4ab32781766620a81a26b2a",
+      "closedAt": "2026-10-28T09:21:55Z",
+      "mergedAt": "2026-10-28T09:21:55Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "966bb441a7a24ce1a761df166a47df976f561290"
+      },
+      "comments": [
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> For me, this resolves all the AD comments in group B, please submit a revised draft when able, to allow these comments to be resolved. I expect a separate PR will address the two comments in group A.\r\n\r\nThanks for the confirmation on group B @gorryfair. \r\n\r\nI believe A1 was addressed in #177 . \r\nA2 should be covered by the addition of a reference at line 277. I also see that appman has landed the PR on tunneling, so as long as a new revision of that doc is published, this reference will be sensible :). ",
+          "createdAt": "2026-10-27T09:45:25Z",
+          "updatedAt": "2026-10-27T09:45:25Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Of course we do not want to replicate the content of the {#recv-advice} section in the overview. But I believe that mentioning the \"processing\" can result in the advice being ignored, and having a couple words saying that and a forward pointer to the relevant section would be nice.\r\n\r\nThis makes sense @huitema. Tried to capture it in a compact way with a forward pointer. Please check the latest version. ",
+          "createdAt": "2026-10-27T09:56:58Z",
+          "updatedAt": "2026-10-27T09:56:58Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo88AAAABUTMJgQ",
@@ -17109,6 +17150,116 @@
               "updatedAt": "2026-10-26T19:04:36Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABUa2CXw",
+          "commit": {
+            "abbreviatedOid": "22e0604"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Yes :-)",
+          "createdAt": "2026-10-27T10:04:38Z",
+          "updatedAt": "2026-10-27T10:04:38Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABUePiSw",
+          "commit": {
+            "abbreviatedOid": "d3cdfcc"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "Thanks for fixing the overview.",
+          "createdAt": "2026-10-27T14:34:59Z",
+          "updatedAt": "2026-10-27T14:34:59Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABUfQmMw",
+          "commit": {
+            "abbreviatedOid": "d3cdfcc"
+          },
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-10-27T15:38:29Z",
+          "updatedAt": "2026-10-27T15:39:28Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "I'm somewhat inclined to not include this as a dependency.",
+              "createdAt": "2026-10-27T15:38:29Z",
+              "updatedAt": "2026-10-27T15:39:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABUpKHPQ",
+          "commit": {
+            "abbreviatedOid": "d3cdfcc"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-10-28T09:18:23Z",
+          "updatedAt": "2026-10-28T09:18:23Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "Fair, will remove this. ",
+              "createdAt": "2026-10-28T09:18:23Z",
+              "updatedAt": "2026-10-28T09:18:23Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 180,
+      "id": "PR_kwDON1dwo88AAAABLBPzeQ",
+      "title": "Shared capacity limit",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/180",
+      "state": "MERGED",
+      "author": "ihlar",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "gorryfair"
+      ],
+      "labels": [],
+      "body": "Small tweak for readability, addresses #179 ",
+      "createdAt": "2026-10-27T13:11:43Z",
+      "updatedAt": "2026-10-28T09:23:44Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "af7ff7aec83606f1202d5717919692686699d11f",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "shared-capacity",
+      "headRefOid": "ed5a6c5d616247d39833a1ef60f085d41dc4e933",
+      "closedAt": "2026-10-28T09:23:44Z",
+      "mergedAt": "2026-10-28T09:23:44Z",
+      "mergedBy": "ihlar",
+      "mergeCommit": {
+        "oid": "0c2c7a55dab3f3399b5f17d68b7df038e44b7909"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABUdDIPw",
+          "commit": {
+            "abbreviatedOid": "ed5a6c5"
+          },
+          "author": "gorryfair",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "I think this fixes it.",
+          "createdAt": "2026-10-27T13:14:30Z",
+          "updatedAt": "2026-10-27T13:14:30Z",
+          "comments": []
         }
       ]
     }
