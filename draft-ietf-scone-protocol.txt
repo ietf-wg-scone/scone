@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 1 May 2027                                 Private Octopus Inc.
+Expires: 18 May 2027                                Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                         28 October 2026
+                                                        14 November 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 May 2027.
+   This Internet-Draft will expire on 18 May 2027.
 
 Copyright Notice
 
@@ -312,10 +312,11 @@ Table of Contents
 
    When network elements provide throughput advice to a QUIC flow that
    encapsulates tunneled flows (such as [CONNECT-UDP]) they can only
-   provide the advice to the outermost flow.  Endpoints can apply the
-   throughput advice to packets in flows that are subsequently
-   encapsulated, but following that advice can have privacy
-   implications; see Section 10.2.
+   provide the advice to the outermost flow.  Tunneled QUIC flows cannot
+   have throughput advice applied; see Section 3.13 of [SCONE-MAN].
+   Endpoints can apply the throughput advice to packets in flows that
+   are subsequently encapsulated, but following that advice can have
+   privacy implications; see Section 10.2.
 
 3.4.  Unidirectional Signal
 
@@ -1308,11 +1309,11 @@ Table of Contents
 
    [SCONE-MAN]
               Mishra, S., Sarker, Z., Tomar, A., and K. Abbas,
-              "Applicability & Manageability Considerations for SCONE",
-              Work in Progress, Internet-Draft, draft-ietf-scone-
-              applicability-manageability-02, 20 June 2026,
+              "Manageability Considerations for SCONE", Work in
+              Progress, Internet-Draft, draft-ietf-scone-applicability-
+              manageability-03, 28 October 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-scone-
-              applicability-manageability-02>.
+              applicability-manageability-03>.
 
    [WHY-ECN]  Fairhurst, G. and M. Welzl, "The Benefits of Using
               Explicit Congestion Notification (ECN)", RFC 8087,
