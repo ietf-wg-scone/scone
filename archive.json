@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-12T06:12:02.901141+00:00",
+  "timestamp": "2026-11-15T05:21:20.615862+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -17268,24 +17268,26 @@
       "id": "PR_kwDON1dwo88AAAABOTLZcw",
       "title": "Can't tag tunneled flows",
       "url": "https://github.com/ietf-wg-scone/scone/pull/181",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "For Mahesh.",
       "createdAt": "2026-11-11T05:54:59Z",
-      "updatedAt": "2026-11-12T03:37:57Z",
+      "updatedAt": "2026-11-14T18:46:26Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "0c2c7a55dab3f3399b5f17d68b7df038e44b7909",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "tunnels",
       "headRefOid": "58c06867a8209a02acc2e92a1173a10103fe5593",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2026-11-14T18:46:26Z",
+      "mergedAt": "2026-11-14T18:46:26Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "e3ef299245cbf592407cff7a2536254430cdd824"
+      },
       "comments": [],
       "reviews": [
         {
