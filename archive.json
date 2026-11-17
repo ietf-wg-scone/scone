@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-15T05:21:20.615862+00:00",
+  "timestamp": "2026-11-17T06:59:15.866170+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -17327,6 +17327,59 @@
           "body": "",
           "createdAt": "2026-11-12T03:37:57Z",
           "updatedAt": "2026-11-12T03:37:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 182,
+      "id": "PR_kwDON1dwo88AAAABPqqpKw",
+      "title": "Tie indicator to transport parameter",
+      "url": "https://github.com/ietf-wg-scone/scone/pull/182",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is perhaps not what Martin Duke wanted, but I think that it's the least distance from the current text.  (\"supports\" == \"scone_supported\")",
+      "createdAt": "2026-11-16T22:27:35Z",
+      "updatedAt": "2026-11-17T01:44:14Z",
+      "baseRepository": "ietf-wg-scone/scone",
+      "baseRefName": "main",
+      "baseRefOid": "e3ef299245cbf592407cff7a2536254430cdd824",
+      "headRepository": "ietf-wg-scone/scone",
+      "headRefName": "indicator-direction",
+      "headRefOid": "993c81d934b14bfcc06d708cbc79f2b31ecaceca",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDON1dwo88AAAABYYFjbg",
+          "commit": {
+            "abbreviatedOid": "993c81d"
+          },
+          "author": "huitema",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "OK. This answers Martin Duke's request literally. \n\nHowever we slice it, we have an ambiguity: the client does not know what the server will do. But we have discussed that quite enough.",
+          "createdAt": "2026-11-17T01:04:28Z",
+          "updatedAt": "2026-11-17T01:04:28Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDON1dwo88AAAABYYf7EQ",
+          "commit": {
+            "abbreviatedOid": "993c81d"
+          },
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-11-17T01:44:14Z",
+          "updatedAt": "2026-11-17T01:44:14Z",
           "comments": []
         }
       ]
