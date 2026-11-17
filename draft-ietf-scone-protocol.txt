@@ -5,14 +5,14 @@
 SCONE                                                         M. Thomson
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                              C. Huitema
-Expires: 18 May 2027                                Private Octopus Inc.
+Expires: 21 May 2027                                Private Octopus Inc.
                                                         奥 一穂 (K. Oku)
                                                                   Fastly
                                                                 M. Joras
                                                                     Meta
                                                                 M. Ihlar
                                                                 Ericsson
-                                                        14 November 2026
+                                                        17 November 2026
 
 
      Standard Communication with Network Elements (SCONE) Protocol
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 May 2027.
+   This Internet-Draft will expire on 21 May 2027.
 
 Copyright Notice
 
@@ -655,10 +655,11 @@ Table of Contents
 
 6.1.  Indicating Support on New Flows
 
-   All new flows that are initiated by a client that supports SCONE MUST
-   include bytes with values 0xc8 and 0x13 as the last two bytes of the
-   payload of the UDP datagrams that commence a new flow, if the QUIC
-   version in use permits the inclusion of data after packets.
+   All new flows that are initiated by a client that advertises the
+   scone_supported transport parameter MUST include bytes with values
+   0xc8 and 0x13 as the last two bytes of the payload of the UDP
+   datagrams that commence a new flow, if the QUIC version in use
+   permits the inclusion of data after packets.
 
    For example, in QUIC version 1, these datagrams contain QUIC packets
    with a long header, including a length prefix (Section 17.2 of
