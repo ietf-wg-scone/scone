@@ -620,7 +620,8 @@ until the transport parameter is received.
 
 ## Indicating Support on New Flows {#indication}
 
-All new flows that are initiated by a client that supports SCONE
+All new flows that are initiated by a client
+that advertises the scone_supported transport parameter
 MUST include bytes with values 0xc8 and 0x13
 as the last two bytes of the payload of the UDP datagrams
 that commence a new flow,
