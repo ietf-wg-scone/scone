@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-17T06:59:15.866170+00:00",
+  "timestamp": "2026-11-19T06:24:21.920534+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -17336,25 +17336,42 @@
       "id": "PR_kwDON1dwo88AAAABPqqpKw",
       "title": "Tie indicator to transport parameter",
       "url": "https://github.com/ietf-wg-scone/scone/pull/182",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "martinthomson",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "This is perhaps not what Martin Duke wanted, but I think that it's the least distance from the current text.  (\"supports\" == \"scone_supported\")",
       "createdAt": "2026-11-16T22:27:35Z",
-      "updatedAt": "2026-11-17T01:44:14Z",
+      "updatedAt": "2026-11-19T03:33:44Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e3ef299245cbf592407cff7a2536254430cdd824",
       "headRepository": "ietf-wg-scone/scone",
       "headRefName": "indicator-direction",
       "headRefOid": "993c81d934b14bfcc06d708cbc79f2b31ecaceca",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2026-11-17T17:12:59Z",
+      "mergedAt": "2026-11-17T17:12:59Z",
+      "mergedBy": "martinthomson",
+      "mergeCommit": {
+        "oid": "8e705d355312b5c054b87a1c9a4f69548dd0da86"
+      },
+      "comments": [
+        {
+          "author": "martinduke",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Yes, thanks for resolving the editorial ambiguity. I am happy to be in the rough, although I wonder if @ihlar is content with this (representing the consumer of this indicator).",
+          "createdAt": "2026-11-18T22:00:54Z",
+          "updatedAt": "2026-11-18T22:00:54Z"
+        },
+        {
+          "author": "ihlar",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Yes, thanks for resolving the editorial ambiguity. I am happy to be in the rough, although I wonder if @ihlar is content with this (representing the consumer of this indicator).\r\n\r\nIdeally from a network perspective it would be good to see indications for the case where a client may send uplink SCONE packets. But normative text around this case is probably going to be awkward. \r\n\r\nIt could be helpful with a short sentence about the  potential consequences of omitting an indicator though. \r\nPerhaps something like:\r\n\r\n\"A client that intends to send SCONE packets but does not advertise the scone_supported transport parameter might omit the indication. This could prevent network elements from detecting SCONE support early, potentially affecting their ability to provide throughput advice.\"",
+          "createdAt": "2026-11-19T03:33:44Z",
+          "updatedAt": "2026-11-19T03:33:44Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDON1dwo88AAAABYYFjbg",
