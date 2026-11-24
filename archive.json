@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-11-19T06:24:21.920534+00:00",
+  "timestamp": "2026-11-24T08:52:56.847430+00:00",
   "repo": "ietf-wg-scone/scone",
   "labels": [
     {
@@ -17343,7 +17343,7 @@
       "labels": [],
       "body": "This is perhaps not what Martin Duke wanted, but I think that it's the least distance from the current text.  (\"supports\" == \"scone_supported\")",
       "createdAt": "2026-11-16T22:27:35Z",
-      "updatedAt": "2026-11-19T03:33:44Z",
+      "updatedAt": "2026-11-24T06:42:30Z",
       "baseRepository": "ietf-wg-scone/scone",
       "baseRefName": "main",
       "baseRefOid": "e3ef299245cbf592407cff7a2536254430cdd824",
@@ -17370,6 +17370,13 @@
           "body": "> Yes, thanks for resolving the editorial ambiguity. I am happy to be in the rough, although I wonder if @ihlar is content with this (representing the consumer of this indicator).\r\n\r\nIdeally from a network perspective it would be good to see indications for the case where a client may send uplink SCONE packets. But normative text around this case is probably going to be awkward. \r\n\r\nIt could be helpful with a short sentence about the  potential consequences of omitting an indicator though. \r\nPerhaps something like:\r\n\r\n\"A client that intends to send SCONE packets but does not advertise the scone_supported transport parameter might omit the indication. This could prevent network elements from detecting SCONE support early, potentially affecting their ability to provide throughput advice.\"",
           "createdAt": "2026-11-19T03:33:44Z",
           "updatedAt": "2026-11-19T03:33:44Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm not opposed to saying something extra, maybe flipping the text @ihlar suggested to something like:\n\n> A client MAY provide an indicator when it might send SCONE packets if the server supports accepting them.\n\nNote that this statement is always true, which highlights how useful the indicator truly is.  But whatever works.  A \"SHOULD\"-strength option might swap \"MAY\" for \"SHOULD\" and add:\n\n> Not adding an indicator might result in network elements marking the flow as not being SCONE-capable.\n\nAn issue would be the best way to continue that discussion.",
+          "createdAt": "2026-11-24T06:42:30Z",
+          "updatedAt": "2026-11-24T06:42:30Z"
         }
       ],
       "reviews": [
